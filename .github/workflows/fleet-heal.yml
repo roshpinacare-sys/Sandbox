@@ -1,0 +1,69 @@
+name: fleet-heal
+# מרפא-הצי (T-47 · טריטוריה: heal/): הרופא-האוטונומי-של-כלל-הגיט.
+# מה-הוא-עושה (כל-30 דק' · דקות 5,35 — נקיות-מכל-העורקים):
+#  1. בודק-מכסה-משותפת (ה-PAT-של-כולם) — מתחת-סף-קשה: SKIP-כנה (אפס-קריאות).
+#  2. סורק-את-24-הריפואים: ריצה-אחרונה-לכל-workflow.
+#  3. מאבחן-בכנות: MINUTES-BLOCKED (חתימת-חסימת-חיוב: כישלון-≤120ש-בפרטי)
+#     מול GENUINE-RED (אדום-אמתי-שדורש-ריפוי).
+#  4. מרפא: ציבורי-אדום → dispatch→הסריקה-הבאה-מאמתת-ירוק (קבלת-HEALED).
+#     פרטי-חסום → קנרית-יחידה (sanbox) פעם/יום — ברגע-שהבעלים-משחרר-את-החיוב
+#     הריפוי-מתגלה-מעצמו-תוך-24h-לכל-הריפואים (המרפא-מדליק-את-כולם).
+#  5. קבלות-כנות: heal/latest.json · heal/state.json · heal/ledger.jsonl (append-only).
+# מכסה: מודע-ל-x-ratelimit-remaining-בכל-תגובה; מתחת-סף-רך: חצאית-round-robin.
+on:
+  schedule:
+    - cron: "5,35 * * * *"
+  workflow_dispatch:
+    inputs:
+      probe_force:
+        description: "כפה-פרובות-מלאות-על-כל-האדומים (עוקף-guard-24h-וקנרית)"
+        default: "false"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fleet-heal
+  cancel-in-progress: false
+
+jobs:
+  heal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: fleet-heal (scan → diagnose → heal → receipts)
+        env:
+          HEAL_TOKEN: ${{ secrets.SBX_FLEET_PAT }}
+          HEAL_FORCE: ${{ inputs.probe_force }}
+        run: node heal/fleet-heal.mjs
+
+      # סריקת-דליפות fail-closed על-הטריטוריה-שלי-בלבד (דפוס-T-45b)
+      - name: leak-scan (fail-closed)
+        run: |
+          git ls-files -z heal/ | xargs -0 node engine/leak-scan.mjs
+
+      # קבלות-שורדות-גם-בריצה-אדומה (חוק-קבלות-תמיד)
+      - name: commit + push (rebase-safe)
+        if: always()
+        run: |
+          git config user.name "fleet-healer"
+          git config user.email "fleet-healer@users.noreply.github.com"
+          git add heal/
+          if git diff --cached --quiet; then
+            echo "no heal receipt changes — skip"
+          else
+            git commit -m "[heal] fleet scan: $(date -u +%FT%TZ)"
+            git pull --rebase origin main
+            git push origin main
+          fi
