@@ -1,0 +1,178 @@
+{
+  "schema": "sandbox.browser-verify/1",
+  "at": "2026-10-09T14:11:29Z",
+  "target": "Pages live",
+  "target_urls": [
+    "https://roshpinacare-sys.github.io/Sandbox/",
+    "https://roshpinacare-sys.github.io/Sandbox/cockpit/"
+  ],
+  "tool": "agent-browser CLI (headless Chromium, session t42d-verify)",
+  "scope_note": "Real-browser verification only of rejection paths, rendering, CSP/console/network behavior and layout. The password was not known and was not guessed, cracked, or bypassed; no exploit scripts were run against the gates.",
+  "checks": [
+    {
+      "id": "CV-01",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/",
+      "action": "Open root URL, snapshot interactive elements, eval document properties",
+      "expected": "Console gate renders as Hebrew RTL UI with a password input",
+      "observed": "Title 'קונסולת-המפעיל — Sandbox'; documentElement dir=rtl, lang=he. Snapshot: h1 'Sandbox · קונסולת-המפעיל', h2 'שער-הסיסמה', password textbox 'סיסמה-ראשית' (@e4), button 'פתח' (@e5), link SECURITY.md. Gate description: 'התוכן-כולו מוצפן AES-256-GCM ונפתח-רק-בסיסמה-הראשית.'",
+      "verdict": "pass"
+    },
+    {
+      "id": "CV-02",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/",
+      "action": "Fill password input with 'wrong-password-test-123', click 'פתח', wait, re-snapshot + read body text",
+      "expected": "Rejected: error message shown, no unlock into content",
+      "observed": "Rejected. Error line rendered under the form: 'סיסמה-שגויה — הפענוח-נכשל קריפטוגרפית. אפס-ניסיונות-נשמרים; נסה-שוב.' URL unchanged (still /Sandbox/ root), still showing gate headings only; no content unlocked. Input retained masked value.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CV-03",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/",
+      "action": "Fill input with multiline garbage 'line1\\nline2<script>alert(1)</script>', click 'פתח', check agent-browser dialog status",
+      "expected": "Rejected, NO alert dialog fired",
+      "observed": "Rejected with the same error line 'סיסמה-שגויה — הפענוח-נכשל קריפטוגרפית. אפס-ניסיונות-נשמרים; נסה-שוב.'; 'agent-browser dialog status' → 'No dialog is currently open'; no unlock.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CV-04",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/",
+      "action": "Run 'agent-browser errors' and 'agent-browser console' after all interactions",
+      "expected": "No page errors / console errors",
+      "observed": "Both commands returned empty output — zero page errors, zero console messages (no hydration errors, no CSP violations, no CORS errors).",
+      "verdict": "pass"
+    },
+    {
+      "id": "CV-05",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/",
+      "action": "agent-browser network requests after render + 2 rejected submissions",
+      "expected": "Browser received sealed-payload.bin / params.json (names only); no request carrying a password-looking value",
+      "observed": "GET /Sandbox/ (Document, 200); GET /Sandbox/params.json (Fetch, 200); GET /Sandbox/sealed-payload.bin (Fetch, 200); GET /favicon.ico (404). Every tracked request is a plain GET to a static asset with no query string and no body; no POST/XHR to any endpoint; no request URL or method carrying a password-looking value.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CK-01",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/",
+      "action": "Open cockpit URL, snapshot, read body text",
+      "expected": "Cockpit gate renders Hebrew RTL with password input",
+      "observed": "Title 'קוקפיט ריבוני — Sovereign Fleet'; dir=rtl, lang=he. Snapshot: region 'קוקפיט ריבוני', h1 'קוקפיט ריבוני', textbox 'סיסמת כניסה', button 'פתח את הכספת'. Vault blurb: 'AES-256-GCM · PBKDF2 600,000 · 3 wraps · 19.2KB · headcorner.txt'. Note: on first load the input and button rendered [disabled] for roughly 2–3 seconds (boot/fetch phase) and then became enabled; re-snapshot showed them enabled and they worked normally.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CK-02",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/",
+      "action": "Fill cockpit password input with 'wrong-password-test-123', click 'פתח את הכספת', wait, re-snapshot + read body",
+      "expected": "Rejected: error message shown, no unlock",
+      "observed": "Rejected. Error line rendered: 'סיסמה שגויה — ה-GCM מאמת ודוחה. הכספת נשארת חתומה.' URL unchanged (still /Sandbox/cockpit/), gate still shown, no vault content unlocked.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CK-03",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/",
+      "action": "Fill cockpit input with multiline garbage 'line1\\nline2<script>alert(1)</script>', click submit, check dialog status",
+      "expected": "Rejected, NO alert dialog fired",
+      "observed": "Rejected with same error 'סיסמה שגויה — ה-GCM מאמת ודוחה. הכספת נשארת חתומה.'; dialog status → 'No dialog is currently open'; no unlock; no script execution.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CK-04",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/",
+      "action": "agent-browser errors + console after cockpit interactions",
+      "expected": "No page errors / console errors",
+      "observed": "Both empty — zero page errors, zero console messages.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CK-05",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/",
+      "action": "agent-browser network requests for cockpit session",
+      "expected": "Sealed payload received; no password-looking value in any request",
+      "observed": "GET /Sandbox/cockpit/ (Document, 200); GET /Sandbox/cockpit/style.css (200); GET /Sandbox/cockpit/vendor/gate-crypto.js (Script, 200); GET /Sandbox/cockpit/app.js (Script, 200); GET /Sandbox/cockpit/vault.enc.json (Fetch, 200). Note: the cockpit's sealed payload file is named vault.enc.json (console gate uses params.json + sealed-payload.bin). All requests plain GET static assets, no query strings, no bodies, nothing password-looking.",
+      "verdict": "pass"
+    },
+    {
+      "id": "SEC-01",
+      "target": "both gates",
+      "action": "Read CSP meta via eval on live pages; curl -sI for HTTP security headers",
+      "expected": "CSP behavior recorded; no CSP violations in console",
+      "observed": "GitHub Pages serves no CSP HTTP header (only strict-transport-security: max-age=31556952); CSP is delivered via <meta http-equiv='Content-Security-Policy'>. Console gate meta CSP: \"default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'self'\" (page has 1 inline script + 1 inline style, which is why unsafe-inline is present). Cockpit meta CSP (stricter): \"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.steemit.com https://api.justyy.com https://steem.61bts.com https://api.hive.blog https://api.deathwing.me; object-src 'none'; base-uri 'none'\". Zero CSP violations appeared in the browser console during any interaction.",
+      "verdict": "pass"
+    },
+    {
+      "id": "MB-01",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/ (viewport 390x844)",
+      "action": "set viewport 390 844, reload, eval scrollWidth + input rect; screenshot",
+      "expected": "Gate visible, input reachable, no horizontal overflow (scrollWidth <= 400)",
+      "observed": "documentElement.scrollWidth=390, clientWidth=390 → no horizontal overflow. Password input visible: rect x=41, y≈382, w=308, h=46 → fully inside the 390px viewport. Gate elements all reachable in snapshot (input @e13, button @e14). dir=rtl preserved.",
+      "verdict": "pass"
+    },
+    {
+      "id": "MB-02",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/ (viewport 390x844)",
+      "action": "set viewport 390 844, reload, eval scrollWidth + input rect; screenshot",
+      "expected": "Gate visible, input reachable, no horizontal overflow (scrollWidth <= 400)",
+      "observed": "documentElement.scrollWidth=390, clientWidth=390 → no horizontal overflow. Password input visible and enabled: rect x=49, y≈506, w=292, h≈45.6 → inside viewport. dir=rtl preserved.",
+      "verdict": "pass"
+    },
+    {
+      "id": "CV-06",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/ + /cockpit/",
+      "action": "Correct-password unlock path",
+      "expected": "Would verify successful unlock",
+      "observed": "NOT VERIFIED — agent-3d holds no password and was forbidden from guessing/cracking/bypassing it. The correct-password path (vault opening, content rendering post-auth) is explicitly out of scope for this receipt.",
+      "verdict": "limit"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "severity": "L",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/",
+      "action": "Network tracking of all requests",
+      "expected": "No 404s on gate assets",
+      "observed": "GET /favicon.ico returns 404 on the console gate (browser auto-request). Cosmetic only; no functional impact.",
+      "verdict": "fail"
+    },
+    {
+      "id": "F-02",
+      "severity": "L",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/",
+      "action": "CSP meta inspection vs cockpit CSP",
+      "expected": "Consistent hardening posture across gates",
+      "observed": "Console gate CSP allows script-src 'unsafe-inline' / style-src 'unsafe-inline' (required by its single-file inline-script architecture), while the cockpit gate enforces the stricter script-src 'self'. Defense-in-depth inconsistency; NO exploit or injection was observed — the XSS payload string in the input was treated purely as key material and never executed.",
+      "verdict": "pass"
+    },
+    {
+      "id": "F-03",
+      "severity": "L",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/",
+      "action": "First-load snapshot",
+      "expected": "Input usable promptly",
+      "observed": "On first load the cockpit password input and submit button render [disabled] for roughly 2–3 seconds (apparent boot/sealed-payload fetch phase), then enable. Informational UX note, not a defect; subsequent interactions behaved normally.",
+      "verdict": "pass"
+    },
+    {
+      "id": "F-04",
+      "severity": "I",
+      "target": "https://roshpinacare-sys.github.io/Sandbox/cockpit/",
+      "action": "CSP meta inspection",
+      "expected": "connect-src scope reviewed",
+      "observed": "Cockpit CSP connect-src allows five external blockchain RPC hosts (api.steemit.com, api.justyy.com, steem.61bts.com, api.hive.blog, api.deathwing.me). None were contacted during this verification (request log shows only same-origin static assets). Recorded for the swarm's awareness; no observed traffic to those hosts from the gates.",
+      "verdict": "pass"
+    }
+  ],
+  "screenshots": [
+    "/tmp/verify-console.png",
+    "/tmp/verify-cockpit.png",
+    "/tmp/verify-console-mobile.png",
+    "/tmp/verify-cockpit-mobile.png"
+  ],
+  "limits": [
+    "The correct-password unlock path could not be verified: no password was available and attempting to guess, crack, or bypass the gates is forbidden. Post-unlock content rendering is unverified.",
+    "Sealed payload files (params.json, sealed-payload.bin, vault.enc.json) were confirmed by name, HTTP method and status only; their bodies were not inspected or decrypted (and decryption was not attempted).",
+    "The 'no password-looking value in any request' check is based on the tracked request list (methods, URLs, no query strings, static GETs only); agent-browser network request detail returned only the URL, so header-level inspection was done via curl for HTTP security headers (HSTS present, no CSP HTTP header on GitHub Pages — CSP is via meta tag).",
+    "No active CSP-violation or injection probe was run against the pages (that would constitute an exploit attempt and is forbidden); CSP verification is limited to reading the delivered policy and observing zero console violations during normal interactions.",
+    "Cockpit initial disabled-state duration (~2–3s) is an approximate human-observed timing, not a measured benchmark.",
+    "Testing performed in a single headless Chromium (agent-browser default); other engines/browsers were not tested."
+  ],
+  "honesty_note": "All 'observed' fields record exactly what agent-browser returned. No dialog ever opened during the XSS-string tests; no console or page errors appeared at any point; browser closed cleanly via 'agent-browser close'. No repo files were edited, nothing committed or pushed, worklog.md untouched."
+}

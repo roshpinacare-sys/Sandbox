@@ -12,6 +12,8 @@ name: sovereign-tick
 on:
   schedule:
     - cron: "*/15 * * * *"
+    # T-42 agent-3 merge: redundant offset grid — scheduler is best-effort under load
+    - cron: "9-59/20 * * * *"
   push:
     branches: [main]
   workflow_dispatch:
@@ -43,9 +45,19 @@ jobs:
         id: tick
         run: node engine/sovereign-tick.mjs
 
+      # T-42 agent-3 merge: network mirror — FleetHQ public receipts → receipts/network.json.
+      # Runs only on genuine ticks (ticked!=0) — a throttled run stays a dead end by law.
+      - name: network-probe (mirror public sources)
+        if: steps.tick.outputs.ticked != '0'
+        run: node engine/network-probe.mjs
+
       - name: leak-scan (fail-closed)
         if: always()
-        run: node engine/leak-scan.mjs receipts/latest.json receipts/ticks.jsonl
+        run: |
+          node engine/leak-scan.mjs receipts/latest.json receipts/ticks.jsonl
+          for f in receipts/network.json receipts/network-log.jsonl; do
+            [ -f "$f" ] && node engine/leak-scan.mjs "$f"
+          done
 
       - name: commit + push (rebase-safe)
         run: |
