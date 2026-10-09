@@ -12,8 +12,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  repository_dispatch:   # T-51: הצתה-מהמפעיל-הפנימי — הנתיב-המוכח-חי
-    types: [artery-revive]
+  repository_dispatch:   # T-51: הצתה-מהמפעיל-הפנימי — אירוע-פר-עורק (אפס-חצימה)
+    types: [revive-artery-catchup]
 
 permissions:
   contents: write   # T-51: הדפוס-המוכח-חי — contents:write-בלבד (actions:write-מפורש-נמדד-403)
@@ -74,9 +74,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # artery-watch עצמו נשמר-במקצף 30 דק׳ (המטרונום-נצחי); שלושת-עורקות-ה-cron ששוקקו-ב-T-51 בסף-החיים-שלהם
-          # הכל-דרך-/dispatches (event_type=artery-revive) — הנתיב-המוכח-חי-היחיד (חוק-הרשאות-T-51)
+          # הכל-דרך-/dispatches עם-אירוע-פר-עורק (revive-*) — הנתיב-המוכח-חי · אפס-חצימה-הדדית (חוק-הרשאות-T-51)
           for spec in "artery-watch.yml:1800" "fleet-heal.yml:2700" "federation.yml:2700" "fleet-yield.yml:9900"; do
-            WF="${spec%%:*}"; MAX="${spec##*:}"
+            WF="${spec%%:*}"; MAX="${spec##*:}"; EVT="revive-${WF%.yml}"
             AGE_S="$(curl -sS --max-time 20 -H "Authorization: Bearer $GH_TOKEN" \
               "https://api.github.com/repos/roshpinacare-sys/Sandbox/actions/workflows/${WF}/runs?per_page=1" \
               | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{const r=JSON.parse(d).workflow_runs?.[0];console.log(r?Math.round((Date.now()-Date.parse(r.created_at))/1000):99999)}catch{console.log(99999)}})')"
@@ -84,8 +84,9 @@ jobs:
               HTTP="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
                 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
                 "https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches" \
-                -d '{"event_type":"artery-revive","client_payload":{"from":"catchup","wf":"'"$WF"'"}}')"
-              echo "EXT-ARTERY ${WF} stale ${AGE_S}s > ${MAX}s — re-ignite http=${HTTP}"
+                -d "{\"event_type\":\"${EVT}\",\"client_payload\":{\"from\":\"catchup\"}}")"
+              echo "EXT-ARTERY ${WF} stale ${AGE_S}s > ${MAX}s — re-ignite via ${EVT} http=${HTTP}"
+              sleep 3
             else
               echo "EXT-ARTERY ${WF} alive (${AGE_S}s) — quiet"
             fi
