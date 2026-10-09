@@ -79,6 +79,12 @@ jobs:
       # הצתה-מחדש-ידנית-אפשרית-תמיד: Actions → Run-workflow).
       - name: chain-next (sleep to next slot, then dispatch the next beat)
         if: always() && steps.tick.outputs.ticked != '0'
+        # T-42 agent-3 FIX (live-proven): the automatic token is NOT in the
+        # default env of run steps — the peer's chain died on `dispatch http=401`
+        # (empty bearer). The documented GITHUB_TOKEN→repository_dispatch
+        # exception is real, but the token must be mapped explicitly.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           SLEEP_S="$(node -e '
