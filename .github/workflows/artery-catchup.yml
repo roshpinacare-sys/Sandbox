@@ -1,0 +1,82 @@
+name: artery-catchup
+# כנף-ההצתה-מחדש (T-46): העורק-הראשי (sovereign.yml — טריטוריית-agent-1) מת-לפעמים
+# ומחכה-לדחיפה-חוץ-כדי-לקום (מוכח-חי 2026-10-09: שתיקה 15:08→16:37 עד-שדחיפת-T-45-הציתה).
+# הכנף-לא-נוגעת-באף-טריטוריה-קיימת: כל-30 דק' בודקת-את-גיל-קבלת-העורק-הראשי;
+# אם-הדופק-איטי-מ-20 דק' — מציתה-מחדש בשני-נתיבים:
+#  ① repository_dispatch לעורק-הראשי (הנתיב-הרצוי — השרשרת-מתעוררת-וממשיכה-כרגיל);
+#  ② אם-ה-dispatch-נכשל — טביעה-ישירה+קומיט (הדופק-שורד-גם-כשמערכת-ה-dispatch-כולה-מושבתת).
+# כשהדופק-טרי (<20 דק') — יציאה-שקטה: אפס-התערבות-בשרשרת-החיה.
+on:
+  schedule:
+    - cron: "7,37 * * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-catchup
+  cancel-in-progress: false
+
+jobs:
+  catchup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: staleness-check (>20min = the main chain needs re-ignition)
+        id: stale
+        run: |
+          AGE_S="$(node -e '
+            const fs = require("fs");
+            let last = 0;
+            try { last = Date.parse(JSON.parse(fs.readFileSync("receipts/latest.json", "utf8")).at) || 0; } catch {}
+            process.stdout.write(String(last > 0 ? Math.round((Date.now() - last) / 1000) : 99999));
+          ')"
+          echo "age=${AGE_S}s"
+          if [ "${AGE_S}" -gt 1200 ]; then
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "stale=false" >> "$GITHUB_OUTPUT"
+            echo "chain alive (${AGE_S}s) — quiet exit"
+          fi
+
+      - name: re-ignite main artery (repository_dispatch)
+        id: ignite
+        if: steps.stale.outputs.stale == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HTTP="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches \
+            -d '{"event_type":"sovereign-tick","client_payload":{"from":"catchup"}}')"
+          echo "dispatch http=$HTTP"
+          echo "dispatch=$HTTP" >> "$GITHUB_OUTPUT"
+
+      - name: direct-tick fallback (heartbeat survives even if dispatch API fails)
+        if: always() && steps.stale.outputs.stale == 'true' && steps.ignite.outputs.dispatch != '204'
+        run: |
+          node engine/sovereign-tick.mjs
+          git config user.name "artery-catchup"
+          git config user.email "artery-catchup@users.noreply.github.com"
+          git add receipts/
+          if git diff --cached --quiet; then
+            echo "no receipt changes — skip"
+          else
+            git commit -m "[catchup] direct heartbeat: $(date -u +%FT%TZ)"
+            git pull --rebase origin main
+            git push origin main
+          fi
