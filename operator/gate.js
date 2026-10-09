@@ -100,6 +100,18 @@ async function fetchArtery() {
   return { latest, ticks };
 }
 
+/* ── פדרציה: קבלה-חיה מהריפו (raw — פומבי) ── */
+const FED_RAW = "https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/federation/";
+async function fetchFederation() {
+  const latest = await (await fetch(FED_RAW + "latest.json", { cache: "no-store" })).json();
+  let recent = [];
+  try {
+    const t = await (await fetch(FED_RAW + "LEDGER.jsonl", { cache: "no-store" })).text();
+    recent = t.trim().split("\n").filter(Boolean).slice(-6).map((l) => JSON.parse(l));
+  } catch {}
+  return { latest, recent };
+}
+
 /* ── איתור-משאב-בשני-פריסות: Pages (קונסולה-בשורש · קוקפיט-ב-/cockpit/) ומקומית (repo-layout) ── */
 async function fetchFirst(paths) {
   let last;
@@ -128,7 +140,8 @@ function renderOverview() {
     <div class="stat"><div class="k">חשבונות-בצי</div><div class="v">${accs.length}</div><div class="s">מכספת-הצי (מפוענחת)</div></div>
     <div class="stat"><div class="k">נאמנות</div><div class="v ${A.fail ? "warn" : "ok"}">${A.pass ?? "?"}✓ / ${A.fail ?? "?"}✗</div><div class="s">מול-שרשרת · ${A.verdict ?? "—"}</div></div>
     <div class="stat"><div class="k">הקונסולה</div><div class="v">${cOk ? "פתוחה" : "—"}</div><div class="s">${cOk ? "קנון-62 פוענח" : "לא-נפתחה בסיסמה-זו"}</div></div>
-    <div class="stat" id="ov-artery-stat"><div class="k">העורק</div><div class="v">…</div><div class="s">בודק-קבלה-אחרונה</div></div>`;
+    <div class="stat" id="ov-artery-stat"><div class="k">העורק</div><div class="v">…</div><div class="s">בודק-קבלה-אחרונה</div></div>
+    <div class="stat" id="ov-fed-stat"><div class="k">פדרציה</div><div class="v">…</div><div class="s">בודק-פנקס-הפדרציה</div></div>`;
   renderTruth();
 }
 
@@ -217,6 +230,37 @@ function renderArtery({ latest, ticks }) {
   ).join("");
   const stat = document.querySelector("#ov-artery-stat");
   if (stat) stat.innerHTML = `<div class="k">העורק</div><div class="v ${ageMin != null && ageMin <= 30 ? "" : ""}" style="color:${ageMin == null ? "var(--bad)" : ageMin <= 30 ? "var(--ok)" : "var(--warn)"}">${label}</div><div class="s">טיק-אחרון לפני ${ageMin ?? "?"} דק'</div>`;
+}
+
+function renderFederation({ latest, recent }) {
+  const ageMin = latest?.at ? Math.round((Date.now() - Date.parse(latest.at)) / 60000) : null;
+  const cls = ageMin == null ? "badge-bad" : ageMin <= 60 ? "badge-ok" : ageMin <= 150 ? "badge-warn" : "badge-bad";
+  const label = ageMin == null ? "אין-סריקה" : ageMin <= 60 ? "חי" : ageMin <= 150 ? "מפגר" : "מנותק";
+  const F = latest?.flags ?? [];
+  const byFlag = {};
+  for (const f of F) byFlag[f.flag] = (byFlag[f.flag] ?? 0) + 1;
+  const flagSummary = Object.entries(byFlag).map(([k, v]) => `${k}×${v}`).join(" · ") || "אפס";
+  $("fed-state").innerHTML = `
+    <div class="seal-line">
+      <span class="badge ${cls}">פדרציה: ${label} (סריקה לפני ${ageMin ?? "?"} דק')</span>
+      <span class="badge ${latest?.verdict === "FEDERATION-OK" ? "badge-ok" : "badge-warn"}">${latest?.verdict ?? "—"}</span>
+      <span class="badge">ריפואים: ${latest?.counts?.github ?? "?"} ב-GitHub · ${latest?.counts?.manifest ?? "?"} בחוקה</span>
+      <span class="badge ${F.length ? "badge-bad" : "badge-ok"}">דגלים: ${latest?.counts?.flagsTotal ?? F.length}${latest?.counts?.flagsTotal > latest?.counts?.flags ? ` (מוצגים ${F.length})` : ""}</span>
+      <span class="badge">${latest?.authMode === "token" ? "auth: token" : "auth: anonymous"}</span>
+    </div>
+    <ul class="kv">
+      <li><span>פירוט-דגלים</span><span class="val ${F.length ? "warn" : "ok"}">${flagSummary}</span></li>
+      <li><span>שרשרת-מרקל</span><span class="val">${String(latest?.chain?.cur ?? "").slice(0, 16)}… · נסרקו ${latest?.counts?.records ?? "?"} ריפואים ב-${latest?.tookMs ?? "?"}ms</span></li>
+    </ul>
+    ${F.length ? `<div class="tablewrap"><table><thead><tr><th>ריפו</th><th>דגל</th><th>פירוט</th></tr></thead><tbody>${F.map((f) => `<tr><td>${f.repo}</td><td>${f.flag}</td><td class="muted">${f.detail ?? ""}</td></tr>`).join("")}</tbody></table></div>` : '<p class="mini muted">אפס-דגלים — הפדרציה-זהה-לחוקה.</p>'}
+    <p class="mini muted">קבלות-אחרונות: ${(recent ?? []).slice().reverse().map((x) => `${String(x.at).slice(0, 16).replace("T", " ")} ${x.verdict}`).join(" · ") || "—"}</p>`;
+  const rows = latest?.repos ?? [];
+  $("fed-repos").innerHTML = rows.length ? `<table><thead><tr><th>ריפו</th><th>תפקיד</th><th>נראות</th><th>דחיפה</th><th>Actions</th></tr></thead><tbody>${rows.map((r) => {
+    const red = (r.redWorkflows ?? []).length;
+    return `<tr><td>${r.name}${r.inManifest ? "" : ' <span class="badge badge-warn">ADOPT?</span>'}</td><td class="muted">${r.role ?? "—"}</td><td>${r.visibility ?? "—"}</td><td>${r.ageHours != null ? r.ageHours + "h" : "—"}</td><td>${red ? `<span class="bad">${red} אדום</span>` : (r.actions ?? "—")}</td></tr>`;
+  }).join("")}</tbody></table></div>` : '<div class="muted">אין-נתוני-ריפואים</div>';
+  const stat = document.querySelector("#ov-fed-stat");
+  if (stat) stat.innerHTML = `<div class="k">פדרציה</div><div class="v" style="color:${cls === "badge-ok" ? "var(--ok)" : cls === "badge-warn" ? "var(--warn)" : "var(--bad)"}">${label}</div><div class="s">${latest?.verdict ?? "—"} · ${latest?.counts?.github ?? "?"} ריפואים</div>`;
 }
 
 async function renderChain() {
@@ -313,6 +357,9 @@ $("gate-form").addEventListener("submit", async (ev) => {
     renderOverview(); renderFleet(); renderConsole(); renderServer();
     fetchArtery().then(renderArtery).catch(() => {
       $("artery-state").innerHTML = '<span class="badge badge-bad">העורק: לא-ניתן-להגיע-לקבלות</span>';
+    });
+    fetchFederation().then(renderFederation).catch(() => {
+      $("fed-state").innerHTML = '<span class="badge badge-bad">פדרציה: לא-ניתן-להגיע-לפנקס</span>';
     });
     renderChain();
     armAutoLock();
