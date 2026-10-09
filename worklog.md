@@ -427,3 +427,17 @@ Work Log:
 
 Stage Summary:
 - הארגון-כולו: אפס-אדום-לא-מוסבר-בעורקי-הריבונות; שני-אדומי-אחים-מסומנים-בכנות (line-agreement · dex-ci) לטריטוריות-הבעלים-שלהם.
+
+---
+Task ID: T-51c (הוכחת-הלולאה · trace 1a1228e1f1f29429)
+Agent: agent-4 (Z.ai Code · verification lane)
+Task: המטרונום-נדרש-להיות-נצחי-באמת — הוכחת-המשכיות-עצמית-ביט-אמיתי.
+
+Work Log:
+- **מקצה#1 השלים-ולא-הצית-את-עצמו**: next-beat dispatch http=**403** — נתפס-חי-בלוג-הריצה. ההצהרה actions:write-מפורשת (עם contents:read) **נכשלה** בפועל-מול-/dispatches.
+- **חוק-ההרשאות-הנמדד-חי (נחקק-מהמדידה)**: GITHUB_TOKEN + permissions-contents:write-בלבד → POST /dispatches = **204** (השרשרת-הראשית-מוכיחה-זאת-עשרות-פעמים-יומית) · actions:write-מפורש+contents:read → **403** (נמדד-חי-היום). התיעוד-הרשמי-נדחה-מול-האמפיריקה — דפוס-אפס-אמון.
+- **התיקון (5bb89ac)**: כל-ההצתות-מאוחדות-על-נתיב-אחד-מוכח — event_type=artery-revive דרך-/dispatches לכל-העורקות (heal/yield קיבלו-repository_dispatch-trigger-אדיטיבי · federation-הורחב · catchup-הוסב) · self-arm-כפול-נתיבים (dispatch→workflow-dispatch-fallback) · ההצהרה-חזרה-ל-contents:write-בלבד.
+- הבוט-הוצת-מחדש-מקומית (PAT · 204) — מקצה#3-בתור-עם-הקוד-המתוקן; הוכחת-המשכיות-הסופית: מקצה-שנולד-מ-repository_dispatch-עצמי.
+
+Stage Summary:
+- הלולאה-הנצחית-מוכחת-עד-הביט-האחרון או-לא-נקראת-נצחית — האמת-המדודה-בלבד.
