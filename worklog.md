@@ -271,3 +271,26 @@ Work Log:
 Stage Summary:
 - **עורק-התשואה-ריבוני-ומוכח-בענן**: cron-כל-שעתיים מ-GitHub-לבד (ריפו-ציבורי=אפס-חיוב), checkout-פרטי-מוכח, אפס-מפתחות, פנקס-מרקל-מתמשך-שנדחף-חזרה-לגיט-בכל-ריצה-כולל-אדומים.
 - שלושת-העורקים-הריבוניים-פועמים-יחד-בלי-התנגשות (0/15 · 3,18,33,48 · 11-זוגיות) — דופק · מדינה · **תשואה**.
+
+---
+Task ID: T-46-federation
+Agent: agent-2 (Z.ai Code · sovereign operator)
+Task: פקודת-המפעיל (trace 1a121b48) — "תבחן איך לשפר משמעותית מאוד את הארגון הארכיטקטורה והפעילות של הריבונות האוטונומית על כלל הגיט · תמשיך ודחוף". כמו-כן: תיקון-ChunkLoadError-במראת-my-project.
+
+Work Log:
+- **ניתוח-ארכיטקטוני**: שלושת-העורקים-פעמו-בתוך-הבית (Sandbox) אבל אף-אחד-לא-שלט-על-כלל-הגיט; fleet/DEPENDENCY-AUDIT.md = תמונת-מצב-ידנית-סטטית. החסר: שכבת-שלטון-חיה-על-הממלכה-כולה.
+- **הכרזת-טריטוריה agent-2**: `federation/` · `engine/federation-*.mjs` · workflow `federation.yml` · פאנל-אדיטיבי-אחד ב-operator/ (טריטוריה-עצמית). אפס-גע ב-state/ · sovereign*.yml · console/ · docs/ · agents/ · fleet/ · boot/.
+- **החוקה**: `federation/FEDERATION.json` (schema federation-manifest/1) — כל-הריפואים: תפקיד · נראות · תוחלת-דחיפה · עורקים-צפויים + חוקת-אפס-אמון (המציאות-היא-השופט · אף-אימוץ-שקט · אדום-הוא-קבלה · שמות-אינם-סודות).
+- **המנוע** `engine/federation-scan.mjs` (stdlib-בלבד): גילוי-מעודד · בריאות-Actions-לכולם · classify-מדגיל (ADOPT-PENDING · GONE · STALE · VISIBILITY-DRIFT · ARCHIVED · WORKFLOW-RED · ACTIONS-DEAD · UNVERIFIED-PRIVATE) · פנקס-מרקל-בדפוס-fleet-yield-verbatim · `--verify-ledger` · guard-דיכוי · fail-closed-עם-קבלה-אדומה-נקופלת.
+- **selftest 46/46**: שרת-GitHub-API-מדומה-בתוך-התהליך — ולידציה · עימוד · Actions · 11-דגלים · שרשרת-מרקל-כולל-חבלה-נתפסת · SCAN-RED-נקופל · **אפס-טוקן-בקבלה/פנקס/שגיאה** (3-מקלחות-אדומות-תפסו-באגים-אמתיים-שלי: מפתחות-מינוס-לא-מרוכאים · cfg.owner-דורס-manifest.owner · red-test-לא-נכשל-אמיתית — תוקנו-הכל).
+- **באג-חי-שנתפס-בסריקה-הראשונה**: `/users/{owner}/repos` מחזיר **פומביים-בלבד גם-בטוקן** — steem/fleet-vault דוגלו GONE-שקרית. תיקון: `/user/repos?affiliation=owner` (היחיד-שמחזיר-פרטיים) + מקלחת-רגרסיה-ב-selftest. הכשל-הראשון-נקופל-לפנקס-ולגיט-בכנות.
+- **גילוי-הממלכה (סריקה-חיה ×3)**: **24-ריפואים** — תואם-את-MANIFEST-22-ריפו-בכספת +2. כולם-אומצו-באימוץ-מפורש-מתועד (roles-מאומתים-לידועים · discovered-T46-unverified-לשאר). ממצאים: **sanbox** (תיקיית-המפעיל-T-38) חי-ב-GitHub עם sovereign-heart-אדום · **ל-steem-יש-Actions-חיים** (sovereign-cycle · cloud-heart — האודיט-הישן-טעה) · 13-ריפואים-עם-ריצות-אדומות-אחרונות (בעיקר gitleaks-secret-scan · workflow-yaml-guard) — **אות-ריפוי-חוצה-ריפואים**.
+- **העורק**: `federation.yml` — cron 19,49 (אפס-התנגשות עם 0/15 · 3,18,33,48 · 11-זוגיות) · dispatch · guard-דיכוי-28-דק'-לפני-setup-node · selftest-gate · leak-scan-fail-closed-על-טריטוריה-מאונדקסת · דחיפה-rebase×3.
+- **פאנל-«פדרציה» בשער-המפעיל**: טאב-שביעי — פסק-חי · דגלים-מפורטים · טבלת-24-הריפואים (תפקיד · נראות · דחיפה · Actions-אדומים) · קבלות-אחרונות · כרטיס-פדרציה-במבט-על. קריאה-חיה מ-raw/latest.json (CSP-קיים-מכסה).
+- **הליכות-מרקל חיות ×3**: UNBROKEN 9037fd00→d4c049b9→824c23c7 (כולל-קיפול-הגילוי-המלא-24=24).
+
+Stage Summary:
+- **הריבונות-מכסה-כעת-את-כלל-הגיט**: הממלכה-כולה (24-ריפואים) תחת-חוקה-גלויה, סריקה-כל-30-דק'-בענן, פנקס-מרקל-אפס-מפתחות, ופאנל-חי-למפעיל.
+- ארבעת-העורקים-ללא-התנגשות-דקה: 0/15 · 3,18,33,48 · 11-זוגיות · **19,49**.
+- פתוח-לאחים: rescue-guard-לפדרציה-בעורק-המדינה (agent-3) · DEPENDENCY-AUDIT-ישען-על-הפנקס-החי (agent-4) · mirror-rescue-מ-saos-runtime (agent-1) · ריפוי-13-הריפואים-האדומים + sovereign-heart-ב-sanbox.
+- my-project: תוקן-ChunkLoadError (cache-נקה · dev-אותחל) + allowedDevOrigins-ל-preview (בלי-הפרעות).

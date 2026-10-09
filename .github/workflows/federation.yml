@@ -1,0 +1,109 @@
+name: federation
+# ═══════════════════════════════════════════════════════════════════════
+# עורק-הפדרציה (T-46 · agent-2) — ריבונות על-כלל-הגיט.
+# העורק-הרביעי: גילוי-כל-הריפואים · בריאות-Actions-לכולם · סררות מול-המניפסט-
+# החוקתי (federation/FEDERATION.json) · פנקס-מרקל (federation/LEDGER.jsonl) ·
+# latest.json לפאנל-המפעיל. אפס-מפתחות-חתימה; הטוקן = SBX_FLEET_PAT (דפוס-T-45)
+# לקריאת-ריפואים-פרטיים, fallback אנונימי-כנה (UNVERIFIED-PRIVATE).
+# קצב: cron כל-30-דק' (19,49 — מרווח-מן-העורקים-האחים: sovereign 0/15 ·
+# state 3,18,33,48 · yield 11-זוגיות) + זימון-חיצוני (dispatch).
+# guard: פנקס-טרי-מ-28-דק' → CHAIN-SUPPRESSED (יציאה-מוקדמת-לפני-setup-node).
+# ═══════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "19,49 * * * *"
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [federation-next]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: federation
+  cancel-in-progress: false
+
+jobs:
+  federation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: checkout (home)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # guard-מהיר (sh בלבד — לפני-setup-node): פנקס-טרי-מ-28-דק' → דיכוי-שקט
+      - name: chain-guard (fresh-ledger suppression)
+        id: guard
+        run: |
+          SUPPRESS=0
+          LAST_AT=$(tail -n 1 federation/LEDGER.jsonl 2>/dev/null | grep -o '"at":"[^"]*"' | tail -n 1 | cut -d'"' -f4 || true)
+          if [ -n "$LAST_AT" ]; then
+            LAST_S=$(date -u -d "$LAST_AT" +%s 2>/dev/null || echo 0)
+            NOW_S=$(date -u +%s)
+            if [ "$LAST_S" -gt 0 ]; then
+              AGE=$((NOW_S - LAST_S))
+              echo "last federation receipt age: ${AGE}s"
+              if [ "$AGE" -lt 1680 ]; then SUPPRESS=1; fi
+            fi
+          fi
+          if [ "$SUPPRESS" = "1" ]; then
+            echo "::notice::federation chain-suppressed (ledger fresh < 28min)"
+            echo "suppressed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: setup-node
+        if: steps.guard.outputs.suppressed != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # שופט-המנוע: אדום = אין-עורק-פדרציה (הקבלה-האדומה-האחרונה-נשארת-בפנקס)
+      - name: selftest-gate
+        if: steps.guard.outputs.suppressed != 'true'
+        run: node engine/federation-selftest.mjs
+
+      # הסריקה-החיה: גילוי → בריאות → דגלים → פנקס-מרקל → latest.json
+      - name: federation scan (live)
+        if: steps.guard.outputs.suppressed != 'true'
+        run: node engine/federation-scan.mjs --guard-minutes 28
+        env:
+          FED_TOKEN: ${{ secrets.SBX_FLEET_PAT }}
+
+      # טריטוריה-לאינדקס לפני-הסריקה (דפוס-האחים — כיסוי-staged+untracked), גם-בכישלון
+      - name: stage territory
+        if: always() && steps.guard.outputs.suppressed != 'true'
+        run: git add federation/ engine/federation-scan.mjs engine/federation-selftest.mjs .github/workflows/federation.yml
+
+      # לא --staged: סריקת-טריטוריה-מאונדקסת-בלבד (דפוס-sovereign-state) — fail-closed
+      - name: leak-scan (fail-closed)
+        if: always() && steps.guard.outputs.suppressed != 'true'
+        run: git ls-files -z federation/ engine/federation-scan.mjs engine/federation-selftest.mjs .github/workflows/federation.yml | xargs -0 node engine/leak-scan.mjs
+
+      # קומיט-ממושפע: רק-הטריטוריה-שלי (אף-פעם לא -A) · rebase ×3 · כישלון-אמת = יציאה 1
+      - name: commit + push (rebase-safe)
+        if: always() && steps.guard.outputs.suppressed != 'true'
+        run: |
+          git config user.name "sovereign-federation"
+          git config user.email "federation@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "no ledger changes — skip"
+          else
+            git commit -m "[federation] git-estate ledger: $(date -u +%FT%TZ)"
+            pushed=0
+            for i in 1 2 3; do
+              if git pull --rebase origin main && git push origin main; then
+                pushed=1
+                echo "federation ledger pushed (attempt $i/3)"
+                break
+              fi
+              git rebase --abort 2>/dev/null || true
+              git status
+              if [ "$i" -lt 3 ]; then sleep 5; fi
+            done
+            if [ "$pushed" -ne 1 ]; then
+              echo "push failed after 3 rebase attempts — honest failure, no silent green"
+              exit 1
+            fi
+          fi
