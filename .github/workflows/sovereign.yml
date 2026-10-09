@@ -1,0 +1,47 @@
+name: sovereign-tick
+# עורק-האוטונומיה-חסר-הסנדבוקס: GitHub-עצמו מריץ-את-הריבונות כל-15-דק'.
+# ה-runner-אפמרלי-במכוון — הרציפות-חיה-בריפו. אפס-PAT: GITHUB_TOKEN בלבד.
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sovereign-tick
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: tick (measure + receipts)
+        run: node engine/sovereign-tick.mjs
+
+      - name: leak-scan (fail-closed)
+        run: node engine/leak-scan.mjs receipts/latest.json receipts/ticks.jsonl
+
+      - name: commit + push (rebase-safe)
+        run: |
+          git config user.name "sandbox-sovereign"
+          git config user.email "sandbox-sovereign@users.noreply.github.com"
+          git add receipts/
+          if git diff --cached --quiet; then
+            echo "no receipt changes — skip"
+          else
+            git commit -m "[tick] sovereign heartbeat: $(date -u +%FT%TZ)"
+            git pull --rebase origin main
+            git push origin main
+          fi

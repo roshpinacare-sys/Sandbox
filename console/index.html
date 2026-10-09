@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'self'">
+<title>קונסולת-המפעיל — Sandbox</title>
+<style>
+  :root{
+    --bg:#0b0e11; --panel:#12161c; --panel2:#171c24; --line:#232b36;
+    --txt:#e8edf4; --dim:#8b98a8; --gold:#d4a94e; --green:#3fb96f; --red:#d05b5b;
+    --mono:'SFMono-Regular',Consolas,'Liberation Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',Tahoma,Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+  a{color:var(--gold);text-decoration:none}
+  header{border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+  .sigil{width:34px;height:34px;border:1px solid var(--gold);border-radius:8px;display:grid;place-items:center;color:var(--gold);font-weight:700}
+  header h1{font-size:1.02rem;font-weight:600}
+  header .sub{color:var(--dim);font-size:.78rem}
+  main{flex:1;width:100%;max-width:880px;margin:0 auto;padding:24px 18px 40px}
+  footer{border-top:1px solid var(--line);color:var(--dim);font-size:.75rem;padding:14px 20px;text-align:center;margin-top:auto}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px}
+  .gate{max-width:430px;margin:8vh auto 0;text-align:center}
+  .gate .sigil{width:52px;height:52px;margin:0 auto 14px;font-size:1.3rem}
+  .gate h2{font-size:1.15rem;margin-bottom:6px}
+  .gate p{color:var(--dim);font-size:.85rem;line-height:1.7;margin-bottom:18px}
+  .field{display:flex;gap:8px}
+  input[type=password]{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--txt);
+    padding:13px 14px;font-size:1rem;outline:none;min-width:0}
+  input[type=password]:focus{border-color:var(--gold)}
+  button{background:var(--gold);color:#141210;border:0;border-radius:10px;padding:13px 22px;font-weight:700;font-size:.95rem;cursor:pointer}
+  button:hover{filter:brightness(1.08)}
+  button[disabled]{opacity:.55;cursor:wait}
+  .msg{margin-top:12px;font-size:.83rem;min-height:1.2em}
+  .msg.err{color:var(--red)} .msg.ok{color:var(--green)}
+  .sec h3{color:var(--gold);font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .sec p{line-height:1.9;font-size:.93rem;color:#cfd7e2}
+  .sec ul{list-style:none;margin-top:4px}
+  .sec li{padding:7px 14px 7px 0;border-right:2px solid var(--line);margin:6px 0;font-size:.9rem;line-height:1.8;color:#cfd7e2}
+  .meta{color:var(--dim);font-size:.75rem;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap}
+  .badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:.72rem;color:var(--dim)}
+  .badge.g{color:var(--green);border-color:#1f4030}
+  .hidden{display:none}
+  .errbox{border:1px solid #4a2424;background:#1a1214;color:#e4a0a0;border-radius:10px;padding:10px 14px;font-size:.83rem;margin-top:10px}
+  @media(max-width:560px){.field{flex-direction:column}button{width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <div class="sigil">צ</div>
+  <div>
+    <h1>Sandbox · קונסולת-המפעיל</h1>
+    <div class="sub">השרת-המפעיל של הרשת — התוכן-מוצפן קליינט-סייד</div>
+  </div>
+</header>
+
+<main>
+  <!-- שער-הסיסמה -->
+  <section id="gate" class="card gate">
+    <div class="sigil">צ</div>
+    <h2>שער-הסיסמה</h2>
+    <p>התוכן-כולו מוצפן AES-256-GCM ונפתח-רק-בסיסמה-הראשית.<br>
+       אין-שמירת-מצב: התוכן-חי-בזיכרון-הלשונית-בלבד, ורענון-מבקש-סיסמה-מחדש — במכוון.</p>
+    <div class="field">
+      <input id="pass" type="password" placeholder="סיסמה-ראשית (הדבקה-מרובת-שורות-נתמכת)" autocomplete="off" spellcheck="false" aria-label="סיסמה-ראשית">
+      <button id="open">פתח</button>
+    </div>
+    <div id="gmsg" class="msg" role="status" aria-live="polite"></div>
+    <div id="gerr" class="errbox hidden"></div>
+  </section>
+
+  <!-- התוכן-המפוענח (בזיכרון-בלבד) -->
+  <section id="vault" class="hidden" aria-live="polite">
+    <div class="meta">
+      <span class="badge g">● פוענח בהצלחה</span>
+      <span class="badge" id="sealedat"></span>
+      <span class="badge">PBKDF2-SHA256 ×650,000 · AES-256-GCM</span>
+      <span class="badge">אפס-שמירה-מקומית</span>
+    </div>
+    <div id="sections"></div>
+  </section>
+</main>
+
+<footer>
+  הסיסמה-לעולם-לא-נשמרת בשום-צורה — לא-כאן, לא-בשרת, לא-בגיט · פרטים: <a href="https://github.com/roshpinacare-sys/Sandbox/blob/main/SECURITY.md" target="_blank" rel="noopener">SECURITY.md</a>
+</footer>
+
+<script>
+"use strict";
+/* ═══ מנוע-הפענוח — WebCrypto בלבד, אפס-תלות, אפס-שרת ═════════════════════
+ * חוזה: params.json (salt/iv/פרמטרים — פומביים) + sealed-payload.bin (צופן+תג).
+ * PBKDF2-SHA256 ×650k → AES-256-GCM · tagLength 128 · סיסמה-שגויה = final-זורק.
+ * אפס-localStorage/cookie/IndexedDB — התוכן-המפוענח-בזיכרון-הלשונית-בלבד.
+ * הקלט: TextEncoder ישיר (UTF-8, בלי-נירמול) — תואם-בייט-מול-כלי-החתימה. */
+const $ = (id) => document.getElementById(id);
+const enc = new TextEncoder();
+
+function b64ToBytes(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+async function deriveKey(passBytes, saltBytes, iterations) {
+  const base = await crypto.subtle.importKey("raw", passBytes, "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", hash: "SHA-256", salt: saltBytes, iterations },
+    base,
+    256,
+  );
+  return crypto.subtle.importKey("raw", bits, { name: "AES-GCM" }, false, ["decrypt"]);
+}
+
+async function tryUnlock(password, params, payloadBytes) {
+  const key = await deriveKey(enc.encode(password), b64ToBytes(params.saltB64), params.iterations);
+  return crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: b64ToBytes(params.ivB64), tagLength: params.tagLenBits },
+    key,
+    payloadBytes,
+  );
+}
+
+function render(payload) {
+  $("gate").classList.add("hidden");
+  const vault = $("vault");
+  vault.classList.remove("hidden");
+  if (payload.sealedAt) $("sealedat").textContent = "נחתם: " + payload.sealedAt;
+  const wrap = $("sections");
+  for (const sec of payload.sections || []) {
+    const card = document.createElement("div");
+    card.className = "card sec";
+    const h = document.createElement("h3");
+    h.textContent = sec.heading || "";
+    card.appendChild(h);
+    if (sec.body) {
+      const p = document.createElement("p");
+      p.textContent = sec.body;
+      card.appendChild(p);
+    }
+    if (Array.isArray(sec.items) && sec.items.length) {
+      const ul = document.createElement("ul");
+      for (const it of sec.items) {
+        const li = document.createElement("li");
+        li.textContent = it;
+        ul.appendChild(li);
+      }
+      card.appendChild(ul);
+    }
+    wrap.appendChild(card);
+  }
+  if (payload.footer) {
+    const f = document.createElement("div");
+    f.className = "card sec";
+    const p = document.createElement("p");
+    p.textContent = payload.footer;
+    f.appendChild(p);
+    wrap.appendChild(f);
+  }
+}
+
+function fail(msg, detail) {
+  $("gmsg").textContent = "";
+  const box = $("gerr");
+  box.classList.remove("hidden");
+  box.textContent = detail ? msg + " — " + detail : msg;
+}
+
+async function main() {
+  const btn = $("open");
+  const passEl = $("pass");
+  let params, payloadBytes;
+  try {
+    const [p, b] = await Promise.all([
+      fetch("./params.json", { cache: "no-store" }).then((r) => {
+        if (!r.ok) throw new Error("params " + r.status);
+        return r.json();
+      }),
+      fetch("./sealed-payload.bin", { cache: "no-store" }).then((r) => {
+        if (!r.ok) throw new Error("payload " + r.status);
+        return r.arrayBuffer();
+      }),
+    ]);
+    params = p;
+    payloadBytes = new Uint8Array(b);
+  } catch (e) {
+    fail("טעינת-הצופן-נכשלה — דרוש-הגשה-דרך-האתר (Pages), לא-file://", String(e && e.message));
+    btn.disabled = true;
+    return;
+  }
+
+  async function attempt() {
+    // קנוניזציה-סימטרית: שורות-מודבקות-מתחברות (זהה-לחתימה-ול-selftest — SECURITY.md)
+    const pw = passEl.value.replace(/[\r\n]+/g, "");
+    if (!pw) {
+      $("gmsg").textContent = "";
+      $("gmsg").className = "msg err";
+      $("gmsg").textContent = "הזן-סיסמה.";
+      return;
+    }
+    btn.disabled = true;
+    $("gerr").classList.add("hidden");
+    $("gmsg").className = "msg";
+    $("gmsg").textContent = "גוזר-מפתח (PBKDF2 ×650k)…";
+    try {
+      const plain = await tryUnlock(pw, params, payloadBytes);
+      const text = new TextDecoder().decode(plain);
+      let payload;
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        throw Object.assign(new Error("payload-corrupt"), { corrupt: true });
+      }
+      render(payload);
+      // ניקוי-מיטבי: אפס-שאריות-סיסמה ב-DOM/מצב
+      passEl.value = "";
+      $("gmsg").textContent = "";
+    } catch (e) {
+      $("gmsg").textContent = "";
+      $("gerr").classList.remove("hidden");
+      $("gerr").textContent = e && e.corrupt
+        ? "הפענוח-הצליח-אך-התוכן-פגום (צופן-ישן/שחותם-מחדש?) — נסה-שוב או עדכן-את-החותם."
+        : "סיסמה-שגויה — הפענוח-נכשל קריפטוגרפית. אפס-ניסיונות-נשמרים; נסה-שוב.";
+    } finally {
+      btn.disabled = false;
+      passEl.focus();
+    }
+  }
+
+  btn.addEventListener("click", attempt);
+  passEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") attempt();
+  });
+  passEl.focus();
+}
+
+main();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+name: pages-deploy
+# פריסת-קונסולת-המפעיל ל-GitHub Pages — השער-המוצפן-קליינט-סייד.
+# סטטי-לגמרי: אפס-שרת, אפס-מסד, אפס-סודות. הסיסמה-מעולם-לא-עוברת-על-החוט.
+on:
+  push:
+    branches: [main]
+    paths: ["console/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup-pages
+        uses: actions/configure-pages@v5
+      - name: upload-console
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: console
+      - name: deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
