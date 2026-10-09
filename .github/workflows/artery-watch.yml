@@ -82,9 +82,11 @@ jobs:
                 http = (await fetch(`${API}/dispatches`, { method: "POST", headers: H,
                   body: JSON.stringify({ event_type: a.chain, client_payload: { from: "artery-watch", staleS: ageS } }) })).status;
               } else {
-                how = "repository_dispatch:artery-revive";
+                // T-51-fix: אירוע-הצתה-פר-עורק — מונע-חצימה-הדדית (כל-אירוע-מצית-רק-את-יעדו;
+                // הדפוס-הקודם artery-revive-משותף גרם-ל-2-אירועים×4-מאזינים=8-ריצות-והתנגשויות-rebase)
+                how = `repository_dispatch:revive-${a.wf.replace(".yml", "")}`;
                 http = (await fetch(`${API}/dispatches`, { method: "POST", headers: H,
-                  body: JSON.stringify({ event_type: "artery-revive", client_payload: { from: "artery-watch", wf: a.wf, staleS: ageS } }) })).status;
+                  body: JSON.stringify({ event_type: `revive-${a.wf.replace(".yml", "")}`, client_payload: { from: "artery-watch", staleS: ageS } }) })).status;
               }
               console.log(`STALE  ${a.wf} last-run ${ageS}s ago > ${a.maxAge}s — ignited via ${how} http=${http}`);
             } catch (e) {
