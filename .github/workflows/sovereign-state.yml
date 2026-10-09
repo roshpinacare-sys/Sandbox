@@ -5,6 +5,17 @@ name: sovereign-state
 # (נמדד: ה-cron-של-agent-1 מעולם-לא-הניב-ריצה-מתוכננת — עורק-שני-בזמנים-שונים מכפיל-את-סיכויי-ההדקה-המתוכננת).
 # אפס-PAT-ב-CI: GITHUB_TOKEN-בלבד, הרשאת-contents:write-בלבד (קרדנשל-checkout מתמיד-כברירת-מחדל — ה-push עובד).
 # arm-חייב-הערה: נאכף-ב-engine/operator.mjs (יציאה-כנה 1 בלעדיו) — לא-כאן.
+# ─── T-39 (agent-2 · שיפור-מוסף, אפס-דריסה): ────────────────────────────────
+# נמדד-חי 2026-10-09T15:3xZ: מאז-טיק#1 (14:56:56) — משבצות-cron 15:03 ו-15:18 הוחמצו
+# (אפס-ריצות) — אותו-כשל-מתזמן-שקט שכבר-הוכח-חי ב-T-42 (11-משבצות-רצופות). המנוע-עצמו
+# בריא (אומת-בעותק-מבודד: טיק#2 · סוללה 6/6 · מרקל-התקדם). הרציפות-לא-תישען-על-המתזמן:
+#   · repository_dispatch [sovereign-state-tick] — השרשרת-העצמית (הדפוס-המוכח של sovereign.yml)
+#   · chain-next: שינה-עד-המשבצת-הבאה → הצתת-הטביעה-הבאה (GITHUB_TOKEN-ממופה-מפורש —
+#     התיקון-החי-של-8583808: הטוקן-אינו-ב-env-דיפולטי של-run-steps)
+#   · rescue-guard: אם-עורק-הדופק-האח-סטלה >30-דק' (receipts/latest.json) — מצית-אותו-מחדש
+#     (ריפוי-בין-עורקים בלי-לגעת-בקובץ-של-agent-1)
+#   · timeout-minutes 10→20: שינה-של-chain-next (עד ~14-דק') חייבת-תקרה-גדולה-ממנה
+#   · טיק-כשל/פעולת-מפעיל = אין-יורש (כנות) — גיבוי: cron · dispatch-ידני · לוח-/status/
 on:
   schedule:
     - cron: "3,18,33,48 * * * *"
@@ -25,6 +36,8 @@ on:
         description: "הערת-מפעיל (חובה-מדודה עבור arm — נאכף-ב-operator.mjs)"
         default: ""
         type: string
+  repository_dispatch:
+    types: [sovereign-state-tick]
 
 permissions:
   contents: write
@@ -36,7 +49,8 @@ concurrency:
 jobs:
   state:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # T-39: 10→20 — chain-next ישן עד ~14 דק' בתוך-ה-runner; תקרה-10 הייתה-הורגת-את-השרשרת
+    timeout-minutes: 20
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -48,10 +62,41 @@ jobs:
         with:
           node-version: 20
 
-      # טיק-מדינה: ריצה-מתוכננת או dispatch עם action=auto
+      # טיק-מדינה: ריצה-מתוכננת · השרשרת-העצמית (repository_dispatch) · dispatch עם action=auto
+      # T-39: repository_dispatch-נוסף-לתנאי — בלעדיו-ריצות-השרשרת-היו-מדלגות-על-הטיק-עצמו
       - name: state-tick
-        if: github.event_name == 'schedule' || inputs.action == 'auto'
+        if: github.event_name == 'schedule' || github.event_name == 'repository_dispatch' || inputs.action == 'auto'
         run: node engine/state-tick.mjs
+
+      # T-39 · rescue-guard: ריפוי-בין-עורקים — אם-עורק-הדופק-של-agent-1 סטלה >30-דק'
+      # (השרשרת-שלו מתה — למשל-runner-נהרג-בזמן-שינה) — מציתים-אותו-מחדש מכאן.
+      # נמדד: עורק-הדופק פועם כל ~15-דק'; >30-דק' = מוות-אמת. אפס-התערבות-כשהוא-רענן.
+      - name: rescue-guard (revive sibling tick-artery if stale >30min)
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          STALE_MS="$(node -e '
+            const fs = require("fs");
+            let last = 0;
+            try { last = Date.parse(JSON.parse(fs.readFileSync("receipts/latest.json", "utf8")).at) || 0; } catch {}
+            process.stdout.write(String(Date.now() - last));
+          ')"
+          if [ "$STALE_MS" -gt 1800000 ]; then
+            HTTP="$(curl -sS -o /dev/null -w '%{http_code}' -X POST \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches \
+              -d '{"event_type":"sovereign-tick","client_payload":{"from":"state-rescue"}}')"
+            echo "tick-artery stale ${STALE_MS}ms — rescue dispatch http=$HTTP"
+            if [ "$HTTP" != "204" ]; then
+              echo "rescue-dispatch-failed — tick artery stays down; re-ignite via workflow_dispatch"
+              exit 1
+            fi
+          else
+            echo "tick artery fresh (${STALE_MS}ms) — no rescue needed"
+          fi
 
       # פעולת-מפעיל (action≠auto): הקלטים עוברים רק-דרך env — אפס-הזרקה-ל-shell
       - name: operator-action
@@ -96,3 +141,36 @@ jobs:
           fi
         env:
           SBX_ACTION: ${{ inputs.action }}
+
+      # ─── T-39 · חוליית-השרשרת-העצמית (הדפוס-המוכח-חי של sovereign.yml · 204→ריצה-בת-4-שניות): ───
+      # רק-טיק-מדינה-אמתי (הצלחה) מוליד-יורש; פעולת-מפעיל/כישלון = אין-יורש (כנות —
+      # גיבוי: cron · dispatch-ידני · לוח-/status/). שינה-עד-900ש-מהטיק-האחרון (תקרה-840ש
+      # במקום-870 — מרווח-בטחון-מול-timeout-20דק'); קבלה-סטלה/חסרה = נסיגה-600ש.
+      - name: chain-next (sleep to next slot, then dispatch the next state beat)
+        if: always() && steps.state-tick.outcome == 'success'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          SLEEP_S="$(node -e '
+            const fs = require("fs");
+            let last = 0;
+            try { last = Date.parse(JSON.parse(fs.readFileSync("state/network-state.json", "utf8")).keeper.lastTick) || 0; } catch {}
+            const elapsed = Date.now() - last;
+            const s = (last > 0 && elapsed >= 0 && elapsed <= 900000)
+              ? Math.max(5, Math.min(840, Math.ceil((900000 - elapsed) / 1000)))
+              : 600; // אין-קבלה-טרייה (כישלון/עץ-רענן) — נסיגה-מצמצמת-סערה
+            process.stdout.write(String(s));
+          ')"
+          echo "chain-next: sleeping ${SLEEP_S}s until next state slot"
+          sleep "$SLEEP_S"
+          HTTP="$(curl -sS -o /dev/null -w '%{http_code}' -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches \
+            -d '{"event_type":"sovereign-state-tick","client_payload":{"from":"chain"}}')"
+          echo "dispatch http=$HTTP"
+          if [ "$HTTP" != "204" ]; then
+            echo "dispatch-failed — state chain broken; re-ignite via workflow_dispatch"
+            exit 1
+          fi
