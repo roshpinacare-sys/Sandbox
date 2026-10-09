@@ -7,6 +7,7 @@
  *   steemtx.mjs (המנוע, מוכח-שרשרת R209/R216/R245) — סריאליזציית בייטים, פורט נאמן
  *   vault.enc.json — PBKDF2 600k + AES-256-GCM, סיסמת-האב הראשית של המפעיל
  * ═══════════════════════════════════════════════════════════════════════ */
+if (window.top !== window.self) { try { window.top.location = window.self.location; } catch { document.documentElement.hidden = true; } } // T-42 framebust (M3)
 (function () {
   "use strict";
   const GC = window.GateCrypto;
@@ -318,7 +319,7 @@
       renderOverview();
       renderAccounts();
     } catch (e) {
-      $("chain-state").innerHTML = `<li><span class="bad">שגיאת RPC: ${String(e.message).slice(0, 120)}</span></li>`;
+      $("chain-state").innerHTML = `<li><span class="bad">שגיאת RPC: ${escapeHtml(String(e.message).slice(0, 120))}</span></li>`;
     }
   }
 
@@ -348,12 +349,12 @@
 
     const dgpo = S.dgpo;
     $("chain-state").innerHTML = dgpo ? `
-      <li><span>ראש-השרשרת</span><span class="val">${dgpo.head_block_number} (#${String(dgpo.head_block_id).slice(0, 10)}…)</span></li>
-      <li><span>זמן-שרשרת</span><span class="val">${String(dgpo.time).replace("T", " ")}</span></li>
-      <li><span>אספקה נוכחית</span><span class="val">${dgpo.current_supply}</span></li>
+      <li><span>ראש-השרשרת</span><span class="val">${escapeHtml(String(dgpo.head_block_number))} (#${escapeHtml(String(dgpo.head_block_id).slice(0, 10))}…)</span></li>
+      <li><span>זמן-שרשרת</span><span class="val">${escapeHtml(String(dgpo.time)).replace("T", " ")}</span></li>
+      <li><span>אספקה נוכחית</span><span class="val">${escapeHtml(String(dgpo.current_supply))}</span></li>
       <li><span>קרן-הווסטים</span><span class="val">${toNum(dgpo.total_vesting_fund_steem).toFixed(0)} STEEM</span></li>
       <li><span>vestsPerSP</span><span class="val">${(toNum(dgpo.total_vesting_shares) / toNum(dgpo.total_vesting_fund_steem) / 1e6).toFixed(3)}</span></li>
-      <li><span>אחרונה-בלתי-הפיכה</span><span class="val">${dgpo.last_irreversible_block_num}</span></li>` : '<li><span class="muted">אין נתוני dgpo</span></li>';
+      <li><span>אחרונה-בלתי-הפיכה</span><span class="val">${escapeHtml(String(dgpo.last_irreversible_block_num))}</span></li>` : '<li><span class="muted">אין נתוני dgpo</span></li>';
   }
 
   function renderCustody() {

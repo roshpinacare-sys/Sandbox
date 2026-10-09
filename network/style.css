@@ -1,0 +1,105 @@
+/* לוח-הרשת הריבוני — Sandbox/network/style.css
+ * dark sovereign theme, RTL-first — תואם-לשפה-החזותית של console/ ו-cockpit (docs/).
+ * אפס-גופנים-חוץ · אפס-CDN · אפס-תמונות · אפס-תלות. */
+
+:root {
+  --bg: #0b0e13; --bg2: #11151d; --card: #151a24; --line: #232b3a;
+  --txt: #e8ecf3; --muted: #8b94a7;
+  --ok: #3ecf8e; --warn: #e5b567; --bad: #ef6461; --acc: #d4a24e;   /* gold — no default blue */
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  line-height: 1.55;
+}
+a { color: var(--acc); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.ltr { direction: ltr; unicode-bidi: isolate; font-family: var(--mono); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ── כותרת ── */
+.site-head { border-bottom: 1px solid var(--line); background: var(--bg2); }
+.head-inner { max-width: 960px; margin: 0 auto; padding: 14px 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.sigil { width: 40px; height: 40px; border: 1px solid var(--acc); border-radius: 10px; display: grid; place-items: center; color: var(--acc); font-weight: 700; font-size: 1.1rem; flex: none; }
+.head-text { flex: 1; min-width: 230px; }
+.head-text h1 { margin: 0; font-size: 1.05rem; font-weight: 600; }
+.head-text .sub { margin: 2px 0 0; color: var(--muted); font-size: .78rem; }
+.nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.nav a { border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: .8rem; }
+.nav a:hover { border-color: var(--acc); text-decoration: none; }
+
+/* ── מבנה ── */
+main { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 20px 18px 36px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+.card h2 { margin: 0 0 4px; font-size: 1rem; font-weight: 600; color: var(--acc); }
+.hint { margin: 0 0 14px; color: var(--muted); font-size: .78rem; }
+.note { margin: 12px 0 0; color: var(--muted); font-size: .8rem; min-height: 1em; }
+.sec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.btn { background: var(--bg2); color: var(--txt); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; min-height: 40px; font-size: .85rem; cursor: pointer; }
+.btn:hover { border-color: var(--acc); }
+.btn[disabled] { opacity: .45; cursor: wait; }
+
+/* ── דופק-הריבונות ── */
+.hb-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 8px 0 2px; }
+.hb-age { font-family: var(--mono); font-weight: 700; font-size: clamp(2.4rem, 9vw, 3.2rem); line-height: 1.1; }
+.hb-age.st-na { font-size: 1.2rem; font-weight: 400; }
+.hb-age .unit { font-size: .36em; font-weight: 400; color: var(--muted); font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif; }
+.hb-pill { border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: .9rem; }
+.hb-src { margin: 8px 0 0; color: var(--muted); font-size: .75rem; }
+.st-ok { color: var(--ok); }
+.st-warn { color: var(--warn); }
+.st-bad { color: var(--bad); }
+.st-na { color: var(--muted); }
+.pill-ok { color: var(--ok); border-color: #1f4030; }
+.pill-warn { color: var(--warn); border-color: #4d3f1e; }
+.pill-bad { color: var(--bad); border-color: #4a2424; }
+.pill-na { color: var(--muted); }
+
+/* ── טיילים (מדדי-הטביעה) ── */
+.meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 14px 0 0; }
+.meta-grid > div { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.meta-grid dt { color: var(--muted); font-size: .72rem; }
+.meta-grid dd { margin: 2px 0 0; direction: ltr; text-align: left; font-family: var(--mono); font-size: .92rem; overflow-wrap: anywhere; }
+
+/* ── טבלאות ── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: .74rem; white-space: nowrap; }
+tbody tr:hover { background: var(--bg2); }
+td.name { max-width: 220px; overflow-wrap: anywhere; }
+.na { color: var(--muted); }
+.c-ok { color: var(--ok); }
+.c-bad { color: var(--bad); }
+.c-warn { color: var(--warn); }
+
+/* ── שורות-מבט-הרשת ── */
+.rows { margin: 0; }
+.rows .row { display: flex; gap: 4px 14px; padding: 10px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; align-items: baseline; }
+.rows .row:last-child { border-bottom: 0; }
+.rows dt { flex: none; min-width: 150px; color: var(--muted); font-size: .8rem; }
+.rows dd { margin: 0; flex: 1; min-width: 220px; font-size: .88rem; }
+.k { color: var(--muted); font-size: .78rem; }
+.pill { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: .8rem; }
+
+/* ── תחתית ── */
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; padding: 14px 18px; text-align: center; }
+footer p { margin: 0; }
+footer .dim { margin-top: 4px; font-size: .72rem; opacity: .8; }
+
+/* ── מובייל (390px ומטה) ── */
+@media (max-width: 560px) {
+  .head-inner { padding: 12px 14px; }
+  main { padding: 16px 12px 28px; }
+  .card { padding: 16px 14px; }
+  .hb-wrap { gap: 10px; }
+  .rows dt { min-width: 100%; }
+  .rows dd { min-width: 100%; }
+  .meta-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+}

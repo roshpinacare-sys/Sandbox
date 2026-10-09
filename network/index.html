@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; connect-src 'self' https://api.github.com; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0e13">
+<title>Sandbox · לוח-הרשת הריבוני</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="head-inner">
+    <div class="sigil" aria-hidden="true">ר</div>
+    <div class="head-text">
+      <h1>Sandbox · לוח-הרשת הריבוני</h1>
+      <p class="sub">הוכחת-החיים הציבורית של עורק-הריבונות — טלמטריה-פומבית בלבד · אפס-סודות · אפס-הרשאות</p>
+    </div>
+    <nav class="nav" aria-label="ניווט-ראשי">
+      <a href="../">הקונסולה</a>
+      <a href="../cockpit/">הקוקפיט</a>
+      <a href="https://github.com/roshpinacare-sys/FleetHQ" target="_blank" rel="noopener noreferrer">FleetHQ</a>
+      <a href="https://github.com/roshpinacare-sys/Sandbox/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">אבטחה</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1 · דופק-הריבונות -->
+  <section class="card" id="sec-hb" aria-labelledby="hb-title">
+    <div class="sec-head">
+      <h2 id="hb-title">דופק-הריבונות</h2>
+      <button id="refresh" type="button" class="btn" title="משליף-מחדש את-כל-המקורות הפומביים">רענן-עכשיו</button>
+    </div>
+    <p class="hint">הזמן-שחלף מאז-טביעת-הראש האחרונה (receipts/latest.json) — מדד-החיים של העורק. ירוק-&lt;30 דק' · צהוב-&lt;90 · אדום-מעלה.</p>
+    <div class="hb-wrap st-na" id="hb-wrap">
+      <div class="hb-age st-na" id="hb-age" role="status" aria-live="polite"><span class="num">…</span></div>
+      <div class="hb-pill pill-na" id="hb-pill">טוען…</div>
+    </div>
+    <p class="hb-src" id="hb-at">טביעה-אחרונה: ממתין-לנתונים…</p>
+    <dl class="meta-grid">
+      <div><dt>head (קיצור)</dt><dd id="hb-head"><span class="na">…</span></dd></div>
+      <div><dt>mode</dt><dd id="hb-mode"><span class="na">…</span></dd></div>
+      <div><dt>קבצים (files)</dt><dd id="hb-files"><span class="na">…</span></dd></div>
+      <div><dt>לא-מחויבים (dirty)</dt><dd id="hb-dirty"><span class="na">…</span></dd></div>
+      <div><dt>שורות-יומן (worklogLines)</dt><dd id="hb-wll"><span class="na">…</span></dd></div>
+      <div><dt>שרשרת (chain)</dt><dd id="hb-chain"><span class="na">…</span></dd></div>
+    </dl>
+  </section>
+
+  <!-- 2 · פעימות-אחרונות -->
+  <section class="card" id="sec-ticks" aria-labelledby="ticks-title">
+    <h2 id="ticks-title">פעימות-אחרונות</h2>
+    <p class="hint">שש-הפעימות האחרונות מ-receipts/ticks.jsonl — החדשה-ביותר בראש.</p>
+    <div class="table-wrap">
+      <table>
+        <caption class="sr-only">שש-הפעימות האחרונות: זמן UTC, head, mode</caption>
+        <thead>
+          <tr><th scope="col">זמן (UTC)</th><th scope="col">head</th><th scope="col">mode</th></tr>
+        </thead>
+        <tbody id="ticks-body">
+          <tr><td colspan="3" class="na">טוען…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3 · מבט-הרשת -->
+  <section class="card" id="sec-net" aria-labelledby="net-title">
+    <h2 id="net-title">מבט-הרשת</h2>
+    <p class="hint">FleetHQ: מצב-guard-הלינארי · מעמד-הצי · קנריית-העד (witness) — מקור: receipts/network.json.</p>
+    <dl class="rows">
+      <div class="row"><dt>guard — מצב-לינארי</dt><dd id="net-guard"><span class="na">טוען…</span></dd></div>
+      <div class="row"><dt>status — מעמד-הצי</dt><dd id="net-status"><span class="na">טוען…</span></dd></div>
+      <div class="row"><dt>witness — קנריית-העד</dt><dd id="net-witness"><span class="na">טוען…</span></dd></div>
+      <div class="row"><dt>נמדד (at)</dt><dd id="net-at"><span class="na">…</span></dd></div>
+    </dl>
+    <p class="note" id="net-note"></p>
+  </section>
+
+  <!-- 4 · ריצות-Actions -->
+  <section class="card" id="sec-gh" aria-labelledby="gh-title">
+    <h2 id="gh-title">ריצות-Actions</h2>
+    <p class="hint">שש-הריצות האחרונות של העורק — GitHub-API פומבי (roshpinacare-sys/Sandbox).</p>
+    <div class="table-wrap">
+      <table>
+        <caption class="sr-only">שש-ריצות-GitHub-Actions-האחרונות</caption>
+        <thead>
+          <tr><th scope="col">נוצרה (UTC)</th><th scope="col">שם</th><th scope="col">event</th><th scope="col">status</th><th scope="col">conclusion</th></tr>
+        </thead>
+        <tbody id="gh-body">
+          <tr><td colspan="5" class="na">טוען…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" id="gh-msg" role="status"></p>
+  </section>
+
+</main>
+
+<footer>
+  <p>סטטי-לגמרי · אפס-סודות · כל-נתון נמדד-או-'לא-זמין'</p>
+  <p class="dim">מקורות: receipts/latest.json · receipts/ticks.jsonl · receipts/network.json · api.github.com — ללא-עוגיות · ללא-מעקב · ללא-צד-שרת</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

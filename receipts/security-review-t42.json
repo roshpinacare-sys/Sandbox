@@ -1,0 +1,235 @@
+{
+  "schema": "sandbox.security-review/1",
+  "at": "2026-10-09T14:25:00Z",
+  "reviewer": "agent-3c (independent, zero-self-trust)",
+  "task_id": "T-42-c",
+  "scope_files": 32,
+  "scope_note": "All 23 tracked files + all 9 untracked WIP files in the local Sandbox clone (console/, docs/ incl. vendor/, engine/, tools/, boot/, network/, receipts/, .github/workflows/, README, SECURITY, worklog, .gitignore) + all 44 historical git blobs (full 4-commit history, not shallow).",
+  "commands_run": [
+    "node engine/leak-scan.mjs --staged → exit 0, clean",
+    "node engine/leak-scan.mjs <24 tracked files explicitly> → exit 0, clean",
+    "node engine/leak-scan.mjs <9 untracked WIP files> → exit 1: 1 hit (see F-L10, verbatim below)",
+    "node engine/leak-scan.mjs --passfile <decoy in /tmp> <decoy files> → exit 1, pass-material+github-token detected, content never printed",
+    "node engine/leak-scan.mjs <missing-file> / --passfile <missing> / <no-targets> → exit 1 each (fail-closed verified)",
+    "leak-scan over all 44 historical git blobs → 0 failures",
+    "node --check on all 6 JS files; bash -n on both boot scripts → all OK",
+    "git log --all --name-only (every file ever added, 4 commits) → no sensitive filename ever committed",
+    "grep sweeps: localStorage/cookie/sessionStorage/IndexedDB (0 code hits), innerHTML/eval/document.write sinks mapped, https origins enumerated"
+  ],
+  "findings": [
+    {
+      "id": "F-H1",
+      "severity": "H",
+      "file": "docs/app.js",
+      "line": "321 (also 350-356); docs/index.html:6",
+      "what": "HTML injection via unescaped RPC-derived strings into innerHTML: line 321 interpolates String(e.message) (can be j.error.message from any configured RPC endpoint) and lines 350-356 interpolate dgpo.head_block_id/time/current_supply etc. directly into innerHTML. docs CSP has no form-action directive.",
+      "why": "A hostile/compromised community RPC endpoint (api.justyy.com, steem.61bts.com, api.deathwing.me are community-run) can inject arbitrary HTML into the trusted cockpit page. script-src 'self' blocks script execution, but form-action is unset and per CSP3 does NOT fall back to default-src — an injected overlay (position:fixed) with a fake 're-enter password' form can submit the master password cross-origin. The master password opens BOTH gates (shared canon-62 wrap), so this is a credible phishing primitive against the single most valuable secret. Impact is phishing-grade (requires operator re-typing), not script-execution grade — stated honestly.",
+      "fix": "Render error/state strings via textContent or the existing escapeHtml() instead of innerHTML interpolation (lines 321, 350-356, and apply the same discipline to renderCustody/renderAudit for vault-derived strings); add form-action 'none' to docs/index.html CSP."
+    },
+    {
+      "id": "F-M1",
+      "severity": "M",
+      "file": "boot/bootstrap.sh",
+      "line": "104-108 (also 88-100)",
+      "what": "Army-vault zip password (keysZipPass) is read in plaintext from recovery-meta.json which lives in the same external steem repo as the encrypted KEYS-ZIP…ROT4.zip.enc.",
+      "why": "Double sha256 pins prove integrity, not confidentiality. If the steem repo is public (or any reader is compromised), anyone can decrypt all 15 accounts' WIFs (owner/active/posting/memo). The design 'new machine + one credential (PAT)' confirms the password is not treated as a secret. Unverifiable from this clone — severity escalates to C if that repo is world-readable.",
+      "fix": "Do not ship the vault password inside the repo that holds the ciphertext: keep keysZipPass out of recovery-meta.json (operator-provided at unseal time or derived from a secret held outside both repos); at minimum verify the steem repo is private and plan a key rotation round (worklog already flags 61 stale keys)."
+    },
+    {
+      "id": "F-M2",
+      "severity": "M",
+      "file": "boot/verify.sh",
+      "line": "8, 29, 35",
+      "what": "verify.sh copies /tmp/gate-crypto.js → /tmp/gate-crypto-verify.cjs and requires it as code, and auto-selects the work dir via `ls -dt /tmp/sovereign-* | head -1`.",
+      "why": "/tmp is world-writable (sticky bit): on a multi-user host another local user can pre-plant gate-crypto.js (bootstrap itself never creates it; whoever does controls key-derivation code of the custody audit) or pre-create a decoy /tmp/sovereign-* dir that verify.sh then treats as the sovereign work dir. Single-operator machines make this low-probability, but the script's whole point is distrust.",
+      "fix": "Keep the crypto file inside the clone (e.g., reference $WORK/Sandbox/docs/vendor/gate-crypto.js) and take WORK from an env var written by bootstrap.sh instead of ls -dt."
+    },
+    {
+      "id": "F-M3",
+      "severity": "M",
+      "file": "console/index.html",
+      "line": "7; docs/index.html:6; docs/app.js:582-601,603-632",
+      "what": "No clickjacking defense on either gate: frame-ancestors absent (and cannot be delivered via <meta> per CSP spec; GitHub Pages cannot set HTTP headers) and no JS framebusting; cockpit has confirm()-less broadcast buttons (claimOne, claim-all).",
+      "why": "Both pages can be iframed and click-shadowed. Impact: forced chain actions (claims — benign; votes/follows — manipulable; op-send is protected by a native confirm() dialog the framing cannot fake). No secret disclosure (key-reveal renders only to the victim's own screen).",
+      "fix": "Add JS framebust on both gates (if (window.top !== window.self) document.documentElement.style.display='none' + a visible warning) and optionally a confirm() before every broadcast including claims."
+    },
+    {
+      "id": "F-L1",
+      "severity": "L",
+      "file": "console/index.html",
+      "line": "7",
+      "what": "Console CSP uses script-src 'unsafe-inline' and style-src 'unsafe-inline' (single-file architecture), weaker than the cockpit's script-src 'self'.",
+      "why": "Defense-in-depth gap only: the console has no dynamic HTML sinks today (render() is textContent-only, verified) and connect-src 'self', so nothing is exploitable now — but any future innerHTML mistake would become full XSS.",
+      "fix": "Extract the script/style into console/app.js + console/style.css and switch to script-src 'self' (mirror the cockpit)."
+    },
+    {
+      "id": "F-L2",
+      "severity": "L",
+      "file": "docs/app.js",
+      "line": "416-419",
+      "what": "renderOpsFields() builds form HTML via string templates with unescaped value=\"${val}\" and <textarea>${val}</textarea>.",
+      "why": "All current call sites pass static empty/constant values, so it is safe today; the pattern is one refactor away from attribute injection if any field is ever prefilled from dynamic data (prefillClaim writes via .value, which is safe).",
+      "fix": "Build fields with createElement/setAttribute, or route val/ph through escapeHtml() before interpolation."
+    },
+    {
+      "id": "F-L3",
+      "severity": "L",
+      "file": "boot/verify.sh",
+      "line": "24-28",
+      "what": "Dead node heredoc: `node - \"$VAULT\" <<'JS' … require(\"file:///tmp/gate-crypto-verify.mjs\") … JS` always throws (missing file / ESM-via-require) and exits 1 with a stack trace; the real audit is the following block.",
+      "why": "No direct security impact (script continues, no set -e), but it is confusing noise and its failure looks like an audit step.",
+      "fix": "Delete the dead heredoc block."
+    },
+    {
+      "id": "F-L4",
+      "severity": "L",
+      "file": "docs/app.js",
+      "line": "680-691; tools/seal.mjs:57 (honest counter-example)",
+      "what": "Cockpit claims 'lock wipes everything' but lock() only nulls references; WIFs and decrypted payload persist in JS strings until GC, and JS cannot zero string memory.",
+      "why": "Best-effort only — same limitation seal.mjs documents honestly ('שאריות-מחרוזת-ב-JS-מתועדות-כמקובל'). Residual memory risk to a local forensic attacker is inherent to JS; the docs overstate the guarantee.",
+      "fix": "State the GC caveat in README/SECURITY wording for the cockpit; keep nulling (it is still correct practice)."
+    },
+    {
+      "id": "F-L5",
+      "severity": "L",
+      "file": ".gitignore",
+      "line": "6-10",
+      "what": "No name-based patterns for credential files: upload/ and .passfile are covered, but bootstrap.sh also probes $PWD/upload/pat.env and $HOME/upload/pat.env, and fleet-vault keys.env conventions exist; *.env / pat.env / keys.env are not ignored.",
+      "why": "One mkdir/rename away from staging a PAT file outside the covered paths.",
+      "fix": "Add: *.env, pat.env, keys.env, *.passfile."
+    },
+    {
+      "id": "F-L6",
+      "severity": "L",
+      "file": "engine/leak-scan.mjs",
+      "line": "22-28, 61-74",
+      "what": "Pattern set has no PEM private-key block (-----BEGIN), no AWS AKIA, no generic bot/api-key shapes; --passfile needle matches only the exact trimmed bytes of the passfile (a derived/canon form of the same secret would not match).",
+      "why": "The repo's own threat-model classes (WIF, GitHub tokens, cred-URLs, machine paths) are covered and fail-closed is verified live, but adjacent secret formats pass silently; passfile matching is exact-match, not secret-family match.",
+      "fix": "Add PEM/AWS patterns; document the exact-match limitation of --passfile next to the usage string."
+    },
+    {
+      "id": "F-L7",
+      "severity": "L",
+      "file": "docs/vault.enc.json",
+      "line": "gate.hint (rendered via docs/app.js:203)",
+      "what": "The public gate displays a hint naming the operator's real password file: 'headcorner.txt — הסיסמה הראשית…'.",
+      "why": "SECURITY.md's own console law is 'no hints' (לא-רמז); the cockpit violates it cosmetically. Value to an attacker is small (a filename), but it is inconsistent doctrine and aids targeted phishing lures.",
+      "fix": "Replace with a neutral hint (accepted password formats) or none."
+    },
+    {
+      "id": "F-L8",
+      "severity": "L",
+      "file": "docs/vendor/gate-crypto.js",
+      "line": "1-19",
+      "what": "Vendored crypto carries no in-repo integrity pin (no sha256 comment, no provenance record); the 'verbatim copy of SovereignConsole' claim cannot be checked from this clone.",
+      "why": "It is first-party code (not a CDN lib) and its ECDSA was live-verified (verify_authority=TRUE per worklog), but nothing in-repo lets a future reviewer detect silent drift from the audited source.",
+      "fix": "Add a header comment with the file's sha256 + the SovereignConsole source path/commit it was copied from, and a one-line diff command to re-verify."
+    },
+    {
+      "id": "F-L9",
+      "severity": "L",
+      "file": "docs/RUNBOOK.md",
+      "line": "26",
+      "what": "RUNBOOK instructs `shred -u .passfile` as the credential-erasure step.",
+      "why": "shred gives weak guarantees on journaled filesystems/SSDs (copy-on-write, wear leveling). Mitigated: the password is only ever copied to .passfile transiently and seal.mjs holds it in memory; residual risk is the on-disk temp copy itself.",
+      "fix": "Prefer creating the passfile on tmpfs (/dev/shm, mode 600) and unlinking; note the shred caveat honestly."
+    },
+    {
+      "id": "F-L10",
+      "severity": "L",
+      "file": "receipts/browser-verify-t42.md",
+      "line": "7",
+      "what": "Untracked WIP receipt (agent-3d) contains a personal machine path — leak-scan correctly BLOCKS it. Verbatim failure output:\n[leak-scan] ✖ workpath · receipts/browser-verify-t42.md:7 (תוכן-לא-מודפס)\n[leak-scan] נחסם: 1 התאמות — אסור-לדחוף. תקן-מקור, לא-רק-את-הסריקה.",
+      "why": "The gate did its job (fail-closed before push); if the protocol is followed nothing leaks. Reported because the task requires verbatim reporting of any leak-scan failure, and the file must be fixed before staging.",
+      "fix": "Replace the absolute path on line 7 with a repo-relative path ('receipts/browser-verify-t42.json') before committing; the JSON twin (browser-verify-t42.json) is clean and scan-passes."
+    },
+    {
+      "id": "F-N1",
+      "severity": "N",
+      "file": ".github/workflows/sovereign.yml + pages.yml",
+      "line": "all",
+      "what": "Workflows verified clean: no pull_request_target; zero github.event.* interpolation into run: blocks (the critical script-injection class is absent); GITHUB_TOKEN only, no secrets.*/PAT anywhere; permissions least-privilege per workflow (sovereign: contents:write — required for receipts push; pages: contents:read + pages:write + id-token:write — required for OIDC deploy); concurrency groups prevent overlap; all first-party actions pinned to official tags (checkout@v4, setup-node@v4, configure-pages@v5, upload-pages-artifact@v3, deploy-pages@v4).",
+      "why": "Confirms agent-1's documented claims, including the honest deferral of SHA-pinning (re-verified TRUE: tags, not SHAs, everywhere — exactly as SECURITY.md rule 6 records).",
+      "fix": "None required now; SHA-pinning remains the documented future round (do not invent unverified SHAs)."
+    },
+    {
+      "id": "F-N2",
+      "severity": "N",
+      "file": "engine/leak-scan.mjs",
+      "line": "all",
+      "what": "Live verification results: full-tree --staged scan and an explicit 24-file scan → 0 hits; all 44 historical blobs → 0 hits; decoy passfile needle → detected (exit 1, 'pass-material', content never printed); missing target/missing passfile/no targets → exit 1 each with clear Hebrew fail-closed messages.",
+      "why": "The push gate is not theater: every failure path exits 1 and the decoy test proves real detection. One real failure found in untracked WIP (see F-L10) — proof it is active on exactly the kind of content it was built for.",
+      "fix": "None."
+    },
+    {
+      "id": "F-N3",
+      "severity": "N",
+      "file": "console/params.json + docs/vault.enc.json",
+      "line": "all",
+      "what": "Crypto parameters byte-verified: console = PBKDF2-HMAC-SHA256 ×650,000 (≥600k ✓), AES-256-GCM tag 128-bit ✓, salt 16B ✓, IV 12B ✓, key 32B ✓, payload = 2928B ct + 16B tag ✓. Cockpit vault v2 = 3 wraps (primary-52/canon-62/word), each iter 600,000 ✓, salt 16B, IV 12B, 48B wrap-ct; body 19707B ct (GCM).",
+      "why": "Matches SECURITY.md exactly; GCM-authenticated-decrypt-as-verifier on both gates is the correct pattern (no timing-compare needed).",
+      "fix": "None."
+    },
+    {
+      "id": "F-N4",
+      "severity": "N",
+      "file": "console/index.html + docs/app.js",
+      "line": "all",
+      "what": "Password handling verified: zero localStorage/sessionStorage/cookie/IndexedDB anywhere (grep-verified, only doc comments); console fetches same-origin only (connect-src 'self', observed assets only per agent-3d's live network log); password is TextEncoder'd in-memory, never sent, cleared from the field on success; cockpit auto-locks at 15 min and clears state; signing is posting-authority-only with a structural block on stale/not-on-chain accounts (getPostingPriv), low-s ECDSA with random k from crypto.getRandomValues; broadcast sends signed tx only — no key material ever leaves the tab.",
+      "why": "The owner's core demand (password gate, no exposed tokens) is honored in code, not just in docs.",
+      "fix": "None."
+    },
+    {
+      "id": "F-N5",
+      "severity": "N",
+      "file": "git history",
+      "line": "4 commits (6d6bc27, 8d4f7a2, 607380d, a7da9ad)",
+      "what": "History is complete (not shallow) and was fully scanned: every filename ever added across all commits is in the current tree — tools/payload-template.json (the C-1 plaintext-template leak from agent-1's self-review) was never committed; no *.pass/.env/token-like filename ever appeared; all 44 blobs leak-clean.",
+      "why": "The documented C-1/H1/H2 fixes from the T-41 review are confirmed fixed at the history level.",
+      "fix": "None."
+    },
+    {
+      "id": "F-N6",
+      "severity": "N",
+      "file": "network/ + engine/network-probe.mjs (agent-3b, untracked WIP)",
+      "line": "all",
+      "what": "The network board is the hygiene gold standard: CSP default-src 'none' with script-src/style-src 'self', form-action 'none', base-uri 'none'; zero innerHTML/eval — DOM built exclusively via createElement/textContent; probe fetches public unauthenticated sources with 10s timeouts, fail-soft per source, atomic tmp+rename writes, tail-128 log. One functional (non-security) note: app.js:226 reads f.witness while network-probe.mjs writes witness_row, and app.js:229 reads sources.note while the probe writes notes — the witness panel will show 'לא-זמין' until the field names converge.",
+      "why": "Shows the desired security posture is repeatable across agents; the field mismatch is worth a one-line heads-up to agent-3b before it ships.",
+      "fix": "Align witness_row↔witness and notes↔note field names (functional, not security)."
+    },
+    {
+      "id": "F-N7",
+      "severity": "N",
+      "file": "boot/bootstrap.sh",
+      "line": "32-62",
+      "what": "Credential handling in boot is sound: token from env or gitignored upload/pat.env; only its length is printed; flows via git credential-helper (never embedded in a clone URL, honoring the repo's own cred-url leak-scan law); no curl|bash anywhere — repos are cloned and scripts run from the clone; work dirs are mkdir 700 / mktemp -d 700; extracted secrets land 0600.",
+      "why": "The highest-privilege script in the repo follows the no-token-in-URL and no-remote-exec rules it was given.",
+      "fix": "None (the /tmp code-execution aspect is F-M2)."
+    }
+  ],
+  "tally": { "C": 0, "H": 1, "M": 3, "L": 10, "N": 7, "total": 21 },
+  "clean_areas": [
+    "GitHub Actions workflows (no pull_request_target, no github.event interpolation, GITHUB_TOKEN-only, least-privilege permissions, concurrency groups; SHA-pinning deferral claim re-verified as documented)",
+    "leak-scan gate (fail-closed verified live on all error paths; decoy needle detected; 0 hits across tree, explicit list, and all 44 historical blobs)",
+    "console crypto params (650k PBKDF2, AES-256-GCM 128-bit tag, 16B salt, 12B IV, 32B key — byte-verified)",
+    "cockpit vault wraps (3×600k, 16B salts, 12B IVs — byte-verified)",
+    "zero browser storage (no localStorage/cookies/sessionStorage/IndexedDB in any file)",
+    "console render path (textContent-only, no dynamic HTML sinks)",
+    "cockpit signing flow (posting-only op set, structural stale-key block, low-s ECDSA, random k, no key material on the wire)",
+    "boot credential handling (env + credential-helper, no token-in-URL, no curl|bash, 0600/700 perms)",
+    "seal.mjs memory discipline (raw buffer zeroed, BOM rejection, internal roundtrip check, template gitignored)",
+    "git history (4 complete commits, no sensitive filename ever committed, all blobs clean)",
+    "docs/RUNBOOK/SECURITY/README (no secrets, no machine paths)",
+    "network board (agent-3b): default-src 'none' CSP, textContent-only DOM, public sources only"
+  ],
+  "limits": [
+    "Cannot decrypt console/sealed-payload.bin or docs/vault.enc.json — no password held, none sought (forbidden). The correct-password unlock path is therefore unverified by this reviewer; evidence base is the GCM-auth design, engine/seal-selftest.mjs, and agent-3d's live browser rejection tests.",
+    "docs/vendor/gate-crypto.js 'verbatim from SovereignConsole' is unverifiable (source not in this clone); its custom secp256k1/ripemd160 correctness was not independently re-proven here — mitigated by the recorded live verify_authority=TRUE evidence.",
+    "M-1 (army-vault password in steem repo) hinges on external repos (steem, fleet-vault) not present in this clone — their ACLs could not be checked.",
+    "Password entropy (~62-byte canon / claimed ~335-bit) is taken from SECURITY.md; it is not measurable from the repo, and the strength of BOTH gates rests on it.",
+    "JS heap erasure guarantees cannot be verified (inherent language limit; see F-L4).",
+    "GitHub Pages headers (HSTS present, no CSP header — meta-CSP only) confirmed from agent-3d's receipt; frame-ancestors is undeliverable on Pages, which shapes the M-3 fix.",
+    "INCIDENT DISCLOSURE (honesty law): while probing usage I ran `node engine/sovereign-tick.mjs --help`; the script ignores argv and executed a real tick, writing receipts/latest.json and appending receipts/ticks.jsonl. I immediately restored both via `git checkout -- receipts/` and verified the working tree returned to its committed state (last tick line = CI tick 11:28:52.287Z, matching HEAD). No data lost, nothing committed or pushed, worklog.md untouched.",
+    "This review is a point-in-time snapshot (14:25Z) — agents 3b/3d were actively writing untracked files during it (network/, browser-verify receipts); their content was reviewed as-found."
+  ]
+}

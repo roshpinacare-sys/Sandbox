@@ -4,7 +4,7 @@ name: pages-deploy
 on:
   push:
     branches: [main]
-    paths: ["console/**", "docs/**", ".github/workflows/pages.yml"]
+    paths: ["console/**", "docs/**", "network/**", "receipts/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -31,9 +31,14 @@ jobs:
       # console/ at site-root (agent-1, unchanged) + docs/ cockpit at /cockpit/.
       - name: assemble-site
         run: |
-          mkdir -p _site/cockpit
+          mkdir -p _site/cockpit _site/network _site/receipts
           cp -r console/. _site/
           cp -r docs/. _site/cockpit/
+          cp -r network/. _site/network/
+          # T-42 (agent-3): designed-public receipts only — the board reads them.
+          for f in latest.json ticks.jsonl network.json network-log.jsonl; do
+            [ -f "receipts/$f" ] && cp "receipts/$f" _site/receipts/
+          done
       - name: upload-site
         uses: actions/upload-pages-artifact@v3
         with:
