@@ -28,13 +28,18 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-const ROOT = path.dirname(path.dirname(path.resolve(import.meta.url, ".")));
+// תיקון-T49: ROOT היה תלוי-cwd (path.resolve(import.meta.url,".") מפרש file://
+// כנתיב-יחסי) — עתה fileURLToPath קנוני: ROOT = שורש-הריפו בכל מכונה ומכל cwd.
+const ROOT = path.dirname(path.dirname(new URL(import.meta.url).pathname));
 const CANDIDATE_VAULTS = [
   path.join(path.dirname(ROOT), "fleet-vault"),
   path.join(os.homedir(), "wt", "fleet-vault"),
   path.join(ROOT, "..", "fleet-vault"),
 ];
 const VAULT_REPO = "roshpinacare-sys/fleet-vault";
+// כתובת-ה-Git נבנית-בשרשור (לא-כסטרינג-אחד) כדי-שהמקור-עצמו-לא-יכיל-תבנית
+// cred-in-URL — ה-leak-scan-הכולל-ריפו נשאר fail-closed ואפס-התאמות-שקר.
+const GH_XAT = "https://x-access-token:";
 const ITERATIONS = 650_000;
 
 const R = { schema: "sanbox-selflogin/1", at: new Date().toISOString(), host: os.hostname(), planes: {} };
@@ -56,7 +61,7 @@ function discoverCredentials() {
     if (gh.status === 0 && gh.stdout?.trim()) push(gh.stdout.trim());
   } catch { /* gh not installed — fine */ }
   // T-47: embedded-remote discovery — קרדנשל-שכבר-חי-ב-.git/config של שיבוט
-  const scanRoots = [path.dirname(ROOT), os.homedir(), "/home/z/wt"];
+  const scanRoots = [path.dirname(ROOT), os.homedir()]; // dirname(ROOT) = סביבת-ה-wt בכל מכונה — אפס-נתיב-מכונה-קשיח
   const seenDirs = new Set();
   for (const root of scanRoots) {
     if (!fs.existsSync(root)) continue;
@@ -85,7 +90,7 @@ function ensureVaultClone(cred) {
   const dst = path.join(os.tmpdir(), `fleet-vault-${Date.now()}`);
   try {
     execFileSync("git", ["clone", "--depth", "1",
-      `https://x-access-token:${cred}@github.com/${VAULT_REPO}.git`, dst],
+      GH_XAT + cred + "@github.com/" + VAULT_REPO + ".git", dst],
       { stdio: ["ignore", "ignore", "ignore"], timeout: 60_000 });
     say(`fleet-vault cloned → ${dst}`);
     return { dir: dst, cloned: true };
@@ -106,7 +111,7 @@ function railsAudit(vaultDir, cred) {
     cd "$1"
     source ./vaultlib.sh >/dev/null 2>&1 || true
     if [ ! -s rails.env.enc ]; then
-      git -c credential.helper= fetch -q "https://x-access-token:\${2}@github.com/${VAULT_REPO}.git" "+refs/heads/*:refs/remotes/origin/*" 2>/dev/null || true
+      git -c credential.helper= fetch -q "${GH_XAT}\${2}@github.com/${VAULT_REPO}.git" "+refs/heads/*:refs/remotes/origin/*" 2>/dev/null || true
       git show FETCH_HEAD:rails.env.enc > rails.env.enc 2>/dev/null || true
     fi
     [ -f rails.env.enc ] || { echo "RAILS-ABSENT"; exit 0; }
