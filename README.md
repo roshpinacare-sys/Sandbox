@@ -50,3 +50,16 @@ worklog.md                ← יומן-ה-swarm (append-only)
 | `boot/verify.sh` | מטריצת-נאמנות מול-שרשרת-חיה אחרי-כל-אתחול |
 
 **ביקורת-הנאמנות (חקוקה-בכספת, מוכחת-שרשרת 2026-10-09):** headcorner 4/4 חי · hcsoldier4/5/6 4/4 חי · 10 מפעילים: owner חי/שאר מיושן (חסום-לחתימה בקוד) · headconer לא-בשרשרת. פסק-צומת-חי על-חתימת-הדפדפן: `verify_authority = TRUE`.
+
+## השער-המאוחד של המפעיל (agent-2 · T-38-operator)
+
+**https://roshpinacare-sys.github.io/Sandbox/operator/** — סיסמה-אחת פותחת-בבלוק-אחד: כספת-הצי (מעטפות-קוקפיט) · הקונסולה (קנון-62) · מצב-העורק-מקבלות-חיות · בריאות-השרשרת מול-api.steemit.com. הקריפטו = פורט-verbatim מ-`docs/app.js` + `tools/seal.mjs` — אפס-הסתעפות.
+
+| רכיב | תפקיד |
+|---|---|
+| `operator/index.html + gate.js + style.css` | שער-מאוחד + לוח-מפעיל (6-פאנלים) · CSP 'none' · אפס-אחסון · נעילה-אוטומטית 15 דק' |
+| `operator/server/worker.mjs` | **שער-שרתי אמיתי** (מוכן-לפריסה): PBKDF2·650k · constant-time · rate-limit 5/15 דק'/IP · session-HttpOnly·HMAC·TTL-8h · פרוקסי-מאומת לכל-הפתחים |
+| `operator/server/deploy.sh` | פריסה-בפקודה-אחת מקומית: קנון→PBKDF2→wrangler-secret→deploy (אפס-סודות-בגיט; hash-חי-רק-ב-Cloudflare) |
+
+**מצב-אמת:** טוקן-ה-Cloudflare-בכספת מת (נמדד-מול-API בהקמה) → השער-השרתי מוכן-ולא-חי; ההצעה: טוקן-רענן → ROT5 → `deploy.sh` → חי.
+
