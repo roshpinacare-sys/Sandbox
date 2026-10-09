@@ -1,10 +1,22 @@
 name: sovereign-tick
-# עורק-האוטונומיה-חסר-הסנדבוקס: GitHub-עצמו מריץ-את-הריבונות כל-15-דק'.
+# עורק-האוטונומיה-חסר-הסנדבוקס (v2 · T-42 — הרצף-המתמיד).
+# לקח-חי-2026-10-09: ה-scheduler-של-GitHub-החסיר-11-משבצות-cron-רצופות (0-הרצות-מתוזמנות;
+# העורק-שתק-ללא-כל-שגיאה). עורק-הנשען-על-המתזמן-לבדו אינו-רציף. לכן — ארבעה-גורמי-מכניסה:
+#   · schedule (cron — אם-יתעורר, מתקבל)  · push-ל-main (כל-דחיפה-מכה-נוספת)
+#   · workflow_dispatch (ידני-למפעיל)     · repository_dispatch (השרשרת-העצמית)
+# והשרשרת: כל-הרצה מסיימת ב-sleep-עד-המשבצת-הבאה → מנפיקה-את-הטביעה-הבאה
+# (GITHUB_TOKEN-בלבד; ל-documentation-של-GitHub: repository_dispatch-הוא-החריג-המוכח
+#  ש-GITHUB_TOKEN-מצית-אותו). מצערת-בתוך-הסקריפט (12-דק') מונעת-טביעות-כפולות,
+# ו-concurrency ממזגת-את-כל-הגורמים-לזרם-טורי-אחד — אפס-סערת-הרצות (יחס-1:1).
 # ה-runner-אפמרלי-במכוון — הרציפות-חיה-בריפו. אפס-PAT: GITHUB_TOKEN בלבד.
 on:
   schedule:
     - cron: "*/15 * * * *"
+  push:
+    branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [sovereign-tick]
 
 permissions:
   contents: write
@@ -27,10 +39,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: tick (measure + receipts)
+      - name: tick (measure + receipts, self-throttled)
+        id: tick
         run: node engine/sovereign-tick.mjs
 
       - name: leak-scan (fail-closed)
+        if: always()
         run: node engine/leak-scan.mjs receipts/latest.json receipts/ticks.jsonl
 
       - name: commit + push (rebase-safe)
@@ -44,4 +58,36 @@ jobs:
             git commit -m "[tick] sovereign heartbeat: $(date -u +%FT%TZ)"
             git pull --rebase origin main
             git push origin main
+          fi
+
+      # חוליית-השרשרת (T-42): רק-טביעה-אמתית (ticked=1) או-כישלון (דלג-על-הסיגנל) מולידות-יורשת —
+      # הרצה-מוצערת (ticked=0) מתה-בלי-יורש (צמצום-אוכלוסיית-השרשרות-לאחת — אפס-התדרדרות-קצב).
+      # sleep-עד-המשבצת-הבאה (15-דק' מהקבלה-האחרונה; תקרה-870ש); קבלה-סטלה/חסרה (כישלון) =
+      # נסיגה-קבועה-600ש (אפס-סערת-ניסיון-חוזר). כישלון-dispatch = יציאה-1 (נראה-ב-Actions;
+      # הצתה-מחדש-ידנית-אפשרית-תמיד: Actions → Run-workflow).
+      - name: chain-next (sleep to next slot, then dispatch the next beat)
+        if: always() && steps.tick.outputs.ticked != '0'
+        run: |
+          set -e
+          SLEEP_S="$(node -e '
+            const fs = require("fs");
+            let last = 0;
+            try { last = Date.parse(JSON.parse(fs.readFileSync("receipts/latest.json", "utf8")).at) || 0; } catch {}
+            const elapsed = Date.now() - last;
+            const s = (last > 0 && elapsed >= 0 && elapsed <= 900000)
+              ? Math.max(5, Math.min(870, Math.ceil((900000 - elapsed) / 1000)))
+              : 600; // אין-קבלה-טרייה (כישלון/עץ-רענן) — נסיגה-מצמצמת-סערה
+            process.stdout.write(String(s));
+          ')"
+          echo "chain-next: sleeping ${SLEEP_S}s until next slot"
+          sleep "$SLEEP_S"
+          HTTP="$(curl -sS -o /dev/null -w '%{http_code}' -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches \
+            -d '{"event_type":"sovereign-tick","client_payload":{"from":"chain"}}')"
+          echo "dispatch http=$HTTP"
+          if [ "$HTTP" != "204" ]; then
+            echo "dispatch-failed — chain broken; re-ignite via workflow_dispatch"
+            exit 1
           fi

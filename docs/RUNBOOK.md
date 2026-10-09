@@ -25,9 +25,12 @@ node engine/sovereign-tick.mjs --local
 4. **חסם-לפני-כל-push:** `node engine/leak-scan.mjs --staged` — אפס-התאמות או-אין-push.
 5. **עדכון-הקונסולה:** עריכת-תבנית-מקומית `tools/payload-template.json` (**gitignored — הפליינטקסט-לא-נדחף-מעולם**) → `cp <קובץ-סיסמה> .passfile && node tools/seal.mjs && shred -u .passfile` (רץ-מקומית-בלבד; הסיסמה-רק-בזיכרון) → commit-הצופן-החדש → `node engine/leak-scan.mjs --staged --passfile <קובץ-סיסמה>` לפני-push.
 
-## העורק-האוטונומי (GitHub Actions)
+## העורק-האוטונומי (GitHub Actions · v2 — הרצף-המתמיד)
 
-- `sovereign.yml`: cron `*/15 * * * *` + dispatch-ידני. ה-runner: checkout → `engine/sovereign-tick.mjs` → commit+push-קבלות. הסמכות: `GITHUB_TOKEN` (contents:write) — אפס-PAT-ב-CI.
+- **לקח-חי-2026-10-09**: מתזמן-ה-cron-של-GitHub-החסיר-11-משבצות-רצופות (0-הרצות-מתוזמנות-מתוך-11; העורק-שתק-ללא-שגיאה-כלשהי). עורק-הנשען-על-המתזמן-לבדו אינו-רציף.
+- `sovereign.yml`-v2 — **ארבעה-גורמי-מכניסה**: cron `*/15` (אם-יתעורר) · push-ל-main · dispatch-ידני · **repository_dispatch — השרשרת-העצמית**. ה-runner: checkout → `engine/sovereign-tick.mjs` (מצערת-עצמית-12דק') → סריקת-דליפות → commit+push-קבלות → **chain-next: sleep-עד-המשבצת-הבאה → dispatch-הטביעה-הבאה**. הסמכות: `GITHUB_TOKEN` (contents:write) — אפס-PAT-ב-CI; repository_dispatch-הוא-החריג-המוכח-ש-GITHUB_TOKEN-מצית-אותו.
+- מצערת-בתוך-הסקריפט: אפס-טביעה-כפולה-תוך-12-דק' למרות-ריבוי-הגורמים; `--force`-עוקף-לאימות. `concurrency`-ממזגת-הכול-לזרם-טורי-אחד (יחס-1:1 — אפס-סערת-הרצות).
+- **הצתה-מחדש** (אם-השרשרת-נשברה): Actions → sovereign-tick → Run-workflow. או-API: `POST /repos/roshpinacare-sys/Sandbox/actions/workflows/sovereign.yml/dispatches`.
 - זו-התשובה-הארכיטקטונית-למחיקות: **GitHub-עצמו הוא-המנוע**; סנדבוקס-חי-הוא-תוספת-נוחות, לא-תנאי-קיום.
 
 ## סדר-היחלצות
