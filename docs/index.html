@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.steemit.com https://api.justyy.com https://steem.61bts.com https://api.hive.blog https://api.deathwing.me; object-src 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>קוקפיט ריבוני — Sovereign Fleet</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════ שער הכניסה ═══════════════ -->
+<section id="gate" aria-labelledby="gate-title">
+  <div class="gate-card">
+    <div class="shield" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="72" height="72" role="img" aria-hidden="true">
+        <path d="M32 4 L54 14 V32 C54 46 45 55 32 60 C19 55 10 46 10 32 V14 Z"
+              fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M22 32 L29 39 L43 24" fill="none" stroke="currentColor" stroke-width="3"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1 id="gate-title">קוקפיט ריבוני</h1>
+    <p class="sub">Sovereign Fleet — מפעיל הרשת. הכל רץ בדפדפן שלך: המפתחות לעולם לא נשלחים לשום שרת.</p>
+
+    <div class="seal-line" id="seal-line">
+      <span class="badge badge-sealed" id="seal-badge">בודק חותם…</span>
+      <span class="seal-meta" id="seal-meta"></span>
+    </div>
+
+    <form id="gate-form" autocomplete="off">
+      <label class="sr-only" for="pass">סיסמת כניסה</label>
+      <input id="pass" type="password" inputmode="text" autocomplete="off"
+             placeholder="סיסמת-האב הראשית (headcorner)" disabled
+             aria-describedby="gate-error">
+      <button id="unlock-btn" type="submit" disabled>פתח את הכספת</button>
+    </form>
+
+    <p id="gate-error" class="gate-error" role="alert" hidden></p>
+
+    <details class="gate-sec">
+      <summary>מה האתר כן עושה / מה האתר לעולם לא עושה</summary>
+      <ul>
+        <li><b>כן:</b> פותח כספת מוצפנת (AES-256-GCM, PBKDF2 600k) בתוך הדפדפן בלבד</li>
+        <li><b>כן:</b> קורא מצב-חי מהשרשרת (יתרות, כוח-הצבעה, פידיונות) דרך RPC ציבורי</li>
+        <li><b>כן:</b> חותם פעולות-רשות-פרסומית מקומית ומשדר ישירות: הצבעה, פידיון, פרסום, custom_json</li>
+        <li><b>לא:</b> שולח מפתחות, סיסמה, או חומר-פרטי לשרת כלשהו — אין לאתר בכלל בקנד-בק (zero backend)</li>
+        <li><b>לא:</b> מחזיק כסף נזיל: אין העברות/שליפות כוח-מפעיל — אפס סיכון הון מבני</li>
+        <li><b>לא:</b> שומר דבר על הדיסק: סגירת-הטאב = הכל נעלם</li>
+      </ul>
+    </details>
+
+    <p class="gate-foot">הכספת חיה ב-Git: <code>roshpinacare-sys/Sandbox</code> · עומדת בפני מחיקת-סנדבוקסים</p>
+  </div>
+</section>
+
+<!-- ═══════════════ הקונסולה ═══════════════ -->
+<main id="console" hidden>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <b>קוקפיט ריבוני</b>
+      <span class="muted">headcorner fleet</span>
+    </div>
+    <div class="topbar-status">
+      <span class="badge badge-ok" id="unlock-badge">כספת פתוחה</span>
+      <span class="muted" id="autolock" title="נעילה אוטומטית לאחר 15 דקות של חוסר-פעילות"></span>
+      <button id="lock-btn" class="btn btn-ghost">🔒 נעל</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="חלקי הקונסולה">
+    <button class="tab active" data-tab="overview" role="tab" aria-selected="true">סקירה</button>
+    <button class="tab" data-tab="accounts" role="tab" aria-selected="false">חשבונות</button>
+    <button class="tab" data-tab="ops" role="tab" aria-selected="false">פעולות</button>
+    <button class="tab" data-tab="keys" role="tab" aria-selected="false">מפתחות</button>
+    <button class="tab" data-tab="system" role="tab" aria-selected="false">מערכת</button>
+    <button class="tab" data-tab="log" role="tab" aria-selected="false">יומן</button>
+  </nav>
+
+  <!-- סקירה -->
+  <section class="panel active" id="panel-overview" role="tabpanel">
+    <div class="cards" id="stat-cards"></div>
+    <div class="row">
+      <div class="card grow">
+        <h3>מצב-השרשרת</h3>
+        <div id="chain-state" class="kv-list"><span class="muted">טוען…</span></div>
+        <button id="refresh-btn" class="btn">רענן מצב-חי</button>
+      </div>
+      <div class="card grow">
+        <h3>נאמנות (מביקורת מול-שרשרת)</h3>
+        <div id="custody-state" class="kv-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- חשבונות -->
+  <section class="panel" id="panel-accounts" role="tabpanel">
+    <div class="row row-between">
+      <h2>חשבונות הצי <span class="muted" id="accounts-count"></span></h2>
+      <div class="row gap8">
+        <select id="chain-filter" aria-label="סינון שרשרת">
+          <option value="steem">Steem</option>
+          <option value="hive">Hive</option>
+        </select>
+        <button id="accounts-refresh" class="btn">רענן</button>
+      </div>
+    </div>
+    <div class="table-wrap" id="accounts-table"><div class="muted pad">טוען מצב-חי…</div></div>
+  </section>
+
+  <!-- פעולות -->
+  <section class="panel" id="panel-ops" role="tabpanel">
+    <div class="row gap8 wrap">
+      <div class="card grow">
+        <h3>פעולה חדשה — רשות פרסומית בלבד</h3>
+        <div class="form-grid">
+          <label>חתימה-מטעם
+            <select id="op-account"></select>
+          </label>
+          <label>סוג-פעולה
+            <select id="op-type">
+              <option value="vote">הצבעה (vote)</option>
+              <option value="claim">פידיון-תגמולים (claim_reward_balance)</option>
+              <option value="comment">פרסום/תגובה (comment)</option>
+              <option value="follow">עקוב (follow)</option>
+              <option value="reblog">הדהוד (reblog)</option>
+            </select>
+          </label>
+        </div>
+        <div id="op-fields" class="form-grid"></div>
+        <div class="row gap8">
+          <button id="op-dry" class="btn btn-ghost">חתימה יבשה (בלי שידור)</button>
+          <button id="op-send" class="btn btn-primary">חתום ושדר</button>
+        </div>
+        <pre id="op-result" class="result" hidden></pre>
+      </div>
+      <div class="card grow">
+        <h3>פידיון מהיר — כל הפידיונות הפתוחים</h3>
+        <p class="muted">סורק את כל חשבונות-הנאמנות-המאומתת ומפדיון כל תגמול-פתוח. כל חשבון נשלח כעסקה נפרדת.</p>
+        <button id="claim-all-btn" class="btn btn-primary">סרוק ופדה הכל</button>
+        <pre id="claim-all-result" class="result" hidden></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- מפתחות -->
+  <section class="panel" id="panel-keys" role="tabpanel">
+    <div class="card">
+      <h3>צפייה במפתחות (מוסתר כברירת-מחדל, חשיפה ל-30 שניות)</h3>
+      <div class="form-grid">
+        <label>חשבון <select id="key-account"></select></label>
+        <label>תפקיד
+          <select id="key-role">
+            <option value="posting">posting</option>
+            <option value="active">active</option>
+            <option value="owner">owner</option>
+            <option value="memo">memo</option>
+          </select>
+        </label>
+        <label>שרשרת
+          <select id="key-chain">
+            <option value="steem">steem</option>
+            <option value="hive">hive</option>
+          </select>
+        </label>
+      </div>
+      <div class="row gap8">
+        <button id="key-reveal" class="btn">חשוף ל-30 שניות</button>
+        <button id="key-copy" class="btn btn-ghost">העתק</button>
+      </div>
+      <pre id="key-out" class="result" hidden></pre>
+      <p class="muted">אזהרה: מפתח חשוף על מסך נראה לעין ולמצלמות. סוגרים מהר.</p>
+    </div>
+  </section>
+
+  <!-- מערכת -->
+  <section class="panel" id="panel-system" role="tabpanel">
+    <div class="row wrap">
+      <div class="card grow">
+        <h3>ביקורת-נאמנות אחרונה</h3>
+        <div id="audit-view" class="kv-list"></div>
+        <p class="muted">כל מפתח בכספת נגזר למפתח-ציבורי ונבדק מול רשויות-השרשרת החיות בעת-בניית הכספת.</p>
+      </div>
+      <div class="card grow">
+        <h3>דוקטרינה</h3>
+        <ul class="kv-list">
+          <li>אפס-בקנד: האתר קובץ סטטי; אין שרת שמת</li>
+          <li>אפס-סיכון הון: רק רשות-פרסומית נחתמת בדפדפן</li>
+          <li>אפס-אמון: מפתח לא מאומת-מול-שרשרת = מפתח-מת לכל דבר</li>
+          <li>אפס-חשיפה: הכספת חתומה AES-256-GCM; הסיסמה לא נמצאת ב-Git כלל</li>
+          <li>הישרדות: GitHub Pages עומד בפני מחיקת-סנדבוקסים</li>
+        </ul>
+      </div>
+      <div class="card grow">
+        <h3>שרשרת-האמון של הכספת</h3>
+        <ul class="kv-list">
+          <li>steem-repo <code>agent/vault/KEYS-ZIP…ROT4.zip.enc</code> — חתום, סיכות-sha256 כפולות</li>
+          <li>fleet-vault (P + wraps) — נפתח אוטונומית במכונה-חדשה (הוכח-חי 2026-10-09)</li>
+          <li>כספת-האתר — PBKDF2 600k + AES-256-GCM, סיסמת-האב הראשית של המפעיל</li>
+          <li>boot/ — החזרת-ריבונות מכל מכונה חדשה, בפקודה אחת</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- יומן -->
+  <section class="panel" id="panel-log" role="tabpanel">
+    <div class="card">
+      <div class="row row-between">
+        <h3>יומן-הפעלה (סשן בלבד — לא נשמר בדיסק)</h3>
+        <button id="log-clear" class="btn btn-ghost">נקה</button>
+      </div>
+      <div id="log-view" class="log-view"><span class="muted">ריק</span></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>ריבונות אינטליגנטית · קוקפיט המפעיל · <span id="foot-ver"></span></span>
+  </footer>
+</main>
+
+<noscript><p style="text-align:center;padding:2rem">האתר דורש JavaScript — הקריפטו רץ בדפדפן שלך.</p></noscript>
+<script src="vendor/gate-crypto.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
