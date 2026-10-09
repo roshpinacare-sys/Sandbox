@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # T-51: נדרש-למעשה-ההצתה-מתחת (workflow-dispatch/repository-dispatch) — בלעדיו-ההצתה-הייתה-403-שקטה
 
 concurrency:
   group: artery-catchup
@@ -65,6 +66,28 @@ jobs:
             -d '{"event_type":"sovereign-tick","client_payload":{"from":"catchup"}}')"
           echo "dispatch http=$HTTP"
           echo "dispatch=$HTTP" >> "$GITHUB_OUTPUT"
+
+      - name: extended-artery guard T-51 — revive watch/heal/federation/yield if stale
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # artery-watch עצמו נשמר-במקצף 30 דק׳ (המטרונום-נצחי); שלושת-עורקות-ה-cron ששוקקו-ב-T-51 בסף-החיים-שלהם
+          for spec in "artery-watch.yml:1800" "fleet-heal.yml:2700" "federation.yml:2700" "fleet-yield.yml:9900"; do
+            WF="${spec%%:*}"; MAX="${spec##*:}"
+            AGE_S="$(curl -sS --max-time 20 -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/roshpinacare-sys/Sandbox/actions/workflows/${WF}/runs?per_page=1" \
+              | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{const r=JSON.parse(d).workflow_runs?.[0];console.log(r?Math.round((Date.now()-Date.parse(r.created_at))/1000):99999)}catch{console.log(99999)}})')"
+            if [ "${AGE_S}" -gt "${MAX}" ]; then
+              HTTP="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
+                -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/roshpinacare-sys/Sandbox/actions/workflows/${WF}/dispatches" \
+                -d '{"ref":"main"}')"
+              echo "EXT-ARTERY ${WF} stale ${AGE_S}s > ${MAX}s — re-ignite http=${HTTP}"
+            else
+              echo "EXT-ARTERY ${WF} alive (${AGE_S}s) — quiet"
+            fi
+          done
 
       - name: direct-tick fallback (heartbeat survives even if dispatch API fails)
         if: always() && steps.stale.outputs.stale == 'true' && steps.ignite.outputs.dispatch != '204'
