@@ -1,12 +1,91 @@
 {
  "schema": "fleet-heal/1",
- "at": "2026-10-09T21:37:17.196Z",
+ "at": "2026-10-09T22:26:22.455Z",
  "owner": "roshpinacare-sys",
  "tokenMode": "token",
  "force": false,
- "rateRemaining": 4919,
+ "rateRemaining": 4949,
  "mode": "full",
  "repos": [
+  {
+   "name": "Sandbox",
+   "visibility": "public",
+   "verdict": "RUNNING",
+   "workflows": [
+    {
+     "workflow": "fleet-yield",
+     "verdict": "RUNNING",
+     "durationS": 2,
+     "conclusion": null,
+     "createdAt": "2026-10-09T22:26:14Z",
+     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37999203725"
+    },
+    {
+     "workflow": "fleet-heal",
+     "verdict": "RUNNING",
+     "durationS": 1,
+     "conclusion": null,
+     "createdAt": "2026-10-09T22:26:14Z",
+     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37999203722"
+    },
+    {
+     "workflow": "federation",
+     "verdict": "RUNNING",
+     "durationS": 1,
+     "conclusion": null,
+     "createdAt": "2026-10-09T22:26:14Z",
+     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37999203698"
+    },
+    {
+     "workflow": "artery-catchup",
+     "verdict": "RUNNING",
+     "durationS": 1,
+     "conclusion": null,
+     "createdAt": "2026-10-09T22:26:14Z",
+     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37999203680"
+    },
+    {
+     "workflow": "artery-watch",
+     "verdict": "RUNNING",
+     "durationS": 5,
+     "conclusion": null,
+     "createdAt": "2026-10-09T22:26:00Z",
+     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37999182702"
+    },
+    {
+     "workflow": "sovereign-state",
+     "verdict": "RUNNING",
+     "durationS": 5,
+     "conclusion": null,
+     "createdAt": "2026-10-09T22:24:11Z",
+     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37999014705"
+    },
+    {
+     "workflow": "sovereign-tick",
+     "verdict": "RUNNING",
+     "durationS": 1,
+     "conclusion": null,
+     "createdAt": "2026-10-09T22:16:40Z",
+     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37998311874"
+    }
+   ]
+  },
+  {
+   "name": "sanbox",
+   "visibility": "private",
+   "verdict": "MINUTES-BLOCKED",
+   "workflows": [
+    {
+     "workflow": "sovereign-heart",
+     "verdict": "MINUTES-BLOCKED",
+     "durationS": 4,
+     "conclusion": "failure",
+     "createdAt": "2026-10-09T18:13:22Z",
+     "url": "https://github.com/roshpinacare-sys/sanbox/actions/runs/37971766530"
+    }
+   ],
+   "probe": "guard-24h"
+  },
   {
    "name": "steem",
    "visibility": "private",
@@ -56,6 +135,12 @@
    "probe": "probe-skip(canary-only) — גלאי-ההתעוררות: sanbox"
   },
   {
+   "name": "TruthRail",
+   "visibility": "public",
+   "verdict": "NO-RUNS",
+   "workflows": []
+  },
+  {
    "name": "saos-control-center",
    "visibility": "private",
    "verdict": "MINUTES-BLOCKED",
@@ -88,65 +173,26 @@
    "probe": "probe-skip(canary-only) — גלאי-ההתעוררות: sanbox"
   },
   {
-   "name": "Sandbox",
-   "visibility": "public",
-   "verdict": "RUNNING",
-   "workflows": [
-    {
-     "workflow": "fleet-yield",
-     "verdict": "RUNNING",
-     "durationS": 4,
-     "conclusion": null,
-     "createdAt": "2026-10-09T21:37:09Z",
-     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37994526951"
-    },
-    {
-     "workflow": "federation",
-     "verdict": "RUNNING",
-     "durationS": 3,
-     "conclusion": null,
-     "createdAt": "2026-10-09T21:37:07Z",
-     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37994523881"
-    },
-    {
-     "workflow": "fleet-heal",
-     "verdict": "RUNNING",
-     "durationS": 6,
-     "conclusion": null,
-     "createdAt": "2026-10-09T21:37:04Z",
-     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37994519802"
-    },
-    {
-     "workflow": "sovereign-tick",
-     "verdict": "RUNNING",
-     "durationS": 4,
-     "conclusion": null,
-     "createdAt": "2026-10-09T21:32:03Z",
-     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37994024731"
-    },
-    {
-     "workflow": "sovereign-state",
-     "verdict": "RUNNING",
-     "durationS": 6,
-     "conclusion": null,
-     "createdAt": "2026-10-09T21:27:05Z",
-     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37993521857"
-    },
-    {
-     "workflow": "artery-catchup",
-     "verdict": "GREEN",
-     "durationS": 12,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:08:43Z",
-     "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/37991612613"
-    }
-   ]
-  },
-  {
-   "name": "TruthRail",
+   "name": "FleetHQ",
    "visibility": "public",
    "verdict": "NO-RUNS",
    "workflows": []
+  },
+  {
+   "name": "saos-dex",
+   "visibility": "private",
+   "verdict": "MINUTES-BLOCKED",
+   "workflows": [
+    {
+     "workflow": "dex-ci",
+     "verdict": "MINUTES-BLOCKED",
+     "durationS": 3,
+     "conclusion": "failure",
+     "createdAt": "2026-10-09T21:58:50Z",
+     "url": "https://github.com/roshpinacare-sys/saos-dex/actions/runs/37996630412"
+    }
+   ],
+   "probe": "probe-skip(canary-only) — גלאי-ההתעוררות: sanbox"
   },
   {
    "name": "SovereignConsole",
@@ -155,17 +201,129 @@
    "workflows": []
   },
   {
-   "name": "sanbox",
-   "visibility": "private",
-   "verdict": "MINUTES-BLOCKED",
+   "name": "Domain",
+   "visibility": "public",
+   "verdict": "GENUINE-RED",
    "workflows": [
     {
-     "workflow": "sovereign-heart",
-     "verdict": "MINUTES-BLOCKED",
-     "durationS": 4,
+     "workflow": "pages build and deployment",
+     "verdict": "GREEN",
+     "durationS": 24,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:39:55Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37994795533"
+    },
+    {
+     "workflow": "human-cadence",
+     "verdict": "GREEN",
+     "durationS": 17,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:39:39Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37994769380"
+    },
+    {
+     "workflow": "fleet-census-cron",
+     "verdict": "GREEN",
+     "durationS": 99,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:07:09Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991451122"
+    },
+    {
+     "workflow": "fill-ledger-cron",
+     "verdict": "GREEN",
+     "durationS": 14,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:07:07Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991448345"
+    },
+    {
+     "workflow": "market-grid-cron",
+     "verdict": "GREEN",
+     "durationS": 20,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:07:05Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991445556"
+    },
+    {
+     "workflow": "grid-trigger-twin",
+     "verdict": "GREEN",
+     "durationS": 21,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:03:29Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991070262"
+    },
+    {
+     "workflow": "ladder-refresh",
+     "verdict": "GREEN",
+     "durationS": 52,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:03:19Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991051506"
+    },
+    {
+     "workflow": "treasury-route",
+     "verdict": "GREEN",
+     "durationS": 45,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T21:00:03Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990688767"
+    },
+    {
+     "workflow": "arb-mesh",
+     "verdict": "GREEN",
+     "durationS": 44,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T20:53:53Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990026649"
+    },
+    {
+     "workflow": "dex-core",
+     "verdict": "GREEN",
+     "durationS": 14,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T20:53:50Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990021246"
+    },
+    {
+     "workflow": "weave-anchor-lines",
+     "verdict": "GREEN",
+     "durationS": 67,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T20:53:45Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990012522"
+    },
+    {
+     "workflow": "weave-heart",
+     "verdict": "GREEN",
+     "durationS": 36,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T20:53:12Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37989952963"
+    },
+    {
+     "workflow": "weave-ecosystem",
+     "verdict": "GENUINE-RED",
+     "durationS": 31,
      "conclusion": "failure",
-     "createdAt": "2026-10-09T18:13:22Z",
-     "url": "https://github.com/roshpinacare-sys/sanbox/actions/runs/37971766530"
+     "createdAt": "2026-10-09T20:13:40Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37985553209"
+    },
+    {
+     "workflow": "watchdog",
+     "verdict": "GREEN",
+     "durationS": 15,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T20:04:33Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37984525430"
+    },
+    {
+     "workflow": "tri-bridge",
+     "verdict": "GREEN",
+     "durationS": 15,
+     "conclusion": "success",
+     "createdAt": "2026-10-09T20:04:23Z",
+     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37984507540"
     }
    ],
    "probe": "guard-24h"
@@ -281,150 +439,6 @@
    "workflows": []
   },
   {
-   "name": "Domain",
-   "visibility": "public",
-   "verdict": "GENUINE-RED",
-   "workflows": [
-    {
-     "workflow": "pages build and deployment",
-     "verdict": "GREEN",
-     "durationS": 25,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:08:45Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991615840"
-    },
-    {
-     "workflow": "fleet-census-cron",
-     "verdict": "GREEN",
-     "durationS": 99,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:07:09Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991451122"
-    },
-    {
-     "workflow": "fill-ledger-cron",
-     "verdict": "GREEN",
-     "durationS": 14,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:07:07Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991448345"
-    },
-    {
-     "workflow": "market-grid-cron",
-     "verdict": "GREEN",
-     "durationS": 20,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:07:05Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991445556"
-    },
-    {
-     "workflow": "grid-trigger-twin",
-     "verdict": "GREEN",
-     "durationS": 21,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:03:29Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991070262"
-    },
-    {
-     "workflow": "ladder-refresh",
-     "verdict": "GREEN",
-     "durationS": 52,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:03:19Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37991051506"
-    },
-    {
-     "workflow": "treasury-route",
-     "verdict": "GREEN",
-     "durationS": 45,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T21:00:03Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990688767"
-    },
-    {
-     "workflow": "arb-mesh",
-     "verdict": "GREEN",
-     "durationS": 44,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T20:53:53Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990026649"
-    },
-    {
-     "workflow": "dex-core",
-     "verdict": "GREEN",
-     "durationS": 14,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T20:53:50Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990021246"
-    },
-    {
-     "workflow": "weave-anchor-lines",
-     "verdict": "GREEN",
-     "durationS": 67,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T20:53:45Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37990012522"
-    },
-    {
-     "workflow": "weave-heart",
-     "verdict": "GREEN",
-     "durationS": 36,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T20:53:12Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37989952963"
-    },
-    {
-     "workflow": "weave-ecosystem",
-     "verdict": "GENUINE-RED",
-     "durationS": 31,
-     "conclusion": "failure",
-     "createdAt": "2026-10-09T20:13:40Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37985553209"
-    },
-    {
-     "workflow": "watchdog",
-     "verdict": "GREEN",
-     "durationS": 15,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T20:04:33Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37984525430"
-    },
-    {
-     "workflow": "tri-bridge",
-     "verdict": "GREEN",
-     "durationS": 15,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T20:04:23Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37984507540"
-    },
-    {
-     "workflow": "agent-verify",
-     "verdict": "GREEN",
-     "durationS": 23,
-     "conclusion": "success",
-     "createdAt": "2026-10-09T19:51:20Z",
-     "url": "https://github.com/roshpinacare-sys/Domain/actions/runs/37983056315"
-    }
-   ],
-   "probe": "guard-24h"
-  },
-  {
-   "name": "saos-dex",
-   "visibility": "private",
-   "verdict": "MINUTES-BLOCKED",
-   "workflows": [
-    {
-     "workflow": "dex-ci",
-     "verdict": "MINUTES-BLOCKED",
-     "durationS": 4,
-     "conclusion": "failure",
-     "createdAt": "2026-10-09T21:01:59Z",
-     "url": "https://github.com/roshpinacare-sys/saos-dex/actions/runs/37990910763"
-    }
-   ],
-   "probe": "probe-skip(canary-only) — גלאי-ההתעוררות: sanbox"
-  },
-  {
    "name": "Zip",
    "visibility": "private",
    "verdict": "MINUTES-BLOCKED",
@@ -505,12 +519,6 @@
    "probe": "probe-skip(canary-only) — גלאי-ההתעוררות: sanbox"
   },
   {
-   "name": "FleetHQ",
-   "visibility": "public",
-   "verdict": "NO-RUNS",
-   "workflows": []
-  },
-  {
    "name": "saos-runtime",
    "visibility": "public",
    "verdict": "RUNNING",
@@ -518,10 +526,10 @@
     {
      "workflow": "sovereign-runtime",
      "verdict": "RUNNING",
-     "durationS": 312,
+     "durationS": 405,
      "conclusion": null,
-     "createdAt": "2026-10-09T21:31:50Z",
-     "url": "https://github.com/roshpinacare-sys/saos-runtime/actions/runs/37994002323"
+     "createdAt": "2026-10-09T22:13:18Z",
+     "url": "https://github.com/roshpinacare-sys/saos-runtime/actions/runs/37998008555"
     }
    ]
   },
