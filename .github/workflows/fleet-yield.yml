@@ -42,7 +42,9 @@ jobs:
       - name: setup-node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # node 22+ — המנוע-מייבא llm-chain.ts; הפשטת-טיפוסים-זמינה-מ-22.13
+          # (נמדד: node 20 מת-מיד על ה-.ts — ERR_UNKNOWN_FILE_EXTENSION · node 24 מקומי = ירוק)
+          node-version: 22
 
       # דפוס-האחים (saos-runtime/steem): רק-noble — המנוע-אפס-תלות-חוץ-אחרת
       - name: engine deps (noble only)
@@ -60,9 +62,11 @@ jobs:
         if: always()
         run: git add receipts/fleet-yield fleet/ engine/fleet-yield.mjs engine/fleet-yield-selftest.mjs .github/workflows/fleet-yield.yml
 
+      # לא --staged: fleet-engine/ הוא-checkout-gitlink-untracked וסריקתו = EISDIR.
+      # סריקת-טריטוריה-מאונדקסת-בלבד (הדפוס של sovereign-state) — fail-closed.
       - name: leak-scan (fail-closed)
         if: always()
-        run: node engine/leak-scan.mjs --staged
+        run: git ls-files -z receipts/fleet-yield fleet/ engine/fleet-yield.mjs engine/fleet-yield-selftest.mjs .github/workflows/fleet-yield.yml | xargs -0 node engine/leak-scan.mjs
 
       # קומיט-ממושפע: רק-הטריטוריה-שלי (אף-פעם לא -A) · rebase ×3 · כישלון-אמת = יציאה 1
       - name: commit + push (rebase-safe)

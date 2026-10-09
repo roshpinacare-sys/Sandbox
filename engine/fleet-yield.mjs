@@ -124,7 +124,7 @@ function engineSelftest(engDir) {
   const parsed = m
     ? { passed: Number(m[1]), total: Number(m[2]), status: String(m[3]).toUpperCase() }
     : { passed: null, total: null, status: "UNPARSED" };
-  const tail = text.split("\n").map((l) => l.trim()).filter(Boolean).slice(-2);
+  const tail = text.split("\n").map((l) => l.trim()).filter(Boolean).slice(-8);
   return { parsed, tail, code: r.status, timedOut: r.error?.code === "ETIMEDOUT" || r.signal === "SIGTERM" };
 }
 
