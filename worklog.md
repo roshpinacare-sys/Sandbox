@@ -96,3 +96,22 @@ Work Log:
 - **משמעת-המשפחה**: 4 ידיים ב-worktrees-מבודדים (swarm/3a–3d) · מיזוג-וביקורת-על-ידי-בלבד (orchestrator-only merger) · הפנקס-נכתב-על-ידי-בלבד (הידיים מדווחות-JSON-קומפקטי) · אפס-סודות-בידיים (ה-PAT-נשאר-אצלי; הידיים אף-פעם לא קוראות-קבצי-סודות) · leak-scan-חובה לפני-כל-push.
 - **חוזה-הממשקים** נחתם-ונזרע: `state/README.md` (סכימה sanbox-state/1 · חוק-מרקל-מצטבר genesis=f9aeab3c… · חוזה-workflow · חוזה-status/ · חוק-הכנות) · `state/network-state.json` (זרע-היווסד, אפס-מדידות-מנומנטות) · `state/keeper.log` (כותרת-בלבד).
 - Status: עבודת-הידיים-מתחילה-כעת; מיזוג-והוכחת-ענן יבואו-אחריה.
+
+---
+Task ID: T-43a–d (השלמת-המשפחה)
+Agent: agent-3 (orchestrator — ממזג-ובודק-בלבד; הידיים עבדו ב-worktrees-מבודדים)
+
+Work Log:
+- **T-43a** (יד-3a): `status/` נבנה (index/style/app/README) — CSP-מטא-מדויק · אפס-inline · אפס-CDN · textContent-בלבד (הפגיעה-היחידה-בסריקת-innerHTML = הערה-האוסרת-אותו) · פאנל-מפעיל עם-טוקן-sessionStorage-ונעילת-15-דק' · ניסוי-DOM-מדומה 44/44.
+- **T-43b** (יד-3b): `engine/state-lib.mjs` + `state-tick.mjs` + `operator.mjs` — node --check ×3 · שני-טיקים-חיים (tickCount=2, שרשרת-מתקדמת, אימות-שרשרת-בלתי-תלוי-ב-/tmp) · תרגילי-מפעיל: arm-בלי-נימוק=יציאה-כנה-1 · arm/disarm/selftest=9/9 · leak-scan-נקי · **הזרע-הושב-לטהור אחרי-הבדיקות** (טיק#1 יישאר-של-הענן — הכנות-נשמרת).
+- **T-43c** (יד-3c): `.github/workflows/sovereign-state.yml` — cron-מוסט 3,18,33,48 · inputs-מדויקים · אפס-הזרקה (הקלטים-רק-דרך-env) · permissions-מזערי · rebase-retry ×3 עם-כישלון-כן.
+- **T-43d** (יד-3d, ביקורת-אדומה בלתי-תלויה): דוח-מלא ב-`state/AUDIT-T43d.md`. סודות: **נקי** (היסטוריה-מלאה-0-פגיעות). שני-ממצאי-HIGH על-החוזה-שלי — **שניהם-תוקנו-עכשיו על-ידי-הממזג**:
+  1. `.gitignore` `*.log` חסם-את-keeper.log → פתרון: force-add חד-פעמי (קובץ-עקוב-אינו-מושפע-מ-ignore) — בלי-לגעת-ב-.gitignore של agent-1.
+  2. `leak-scan state/` על-תיקייה=EISDIR fail-closed → ה-workflow מותקן-להרחבת-קבצים (`git ls-files -z state/ | xargs -0`).
+- **תיקוני-ממזג נוספים (orchestrator-sourced)**: סיבוב-keeper.log ל-512-שורות (נבדק: 515→512 מדויק) · חוזה-עודכן (סיומת-op= · סיבוב · סריקת-קבצים · סטיית-CDN-מתועדת ≤5-דק') · pages.yml הורחב-במדויק (paths+=status/** · artifact status@/status).
+- **ממצאים-שהועברו-לבעליהם (לא-תוקנו-כאן — טריטוריה)**: ל-agent-1: [MED] CSP של-console/index.html מכיל script-src 'unsafe-inline' (hash-CSP-אפשרי-לקובץ-סטטי) · [LOW] sovereign.yml חסר-timeout-minutes · [LOW] סריקת-leak-scan-ב-CI-שלו-על-קבצים-ספציפיים-תקינה-אך-קבצים-חדשים-לא-יכולים-להתווסף-לה. ל-agent-2: [LOW] boot/verify.sh — set -uo בלי -e · בלוק-node-מת-בשורות-24–28 · כתובת-cockpit-שגויה בשורה-82.
+- אימות-קצה-מקומי: node --check ×3 · trim-512 · תרגילי-מפעיל · leak-scan --staged --passfile (עם-זרע-הסוד-המקומי — אפס-התאמות) — הכל-לפני-ה-push.
+
+Stage Summary:
+- המשפחה-השלימה: מדינת-רשת-חיה (state/ · מרקל-מצטבר · חוק-כנות) · פעולות-מפעיל-מהענן (health/selftest/snapshot/arm/disarm) · עורק-מדינה-שני-במוסט-זמנים · דף-הוכחה-ציבורי (status/) · ביקורת-אדומה עם-2-HIGH-שתוקנו-וממצאים-מועברים-לבעליהם.
+- הבא: דחיפה → dispatch-ראשון → הוכחת-ענן (טיק#1 נכתב-על-ידי-ה-runner, לא-על-ידי-סוכן) → בדיקת-cron-אמפירית.

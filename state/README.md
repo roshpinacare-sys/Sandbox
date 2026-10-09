@@ -72,7 +72,10 @@
 
 - כותבים-כאן **רק** `engine/state-tick.mjs` (טיקים) ו-`engine/operator.mjs` (פעולות-מפעיל) — בענן (Actions) או מקומית לבדיקה.
 - כתיבה = atomic (tmp+rename) · זמנים = UTC ISO-8601 (Z) · יומן `keeper.log` שורה-אחת-לטיק.
-- `keeper.log`: `[<ISO-Z>] tick#N <ok|fail> head=<12hex> merkle=<8hex> st=P/T` — שורת-הערה ראשונה מותרת (`#`).
+- `keeper.log`: `[<ISO-Z>] tick#N <ok|fail> head=<12hex> merkle=<8hex> st=P/T` + סיומת-אופציונלית ` op=<action>` לשורות-מפעיל — שורת-הערה ראשונה מותרת (`#`).
+- **סיבוב-יומן**: היומן-החי מוגבל ל-512-שורות-טיק-אחרונות (שורות-כותרת-נשמרות); ההיסטוריה-המלאה חיה-בהיסטוריית-הגיט (תקדים ticks.jsonl של agent-1).
+- **סריקה-לפני-push**: leak-scan מורץ על **רשימת-קבצים** (`git ls-files -z state/ | xargs -0 node engine/leak-scan.mjs`) — לא-על-התיקייה (ארג=EISDIR fail-closed, ממצא-HIGH T-43d).
+- `keeper.log` מוגן-מפני-`*.log` ב-.gitignore בכוח-מעקב-חד-פעמי (force-add של-הממזג); קובץ-עקוב אינו-מושפע-מ-ignore.
 - אסור-force-push · push עם rebase-retry ×3 · אפס-התאמות ב-leak-scan לפני-push · ה-commit **רק** `git add state/` (אף-פעם לא `add -A`).
 
 ## חוזה-workflow — `.github/workflows/sovereign-state.yml`
@@ -94,6 +97,7 @@
 - CSP-קשוח (מטא): `default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.github.com; base-uri 'none'; form-action 'none'`.
 - אפס-inline (אף-תג-סקריפט/סטייל-מוטמע) · אפס-CDN · אפס-פונטים-חוץ · RTL עברית · רספונסיבי · ניגודיות-AA · `prefers-reduced-motion`.
 - כנות: מצב-שליפה-כושל = "מצב-לא-זמין" מפורש — לעולם לא נתוני-דמה.
+- **סטיית-טריות-ידועה**: raw.githubusercontent מתווך-CDN עם TTL-עד-~5-דק' — העמוד-מראה-מדידות-בנות-עד-כ-5-דק'-פלוס-גיל-הטיק-עצמו; זה-מתועד-ומקובל (ה-LED-מחשב-זקנה-לפי-זמן-הטיק, לא-לפי-זמן-השליפה).
 
 ## חוק-הכנות (מכונן)
 

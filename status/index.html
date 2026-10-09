@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com https://api.github.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="מצב-הרשת החי של Sandbox הריבוני — כל-ערך נמדד בענן ונקרא מהגיט. אין-דמה, אין-טענות.">
+<title>מצב-הרשת — Sandbox ריבוני</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<header class="wrap hero">
+  <div class="hero-main">
+    <h1>מצב-הרשת — Sandbox ריבוני</h1>
+    <p class="tagline">ההוכחה שלא תלויה בטענות: כל-ערך כאן נשלף חי מהגיט — מה שלא נמדד, לא מוצג.</p>
+    <p class="updated">
+      <span>עודכן:</span> <span id="v-updated" class="mono"><span class="skel" aria-hidden="true"></span></span>
+      <span>· גיל-המדידה:</span> <span id="v-updated-age" class="mono"><span class="skel" aria-hidden="true"></span></span>
+      <span>· סכימה:</span> <span id="v-schema" class="mono"><span class="skel" aria-hidden="true"></span></span>
+      <button type="button" id="btn-refresh" class="btn-refresh">רענון</button>
+    </p>
+  </div>
+  <div class="hero-side">
+    <div class="overall" id="overall" data-state="gray" data-pulse="0">
+      <span class="dot big" aria-hidden="true"></span>
+      <span class="overall-text">
+        <span class="led-label">מצב-כללי</span>
+        <span id="v-overall-text" class="led-state">טוען…</span>
+      </span>
+    </div>
+    <div class="clock" role="timer" aria-label="שעון-חי: ירושלים ו-UTC">
+      <span class="clock-line">
+        <span id="v-clock-jlm" class="mono ltr clock-jlm">--:--:--</span>
+        <span class="clock-tz">ירושלים</span>
+      </span>
+      <span id="v-clock-utc" class="mono ltr clock-utc">UTC --:--:--</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p id="live" class="sr-only" role="status" aria-live="polite"></p>
+
+  <noscript><p class="op-warn">הדף-הזה דורש JavaScript כדי-לשלוף את-המדידות מהגיט — בלעדיו אין-נתונים, ולכן אין-הוכחה.</p></noscript>
+
+  <section class="led-strip" aria-label="נורות-מצב של הרשת">
+    <div class="led" id="led-overall" data-state="gray" data-pulse="0">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="led-label">מצב-כללי</span>
+      <span class="led-state" id="led-overall-text">טוען…</span>
+    </div>
+    <div class="led" id="led-keeper" data-state="gray" data-pulse="0">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="led-label">keeper</span>
+      <span class="led-state" id="led-keeper-text">טוען…</span>
+    </div>
+    <div class="led" id="led-switch" data-state="gray" data-pulse="0">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="led-label">מתג-ריבונות</span>
+      <span class="led-state" id="led-switch-text">טוען…</span>
+    </div>
+    <div class="led" id="led-selftest" data-state="gray" data-pulse="0">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="led-label">selftest</span>
+      <span class="led-state" id="led-selftest-text">טוען…</span>
+    </div>
+    <div class="led" id="led-custody" data-state="gray" data-pulse="0">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="led-label">custody-echo</span>
+      <span class="led-state" id="led-custody-text">טוען…</span>
+    </div>
+  </section>
+
+  <section class="grid" aria-label="פאנלי-מדידה">
+
+    <article class="card" id="card-keeper">
+      <h2>keeper — פועמת-המדינה</h2>
+      <div class="row"><span class="k">tickCount</span><span class="v mono ltr" id="v-keeper-ticks"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">lastTick</span><span class="v" id="v-keeper-lasttick"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">גיל-הטיק</span><span class="v mono ltr" id="v-keeper-age"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">lastHead</span><span class="v mono ltr" id="v-keeper-head"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">consecutiveFailures</span><span class="v mono ltr" id="v-keeper-fails"><span class="skel" aria-hidden="true"></span></span></div>
+    </article>
+
+    <article class="card" id="card-merkle">
+      <h2>שרשרת-מרקל המצטברת</h2>
+      <div class="row"><span class="k">prev → merkle</span>
+        <span class="merkle-flow">
+          <span class="v mono ltr" id="v-merkle-prev"><span class="skel" aria-hidden="true"></span></span>
+          <span class="arrow" aria-hidden="true">→</span>
+          <span class="v mono ltr" id="v-merkle-cur"><span class="skel" aria-hidden="true"></span></span>
+        </span>
+      </div>
+      <div class="row"><span class="k">genesis</span><span class="v mono ltr" id="v-merkle-genesis"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">הערה</span><span class="v note" id="v-merkle-note"><span class="skel" aria-hidden="true"></span></span></div>
+    </article>
+
+    <article class="card" id="card-switch">
+      <h2>מתג-ריבונות</h2>
+      <div class="row"><span class="k">מצב</span><span class="v" id="v-switch-mode"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">מאז</span><span class="v" id="v-switch-since"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">נימוק</span><span class="v note" id="v-switch-note"><span class="skel" aria-hidden="true"></span></span></div>
+    </article>
+
+    <article class="card" id="card-custody">
+      <h2>custody — הד-הקבלה</h2>
+      <div class="row"><span class="k">מקור</span><span class="v mono ltr" id="v-custody-src"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">status</span><span class="v" id="v-custody-status"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">echo.at</span><span class="v" id="v-custody-at"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">echo.head</span><span class="v mono ltr" id="v-custody-head"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">echo.files</span><span class="v mono ltr" id="v-custody-files"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">echo.dirty</span><span class="v mono ltr" id="v-custody-dirty"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">echo.keysLeaked</span><span class="v" id="v-custody-keys"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">echoedAt</span><span class="v" id="v-custody-echoedat"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">bytesSha256</span><span class="v mono ltr" id="v-custody-bytes"><span class="skel" aria-hidden="true"></span></span></div>
+    </article>
+
+    <article class="card" id="card-selftest">
+      <h2>selftest — בדיקה-עצמית</h2>
+      <div class="row"><span class="k">תוצאה</span><span class="v mono ltr" id="v-selftest-score"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">status</span><span class="v" id="v-selftest-status"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">at</span><span class="v" id="v-selftest-at"><span class="skel" aria-hidden="true"></span></span></div>
+    </article>
+
+    <article class="card" id="card-chain">
+      <h2>chain — מצב-העץ</h2>
+      <div class="row"><span class="k">headSha</span><span class="v mono ltr" id="v-chain-head"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">trackedFiles</span><span class="v mono ltr" id="v-chain-tracked"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">dirtyFiles</span><span class="v mono ltr" id="v-chain-dirty"><span class="skel" aria-hidden="true"></span></span></div>
+      <div class="row"><span class="k">worklogLines</span><span class="v mono ltr" id="v-chain-worklog"><span class="skel" aria-hidden="true"></span></span></div>
+    </article>
+
+  </section>
+
+  <article class="card card-wide" id="card-log">
+    <h2>יומן-טיקים — keeper.log · 30-השורות-האחרונות</h2>
+    <pre class="logview mono" id="v-log" dir="ltr" tabindex="0" aria-label="זנב יומן-הטיקים, 30 שורות אחרונות, ניתן לגלילה"><span class="skel" aria-hidden="true"></span></pre>
+  </article>
+
+  <section class="op-frame card-wide" id="op-frame" aria-label="פאנל-מפעיל">
+    <button type="button" class="op-toggle" id="op-toggle" aria-expanded="false" aria-controls="op-body">
+      <span class="op-title">פאנל-מפעיל — פעולות-מדינה</span>
+      <span class="op-hint" id="op-hint">סגור ▾</span>
+    </button>
+    <div class="op-body" id="op-body" hidden>
+      <p class="op-warn">הטוקן נשאר בזיכרון-הלשונית בלבד (sessionStorage) ונמחק בנעילה/אי-פעילות של 15 דקות. לעולם לא נשמר ולא נשלח לשום-מקום פרט ל-GitHub API.</p>
+      <div class="op-grid">
+        <div class="op-field op-token-field">
+          <label for="op-token">טוקן-מפעיל (רק-הרשאת actions)</label>
+          <input type="password" id="op-token" name="op-token" autocomplete="off" spellcheck="false" dir="ltr" placeholder="הזן-טוקן-כאן">
+          <div class="op-btns">
+            <button type="button" id="op-save">שמור-טוקן</button>
+            <button type="button" id="op-clear">נקה-טוקן</button>
+          </div>
+          <p class="op-token-state" id="op-token-state" aria-live="polite">אין-טוקן-שמור</p>
+        </div>
+        <div class="op-field">
+          <label for="op-action">פעולה</label>
+          <select id="op-action" name="op-action">
+            <option value="auto">אוטומטי — auto</option>
+            <option value="health">בדיקת-חיות — health</option>
+            <option value="selftest">בדיקה-עצמית — selftest</option>
+            <option value="snapshot">צילום-מצב — snapshot</option>
+            <option value="arm">חימוש-המתג — arm</option>
+            <option value="disarm">ניטרול-המתג — disarm</option>
+          </select>
+        </div>
+        <div class="op-field">
+          <label for="op-note">נימוק <span class="hint" id="op-note-hint" hidden>— חובה עבור arm</span></label>
+          <input type="text" id="op-note" name="op-note" autocomplete="off">
+        </div>
+        <div class="op-field op-send">
+          <button type="button" id="op-dispatch" class="op-dispatch">שגר-פעולה</button>
+          <p class="op-result" id="op-result" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="links" aria-label="קישורים">
+    <a href="../">קונסולה</a>
+    <a href="../cockpit/">קוקפיט</a>
+    <a href="https://github.com/roshpinacare-sys/Sandbox/actions" rel="noopener noreferrer">Actions</a>
+    <a href="https://github.com/roshpinacare-sys/Sandbox/blob/main/docs/RUNBOOK.md" rel="noopener noreferrer">RUNBOOK</a>
+    <a href="https://github.com/roshpinacare-sys/Sandbox" rel="noopener noreferrer">הריפו</a>
+  </nav>
+</main>
+
+<footer class="wrap foot">
+  <p class="foot-law">ריבונות שנמדדת — לא נטענת</p>
+  <p class="foot-merkle mono ltr">merkle: <span id="v-footer-merkle"><span class="skel" aria-hidden="true"></span></span></p>
+  <a href="https://github.com/roshpinacare-sys/Sandbox" rel="noopener noreferrer">roshpinacare-sys/Sandbox</a>
+</footer>
+
+</body>
+</html>

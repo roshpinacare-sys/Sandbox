@@ -1,0 +1,98 @@
+name: sovereign-state
+# עורק-המדינה (T-43 · משפחת-agent-3): מדידות-הרשת-החיות ב-state/ + פעולות-מפעיל מהענן.
+# עורק-עצמאי-שני לצד עורק-הטיק של agent-1 (sovereign.yml) — לא-מחליף-אותו.
+# cron-מוסט 3,18,33,48: היסט-3-דק' מה-*/15 של agent-1 כך-ששני-העורקים לא-יתנגשו-באותה-דקה
+# (נמדד: ה-cron-של-agent-1 מעולם-לא-הניב-ריצה-מתוכננת — עורק-שני-בזמנים-שונים מכפיל-את-סיכויי-ההדקה-המתוכננת).
+# אפס-PAT-ב-CI: GITHUB_TOKEN-בלבד, הרשאת-contents:write-בלבד (קרדנשל-checkout מתמיד-כברירת-מחדל — ה-push עובד).
+# arm-חייב-הערה: נאכף-ב-engine/operator.mjs (יציאה-כנה 1 בלעדיו) — לא-כאן.
+on:
+  schedule:
+    - cron: "3,18,33,48 * * * *"
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "פעולת-מפעיל: auto=טיק-מדינה-רגיל · health · selftest · snapshot · arm · disarm"
+        default: auto
+        type: choice
+        options:
+          - auto
+          - health
+          - selftest
+          - snapshot
+          - arm
+          - disarm
+      note:
+        description: "הערת-מפעיל (חובה-מדודה עבור arm — נאכף-ב-operator.mjs)"
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sovereign-state
+  cancel-in-progress: false
+
+jobs:
+  state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # טיק-מדינה: ריצה-מתוכננת או dispatch עם action=auto
+      - name: state-tick
+        if: github.event_name == 'schedule' || inputs.action == 'auto'
+        run: node engine/state-tick.mjs
+
+      # פעולת-מפעיל (action≠auto): הקלטים עוברים רק-דרך env — אפס-הזרקה-ל-shell
+      - name: operator-action
+        if: github.event_name == 'workflow_dispatch' && inputs.action != 'auto'
+        run: node engine/operator.mjs
+        env:
+          SBX_ACTION: ${{ inputs.action }}
+          SBX_NOTE: ${{ inputs.note }}
+
+      # סריקת-דליפות fail-closed: שגיאה=חסימה — אף-קומיט-לא-יוצא-לפניה.
+      # (תיקון-ממזג agent-3 ממצא-HIGH של-הביקורת-האדומה T-43d: leak-scan על-ארג-תיקייה
+      #  = EISDIR fail-closed; חובה-הרחבה-לרשימת-קבצים-עקובים)
+      - name: leak-scan (fail-closed)
+        run: git ls-files -z state/ | xargs -0 node engine/leak-scan.mjs
+
+      # קומיט-ממושפע: רק state/ (אף-פעם לא -A) · pull --rebase ×3 · כישלון-אחרי-3 = יציאה 1 (אף-ירוק-שקרי)
+      - name: commit + push (rebase-safe)
+        run: |
+          git config user.name "sandbox-state"
+          git config user.email "sandbox-state@users.noreply.github.com"
+          git add state/
+          N=$(node -p "require('./state/network-state.json').keeper.tickCount")
+          if git diff --cached --quiet; then
+            echo "no state changes — skip"
+          else
+            git commit -m "[state] tick#$N ${SBX_ACTION:-auto}: $(date -u +%FT%TZ)"
+            pushed=0
+            for i in 1 2 3; do
+              if git pull --rebase origin main && git push origin main; then
+                pushed=1
+                echo "state pushed (attempt $i/3)"
+                break
+              fi
+              git rebase --abort 2>/dev/null || true
+              git status
+              if [ "$i" -lt 3 ]; then sleep 5; fi
+            done
+            if [ "$pushed" -ne 1 ]; then
+              echo "push failed after 3 rebase attempts — honest failure, no silent green"
+              exit 1
+            fi
+          fi
+        env:
+          SBX_ACTION: ${{ inputs.action }}
