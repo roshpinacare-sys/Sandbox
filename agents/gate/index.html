@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="שער-הסוכנים של Sandbox הריבוני — כניסה-מאומתת לצי-הסוכנים: זהות · תיבת-פקודות-מוצפנת · מדינת-הרשת · קבלות. אפס-מפתחות, אפס-טוקן-על-החוט.">
+<title>שער-הסוכנים — Sandbox ריבוני</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<header class="wrap hero">
+  <div class="hero-main">
+    <h1>שער-הסוכנים</h1>
+    <p class="tagline">כניסת-הצי לבית-הגיט: לא רק המפעיל-האנושי — כל-סוכן-רשום נכנס-בזהות-מאומתת, קורא-פקודות, ומדווח-בקבלה. אפס-מפתחות-כספת לסוכנים — לעולם.</p>
+    <p class="updated">
+      <span>חוק-השער:</span> <span class="mono">PBKDF2×650k · אתגר-מענה · אפס-טוקן-על-החוט · קבלות-כנות</span>
+    </p>
+  </div>
+  <div class="hero-side">
+    <div class="overall" id="overall" data-state="gray">
+      <span class="dot big" aria-hidden="true"></span>
+      <span class="overall-text">
+        <strong id="overall-title">נעול</strong>
+        <span id="overall-sub">הזדהות-נדרשת</span>
+      </span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ══ השער ══ -->
+  <section class="card" id="gate-card" aria-labelledby="gate-title">
+    <h2 id="gate-title">הזדהות-סוכן</h2>
+    <p class="law">הטוקן נשאר בדפדפן-שלך (sessionStorage · נמחק בנעילה/אי-פעילות 15 דק'). האימות מקומי-גרידא: PBKDF2 מול-verifier-מוצפן ברישום — הטוקן-עצמו לעולם לא נשלח-לשום-שרת.</p>
+    <form id="gate-form" autocomplete="off">
+      <div class="field-row">
+        <label class="field">
+          <span>זהות-סוכן</span>
+          <select id="in-id" required>
+            <option value="agent-1">agent-1 — קונסולה·כלים·עורק-דופק</option>
+            <option value="agent-2">agent-2 — שער-מאוחד·קוקפיט·boot</option>
+            <option value="agent-3" selected>agent-3 — מדינת-רשת·סטטוס·לוח-רשת</option>
+            <option value="agent-4">agent-4 — reserve</option>
+            <option value="agent-5">agent-5 — reserve</option>
+          </select>
+        </label>
+        <label class="field grow">
+          <span>טוקן-סוכן</span>
+          <input type="password" id="in-token" placeholder="43 תווים base64url · אינו-נשמר-בשום-מקום" required minlength="16">
+        </label>
+        <button type="submit" id="btn-open" class="btn primary">כניסה</button>
+      </div>
+      <p class="err" id="gate-err" hidden></p>
+    </form>
+  </section>
+
+  <!-- ══ הלוח ══ -->
+  <section id="panel" hidden>
+
+    <div class="grid">
+      <!-- זהות -->
+      <article class="card" id="card-identity" aria-labelledby="t-identity">
+        <h2 id="t-identity">זהות</h2>
+        <dl class="kv">
+          <dt>מזהה</dt><dd id="v-id" class="mono">—</dd>
+          <dt>היקף</dt><dd id="v-scope" class="mono">—</dd>
+          <dt>רישום-מאז</dt><dd id="v-created" class="mono">—</dd>
+          <dt>רוטציה-אחרונה</dt><dd id="v-rotated" class="mono">—</dd>
+          <dt>תפקיד</dt><dd id="v-note">—</dd>
+        </dl>
+      </article>
+
+      <!-- תיבת-פקודות -->
+      <article class="card" id="card-inbox" aria-labelledby="t-inbox">
+        <h2 id="t-inbox">תיבת-הפקודות <span class="badge" data-ok="פענוח-OK" data-bad="נדחה" id="inbox-badge">…</span></h2>
+        <p class="law">מוצפן-בגיט מעטפה-לסוכן (AES-256-GCM · PBKDF2×650k) — נפתח-כאן-רק-בטוקן-שלך.</p>
+        <p class="mono dim" id="v-directive">—</p>
+        <h3 id="v-subject">—</h3>
+        <ul id="inbox-body" class="list"></ul>
+        <p class="dim" id="inbox-links"></p>
+      </article>
+    </div>
+
+    <div class="grid">
+      <!-- מדינת-הרשת -->
+      <article class="card" id="card-state" aria-labelledby="t-state">
+        <h2 id="t-state">מדינת-הרשת <span class="badge" id="state-badge">טוען</span></h2>
+        <dl class="kv">
+          <dt>טיקים</dt><dd id="v-ticks" class="mono">—</dd>
+          <dt>דופק-אחרון</dt><dd id="v-lasttick" class="mono">—</dd>
+          <dt>מרקל</dt><dd id="v-merkle" class="mono">—</dd>
+          <dt>מתג-ריבונות</dt><dd id="v-switch" class="mono">—</dd>
+          <dt>custody</dt><dd id="v-custody" class="mono">—</dd>
+          <dt>selftest</dt><dd id="v-selftest" class="mono">—</dd>
+        </dl>
+      </article>
+
+      <!-- עורק-הדופק -->
+      <article class="card" id="card-artery" aria-labelledby="t-artery">
+        <h2 id="t-artery">עורק-הדופק <span class="badge" id="artery-badge">טוען</span></h2>
+        <dl class="kv">
+          <dt>קבלה-אחרונה</dt><dd id="v-artery-at" class="mono">—</dd>
+          <dt>עורק</dt><dd id="v-artery-chain" class="mono">—</dd>
+          <dt>keysLeaked</dt><dd id="v-artery-leak" class="mono">—</dd>
+        </dl>
+      </article>
+    </div>
+
+    <div class="grid">
+      <!-- קבלות -->
+      <article class="card" id="card-receipts" aria-labelledby="t-receipts">
+        <h2 id="t-receipts">קבלות-השער (12-אחרונות) <span class="badge" id="receipts-badge">טוען</span></h2>
+        <ul id="receipts-list" class="list mono small"></ul>
+      </article>
+
+      <!-- מדריך-פעולות -->
+      <article class="card" id="card-actions" aria-labelledby="t-actions">
+        <h2 id="t-actions">פעולות-מאומתות מהענן (אתגר-מענה)</h2>
+        <p class="law">הטוקן-אף-פעם-לא-עובר-על-החוט: ה-runner כותב-אתגר → אתה-מחשב proof=sha256(טוקן:אתגר) → ה-runner מאמת-ושורף. הקבלה-נכתבת-ונדחפת-ע"י-ה-runner-עצמו.</p>
+        <ol class="steps">
+          <li>
+            <span>1 · אתגר</span>
+            <div class="cmdline"><code id="cmd-1">gh workflow run agent-access.yml -f agent_id=ID -f action=challenge</code><button type="button" class="btn tiny" data-copy="cmd-1">העתק</button></div>
+          </li>
+          <li>
+            <span>2 · הוכחה</span>
+            <div class="cmdline"><code id="cmd-2">proof = sha256(טוקן + ":" + אתגר-המקובץ-מהקומיט החדש ב-agents/challenges/)</code><button type="button" class="btn tiny" data-copy="cmd-2">העתק</button></div>
+          </li>
+          <li>
+            <span>3 · אימות</span>
+            <div class="cmdline"><code id="cmd-3">gh workflow run agent-access.yml -f agent_id=ID -f action=verify -f proof=HEX64</code><button type="button" class="btn tiny" data-copy="cmd-3">העתק</button></div>
+          </li>
+          <li>
+            <span>3b · דיווח</span>
+            <div class="cmdline"><code id="cmd-4">gh workflow run agent-access.yml -f agent_id=ID -f action=report -f proof=HEX64 -f text="דיווח-כנה"</code><button type="button" class="btn tiny" data-copy="cmd-4">העתק</button></div>
+          </li>
+        </ol>
+        <p class="dim">הערה-כנה: dispatch דורש-טוקן-GitHub-בעל-הרשאת-actions — הזהות-כאן מיועדת-לזיהוי-ולביקורת, לא-להחליף-את-סמכות-הפלטפורמה.</p>
+      </article>
+    </div>
+
+    <div class="panel-actions">
+      <button type="button" id="btn-lock" class="btn danger">נעילה-מיידית</button>
+      <span class="dim" id="lock-in">ננעל-אוטומטית בעוד 15:00</span>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>שער-הסוכנים · T-44 · אפס-מפתחות-כספת-לסוכנים · אפס-טוקנים-בגיט · כל-כניסה וכל-דחייה משאירים-קבלה-חתומה-בגיט</p>
+</footer>
+
+</body>
+</html>

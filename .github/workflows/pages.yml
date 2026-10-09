@@ -4,7 +4,7 @@ name: pages-deploy
 on:
   push:
     branches: [main]
-    paths: ["console/**", "docs/**", "network/**", "receipts/**", "operator/**", "status/**", ".github/workflows/pages.yml"]
+    paths: ["console/**", "docs/**", "network/**", "receipts/**", "operator/**", "status/**", "agents/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -30,9 +30,10 @@ jobs:
       # EXTEND (T-37-cockpit, agent-2): console/ at site-root + docs/ cockpit at /cockpit/.
       # EXTEND (T-38-operator, agent-2): + unified operator portal at /operator/.
       # EXTEND (T-43, agent-3): + status/ public proof page at /status/.
+      # EXTEND (T-44, agent-3): + agents/ gate at /agents/ (registry + sealed inbox — zero tokens).
       - name: assemble-site
         run: |
-          mkdir -p _site/cockpit _site/network _site/receipts _site/operator _site/status
+          mkdir -p _site/cockpit _site/network _site/receipts _site/operator _site/status _site/agents
           cp -r console/. _site/
           cp -r docs/. _site/cockpit/
           cp -r network/. _site/network/
@@ -43,6 +44,10 @@ jobs:
           cp -r operator/. _site/operator/
           rm -rf _site/operator/server/.env.local
           cp -r status/. _site/status/
+          # T-44 (agent-3): gate page + hash registry + sealed inbox (agents.json holds
+          # PBKDF2 verifiers only; challenges/receipts stay out — read via raw.githubusercontent).
+          cp -r agents/gate/. _site/agents/
+          cp agents/agents.json agents/inbox.sealed.json _site/agents/
       - name: upload-site
         uses: actions/upload-pages-artifact@v3
         with:

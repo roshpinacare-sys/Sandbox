@@ -1,0 +1,102 @@
+name: agent-access
+# שער-הסוכנים-השרתי (T-44 · agent-3): זהות-מאומתת לצי-הסוכנים — לא רק למפעיל-האנושי.
+# אתגר-מענה: ה-runner כותב-אתגר טרי → הסוכן מחשב proof=sha256(טוקן:אתגר) → ה-runner
+# מאמת מול-הסוד ומול-האתגר-שבקומיט, משרף-אתגר, כותב-קבלה-כנה ודוחף. הטוקן-עצמו
+# לעולם-לא-עובר-על-החוט ולעולם-לא-בגיט (רק repo-secret SBX_AGENT_TOKEN_<ID>).
+# קלטים-פומביים-מטבעם: agent_id · action · proof (hash · שימוש-חד-פעמי) · text.
+on:
+  workflow_dispatch:
+    inputs:
+      agent_id:
+        description: "מזהה-סוכן-רשום (agent-1..agent-5 — ראו agents/agents.json)"
+        default: ""
+        type: string
+      action:
+        description: "challenge=כתיבת-אתגר · verify=אימות-הוכחה · report=דיווח-מאומת"
+        default: challenge
+        type: choice
+        options:
+          - challenge
+          - verify
+          - report
+      proof:
+        description: "הוכחה (verify/report בלבד): sha256(טוקן:אתגר) — 64-hex · שימוש-חד-פעמי"
+        default: ""
+        type: string
+      text:
+        description: "תוכן-הדיווח (report בלבד · ≤500 תווים)"
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agent-access
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # הקלטים עוברים רק-דרך env — אפס-הזרקה-ל-shell (חוזה-sovereign-state)
+      # הסודות-ממופים-מפורשות (secrets-אינו-מאפשר-אינדוקס-דינמי); הריקים-נדחים-בשער.
+      - name: agent-gate
+        run: node engine/agent-gate.mjs "${SBX_ACTION}"
+        env:
+          SBX_ACTION: ${{ inputs.action }}
+          SBX_AGENT_ID: ${{ inputs.agent_id }}
+          SBX_PROOF: ${{ inputs.proof }}
+          SBX_TEXT: ${{ inputs.text }}
+          SBX_AGENT_TOKEN_AGENT1: ${{ secrets.SBX_AGENT_TOKEN_AGENT1 }}
+          SBX_AGENT_TOKEN_AGENT2: ${{ secrets.SBX_AGENT_TOKEN_AGENT2 }}
+          SBX_AGENT_TOKEN_AGENT3: ${{ secrets.SBX_AGENT_TOKEN_AGENT3 }}
+          SBX_AGENT_TOKEN_AGENT4: ${{ secrets.SBX_AGENT_TOKEN_AGENT4 }}
+          SBX_AGENT_TOKEN_AGENT5: ${{ secrets.SBX_AGENT_TOKEN_AGENT5 }}
+
+      # סריקת-דליפות fail-closed על-כל-קבצי-השער + מנוע-השער (חוזה-state)
+      - name: leak-scan (fail-closed)
+        run: |
+          git ls-files -z agents/ | xargs -0 node engine/leak-scan.mjs
+          node engine/leak-scan.mjs engine/agent-gate.mjs
+
+      # קומיט-ממושפע: רק agents/ (אף-פעם לא -A) · pull --rebase ×3 · כישלון-כנה
+      - name: commit + push (rebase-safe)
+        run: |
+          git config user.name "sandbox-agents"
+          git config user.email "sandbox-agents@users.noreply.github.com"
+          git add agents/
+          if git diff --cached --quiet; then
+            echo "no agent-gate changes — skip"
+          else
+            git commit -m "[agents] ${SBX_ACTION} ${SBX_AGENT_ID}: $(date -u +%FT%TZ)"
+            pushed=0
+            for i in 1 2 3; do
+              if git pull --rebase origin main && git push origin main; then
+                pushed=1
+                echo "agents pushed (attempt $i/3)"
+                break
+              fi
+              git rebase --abort 2>/dev/null || true
+              git status
+              if [ "$i" -lt 3 ]; then sleep 5; fi
+            done
+            if [ "$pushed" -ne 1 ]; then
+              echo "push failed after 3 rebase attempts — honest failure, no silent green"
+              exit 1
+            fi
+          fi
+        env:
+          SBX_ACTION: ${{ inputs.action }}
+          SBX_AGENT_ID: ${{ inputs.agent_id }}
