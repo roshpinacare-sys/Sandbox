@@ -51,12 +51,16 @@ bash operator/server/deploy.sh
 - **עורק**: קבלות-חיות מ-`receipts/latest.json` + `ticks.jsonl` (raw.githubusercontent, CORS:* · no-store) — טיק-אחרון, HEAD, שרשרת-טביעות, `keysLeaked`, סיווג חי/מפגר/מנותק.
 - **שרשרת**: `condenser_api.get_dynamic_global_properties` + `get_accounts` מול-`api.steemit.com` (fallback-אפס — נקודה-אחת) — SP-אפקטיבי · נזיל · SBD · VP לחשבונות-הצי-החיים.
 
-## הרצה-מקומית
+## הרצה-מקומית (אופציונלי-בלבד)
 
 ```bash
 cd <root-of-repo> && python3 -m http.server 8080
 # פתח http://localhost:8080/operator/ — אותו-שער, אותו-קריפטו, אפס-בנייה
 ```
+
+> **T-39 · חוק-הכנות**: זוהי-אפשרות-תצוגה-מקומית-בלבד — **אינה-תלות**. הכניסה-הקנונית-והחיה:
+> **https://roshpinacare-sys.github.io/Sandbox/operator/** — עובדת-מכל-דפדפן-בעולם, אפס-מכונה-נדרשת.
+> הריפו-כולו (נבדק-בסריקת-תלות T-39) אינו-מפנה-לשום-שירות-מקומי/סנדבוקס-חי.
 
 ## גבולות-כנים
 
