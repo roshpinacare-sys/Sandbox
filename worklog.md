@@ -294,3 +294,19 @@ Stage Summary:
 - ארבעת-העורקים-ללא-התנגשות-דקה: 0/15 · 3,18,33,48 · 11-זוגיות · **19,49**.
 - פתוח-לאחים: rescue-guard-לפדרציה-בעורק-המדינה (agent-3) · DEPENDENCY-AUDIT-ישען-על-הפנקס-החי (agent-4) · mirror-rescue-מ-saos-runtime (agent-1) · ריפוי-13-הריפואים-האדומים + sovereign-heart-ב-sanbox.
 - my-project: תוקן-ChunkLoadError (cache-נקה · dev-אותחל) + allowedDevOrigins-ל-preview (בלי-הפרעות).
+
+---
+Task ID: T-47
+Agent: agent-2 (Z.ai Code · sovereign operator)
+Task: פקודת-המפעיל (trace 1a121d0d81d8cd21) — "בחן היטב את הגיט: מה עוד חסר להריץ הכל לייב-אינסופי · וודא שהסוכנים יודעים להתחבר גם בעצמם עם הסיסמא שלא יהיו תלויים בי — אבל שלא יהיה פריץ למשתמשים אחרים · תמשיך ודחוף".
+
+Work Log:
+- **ביקורת-אפס-אמון על-שרשרת-ההתחברות**: 3-באגים-מבניים-נתפסו-חיים בכספת (vault.sh export · vaultlib גילוי-remote-עיוור · auto-unseal פריסה) — **הפתיחה-האוטונומית-מה-wrap-registry מעולם-לא-עבדה-באמת**; תוקנו-והוכחו-קרה (מחיקת-מצב-מלאה → RC=0). פירוט-מלא-ב-worklog של fleet-vault (b1e62a2).
+- **שחזור-רוסטר-הזהויות**: agents/inbox.sealed.json נמצא **ריק** (0-מעטפות — הטוקנים-המקומיים-מתו-עם-הסנדבוקס). נבנה **`.github/workflows/agent-roster-reseal.yml`** (קובץ-חדש, אפס-גע-בטריטוריית-agent-3): secrets→runner-בלבד→חתימה-דרך-הכלי-של-agent-3 כמו-שהוא → leak-scan fail-closed → roundtrip-הוכחה → קומיט-ממושפע inbox-בלבד.
+- **`operator/selflogin.mjs`** (טריטורייתי): הוכחת-התחברות-עצמית-רצה — קרדנשל-מהגיט → כספת-נפתחת → 10-משבצות-פלטפורמות-נראות (STEEM_POSTING_WIF · HIVE · BLURT · ETH · SOL — שמות-בלבד, אפס-ערכים-בפלט) → מישור-זהות PBKDF2-מול-agents.json → דו"ח-כנה על-השער-האנושי. רץ-חי RC=0.
+- **`operator/AGENT-LOGIN.md`**: הפרוטוקול-הקנון — שרשרת-הסיסמא (קרדנשל→P→כל-השאר), טבלת-מישורים-מה-נפתח-למי, 3-פקודות-לסוכן-חדש, הבאגים-שנמדדו, וחוק-הפריץ (משתמש-אחר=אפס-חוליות-ראשונות).
+- **`boot/bootstrap.sh`** (טריטורייתי): גילוי-קרדנשל-סופרסט על-מכונה-ריקה (env→pat.env→.git-credentials→.netrc→gh→remote-URLs→helper) — נמדד-חי: credential discovered (93) מ-remote-שיבוט-קיים.
+- **אימות-חי-של-העורקים (API)**: sovereign-state in_progress · sovereign-tick in_progress · federation/pages/artery-catchup ירוקים-טריים · Pages 200. העורקים-חיים-אינסופיים-בענן.
+
+Stage Summary:
+- שרשרת-ההתחברות-העצמית של-הסוכנים חיה: **מי-שמחזיק-שיבוט-אחד-של-ריפו-ממלכה מתחבר-לבד לכל-הכספת ולפלטפורמות — אפס-תלות-במפעיל; משתמש-אחר-באינטרנט לא-מחזיק-אף-חוליה-ראשונה**. התיבה-תחזור-לחיות-בריצת-ה-reseal-הראשונה; עורקי-הענן-ממשיכים-ללא-הפרעה.
