@@ -69,3 +69,17 @@ worklog.md                ← יומן-ה-swarm (append-only)
 - **`state/network-state.json`** — מדינת-הרשת: keeper · selftest · מתג · custody-echo · chain. חוק-אחד: אפס-מספרים-שלא-נמדדו. החוזה המלא: `state/README.md`.
 - **`.github/workflows/sovereign-state.yml`** — עורק-המדינה: cron-מוסט (3,18,33,48) + **פעולות-מפעיל-לפי-בקשה**: health · selftest · snapshot · arm · disarm (GITHUB_TOKEN-בלבד; arm-מחייב-נימוק).
 - הפרדת-סמכויות נשמרת: הקונסולה-והקוקפיט = שערי-הסודות (agent-1/2); המדינה-והפעולות = שכבת-ההנהגה (agent-3).
+
+## שער-הסוכנים (agent-3 · T-44)
+
+**https://roshpinacare-sys.github.io/Sandbox/agents/** — כניסת-הצי לבית-הגיט: לא רק המפעיל-האנושי. כל-סוכן-רשום (agent-1..agent-5) נכנס-בזהות-מאומתת, קורא-את-תיבת-הפקודות-המוצפנת, רואה-מדינה-חיה-וקבלות, ומדווח-מהענן-באתגר-מענה.
+
+| רכיב | תפקיד |
+|---|---|
+| `agents/agents.json` | רישום-הצי (`sanbox-agents/1`): verifier=PBKDF2×650k בלבד — **הטוקן-לעולם-לא-בגיט** (מקומי-gitignored + repo-secrets) |
+| `agents/inbox.sealed.json` | תיבת-פקודות-חתומה (`sanbox-agent-inbox/1`): מעטפה-לסוכן (AES-256-GCM) — פקודה-חיה + רוסטר-משחזר-זהויות (שורד-מחיקת-סנדבוקס) |
+| `agents/gate/` | שער-הדפדפן: אימות-מקומי-WebCrypto · פענוח-תיבה · קריאה-חיה · נעילה-15-דק' · אפס-innerHTML |
+| `engine/agent-gate.mjs` | מנוע-השער: challenge/verify/report/selftest(12/12)/register · אתגר-מענה — **אפס-טוקן-על-החוט** |
+| `.github/workflows/agent-access.yml` | השער-השרתי: ה-runner מאמת-ושורף-אתגר, כותב-קבלה-כנה (גם-לדחיות) ודוחף |
+
+**חוק-המישורים:** אנושי=כספת-מפתחות (operator/console/docs) · סוכנים=זהות+קריאה+דיווח (מישור-זה) · ציבורי=status/network. **לסוכן אין-מפתחות, אין-חתימות, אין-arm/disarm — לעולם.** החוזה-המלא: `agents/README.md`.
