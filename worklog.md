@@ -9,7 +9,10 @@
 
 **טריטוריות:**
 - agent-1 (T-41): תשתית-מלאה — README · SECURITY · RUNBOOK · console/ (מוצפן) · engine/ (tick · leak-scan · selftest) · tools/ (seal + תבנית-local) · workflows (sovereign-tick + pages) · .gitignore.
-- agent-2..5: **פנוי** — הכריזו-כאן. מוצע: מסילות-מדידה-נוספות ב-engine/ · פאנלים-חיים-בקונסולה (דרך-עדכון-חותם) · אינטגרציית-Console/Domain · חיזוק-Actions (SHA-pinning-מאומת).
+- agent-2 (T-37-cockpit): docs/ (קוקפיט) + boot/ (bootstrap · verify) + הרחבות-pages.yml.
+- agent-2 (T-38-operator): operator/ (שער-מאוחד + שער-שרתי) + הרחבות-pages.yml.
+- agent-3 (T-42): sovereign.yml (artery-v2 · dual-cron) · network/ (לוח-הרשת) · receipts-פרסום-ציבורי · הרחבות-pages.yml.
+- agent-4..5: **פנוי** — הכריזו-כאן. מוצע: מסילות-מדידה-נוספות ב-engine/ · פאנלים-חיים-בקונסולה (דרך-עדכון-חותם) · אינטגרציית-Console/Domain · חיזוק-Actions (SHA-pinning-מאומת).
 
 ---
 Task ID: T-41
@@ -70,3 +73,15 @@ Work Log (הכל-נמדד):
 
 Stage Summary:
 - המקשה-האחת: Sandbox=שרת-המפעיל (קונסולה-מוצפנת + קוקפיט-מפתחות) + עורק-דופק-כפול-ב-Actions + לוח-רשת-ציבורי-חי + מגש-FleetHQ + סקירה-ביטחונית-עצמאית-שסגרה-H1. הכל-סטטי/CI-בלבד — **אפס-תלות-בחיים-של-סנדבוקס כלשהו**. הדופק-ימדד-את-עצמו-בפומבי; מי-שרוצה-לדעת-אם-הריבונות-חיה — נכנס-ללוח-ורואה-צבע.
+Task ID: T-38-operator
+Agent: agent-2 (Z.ai Code · sovereign operator)
+Task: T-38 (השער-השרתי): הסיסמה-היא-השער — שער-מאוחד-אחד שפותח-הכל-כבלוק-אחד + שער-שרתי אמיתי (sessions·rate-limit) מוכן-לפריסה. טריטוריה: operator/ בלבד + הרחבות-מדויקות (pages.yml · כרזת-טריטוריות · README-סעיף).
+
+Work Log:
+- **אפס-אמון-פתיחה**: הריפו-"sanbox" לא-קיים (API-חי: total_count=0) — התיקייה-שנפתחה = `roshpinacare-sys/Sandbox`. fetch-חי לפני-עבודה; עורק-אומת-חי (קבלה 14:23:03Z · chain 4ee146ac · keysLeaked:false). טריטוריות-האחים-נקראו-מהיומן לפני-כל-נגיעה.
+- **שחזור-כספת-הצי**: fleet-vault הופשל-מחדש-על-מכונה-חדשה. **באג-אמת-שנתגלה-ותוקן-בהבנה**: unwrap-נכשל-בשחזור — הקרדנשל-הרשום-במעטפת = **השורה-המלאה** של pat.env (93 תווים), לא-הטוקן-בלבד; לקח-שנרשם-כאן-לדורות. keys.env.enc נפתח (11 slots) + rails.env.enc נפתח (10 slots: מפתחות-שרשרת Steem/Hive/Blurt/ETH/SOL).
+- **אמת-מדודה-מרכזית (T-38)**: טוקן-ה-Cloudflare בכספת **מת** — `GET /user/tokens/verify` → "Invalid API Token" (מול-API-חי, 2026-10-09). לכן-השער-השרתי=**מוכן-לא-חי** בכנות, עם-הצעה-קונקרטית (ROT5) במקום-הבטחה.
+- **operator/ — השער-המאוחד (חי-היום-על-Pages)**: `index.html · gate.js · style.css`. הדבקת-הסוד-המלא פותחת-בבלוק-אחד **גם** את-כספת-הצי (פורט-verbatim של-docs/app.js:tryUnlock — מעטפות PBKDF2·600k) **גם** את-הקונסולה (קנון-62 של-tools/seal.mjs:51 — PBKDF2·650k על-sealed-payload.bin) → לוח-מפעיל: מבט-על · כספת-הצי (ביקורת-נאמנות-חקוקה) · הקונסולה (עץ-JSON מפוענח) · העורק (קבלות-חיות-מ-receipts/ דרך-raw.githubusercontent) · השרשרת (dgpo+get_accounts מול-api.steemit.com) · שער-שרתי. CSP 'none'-default · אפס-אחסון · נעילה-אוטומטית-15 דק' · שדה-הקלט-מתרוקן-אחרי-פתיחה.
+- **operator/server/ — השער-השרתי (מוכן-לפריסה)**: worker.mjs (PBKDF2-SHA256·650k מול-hash-secret · timingSafeEqual-ופולבק · rate-limit 5/15 דק'/IP→429 · session HMAC-SHA256-stateless HttpOnly·Secure·SameSite=Strict·TTL-8h · /healthz פומבי · פרוקסי-מאומת-strip-cookies-no-store לכל-הפתחים) · wrangler.toml (אפס-סודות) · deploy.sh (גזירת-קנון-מקובץ-מקומי-בזיכרון-התהליך→secret-ישירות; אין-קובץ-ביניים·אין-הדפסה; SESSION_SECRET-חדש-בכל-פריסה=הרג-סשנים-מכוון) · operator/.gitignore (מקומי-משלי — .gitignore-של-agent-1-לא-נגע).
+- **אמת-בדפדפן (agent-browser, חי-על-שרת-מקומי של-העץ)**: שער-רנדר · שגוי→נדחה-קריפטוגרפית · נכון→שני-השערים-נפתחים · לוח-חי: עורק-מאומת-חי · קבלה-אחרונה · חשבונות-הצי-מול-שרשרת · עץ-הקונסולה · נעילה-מנקה.
+- **אפס-דריסות**: לא-נגעתי ב-console/ · docs/ · engine/ · tools/ · boot/ · sovereign.yml · .gitignore-שורש; pages.yml = הרחבה-מדויקת-בלבד (paths+operator · assemble+operator@/operator · rm-הגנתי-על-.env.local) · README = סעיף-מצורף-בלבד · leak-scan-לפני-push.

@@ -4,7 +4,7 @@ name: pages-deploy
 on:
   push:
     branches: [main]
-    paths: ["console/**", "docs/**", "network/**", "receipts/**", ".github/workflows/pages.yml"]
+    paths: ["console/**", "docs/**", "network/**", "receipts/**", "operator/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -29,9 +29,10 @@ jobs:
         uses: actions/configure-pages@v5
       # EXTEND (T-37-cockpit, agent-2): artifact now carries BOTH gates —
       # console/ at site-root (agent-1, unchanged) + docs/ cockpit at /cockpit/.
+      # EXTEND (T-38-operator, agent-2): + unified operator portal at /operator/.
       - name: assemble-site
         run: |
-          mkdir -p _site/cockpit _site/network _site/receipts
+          mkdir -p _site/cockpit _site/network _site/receipts _site/operator
           cp -r console/. _site/
           cp -r docs/. _site/cockpit/
           cp -r network/. _site/network/
@@ -39,6 +40,8 @@ jobs:
           for f in latest.json ticks.jsonl network.json network-log.jsonl; do
             [ -f "receipts/$f" ] && cp "receipts/$f" _site/receipts/
           done
+          cp -r operator/. _site/operator/
+          rm -rf _site/operator/server/.env.local
       - name: upload-site
         uses: actions/upload-pages-artifact@v3
         with:

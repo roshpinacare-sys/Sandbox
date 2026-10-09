@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self' https://api.steemit.com https://api.hive.blog https://raw.githubusercontent.com; img-src 'self' data:; base-uri 'none'; form-action 'self'">
+<title>השער-המאוחד של המפעיל — Sovereign Operator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <b>השער-המאוחד של המפעיל</b>
+    <span class="mini">Sovereign Operator · מקור-האמת: roshpinacare-sys/Sandbox</span>
+  </div>
+  <div id="hdr-state" class="badge">סגור</div>
+</header>
+
+<!-- ═══════════ השער: סיסמה אחת פותחת-הכל ═══════════ -->
+<main id="gate" class="gate-wrap">
+  <section class="card gate-card">
+    <h1>כניסת-מפעיל</h1>
+    <p class="muted">סיסמה-אחת פותחת בבלוק-אחד: כספת-הצי (קוקפיט) · הקונסולה הראשית · מצב-העורק · בריאות-השרשרת.
+    הסיסמה-מעולם-לא-עוזבת את הדפדפן — כל-הקריפטו מקומי (WebCrypto), אפס-שרת, אפס-אחסון.</p>
+    <div id="seal-line" class="seal-line"><span class="badge" id="badge-cockpit">כספת: בודק…</span><span class="badge" id="badge-console">קונסולה: בודק…</span></div>
+    <form id="gate-form">
+      <textarea id="pass" rows="4" autocomplete="off" spellcheck="false" inputmode="text"
+        placeholder="הדבק-כאן את תוכן הסוד המלא (headcorner) — רב-שורה מתחבר-אוטומטית"></textarea>
+      <button id="unlock-btn" class="btn btn-primary" type="submit" disabled>פתח-הכל</button>
+    </form>
+    <p class="mini muted">שגיאה-קריפטוגרפית נדחית-בשקט — אין-רמזים-ליריב. נעילה-אוטומטית אחרי 15 דק' או «נעל».</p>
+    <div id="gate-err" class="err" hidden></div>
+  </section>
+</main>
+
+<!-- ═══════════ לוח-המפעיל ═══════════ -->
+<main id="dash" hidden>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="לוח-המפעיל">
+    <button class="tab active" data-tab="overview" role="tab" aria-selected="true">מבט-על</button>
+    <button class="tab" data-tab="fleet" role="tab" aria-selected="false">כספת-הצי</button>
+    <button class="tab" data-tab="console" role="tab" aria-selected="false">הקונסולה</button>
+    <button class="tab" data-tab="artery" role="tab" aria-selected="false">העורק</button>
+    <button class="tab" data-tab="chain" role="tab" aria-selected="false">השרשרת</button>
+    <button class="tab" data-tab="server" role="tab" aria-selected="false">שער-שרתי</button>
+    <span class="spacer"></span>
+    <span id="autolock" class="mini muted"></span>
+    <button id="lock-btn" class="btn btn-mini">נעל</button>
+  </nav>
+
+  <!-- מבט-על -->
+  <section class="panel" id="panel-overview" role="tabpanel">
+    <div class="cards" id="ov-cards"></div>
+    <div class="grid2">
+      <div class="card">
+        <h2>פתחים-ריבוניים (חיים-על-Pages)</h2>
+        <ul class="links">
+          <li><a href="../console/" target="_blank" rel="noreferrer">הקונסולה הראשית (agent-1) ↗</a><span class="mini muted">שער-PBKDF2·650k — הדבק-שוב-שם (בידוד-מכוון)</span></li>
+          <li><a href="../cockpit/" target="_blank" rel="noreferrer">קוקפיט-הפעולות (agent-2) ↗</a><span class="mini muted">חתימה-בדפדפן — סביבה-מבודדת-במכוון</span></li>
+          <li><a href="https://github.com/roshpinacare-sys/Sandbox/actions" target="_blank" rel="noreferrer">ריצות-Actions (העורק) ↗</a><span class="mini muted">sovereign.yml · pages.yml</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>אמת-מידה-חיה</h2>
+        <ul class="kv" id="ov-truth"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- כספת-הצי -->
+  <section class="panel" id="panel-fleet" hidden role="tabpanel">
+    <div class="card">
+      <h2>ביקורת-הנאמנות (חקוקה-בכספת)</h2>
+      <ul class="kv" id="fleet-audit"></ul>
+    </div>
+    <div class="card">
+      <h2>נאמנות-חשבונות מול-שרשרת</h2>
+      <ul class="kv" id="fleet-custody"></ul>
+    </div>
+  </section>
+
+  <!-- הקונסולה -->
+  <section class="panel" id="panel-console" hidden role="tabpanel">
+    <div class="card">
+      <h2>תוכן-הקונסולה הראשית (מפוענח-בזיכרון-בלבד)</h2>
+      <p class="mini muted">אותו-צופן של agent-1 — נפתח-כאן-מקומית בקנון-62 המשותף. אינו-נשלח-לשום-שרת.</p>
+      <div id="console-tree" class="tree"></div>
+    </div>
+  </section>
+
+  <!-- העורק -->
+  <section class="panel" id="panel-artery" hidden role="tabpanel">
+    <div class="card">
+      <h2>עורק-הריבונות (GitHub-Actions — הרץ-מת-בכל-ריצה, ההמשכיות-בריפו)</h2>
+      <div id="artery-state"></div>
+      <div id="artery-ticks" class="ticks"></div>
+    </div>
+  </section>
+
+  <!-- השרשרת -->
+  <section class="panel" id="panel-chain" hidden role="tabpanel">
+    <div class="grid2">
+      <div class="card">
+        <h2>Steem — קצב-השרשרת</h2>
+        <ul class="kv" id="chain-dgpo"></ul>
+      </div>
+      <div class="card">
+        <h2>חשבונות-הצי חי-מול-השרשרת</h2>
+        <div id="chain-accounts" class="tablewrap"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- שער-שרתי -->
+  <section class="panel" id="panel-server" hidden role="tabpanel">
+    <div class="card">
+      <h2>השער-השרתי (operator/server — Cloudflare-Worker)</h2>
+      <div id="server-state"></div>
+      <h2 class="mt">הפעלה-בפקודה-אחת (מקומית-בלבד)</h2>
+      <pre class="code">cd operator/server
+# .env.local (מקומי-בלבד, gitignored):
+#   CLOUDFLARE_API_TOKEN=… · CLOUDFLARE_ACCOUNT_ID=… · PASSFILE=&lt;נתיב-מקומי-לסוד&gt;
+bash deploy.sh</pre>
+      <p class="mini muted">ה-worker: התחברות-סיסמה (PBKDF2·650k · constant-time · rate-limit ל-IP · session-HttpOnly) +
+מראת-פרוקסי לכל-הפתחים — הכל-מאחורי-סיסמה-שרתית אמיתית. אפס-סודות-בגיט: ה-hash-חי-רק-כ-secret-ב-Cloudflare.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span class="mini muted">Sovereign Operator · operator/ · append-only worklog · אפס-סודות-בגיט · מקור-האמת תמיד-הריפו</span>
+  </footer>
+</main>
+
+<script src="gate.js"></script>
+</body>
+</html>
