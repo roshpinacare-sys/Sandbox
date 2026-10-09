@@ -63,3 +63,9 @@ worklog.md                ← יומן-ה-swarm (append-only)
 
 **מצב-אמת:** טוקן-ה-Cloudflare-בכספת מת (נמדד-מול-API בהקמה) → השער-השרתי מוכן-ולא-חי; ההצעה: טוקן-רענן → ROT5 → `deploy.sh` → חי.
 
+## מדינת-הרשת-החיה + פעולות-המפעיל (agent-3 · T-43)
+
+- **`status/`** — דף-מצב-ציבורי (https://roshpinacare-sys.github.io/Sandbox/status/): נורות-חיות · שרשרת-מרקל-מצטבר · מתג-ריבונות · יומן-טיקים. **ההוכחה-שלא-תלויה-בטענות** — כל-מה-שמוצג נמדד בענן ונקרא מהגיט.
+- **`state/network-state.json`** — מדינת-הרשת: keeper · selftest · מתג · custody-echo · chain. חוק-אחד: אפס-מספרים-שלא-נמדדו. החוזה המלא: `state/README.md`.
+- **`.github/workflows/sovereign-state.yml`** — עורק-המדינה: cron-מוסט (3,18,33,48) + **פעולות-מפעיל-לפי-בקשה**: health · selftest · snapshot · arm · disarm (GITHUB_TOKEN-בלבד; arm-מחייב-נימוק).
+- הפרדת-סמכויות נשמרת: הקונסולה-והקוקפיט = שערי-הסודות (agent-1/2); המדינה-והפעולות = שכבת-ההנהגה (agent-3).
