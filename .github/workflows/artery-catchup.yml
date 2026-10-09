@@ -12,10 +12,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:   # T-51: הצתה-מהמפעיל-הפנימי — הנתיב-המוכח-חי
+    types: [artery-revive]
 
 permissions:
-  contents: write
-  actions: write   # T-51: נדרש-למעשה-ההצתה-מתחת (workflow-dispatch/repository-dispatch) — בלעדיו-ההצתה-הייתה-403-שקטה
+  contents: write   # T-51: הדפוס-המוכח-חי — contents:write-בלבד (actions:write-מפורש-נמדד-403)
 
 concurrency:
   group: artery-catchup
@@ -73,6 +74,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # artery-watch עצמו נשמר-במקצף 30 דק׳ (המטרונום-נצחי); שלושת-עורקות-ה-cron ששוקקו-ב-T-51 בסף-החיים-שלהם
+          # הכל-דרך-/dispatches (event_type=artery-revive) — הנתיב-המוכח-חי-היחיד (חוק-הרשאות-T-51)
           for spec in "artery-watch.yml:1800" "fleet-heal.yml:2700" "federation.yml:2700" "fleet-yield.yml:9900"; do
             WF="${spec%%:*}"; MAX="${spec##*:}"
             AGE_S="$(curl -sS --max-time 20 -H "Authorization: Bearer $GH_TOKEN" \
@@ -81,8 +83,8 @@ jobs:
             if [ "${AGE_S}" -gt "${MAX}" ]; then
               HTTP="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
                 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/repos/roshpinacare-sys/Sandbox/actions/workflows/${WF}/dispatches" \
-                -d '{"ref":"main"}')"
+                "https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches" \
+                -d '{"event_type":"artery-revive","client_payload":{"from":"catchup","wf":"'"$WF"'"}}')"
               echo "EXT-ARTERY ${WF} stale ${AGE_S}s > ${MAX}s — re-ignite http=${HTTP}"
             else
               echo "EXT-ARTERY ${WF} alive (${AGE_S}s) — quiet"

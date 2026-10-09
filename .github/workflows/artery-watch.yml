@@ -15,7 +15,10 @@ name: artery-watch
 #     מטרונום-עצמאי ללא cron וללא-דחיפות-חוץ. צעד-ההצתה-העצמית if: always() —
 #     הלולאה-שורדת-גם-כשלי-מדידה-וגם-כשלי-API.
 #   · שכבה-שנייה: artery-catchup (מופעל-דחיפות) מפקח גם על המטרונום עצמו — כיסוי-הדדי.
-#   · אפס-סודות: GITHUB_TOKEN-מקומי-בלבד · permissions-מפורשים (actions:write נדרש להצתה).
+#   · אפס-סודות: GITHUB_TOKEN-מקומי-בלבד.
+#   · חוק-הרשאות-נמדד-חי (T-51): GITHUB_TOKEN + permissions-contents:write → POST /dispatches = 204
+#     (מוכח-חי-עשרות-פעמים-יומית-בשרשרת-הראשית); actions:write-מפורש-עם-contents:read → 403 (נמדד-חי).
+#     לכן: contents:write-בלבד · כל-ההצתות-דרך-/dispatches (repository_dispatch) — הנתיב-המוכח-היחיד.
 # ═══════════════════════════════════════════════════════════════════════════
 on:
   schedule:
@@ -25,8 +28,7 @@ on:
     types: [artery-watch]
 
 permissions:
-  contents: read
-  actions: write
+  contents: write
 
 concurrency:
   group: artery-watch
@@ -80,9 +82,9 @@ jobs:
                 http = (await fetch(`${API}/dispatches`, { method: "POST", headers: H,
                   body: JSON.stringify({ event_type: a.chain, client_payload: { from: "artery-watch", staleS: ageS } }) })).status;
               } else {
-                how = "workflow_dispatch";
-                http = (await fetch(`${API}/actions/workflows/${a.wf}/dispatches`, { method: "POST", headers: H,
-                  body: JSON.stringify({ ref: "main" }) })).status;
+                how = "repository_dispatch:artery-revive";
+                http = (await fetch(`${API}/dispatches`, { method: "POST", headers: H,
+                  body: JSON.stringify({ event_type: "artery-revive", client_payload: { from: "artery-watch", wf: a.wf, staleS: ageS } }) })).status;
               }
               console.log(`STALE  ${a.wf} last-run ${ageS}s ago > ${a.maxAge}s — ignited via ${how} http=${http}`);
             } catch (e) {
@@ -107,5 +109,13 @@ jobs:
             -d '{"event_type":"artery-watch","client_payload":{"from":"beat-chain"}}')"
           echo "next-beat dispatch http=$HTTP"
           if [ "$HTTP" != "204" ]; then
-            echo "::warning::self-arm failed (http=$HTTP) — artery-catchup cron/push layer + schedule remain as revival layers"
+            HTTP2="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/roshpinacare-sys/Sandbox/actions/workflows/artery-watch.yml/dispatches \
+              -d '{"ref":"main"}')"
+            echo "fallback workflow-dispatch http=$HTTP2"
+            if [ "$HTTP2" != "204" ]; then
+              echo "::warning::self-arm failed on both paths — artery-catchup push/cron layer + schedule remain as revival layers"
+            fi
           fi

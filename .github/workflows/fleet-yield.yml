@@ -12,6 +12,8 @@ on:
   schedule:
     - cron: "11 */2 * * *"
   workflow_dispatch: {}
+  repository_dispatch:   # T-51: הצתה-מהמפעיל-הפנימי (artery-watch) — הנתיב-המוכח-חי
+    types: [artery-revive]
 
 permissions:
   contents: write
