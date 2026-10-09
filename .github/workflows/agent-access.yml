@@ -65,11 +65,43 @@ jobs:
           SBX_AGENT_TOKEN_AGENT4: ${{ secrets.SBX_AGENT_TOKEN_AGENT4 }}
           SBX_AGENT_TOKEN_AGENT5: ${{ secrets.SBX_AGENT_TOKEN_AGENT5 }}
 
-      # סריקת-דליפות fail-closed על-כל-קבצי-השער + מנוע-השער (חוזה-state)
+      # סריקת-דליפות fail-closed על-כל-קבצי-השער + מנוע-השער (חוזה-state) — נתיב-הצלחה
       - name: leak-scan (fail-closed)
         run: |
           git ls-files -z agents/ | xargs -0 node engine/leak-scan.mjs
           node engine/leak-scan.mjs engine/agent-gate.mjs
+
+      # קבלת-כישלון-חייבת-לשרוד-בגיט (ממצא-T-44-חי: נתיב-כישלון-לא-הגיע-ל-commit —
+      # סתירה-לטענת-השער "כל-דחייה-משאירה-קבלה"). צעד-תמידי: קבלות-בלבד, גם-בריצה-אדומה.
+      - name: receipt-commit (always — failed attempts are audited too)
+        if: always()
+        run: |
+          git config user.name "sandbox-agents"
+          git config user.email "sandbox-agents@users.noreply.github.com"
+          if git diff --quiet -- agents/receipts/ && git diff --cached --quiet -- agents/receipts/; then
+            echo "no receipt changes (success path handles its own commit)"
+            exit 0
+          fi
+          node engine/leak-scan.mjs agents/receipts/log.jsonl
+          git add agents/receipts/
+          git commit -m "[agents] receipt ${SBX_ACTION} ${SBX_AGENT_ID}: $(date -u +%FT%TZ)"
+          pushed=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin main; then
+              pushed=1
+              echo "failed-receipt pushed (attempt $i/3) — rejection is audited"
+              break
+            fi
+            git rebase --abort 2>/dev/null || true
+            if [ "$i" -lt 3 ]; then sleep 5; fi
+          done
+          if [ "$pushed" -ne 1 ]; then
+            echo "receipt push failed — honest failure, no silent green"
+            exit 1
+          fi
+        env:
+          SBX_ACTION: ${{ inputs.action }}
+          SBX_AGENT_ID: ${{ inputs.agent_id }}
 
       # קומיט-ממושפע: רק agents/ (אף-פעם לא -A) · pull --rebase ×3 · כישלון-כנה
       - name: commit + push (rebase-safe)
