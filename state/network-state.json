@@ -1,21 +1,21 @@
 {
   "schema": "sanbox-state/1",
-  "updatedAt": "2026-10-09T14:12:42Z",
+  "updatedAt": "2026-10-09T14:56:56.446Z",
   "genesis": "f9aeab3c481cc79cc426e5594fa5bf6ba617592267fb73859f8fd2cb7a0b65e5",
-  "prevMerkle": null,
-  "merkle": "f9aeab3c481cc79cc426e5594fa5bf6ba617592267fb73859f8fd2cb7a0b65e5",
+  "prevMerkle": "f9aeab3c481cc79cc426e5594fa5bf6ba617592267fb73859f8fd2cb7a0b65e5",
+  "merkle": "6980cbc99a08238b59ada3f04099b8bda942d8d2d27d238526ab41432d862cf5",
   "keeper": {
-    "tickCount": 0,
-    "lastTick": null,
-    "lastHead": null,
-    "status": "never-run",
+    "tickCount": 1,
+    "lastTick": "2026-10-09T14:56:56.446Z",
+    "lastHead": "366ff74f99b5",
+    "status": "ok",
     "consecutiveFailures": 0
   },
   "operator": {
-    "lastAction": null,
-    "by": null,
-    "at": null,
-    "note": null
+    "lastAction": "health",
+    "by": "operator-dispatch",
+    "at": "2026-10-09T14:56:56.446Z",
+    "note": "first-cloud-proof T-43"
   },
   "killSwitch": {
     "mode": "dryrun",
@@ -24,23 +24,36 @@
   },
   "custody": {
     "source": "receipts/latest.json",
-    "echo": null,
-    "echoedAt": null,
-    "status": "unmeasured"
+    "echo": {
+      "schema": "sandbox.tick/1",
+      "at": "2026-10-09T14:53:39.213Z",
+      "mode": "ci",
+      "head": "f4a70895ad38",
+      "dirty": 0,
+      "files": 43,
+      "worklogLines": 75,
+      "keysLeaked": false,
+      "chain": "f8755d76bd35e898",
+      "prevChain": "0902ac003d585623",
+      "bytesSha256": "581ecdf186cec69471a2913669d5413d857693a95066d641c27e2a263c8ef0e9"
+    },
+    "echoedAt": "2026-10-09T14:56:56.446Z",
+    "status": "ok"
   },
   "selftest": {
-    "passed": 0,
-    "total": 0,
-    "at": null,
-    "status": "never-run"
+    "passed": 6,
+    "total": 6,
+    "at": "2026-10-09T14:56:56.446Z",
+    "status": "ok"
   },
   "chain": {
-    "headSha": null,
+    "headSha": "366ff74f99b5",
     "dirtyFiles": 0,
-    "trackedFiles": 0,
-    "worklogLines": 0
+    "trackedFiles": 55,
+    "worklogLines": 101
   },
   "notes": [
-    "זרע-היווסד (genesis seed) — agent-3 · T-43 · המדידה-הראשונה תתרחש בטיק-הראשון"
+    "זרע-היווסד (genesis seed) — agent-3 · T-43 · המדידה-הראשונה תתרחש בטיק-הראשון",
+    "op#health ok 6/6 head=366ff74f99b5"
   ]
 }
