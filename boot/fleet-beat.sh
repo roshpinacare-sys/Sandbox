@@ -8,6 +8,9 @@
 #   1. כספת — vault.sh open (session → wraps → legacy; הגילוי-כמו-revive)
 #   2. cloud-echo  — פעימת-מדינה-שורדת-מכונות (Supabase · Postgres)
 #   3. gitlab-mirror — בית-git-שני (דילוג-כנה-כשאין-שינוי)
+#   3.5 render-home — בית-חי-שני-לקוקפיט (מדידה+החיה-עצמית)
+#   3.7 fleet-yield — עורק-התשואה-חי (T-54c): אינטל-curation-בלי-מפתחות
+#       (חוק-המישורים: המנוע-מתכנן · הקוקפיט-חותם — כאן-קריאה-בלבד)
 #   4. קבלות — leak-scan --staged (fail-closed) → commit → push
 #
 # אפס-סודות-בפלט · keys.env-נמחק-בסוף (היגיינה) · כל-כשל-כנה-ולא-קטלני.
@@ -47,10 +50,32 @@ node "$SANDBOX/engine/gitlab-mirror.mjs" || say "gitlab-mirror degraded (honest 
 # ── 3.5) הבית-השני-החי (T-54): מדידה+החיה-עצמית-של-קוקפיט-Render ──────────
 node "$SANDBOX/engine/render-home.mjs" || say "render-home degraded (honest — see above)"
 
+# ── 3.7) עורק-התשואה (T-54c): סנכרון-מנוע-מוגן + אינטל-חי ─────────────────
+# המנוע-חי-ב-$FLEET/steem (checkout-משותף-עם-האחים) — סנכרון-פסיבי-בלבד:
+# אחורי-ונקי→fast-forward · מלוכלך→נוגעים-לא (חוק-אפס-דריסה) · שגיאה=לא-קטלני.
+STEEM_DIR="$FLEET/steem"
+if [ -d "$STEEM_DIR/.git" ] && [ -f "$SANDBOX/engine/fleet-yield.mjs" ]; then
+  if git -C "$STEEM_DIR" fetch -q origin saos-cockpit 2>/dev/null; then
+    LOCAL="$(git -C "$STEEM_DIR" rev-parse HEAD 2>/dev/null)"
+    REMOTE="$(git -C "$STEEM_DIR" rev-parse FETCH_HEAD 2>/dev/null)"
+    DIRTY="$(git -C "$STEEM_DIR" status --porcelain 2>/dev/null | head -1)"
+    if [ -n "$LOCAL" ] && [ -n "$REMOTE" ] && [ "$LOCAL" != "$REMOTE" ] && [ -z "$DIRTY" ] \
+       && git -C "$STEEM_DIR" merge-base --is-ancestor "$LOCAL" "$REMOTE" 2>/dev/null; then
+      git -C "$STEEM_DIR" pull -q --ff-only origin saos-cockpit 2>/dev/null \
+        && say "yield-engine synced: $(git -C "$STEEM_DIR" rev-parse --short=12 HEAD)" \
+        || say "yield-engine sync deferred (honest)"
+    fi
+  fi
+  FLEET_ENGINE_DIR="$STEEM_DIR" node "$SANDBOX/engine/fleet-yield.mjs" \
+    || say "fleet-yield degraded (honest — the gate refuses fake green)"
+else
+  say "fleet-yield: engine checkout missing (honest — intel skipped this beat)"
+fi
+
 # ── 4) קבלות → leak-scan (fail-closed) → דחיפה ────────────────────────────
 rm -f "$VDIR/keys.env"
 if [ -d "$SANDBOX/.git" ]; then
-  git -C "$SANDBOX" add receipts/cloud-echo.jsonl receipts/gitlab-mirror.jsonl receipts/render-home.jsonl 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/cloud-echo.jsonl receipts/gitlab-mirror.jsonl receipts/render-home.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl 2>/dev/null || true
   if git -C "$SANDBOX" diff --cached --quiet 2>/dev/null; then
     say "receipts: nothing new (honest)"
   else

@@ -120,11 +120,24 @@ if [ -s "$VDIR/keys.env.enc" ]; then
   fi
 fi
 
+# ── 6.8) עורק-התשואה (T-54c): אינטל-curation-חי — בלי-מפתחות (חוק-המישורים) ─
+# רץ-גם-אם-הכספת-נשארת-אטומה: קריאות-שרשרת-בלבד + selftest-gate (אפס-ירוק-שקרי).
+if [ -f "$SANDBOX/engine/fleet-yield.mjs" ]; then
+  STEEM_DIR="${FLEET:-$(dirname "$SANDBOX")}/steem"
+  if [ -d "$STEEM_DIR/.git" ]; then
+    say "fleet-yield: intelligence vein (engine=$(basename "$STEEM_DIR"))…"
+    FLEET_ENGINE_DIR="$STEEM_DIR" node "$SANDBOX/engine/fleet-yield.mjs" \
+      || say "fleet-yield: degraded (honest — gate refuses fake green)"
+  else
+    say "fleet-yield: engine checkout missing (honest)"
+  fi
+fi
+
 # ── 7) קבלה-ודחיפה ─────────────────────────────────────────────────────────
 if [ "$CHECK" = "0" ] && [ -d "$SANDBOX/.git" ]; then
   mkdir -p "$SANDBOX/receipts"
   printf '%s\n' "{\"revivedAt\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"source\":\"$(basename "$SRC")\",\"port\":${PORT},\"fleet\":\"$(basename "$FLEET")\"}" >> "$SANDBOX/receipts/revivals.jsonl"
-  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl receipts/gitlab-mirror.jsonl receipts/cloud-echo.jsonl boot/ 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl receipts/gitlab-mirror.jsonl receipts/cloud-echo.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl boot/ 2>/dev/null || true
   if command -v node >/dev/null 2>&1 && [ -f "$SANDBOX/engine/leak-scan.mjs" ]; then
     node "$SANDBOX/engine/leak-scan.mjs" --staged || { say "leak-scan LIT — receipt push refused (fail-closed)"; exit 1; }
   fi
