@@ -28,9 +28,11 @@ const PROBES = [
   {
     name: "gitlab",
     env: "GITLAB_TOKEN",
-    url: "https://gitlab.com/api/v4/user",
+    // T-57 (measured live): הטוקן-מוקף-פרויקטים — /user מחזיר-403 בזמן-שהמראה-עצמה
+    // מאומתת 3/3 verified. המדידה-חייבת-למדוד-יכולת-אמת: רשימת-פרויקטים-חברים.
+    url: "https://gitlab.com/api/v4/projects?membership=true&per_page=1",
     headers: (t) => ({ "PRIVATE-TOKEN": t }),
-    identity: (j) => (j?.username ? `user:${j.username}` : null),
+    identity: (j) => (Array.isArray(j) ? `projects-accessible:${j.length >= 1 ? "yes" : "none"}` : null),
   },
   {
     name: "supabase",
