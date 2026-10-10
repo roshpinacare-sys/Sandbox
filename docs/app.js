@@ -651,16 +651,33 @@ txid: ${signed.txid}
     source: "",
     queue: new Set(),                    // author/permlink — אישור-המפעיל (סשן-בלבד)
     signed: (() => { try { return JSON.parse(localStorage.getItem("sovereign-signed-votes") || "{}"); } catch { return {}; } })(),
+    /* T-56: אמת-השרשרת — מפת-ההצבעות-האחרונות-של-המצביע (מהקבלה · נתונים-פומביים).
+     * null = הקבלה-עצמה-מודה-שהדה-דופ-לא-זמין (שני-המקורות-מתו במנוע) — מוצג-בכנות. */
+    onChain: null,
   };
   const saveSigned = () => { try { localStorage.setItem("sovereign-signed-votes", JSON.stringify(CUR.signed)); } catch {} };
   /* escapeHtml-חי-בקובץ-זה-מלמטה (חוק-T-42) — כל-נתון-חוץ-מהקבלה-עובר-הימלטות */
   const curKey = (c) => `${c.author}/${c.permlink}`;
+  /* T-56: מפת-האמת-מהשרשרת — מועמד-שהוצב-כבר-מכל-מכשיר מזוהה-כאן */
+  const buildOnChain = (r) => {
+    const list = r?.voter?.recentVotes;
+    CUR.onChain = Array.isArray(list)
+      ? new Map(list.filter((v) => v?.k).map((v) => [String(v.k), { w: Number(v.w) || 0, at: String(v.at || "") }]))
+      : null;
+  };
+  const chainVoted = (key) => (CUR.onChain ? CUR.onChain.get(key) ?? null : null);
   const REC_TIME = () => Date.parse(CUR.receipt?.at ?? "") || Date.parse((CUR.receipt?.at ?? "") + "Z") || 0;
   const REC_AGE_MS = () => (REC_TIME() ? Date.now() - REC_TIME() : Number.POSITIVE_INFINITY); // קבלה-בלי-זמן-תקין = זקנה-מיידית (fail-closed)
   const rowAgeMin = (c) => Math.round((Number(c.ageMinutes) || 0) + REC_AGE_MS() / 60000);
   const capToday = () => {
     const today = new Date().toISOString().slice(0, 10);
-    return Object.values(CUR.signed).filter((v) => String(v.at || "").slice(0, 10) === today).length;
+    /* T-56: חציית-מכשירים — מה-שחתום-במקומי + מה-שהשרשרת-מעידה-על-היום (איחוד-מפתחות).
+     * הקבלה-יכולה-להיות-בת-שעות — הספירה-המשותפת-היא-רצפה-כנה, לא-תקרה-מדויקת. */
+    const local = Object.entries(CUR.signed).filter(([, v]) => String(v?.at || "").slice(0, 10) === today).map(([k]) => k);
+    const chain = CUR.onChain
+      ? [...CUR.onChain.entries()].filter(([, v]) => String(v.at || "").slice(0, 10) === today).map(([k]) => k)
+      : [];
+    return new Set([...local, ...chain]).size;
   };
 
   async function fetchCuration() {
@@ -680,8 +697,9 @@ txid: ${signed.txid}
         if (r?.selftest?.status !== "PASS") throw new Error("selftest=" + r?.selftest?.status);
         CUR.receipt = r;
         CUR.fetchedAt = Date.now();
+        buildOnChain(r); // T-56: אמת-השרשרת-נטענת-מהקבלה (או-null-כנה)
         renderCuration();
-        log("curation-fetch", `INTEL ${r.verdict} · ${r.candidates.selected.length} candidates · engine ${String(r.engineHead).slice(0, 8)}… · ${CUR.source}`, "ok");
+        log("curation-fetch", `INTEL ${r.verdict} · ${r.candidates.selected.length} candidates · engine ${String(r.engineHead).slice(0, 8)}… · ${CUR.source}` + (CUR.onChain ? ` · dedup ${CUR.onChain.size}` : " · dedup לא-זמין"), "ok");
         return;
       } catch { /* המקור-הבא — כנות: אם-כולם-נפלו נכתוב-זאת-למטה */ }
     }
@@ -709,6 +727,7 @@ txid: ${signed.txid}
       `חוקי-החלון: ${ageMin}–${ageMax} דק' (מחושב-מחדש-כאן, עכשיו)`,
       `יום-מקס: ${maxPerDay} · חתומו-היום: ${capToday()}`,
       `נסרקו: ${Number(r.candidates.scanned) || 0} · נבחרו: ${(r.candidates.selected || []).length} · צפופים: ${Number(r.candidates.crowded) || 0}`,
+      `דה-דופ-שרשרת: ${CUR.onChain ? `${CUR.onChain.size} הצבעות-מוכרות (as-of-המקבלה)` : "לא-זמין-כנה (הקבלה-מדווחת)"}`,
       r.candidates.dayCapReached ? `<span class="warn">מכסת-היום-הושגה-במנוע</span>` : "",
     ].filter(Boolean).map((s) => `<span>· ${s}</span>`).join(" ");
 
@@ -718,6 +737,8 @@ txid: ${signed.txid}
       const age = rowAgeMin(c);
       const expired = age < ageMin || age > ageMax;
       const signedInfo = CUR.signed[key];
+      const onChainInfo = chainVoted(key); // T-56: אמת-השרשרת-חוצה-מכשירים
+      if (onChainInfo && CUR.queue.has(key)) { CUR.queue.delete(key); } // אפס-הצבעה-כפולה — יציאה-שקטה-מהתור
       const queued = CUR.queue.has(key);
       const wPct = (w / 100).toFixed(2);
       const eAuthor = escapeHtml(c.author), eKey = escapeHtml(key);
@@ -725,6 +746,8 @@ txid: ${signed.txid}
       const eTag = escapeHtml(c.tag ?? "");
       const state = signedInfo
         ? `<span class="badge badge-ok">חתום ✓</span>`
+        : onChainInfo
+        ? `<span class="badge badge-ok">בשרשרת ✓ (מכל-מכשיר)</span>`
         : staleBlock
         ? `<span class="badge badge-bad">מקבלה-זקנה (${ageH.toFixed(1)} שע') — חסום</span>`
         : expired
@@ -736,9 +759,9 @@ txid: ${signed.txid}
         <td><strong>${eAuthor}</strong></td>
         <td class="s"><a href="https://steemit.com/@${encodeURIComponent(c.author)}/${encodeURIComponent(c.permlink)}" target="_blank" rel="noopener noreferrer">${ePermlink}</a></td>
         <td>${wPct}%</td>
-        <td>${age} דק'${expired && !signedInfo ? " ⚠" : ""}</td>
+        <td>${age} דק'${expired && !signedInfo && !onChainInfo ? " ⚠" : ""}</td>
         <td class="muted s">${eTag}</td>
-        <td>${state}${signedInfo ? `<div class="muted s"><a href="https://steemscan.com/transaction/${encodeURIComponent(signedInfo.txid)}" target="_blank" rel="noopener noreferrer">${escapeHtml(String(signedInfo.txid).slice(0, 14))}…</a></div>` : ""}</td>
+        <td>${state}${signedInfo ? `<div class="muted s"><a href="https://steemscan.com/transaction/${encodeURIComponent(signedInfo.txid)}" target="_blank" rel="noopener noreferrer">${escapeHtml(String(signedInfo.txid).slice(0, 14))}…</a></div>` : ""}${onChainInfo && !signedInfo ? `<div class="muted s">שרשרת: ${escapeHtml(String(onChainInfo.at).replace("T", " ").slice(0, 16))} · ${((Number(onChainInfo.w) || 0) / 100).toFixed(2)}%</div>` : ""}</td>
       </tr>`;
     }).join("");
     table.innerHTML = rows
@@ -795,6 +818,10 @@ txid: ${signed.txid}
     for (const c of items) {
       const w = Math.round(Number(c.weight) || 0);
       if (!(w > 0 && w <= 10000)) { lines.push(`${c.author}: נחסם — משקל-שרשרת-לא-חוקי (${w})`); CUR.queue.delete(curKey(c)); continue; }
+      /* T-56: בדיקת-אמת-שנייה-ברגע-החתימה (אפס-אמון — הקבלה-היא-רק-תוכנית):
+       * אם-השרשרת-מעידה-שכבר-הוצב — חסימה-כנה, אפילו-אם-ה-UI-פספס. */
+      const nowVoted = chainVoted(curKey(c));
+      if (nowVoted) { lines.push(`${c.author}: נחסם — כבר-בשרשרת (${String(nowVoted.at).replace("T", " ").slice(0, 16)}) · אפס-הצבעה-כפולה`); CUR.queue.delete(curKey(c)); continue; }
       try {
         const ops = [["vote", { voter: account, author: c.author, permlink: c.permlink, weight: w }]];
         const signed = await signTx(account, ops);

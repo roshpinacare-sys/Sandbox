@@ -185,13 +185,94 @@ async function main() {
       }
     : { account: VOTER, status: "read-failed", error: accR.error ?? "no-result", vestsEff: null, vpEff: null };
 
+  /* 4.5 · פנקס-ההצבעות-מהשרשרת (T-56 · ציבורי-לגמרי — אפס-מפתחות):
+   * רשת-שנייה-מעל-ה-dedup-של-המנוע (active_votes): אם-ה-checkout-ישן-או-הצומת-
+   * הקדים-את-עצמו — כאן-האמת-מהחשבון-עצמו. השרשרת-היא-הפנקס — לא-localStorage
+   * (נופל-בין-מכשירים) ולא-מדינת-מנוע (נופל-בין-ריצות).
+   * מדידה-חייה 09:33Z: get_account_votes-מת-בצמתים-המודרניים (Server-error) →
+   * מפל: get_account_history-בעימוד-אחורה (הצומת-מגביל-100-לעמוד · נמדד:
+   * 100-ops-אחרונים-של-headcorner = 1.09-שעות-בלבד! החשבון-פעיל-מאוד) —
+   * עימוד-עד-כיסוי-חלון-הגיל (250-דק' > חלון-המועמדים-240) או-5-עמודים.
+   * שני-המקורות-נפלו = dedup-לא-זמין-בכנות (recentVotes=null) — הקבלה-עצמה-כשרה
+   * (ה-intel-אינו-תלוי-פנקס-ההצבעות; ה-cockpit-מציג-זאת-בכנות). */
+  const votesFromHistory = (result) => {
+    try {
+      return Object.values(result ?? {})
+        .map(([, w]) => w)
+        .filter((w) => w?.op?.[0] === "vote" && String(w?.op?.[1]?.voter ?? "") === VOTER)
+        .map((w) => ({ authorperm: `${w.op[1].author}/${w.op[1].permlink}`, weight: Number(w.op[1].weight) || 0, time: String(w.timestamp ?? "") }));
+    } catch { return null; }
+  };
+  let votesArr = null;
+  let votesHow = "failed";
+  const votesR = await rpc("condenser_api.get_account_votes", [[VOTER]]);
+  if (votesR.ok && Array.isArray(votesR.result)) {
+    votesArr = votesR.result;
+    votesHow = "get_account_votes";
+  } else {
+    /* עימוד-אחורה: מכסה-את-חלון-הגיל-במלואו — כי-עמוד-אחד-של-100-ops-על-חשבון-
+     * פעיל-מכסה-שעה-וחצי-בלבד (נמדד-חי) — הצבעה-בת-שעתיים-הייתה-נופלת. */
+    const WINDOW_MS = 250 * 60000; // > חלון-הגיל-המרבי (240 דק') + מרווח
+    const cutoff = Date.now() - WINDOW_MS;
+    const collected = [];
+    let from = -1;
+    let pages = 0;
+    let firstOk = false;
+    let malformed = false;
+    for (let page = 0; page < 5; page++) {
+      const histR = await rpc("condenser_api.get_account_history", [VOTER, from, 100]);
+      if (!histR.ok) break;
+      const pageVotes = votesFromHistory(histR.result);
+      if (!Array.isArray(pageVotes)) { malformed = true; break; }
+      if (page === 0) firstOk = true;
+      pages++;
+      collected.push(...pageVotes);
+      const entries = Object.entries(histR.result ?? {});
+      if (!entries.length) break;
+      let oldestIdx = Infinity, oldestTime = Infinity;
+      for (const [, pair] of entries) {
+        /* צורת-ה-API-נמדדה-חי 09:47Z: מפתח-המפה-הוא-יחסי-בעת-from=-1 (0..100)
+         * ואילו-האינדקס-הפנימי pair[0]-הוא-המוחלט — רק-הוא-עוגן-עימוד-תקין. */
+        const innerIdx = Number(pair?.[0]);
+        if (Number.isFinite(innerIdx) && innerIdx < oldestIdx) oldestIdx = innerIdx;
+        const t = Date.parse(pair?.[1]?.timestamp ?? "");
+        if (Number.isFinite(t) && t < oldestTime) oldestTime = t;
+      }
+      if (oldestTime <= cutoff) break;  // החלון-מכוסה-במלואו
+      if (!Number.isFinite(oldestIdx) || oldestIdx <= 0) break; // תחילת-ההיסטוריה
+      from = oldestIdx - 1;
+    }
+    if (firstOk && !malformed) {
+      votesArr = collected;
+      votesHow = `get_account_history:100x${pages}`;
+    }
+  }
+  const votedSet = new Set(votesArr ? votesArr.map((v) => String(v.authorperm ?? `${v.author}/${v.permlink}`)) : []);
+  /* הקבלה-מרוסנת: 150-האחרונות-בלבד (ממוינות-זמן-יורד) — נתונים-פומביים-בלבד */
+  const recentVotes = votesArr
+    ? votesArr.slice()
+        .sort((a, b) => Date.parse(b.time ?? "") - Date.parse(a.time ?? ""))
+        .slice(0, 150)
+        .map((v) => ({ k: String(v.authorperm ?? `${v.author}/${v.permlink}`), w: Number(v.weight) || 0, at: String(v.time ?? "") }))
+    : null;
+  if (acc) voter.votesRead = votesArr ? votesHow : "failed";
+  if (acc && !votesArr) voter.votesError = String(votesR.error ?? "history-unavailable").slice(0, 120);
+
   /* 5 · זרם-חי → חוקי-ה-curator (voter=קריאה-בלבד; אפס-מדינה-יומית = תוכנית-מלאה) */
   const fetched = await cur.fetchCandidates(policy, null, nowMs);
   if (!fetched.ok) failReceipt("RPC-STREAM-FAIL", { engineHead, selftest, voter, vestsPerSP, error: "all nodes down" });
   const plan = cur.filterCandidates({
     posts: fetched.posts, voter: VOTER, policy, nowMs,
-    votedPermlinks: [], votesToday: 0, authorsToday: {}, jitterSeed: null,
+    votedPermlinks: votesArr ? [...votedSet].map((k) => k.split("/").slice(1).join("/")) : [], votesToday: 0, authorsToday: {}, jitterSeed: null,
   });
+
+  /* 5.5 · הפרדת-המועמדים-שכבר-בשרשרת (T-56): המנוע-לא-בוחר-מה-שהצביע-כבר —
+   * אפס-הצבעה-כפולה-במקור (השרשרת-היא-האמת, גם-אם-ה-curator-של-המנוע-פספס). */
+  const selectedLive = [];
+  const votedOnChain = [];
+  for (const c of plan.selected) {
+    (votedSet.has(`${c.author}/${c.permlink}`) ? votedOnChain : selectedLive).push(c);
+  }
 
   /* 6 · קבלה-שרשרתית */
   const payload = {
@@ -205,14 +286,17 @@ async function main() {
       tvs, tvf,
       head: String(dgpo.result.head_block_number ?? ""),
     },
-    voter,
+    voter: { ...voter, recentVotes },
     candidates: {
       scanned: fetched.posts.length,
-      selected: plan.selected.slice(0, 12),
+      selected: selectedLive.slice(0, 12),
       rejectedTop: plan.rejected.slice(0, 14).map((r) => `${r.key}:${r.reason}`),
       rejectedCount: plan.rejected.length,
       crowded: plan.rejected.filter((r) => r.reason === "crowded").length,
       dayCapReached: plan.dayCapReached === true,
+      /* T-56: האמת-מהשרשרת — מה-שהוצב-כבר-יוצא-מהתור-לפני-שהמפעיל-יראה-אותו */
+      votedOnChain: votedOnChain.slice(0, 6).map((c) => `${c.author}/${c.permlink}`),
+      dedup: votesArr ? "on-chain" : "unavailable",
     },
     laws: {
       maxPostVotes: policy.maxPostVotes, maxPerDay: policy.maxPerDay,
@@ -229,6 +313,8 @@ async function main() {
     verdict: receipt.verdict, engineHead, selftest: selftest.status,
     vestsPerSP, vpEff: voter.vpEff, scanned: receipt.candidates.scanned,
     selected: receipt.candidates.selected.length, crowded: receipt.candidates.crowded,
+    votedOnChain: receipt.candidates.votedOnChain.length,
+    dedup: receipt.candidates.dedup,
     chain: receipt.chain.cur.slice(0, 12), tookMs: receipt.tookMs,
   }));
 }
