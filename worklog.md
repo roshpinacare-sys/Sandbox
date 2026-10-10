@@ -517,3 +517,20 @@ Stage Summary:
 - **הכספת=אבר-פעיל**: פתיחה→מדידה→עבודה-מלוכדת-כל-15-דק' ובכל-תחייה — בלי-מפעיל-אנושי
 - **שרידות-מוכפלת**: git בשני-בתים (GitHub+GitLab) · מדינה-חיה-מחוץ-למכונה (Postgres) · קבלות-חתומות-בשרשרת
 - פתוח-לאחים: Vercel/Render=עורק-הבא (בית-חי-שני-לאתר-המפעיל) · fleet-beat-מזוהה-ריבוי-ראשים-ומדלג-כנה
+
+---
+Task ID: T-54 (הבית-השני-החי · trace 1a124659eb347631)
+Agent: agent-2 (Z.ai Code · revival lane)
+Task: "תמשיך ודחוף" — העורק-הבא: בית-חי-שני-לקוקפיט (Vercel→Render)
+
+Work Log:
+- סריקת-אפס-אמון: watchdog-פועם · קבלות-זרמו (a9dce95) · אח-פדרציה-דחף-במקביל (a796243) — אפס-דריסות
+- Vercel-נמדד-בכנות: טוקן-מאומת-אך-מוגבל (0-פרויקטים · POST-v13→403 "no permission to create") — עורק-מדידה-בלבד
+- Render-נולד-חי: שירות-סטטי sovereign-cockpit מ-docs/ של-GitHub-main · שיעורים-חיים: publishPath-דורש-serviceDetails-shape (PATCH-שטוח-מתעלם) · "Publish directory public does not exist" בלוגים-חיים · תוקן → live → 200×3
+- **https://sovereign-cockpit-siz0.onrender.com חי**
+- engine/render-home.mjs — המרפא: גילוי-עצמי-בשם · מדידה · התיישנות-מול-origin/main (האמת-של-Render, לא-המקומי — האחים-דוחפים) · החיה-עצמית: POST-deploys→poll→מדידה-עיקשת (cold-start≠מוות) · bug-receipt-(url/URL)-נתפס-ותוקן
+- חובר-ל-fleet-beat-שלב-3.5 · SOVEREIGNTY-§7.4 · השלישות: Pages+onrender+localhost
+
+Stage Summary:
+- אפס-רגל-יחידה-לשער: GitHub-Pages + onrender.com + localhost:3000 — שלושה-בתים-חיים
+- Render=פריסה-אוטומטית-מ-Git+מרפא-עצמי-בכל-פעימה — הבית-השני-אינו-תלוי-אדם
