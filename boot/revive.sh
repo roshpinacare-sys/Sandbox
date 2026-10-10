@@ -108,6 +108,12 @@ if [ -s "$VDIR/keys.env.enc" ]; then
     set -a; . "$VDIR/keys.env"; set +a
     say "infra-keys: vault open — probing liveness…"
     node "$SANDBOX/engine/key-probe.mjs" || say "key-probe: at least one key DEAD (honest — see above)"
+    # ── 6.6) בית-git-שני (T-53): מראת-gitlab-של-שלושת-בתי-הצי ──
+    say "gitlab-mirror: second git home…"
+    node "$SANDBOX/engine/gitlab-mirror.mjs" || say "gitlab-mirror: FAILED (honest — see above)"
+    # ── 6.7) הד-ענן (T-53): פעימת-מדינה-שורדת-מכונות ──
+    say "cloud-echo: durable state heartbeat…"
+    node "$SANDBOX/engine/cloud-echo.mjs" || say "cloud-echo: FAILED (honest — see above)"
     rm -f "$VDIR/keys.env"   # היגיינה: גלוי-רק-בזיכרון-התהליך
   else
     say "infra-keys: vault stayed sealed (honest) — probe skipped"
@@ -118,12 +124,12 @@ fi
 if [ "$CHECK" = "0" ] && [ -d "$SANDBOX/.git" ]; then
   mkdir -p "$SANDBOX/receipts"
   printf '%s\n' "{\"revivedAt\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"source\":\"$(basename "$SRC")\",\"port\":${PORT},\"fleet\":\"$(basename "$FLEET")\"}" >> "$SANDBOX/receipts/revivals.jsonl"
-  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl boot/ 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl receipts/gitlab-mirror.jsonl receipts/cloud-echo.jsonl boot/ 2>/dev/null || true
   if command -v node >/dev/null 2>&1 && [ -f "$SANDBOX/engine/leak-scan.mjs" ]; then
     node "$SANDBOX/engine/leak-scan.mjs" --staged || { say "leak-scan LIT — receipt push refused (fail-closed)"; exit 1; }
   fi
   git -C "$SANDBOX" -c user.name=sandbox-sovereign -c user.email=sandbox-sovereign@users.noreply.github.com commit -q -m "[revive] local runtime revival: $(date -u +%Y-%m-%dT%H:%M:%SZ)" 2>/dev/null \
-    && git -C "$SANDBOX" -c credential.helper="$CRED_HELPER" pull -q --rebase origin main 2>/dev/null \
+    && git -C "$SANDBOX" -c credential.helper="$CRED_HELPER" pull -q --rebase --autostash origin main 2>/dev/null \
     && git -C "$SANDBOX" -c credential.helper="$CRED_HELPER" push -q origin HEAD:main \
     && say "receipt: committed+pushed to $ORG/Sandbox" || say "receipt: nothing to commit or push deferred (honest)"
 fi

@@ -41,5 +41,12 @@ while true; do
       say "mirror cycle OK"
     else say "mirror cycle FAILED this round (honest)"; fi
   fi
+  # ── 2.5) פעימת-עורקים: כספת→cloud-echo+gitlab-mirror (T-53 · flock-מוגן) ──
+  VDIR_BEAT="$(dirname "$SANDBOX")/fleet-vault"
+  if [ -s "$VDIR_BEAT/keys.env.enc" ]; then
+    if flock -n /tmp/sovereign-beat.lock bash "$SANDBOX/boot/fleet-beat.sh" >> "$LOG" 2>&1; then
+      say "fleet-beat OK"
+    else say "fleet-beat degraded this round (honest)"; fi
+  fi
   sleep "$INTERVAL"
 done

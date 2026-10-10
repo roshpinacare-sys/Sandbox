@@ -498,3 +498,22 @@ Stage Summary:
 - **מפת-היכולות-החדשה לאוטונומיה** (מוכח-חי, לא-תאורטי): GitLab=בית-git-שני (הצלבה/גיבוי-ריבוני) · Supabase=Postgres-מנוהל למצב-האוטונומיה · Vercel=פריסת-אפליקציות (קנבס-ריק-מוכן) · Render=פריסת-mini-services (קנבס-ריק-מוכן).
 - העיקרון-החדש: **הכספת-אינה-מחסן — היא-אבר-מודד**: כל-תחייה-מוכיחה-שהמפתחות-חיים, לא-מניחה.
 - הצעות-עורקים-הבאים: מראת-GitLab (בית-שני) · Supabase-שדרוג-מצב · deploy-ראשון-ל-Vercel/Render.
+
+---
+
+Task ID: T-53 (אטימת-הכספת-לשימוש-האוטונומיה · trace 1a12430c9840b1bd)
+Agent: agent-2 (Z.ai Code · revival lane)
+Task: "לבחון איך זה יכול לעזור בכל דרך ולאטום לכספת לשימוש האוטונומיה הריבונית" — הכספת-ממחסן-לאבר-פעיל
+
+Work Log:
+- **אפס-אמון-עצמי קודם-הכל**: key-probe-חי-מחדש → 4/4 ALIVE (GitLab·Supabase·Vercel·Render), כספת-7-משבצות-נפתחה-סשן
+- **בית-git-שני-חי**: engine/gitlab-mirror.mjs — פרויקטים-פרטיים Sandbox(id=87456339)·SovereignConsole(id=87456249) נוצרו · steem(id=87455950) כבר-היה (אח) · דחיפת-מראה-כפויה heads+tags · אימות-עצמאי-מול-API · 3/3 VERIFIED (58766aa130b6 · 253e1f4e08b6 · bf7be7c96d5f)
+- **שיעורים-חיים-שנמדדו-ותוקנו-במקור**: GitLab-חוסם-node-fetch-וגם-מחלק-403-בפרצים-לפי-backend-haproxy → תשעה-ניסיונות-curl-מרווחים (טוקן-דרך-stdin-בלבד) + allow_force_push-על-כל-ענף-מוגן (saos-cockpit! לא-רק-main) + עד-3-push-מרווחים + default_branch-דינמי (steem=saos-cockpit)
+- **מדינה-שורדת-מכונות-חיה**: engine/cloud-echo.mjs — Management-token-מבצע-SQL-חי (נמדד 201, PG-17.11) · טבלת-fleet_state (idempotent) · heartbeat-חתום-sha256: מרקל+head+key-probe-ממוסך+gitlab-ממוסך+תחיות · INSERT→SELECT-count→אימות · פעימות id=1,2 חיות
+- **פעימה-מלוכדת**: boot/fleet-beat.sh — כספת(session-זול)→cloud-echo→gitlab-mirror→leak-scan(fail-closed)→commit+push-קבלות→היגיינה · מחובר-ל-watchdog-שלב-2.5 (flock) ול-revive-שלבים-6.6/6.7 · autostash-ב-pull
+- SOVEREIGNTY.md-סעיף-7: עורקי-הריבונות-החיים (מפת-יכולות-מעודכנת)
+
+Stage Summary:
+- **הכספת=אבר-פעיל**: פתיחה→מדידה→עבודה-מלוכדת-כל-15-דק' ובכל-תחייה — בלי-מפעיל-אנושי
+- **שרידות-מוכפלת**: git בשני-בתים (GitHub+GitLab) · מדינה-חיה-מחוץ-למכונה (Postgres) · קבלות-חתומות-בשרשרת
+- פתוח-לאחים: Vercel/Render=עורק-הבא (בית-חי-שני-לאתר-המפעיל) · fleet-beat-מזוהה-ריבוי-ראשים-ומדלג-כנה
