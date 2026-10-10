@@ -44,10 +44,13 @@ node "$SANDBOX/engine/cloud-echo.mjs" || say "cloud-echo FAILED (honest — see 
 # ── 3) בית-git-שני (idempotent — מדלג-על-ראשים-מאומתים-זהים) ───────────────
 node "$SANDBOX/engine/gitlab-mirror.mjs" || say "gitlab-mirror degraded (honest — see above)"
 
+# ── 3.5) הבית-השני-החי (T-54): מדידה+החיה-עצמית-של-קוקפיט-Render ──────────
+node "$SANDBOX/engine/render-home.mjs" || say "render-home degraded (honest — see above)"
+
 # ── 4) קבלות → leak-scan (fail-closed) → דחיפה ────────────────────────────
 rm -f "$VDIR/keys.env"
 if [ -d "$SANDBOX/.git" ]; then
-  git -C "$SANDBOX" add receipts/cloud-echo.jsonl receipts/gitlab-mirror.jsonl 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/cloud-echo.jsonl receipts/gitlab-mirror.jsonl receipts/render-home.jsonl 2>/dev/null || true
   if git -C "$SANDBOX" diff --cached --quiet 2>/dev/null; then
     say "receipts: nothing new (honest)"
   else
