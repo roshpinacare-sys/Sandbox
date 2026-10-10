@@ -135,13 +135,18 @@ if [ -f "$SANDBOX/engine/fleet-yield.mjs" ]; then
   fi
 fi
 
+# ── 6.8b) צינור-החתימה · פולס-המועמדים → הקוקפיט (T-60) ────────────────────
+if [ -f "$SANDBOX/engine/candidates-export.mjs" ]; then
+  node "$SANDBOX/engine/candidates-export.mjs"     || say "candidates-export: degraded (honest — stale pulse stays labeled)"
+fi
+
 # ── 6.9) חיישן-עורקי-הרשת: עבר-ל-6.5b (בתוך-ענף-הפתיחה — היגיינת-הכספת מוחקת-את-המפתחות-אחרי-שימוש) ─
 
 # ── 7) קבלה-ודחיפה ─────────────────────────────────────────────────────────
 if [ "$CHECK" = "0" ] && [ -d "$SANDBOX/.git" ]; then
   mkdir -p "$SANDBOX/receipts"
   printf '%s\n' "{\"revivedAt\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"source\":\"$(basename "$SRC")\",\"port\":${PORT},\"fleet\":\"$(basename "$FLEET")\"}" >> "$SANDBOX/receipts/revivals.jsonl"
-  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl receipts/gitlab-mirror.jsonl receipts/cloud-echo.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl receipts/veins.jsonl boot/ 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl receipts/gitlab-mirror.jsonl receipts/cloud-echo.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl receipts/cockpit-candidates.json receipts/veins.jsonl boot/ 2>/dev/null || true
   if command -v node >/dev/null 2>&1 && [ -f "$SANDBOX/engine/leak-scan.mjs" ]; then
     node "$SANDBOX/engine/leak-scan.mjs" --staged || { say "leak-scan LIT — receipt push refused (fail-closed)"; exit 1; }
   fi

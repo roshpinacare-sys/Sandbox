@@ -71,10 +71,16 @@ else
   say "fleet-yield: engine checkout missing (honest — intel skipped this beat)"
 fi
 
+# ── 3.8) צינור-החתימה · פולס-המועמדים → הקוקפיט (T-60 · בקצב-הפעימה) ──────
+if [ -f "$SANDBOX/engine/candidates-export.mjs" ]; then
+  node "$SANDBOX/engine/candidates-export.mjs" \
+    || say "candidates-export degraded (honest — the cockpit gets the stale pulse labeled)"
+fi
+
 # ── 4) קבלות → leak-scan (fail-closed) → דחיפה ────────────────────────────
 rm -f "$VDIR/$(printf 'a2V5cy5lbnY='|base64 -d)"
 if [ -d "$SANDBOX/.git" ]; then
-  git -C "$SANDBOX" add receipts/cloud-echo.jsonl receipts/gitlab-mirror.jsonl receipts/render-home.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/cloud-echo.jsonl receipts/gitlab-mirror.jsonl receipts/render-home.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl receipts/cockpit-candidates.json 2>/dev/null || true
   if git -C "$SANDBOX" diff --cached --quiet 2>/dev/null; then
     say "receipts: nothing new (honest)"
   else
