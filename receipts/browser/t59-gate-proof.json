@@ -1,0 +1,14 @@
+{
+  "schema": "browser-gate-proof/1",
+  "at": "2026-10-10T12:55:00Z",
+  "surface": "http://localhost:3000/cockpit/index.html (same static code as live Pages /cockpit/)",
+  "tests": [
+    { "n": 1, "input": "attacker garbage", "expect": "reject", "measured": "סיסמה שגויה — ה-GCM מאמת ודוחה. הכספת נשארת חתומה.", "result": "PASS" },
+    { "n": 2, "input": "wrong-shaped secret (file-content candidate)", "expect": "reject", "measured": "GCM reject — sealed", "result": "PASS" },
+    { "n": 3, "input": "operator primary-52 secret (never recorded here)", "expect": "open", "measured": "כספת פתוחה + live STEEM board (liquid Σ, open claims, 3 custody rows)", "result": "PASS" },
+    { "n": 4, "input": "lock button", "expect": "seal", "measured": "LOCKED-OK", "result": "PASS" }
+  ],
+  "hygiene": { "localStorage": "No storage entries (measured twice)", "afterLock": "locked", "browserClosed": true },
+  "screenshot": "t59-gate-open.png",
+  "secretMaterialInReceipt": "NONE — by law"
+}
