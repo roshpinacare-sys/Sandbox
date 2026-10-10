@@ -195,11 +195,15 @@ try {
   const mRepo = /github\.com\/([^/]+\/[^/.]+)/.exec(svc.body?.repo || "");
   if (mRepo) {
     const cb = Date.now();
-    const [served, truth] = await Promise.all([
+    // שני-קבצים: app.js (הלוגיקה) + index.html (השער-לקבצים — 90baeec-לימד: תג-ה-script-המטמון-שלו-הוא-שער-האמת)
+    const [servedJs, truthJs, servedHtml, truthHtml] = await Promise.all([
       fetch(`${HOME_URL}/cockpit/app.js?cb=${cb}`, { signal: AbortSignal.timeout(15000) }).then((r) => (r.ok ? r.text() : null)).catch(() => null),
       fetch(`https://raw.githubusercontent.com/${mRepo[1]}/main/docs/app.js`, { signal: AbortSignal.timeout(15000) }).then((r) => (r.ok ? r.text() : null)).catch(() => null),
+      fetch(`${HOME_URL}/cockpit/index.html?cb=${cb + 1}`, { signal: AbortSignal.timeout(15000) }).then((r) => (r.ok ? r.text() : null)).catch(() => null),
+      fetch(`https://raw.githubusercontent.com/${mRepo[1]}/main/docs/index.html`, { signal: AbortSignal.timeout(15000) }).then((r) => (r.ok ? r.text() : null)).catch(() => null),
     ]);
-    if (served && truth) contentStale = sha256(served) !== sha256(truth);
+    if (servedJs && truthJs) contentStale = contentStale || sha256(servedJs) !== sha256(truthJs);
+    if (servedHtml && truthHtml) contentStale = contentStale || sha256(servedHtml) !== sha256(truthHtml);
   }
 } catch {}
 if (contentStale) {
