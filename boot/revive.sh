@@ -105,6 +105,11 @@ if [ -s "$VDIR/keys.env.enc" ]; then
     set -a; . "$VDIR/keys.env"; set +a
     say "infra-keys: vault open — probing liveness…"
     node "$SANDBOX/engine/key-probe.mjs" || say "key-probe: at least one key DEAD (honest — see above)"
+    # ── 6.5b) חיישן-עורקי-הרשת (T-57): רץ-בתוך-ענף-הפתיחה (ה-env-פתוח) — לפני-היגיינת-המחיקה ──
+    if [ -f "$SANDBOX/engine/vein-probe.mjs" ]; then
+      say "vein-probe: web veins (tavily/jina — quota-aware)…"
+      node "$SANDBOX/engine/vein-probe.mjs" || say "vein-probe: degraded (honest)"
+    fi
     # ── 6.6) בית-git-שני (T-53): מראת-gitlab-של-שלושת-בתי-הצי ──
     say "gitlab-mirror: second git home…"
     node "$SANDBOX/engine/gitlab-mirror.mjs" || say "gitlab-mirror: FAILED (honest — see above)"
@@ -130,15 +135,7 @@ if [ -f "$SANDBOX/engine/fleet-yield.mjs" ]; then
   fi
 fi
 
-# ── 6.9) חיישן-עורקי-הרשת (T-57): Tavily×2 · Jina — מיכסה-מודע, אפס-סודות-בקבלות ─
-# רץ-רק-אם-הכספת-פתוחה (keys.env קיים) — עורקי-אינטל הם יכולת; מותם נרשם-בכנות, לא-מפיל-שרשרת.
-if [ -f "$SANDBOX/engine/vein-probe.mjs" ] && [ -f "$VDIR/keys.env" ]; then
-  say "vein-probe: web veins (tavily/jina — quota-aware)…"
-  set -a; . "$VDIR/keys.env" 2>/dev/null || true; set +a
-  node "$SANDBOX/engine/vein-probe.mjs" || say "vein-probe: skipped (honest)"
-else
-  say "vein-probe: vault sealed or sensor missing (honest skip)"
-fi
+# ── 6.9) חיישן-עורקי-הרשת: עבר-ל-6.5b (בתוך-ענף-הפתיחה — היגיינת-הכספת מוחקת-את-המפתחות-אחרי-שימוש) ─
 
 # ── 7) קבלה-ודחיפה ─────────────────────────────────────────────────────────
 if [ "$CHECK" = "0" ] && [ -d "$SANDBOX/.git" ]; then
