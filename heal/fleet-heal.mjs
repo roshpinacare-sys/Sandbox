@@ -168,10 +168,13 @@ async function tryHeal(repoName, run, state, nowMs) {
 
 /* ---------- מקלחת-אנטי-טוקן ---------- */
 function scrub(obj) {
-  const s = JSON.stringify(obj);
-  if (!TOKEN) return obj;
-  const safe = s.split(TOKEN).join('***');
-  return JSON.parse(safe);
+  let s = JSON.stringify(obj);
+  s = s.split('roshpinacare-sys/fleet-vault').join('vault-home');
+  s = s.split('roshpinacare-sys/steem').join('engine-home');
+  s = s.split('fleet-vault').join('vault-home');
+  if (!TOKEN) return JSON.parse(s);
+  s = s.split(TOKEN).join('***');
+  return JSON.parse(s);
 }
 
 /* ---------- ראשי ---------- */
@@ -292,7 +295,7 @@ try {
     : 'FLEET-GREEN';
   saveState(state);
 
-  writeFileSync(LATEST, JSON.stringify(result, null, 1) + '\n');
+  writeFileSync(LATEST, JSON.stringify(scrub(result), null, 1) + '\n');
   mkdirSync(RECEIPTS, { recursive: true });
   const stamp = at.replace(/[:.]/g, '-');
   writeFileSync(path.join(RECEIPTS, `scan-${stamp}.json`), JSON.stringify(scrub(result), null, 1) + '\n');
