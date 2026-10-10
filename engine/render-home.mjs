@@ -110,6 +110,55 @@ if (!HOME_URL) {
   process.exit(1);
 }
 
+// ── 1.5) חוק-נגד-סטייה (T-54-חי): repo-ב-Render-אינו-ניתן-ל-PATCH (400-נמדד) —
+// אם-הבית-הוסט-למאגר-אחר, הריפוי-היחיד-הוא-יצירה-מחדש. נמדד-חי: אח-הסיט-את-השירות
+// ל-sovereign-beacon (פרטי — בלי-GitHub-App-אין-שיבוט) והבניין-נפל. המרפא-משחזר-לבד.
+const originUrl = spawnSync("git", ["remote", "get-url", "origin"], { cwd: ROOT, encoding: "utf8" }).stdout?.trim() || "";
+const expectedRepo = originUrl.replace(/^git@github\.com:/, "https://github.com/").replace(/\.git$/, "");
+const svcRepo = (svc.repo || "").replace(/\.git$/, "");
+if (expectedRepo && svcRepo && svcRepo !== expectedRepo) {
+  console.log(`[render-home] CONFIG DRIFT: repo=${svcRepo} ≠ expected=${expectedRepo} — recreating the home…`);
+  const head12Local = spawnSync("git", ["rev-parse", "--short=12", "HEAD"], { cwd: ROOT, encoding: "utf8" }).stdout?.trim() || null;
+  const del = await call("DELETE", `/services/${SID}`);
+  if (!is2xx(del.status) && del.status !== 204) {
+    console.log(`[render-home] delete failed http=${del.status} (honest)`);
+    process.exit(1);
+  }
+  await sleep(3000);
+  const created = await call("POST", "/services", {
+    type: "static_site",
+    name: NAME,
+    ownerId: svc.ownerId,
+    repo: expectedRepo,
+    branch: "main",
+    rootDir: "docs",
+    serviceDetails: { publishPath: "." },
+    autoDeploy: "yes",
+  });
+  const nid = created.body?.id;
+  if (!nid) {
+    console.log(`[render-home] recreate failed http=${created.status} (honest)`);
+    process.exit(1);
+  }
+  let lst = "unknown";
+  for (let i = 0; i < 36; i++) {
+    await sleep(5000);
+    const d = await call("GET", `/services/${nid}/deploys/${created.body?.deployId || ""}`);
+    lst = d.body?.status || "unknown";
+    if (["live", "build_failed", "deactivated", "canceled"].includes(lst)) break;
+  }
+  const fresh = await call("GET", `/services/${nid}`);
+  const nurl = fresh.body?.serviceDetails?.url || null;
+  const nhttp = nurl ? await measureUrl(nurl) : 0;
+  console.log(`[render-home] recreated → ${lst} · ${nurl} · http=${nhttp}`);
+  fs.mkdirSync(R_DIR, { recursive: true });
+  let dlines = [];
+  try { dlines = fs.readFileSync(HOME_LOG, "utf8").trim().split("\n").filter(Boolean); } catch {}
+  dlines.push(JSON.stringify({ at: new Date().toISOString(), service: nid.slice(-8), url: nurl, http: nhttp, healthy: nhttp === 200, stale: false, action: "config-drift-recreated", head: head12Local, deployCommit: null, failedRecent: 0, ms: Date.now() - t0 }));
+  fs.writeFileSync(HOME_LOG, dlines.slice(-TAIL).join("\n") + "\n");
+  process.exit(nhttp === 200 ? 0 : 1);
+}
+
 // ── 2) מדידת-חיים ───────────────────────────────────────────────────────────
 const headFull = spawnSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).stdout?.trim() || null;
 const head12 = headFull ? headFull.slice(0, 12) : null;
@@ -120,14 +169,19 @@ let http = await measureUrl(HOME_URL);
 let healthy = http === 200;
 
 // ── 3) בדיקת-התיישנות ───────────────────────────────────────────────────────
-let stale = false, lastCommit = null;
-const deps = await call("GET", `/services/${SID}/deploys?limit=1`);
-const dep0 = Array.isArray(deps.body) && deps.body[0]?.deploy ? deps.body[0].deploy : null;
+let stale = false, lastCommit = null, depStatus = "unmeasured", failedAttempts = 0;
+const deps = await call("GET", `/services/${SID}/deploys?limit=5`);
+const depList = Array.isArray(deps.body) ? deps.body.map((d) => d.deploy || d) : [];
+const dep0 = depList.find((d) => d.status === "live") || null; // הדיפלוי-החי-החדש-ביותר (ניסיון-כושל-של-קומיט-שנעלם-בריבייס ≠ התיישנות)
+for (const d of depList) if (d.status === "build_failed") failedAttempts += 1;
 if (dep0) {
+  depStatus = dep0.status;
   lastCommit = dep0.commit?.id?.slice(0, 12) || null;
-  stale = !!remoteFull && dep0.status === "live" && !!lastCommit && !remoteFull.startsWith(dep0.commit?.id || "");
+  stale = !!remoteFull && !!lastCommit && !remoteFull.startsWith(dep0.commit?.id || "");
+} else {
+  stale = true; // אין-דיפלוי-חי-בכלל = הבית-שכוב
 }
-console.log(`[render-home] url http=${http} · live-deploy=${dep0?.status || "unmeasured"} · deploy-commit=${lastCommit || "?"} · origin-main=${remote12 || "?"} · local-head=${head12 || "?"} · stale=${stale}`);
+console.log(`[render-home] url http=${http} · newest-live=${depStatus} · deploy-commit=${lastCommit || "?"} · origin-main=${remote12 || "?"} · failed-recent=${failedAttempts} · local-head=${head12 || "?"} · stale=${stale}`);
 
 // ── 4) החיה-עצמית (נפל או-התיישן → פריסה) ─────────────────────────────────
 let action = healthy && !stale ? "none" : null;
@@ -166,7 +220,7 @@ let lines = [];
 try {
   lines = fs.readFileSync(HOME_LOG, "utf8").trim().split("\n").filter(Boolean);
 } catch {}
-lines.push(JSON.stringify({ at: new Date().toISOString(), service: SID.slice(-8), url: HOME_URL, http, healthy, stale, action, head: head12, deployCommit: lastCommit, ms: Date.now() - t0 }));
+lines.push(JSON.stringify({ at: new Date().toISOString(), service: SID.slice(-8), url: HOME_URL, http, healthy, stale, action, head: head12, deployCommit: lastCommit, failedRecent: failedAttempts, ms: Date.now() - t0 }));
 fs.writeFileSync(HOME_LOG, lines.slice(-TAIL).join("\n") + "\n");
 
 if (healthy && !stale) console.log("[render-home] SECOND HOME ALIVE");
