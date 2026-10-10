@@ -153,6 +153,9 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     version: VERSION,
     vaultMeta: null,
     payload: null,        // נפתח: {accounts, endpoints, audit, github, ...}
+    sessionKey: null,     // T-60: מפתח-סשן-לא-ניתן-לחילוץ — לחתימת-אישורים-בלבד
+    pulse: null,          // T-60: פולס-המועמדים (מנוכה-סודות)
+    envelopes: [],        // T-60: אישורים-חתומים (זיכרון-סשן)
     log: [],
     idleAt: Date.now(),
     lockTimer: null,
@@ -182,6 +185,8 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
           const master = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64dec(w.iv) }, k, b64dec(w.ct));
           const mk = await crypto.subtle.importKey("raw", master, { name: "AES-GCM" }, false, ["decrypt"]);
           const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64dec(S.vaultMeta.body.iv) }, mk, b64dec(S.vaultMeta.body.ct));
+          // T-60: מפתח-סשן-לא-ניתן-לחילוץ — רק-חותם, אף-פעם-לא-נקרא
+          S.sessionKey = await crypto.subtle.importKey("raw", master, { name: "AES-GCM" }, false, ["encrypt"]);
           return JSON.parse(new TextDecoder().decode(pt));
         } catch {}
       }
@@ -237,6 +242,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
       S.payload = payload;
       $("pass").value = "";
       enterConsole(ms);
+      fetchPulse();   // T-60: פולס-המנוע זורם-מיד-עם-הפתיחה
     } catch {
       $("gate-error").textContent = "סיסמה שגויה — ה-GCM מאמת ודוחה. הכספת נשארת חתומה.";
       $("gate-error").hidden = false;
@@ -907,6 +913,8 @@ txid: ${signed.txid}
   function lock(reason) {
     S.payload = null;
     S.live = null;
+    S.sessionKey = null;   // T-60: המפתח-מת-עם-הנעילה — אפס-שרידים
+    S.envelopes = [];
     S.log = [];
     clearTimeout(S.lockTimer);
     $("console").hidden = true;
@@ -948,6 +956,97 @@ txid: ${signed.txid}
   $("accounts-refresh").addEventListener("click", refreshLive);
   $("chain-filter").addEventListener("change", renderAccounts);
   $("log-clear").addEventListener("click", () => { S.log = []; renderLog(); });
+
+  /* ═══════════ T-60 · צינור-החתימה: המנוע-מתכנן → המפעיל-מאשר → הכספת-חותמת ═══════════
+   * הפולס: same-origin-קודם (בית-Pages: /receipts/) → raw-fallback (Render/localhost).
+   * האישור: מעטפת AES-256-GCM תחת מפתח-סשן-לא-ניתן-לחילוץ — זיכרון-בלבד.
+   * אפס-מפתח-עובר-על-החוט. */
+  const PULSE_SOURCES = [
+    "/receipts/cockpit-candidates.json",
+    "https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/receipts/cockpit-candidates.json",
+  ];
+  const b64enc = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+  async function fetchPulse() {
+    for (const url of PULSE_SOURCES) {
+      try {
+        const r = await fetch(url, { cache: "no-store" });
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        S.pulse = await r.json();
+        renderPulse(true);
+        return;
+      } catch { /* המקור-הבא — ואז-כנות */ }
+    }
+    renderPulse(false);
+  }
+  function pulseAgeMin() {
+    if (!S.pulse?.pulseAt) return null;
+    const ms = Date.now() - new Date(S.pulse.pulseAt).getTime();
+    return Number.isFinite(ms) ? Math.max(0, Math.round(ms / 60000)) : null;
+  }
+  function renderPulse(ok) {
+    const meta = $("pulse-meta"), tbl = $("pulse-table");
+    if (!ok || !S.pulse) {
+      meta.textContent = "אין-פולס — עורק-המועמדים-מהמנוע טרם-זרם (כנה, ללא-ירוק-מזויף)";
+      tbl.innerHTML = '<div class="muted pad">אין-מועמדים-להצגה</div>';
+      return;
+    }
+    const age = pulseAgeMin();
+    const fresh = age !== null && age <= 200;
+    meta.textContent =
+      `פולס ${fresh ? "חי" : "מפגר"} · גיל ${age ?? "?"} דק' · verdict=${escapeHtml(S.pulse.verdict ?? "?")}` +
+      ` · engine=${escapeHtml(S.pulse.engineHead ?? "?")} · selftest=${escapeHtml(S.pulse.selftest ?? "?")}` +
+      ` · נסרקו ${S.pulse.scanned ?? 0} · נפסלו ${S.pulse.rejectedCount ?? 0}`;
+    const rows = (S.pulse.candidates ?? []).map((c, i) =>
+      `<tr><td>${escapeHtml(c.author)}</td>` +
+      `<td class="mono">${escapeHtml(String(c.permlink ?? "").slice(0, 48))}${String(c.permlink ?? "").length > 48 ? "…" : ""}</td>` +
+      `<td>${Number(c.weight ?? 0)}</td><td>${Number(c.ageMinutes ?? 0)} דק'</td>` +
+      `<td>${escapeHtml(c.tag ?? "")}</td>` +
+      `<td><button class="btn btn-primary" data-approve="${i}">אישור</button></td></tr>`
+    ).join("");
+    tbl.innerHTML =
+      `<table><thead><tr><th>מחבר</th><th>פרמלינק</th><th>משקל</th><th>גיל</th><th>תגית</th><th></th></tr></thead><tbody>` +
+      (rows || '<tr><td colspan="6" class="muted">אין-מועמדים-בפולס-זה</td></tr>') +
+      `</tbody></table>`;
+    tbl.querySelectorAll("[data-approve]").forEach((b) =>
+      b.addEventListener("click", () => approveCandidate(Number(b.dataset.approve), b)),
+    );
+  }
+  async function approveCandidate(i, btn) {
+    if (!S.sessionKey) { log("approve-denied", "אין-מפתח-סשן — פתח-את-הכספת-קודם"); return; }
+    const c = S.pulse?.candidates?.[i];
+    if (!c) return;
+    btn.disabled = true; btn.textContent = "חותם…";
+    try {
+      const id = `${c.author}/${c.permlink}`;
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const pt = new TextEncoder().encode(JSON.stringify({
+        v: 1,
+        id,
+        weight: Number(c.weight ?? 0),
+        decidedAt: new Date().toISOString(),
+        doctrine: "engine-plans · operator-approves · vault-signs · zero-keys-over-wire",
+      }));
+      const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, S.sessionKey, pt);
+      const env = b64enc(iv) + "." + b64enc(ct);
+      const fp = [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(env)))]
+        .slice(0, 4).map((x) => x.toString(16).padStart(2, "0")).join("");
+      S.envelopes.unshift({ id, fp, env, at: new Date().toISOString() });
+      if (S.envelopes.length > 20) S.envelopes.pop();
+      renderEnvelopes();
+      log("approve", `${id} · מעטפה ${fp}`);
+      btn.textContent = "אושר ✓";
+    } catch (e) {
+      btn.disabled = false; btn.textContent = "אישור";
+      log("approve-fail", e.message ?? "seal error");
+    }
+  }
+  function renderEnvelopes() {
+    const pre = $("approve-log");
+    if (!S.envelopes.length) { pre.textContent = "— אין-אישורים-בסשן-זה —"; return; }
+    pre.textContent = S.envelopes.map((e) =>
+      `[${e.at.slice(11, 19)}] ${e.id}\n    מעטפה ${e.fp} · ${e.env.length}B — להעברה-לנאמן-המנוע-בלבד`,
+    ).join("\n");
+  }
 
   boot();
 })();
