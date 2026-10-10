@@ -38,7 +38,7 @@ jobs:
           cp -r docs/. _site/cockpit/
           cp -r network/. _site/network/
           # T-42 (agent-3): designed-public receipts only — the board reads them.
-          for f in latest.json ticks.jsonl network.json network-log.jsonl; do
+          for f in latest.json ticks.jsonl network.json network-log.jsonl cockpit-candidates.json; do
             [ -f "receipts/$f" ] && cp "receipts/$f" _site/receipts/
           done
           # T-55: the yield-intel receipt rides the same-origin artifact — the cockpit
