@@ -19,8 +19,11 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+
+const sha256 = (s) => crypto.createHash("sha256").update(s).digest("hex");
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const R_DIR = path.join(ROOT, "receipts");
@@ -183,6 +186,27 @@ if (dep0) {
 }
 console.log(`[render-home] url http=${http} · newest-live=${depStatus} · deploy-commit=${lastCommit || "?"} · origin-main=${remote12 || "?"} · failed-recent=${failedAttempts} · local-head=${head12 || "?"} · stale=${stale}`);
 
+// ── 3.5) אמת-תוכן (T-55b · נמדד-חי): API-אומר-live ≠ CDN-מגיש-אמת.
+// המדידה-היחידה-הכנה: הבייטים-המוגשים-מול-האמת-ב-raw.githubusercontent
+// (node-מותר-שם — 200-נמדד; הדפדפן-חסום, זה-בדיוק-מה-שמצדיק-את-בדיקת-התוכן-כאן).
+let contentStale = false;
+try {
+  const svc = await call("GET", `/services/${SID}`);
+  const mRepo = /github\.com\/([^/]+\/[^/.]+)/.exec(svc.body?.repo || "");
+  if (mRepo) {
+    const cb = Date.now();
+    const [served, truth] = await Promise.all([
+      fetch(`${HOME_URL}/cockpit/app.js?cb=${cb}`, { signal: AbortSignal.timeout(15000) }).then((r) => (r.ok ? r.text() : null)).catch(() => null),
+      fetch(`https://raw.githubusercontent.com/${mRepo[1]}/main/docs/app.js`, { signal: AbortSignal.timeout(15000) }).then((r) => (r.ok ? r.text() : null)).catch(() => null),
+    ]);
+    if (served && truth) contentStale = sha256(served) !== sha256(truth);
+  }
+} catch {}
+if (contentStale) {
+  stale = true;
+  console.log("[render-home] content-lag measured (API-live ≠ served bytes) — treating as stale");
+}
+
 // ── 4) החיה-עצמית (נפל או-התיישן → פריסה) ─────────────────────────────────
 let action = healthy && !stale ? "none" : null;
 if (!healthy || stale) {
@@ -220,7 +244,7 @@ let lines = [];
 try {
   lines = fs.readFileSync(HOME_LOG, "utf8").trim().split("\n").filter(Boolean);
 } catch {}
-lines.push(JSON.stringify({ at: new Date().toISOString(), service: SID.slice(-8), url: HOME_URL, http, healthy, stale, action, head: head12, deployCommit: lastCommit, failedRecent: failedAttempts, ms: Date.now() - t0 }));
+lines.push(JSON.stringify({ at: new Date().toISOString(), service: SID.slice(-8), url: HOME_URL, http, healthy, stale, contentStale, action, head: head12, deployCommit: lastCommit, failedRecent: failedAttempts, ms: Date.now() - t0 }));
 fs.writeFileSync(HOME_LOG, lines.slice(-TAIL).join("\n") + "\n");
 
 if (healthy && !stale) console.log("[render-home] SECOND HOME ALIVE");
