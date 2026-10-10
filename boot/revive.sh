@@ -97,11 +97,28 @@ for r in Sandbox steem; do
   else say "heartbeat/${r}: UNREACHABLE (honest)"; fi
 done
 
+# ── 6.5) מפתחות-תשתית: פתיחת-כספת (נתיב-wrap) → מדידת-חיות (ממוסך) ────────
+VDIR="$FLEET/fleet-vault"
+if [ -s "$VDIR/keys.env.enc" ]; then
+  # סנכרון-פריסה (T-47): vaultlib-מצפה ENC-ב-$VAULT_DIR; ואז-open (session→wrap→legacy)
+  MDIR="$FLEET/vault"
+  mkdir -p "$MDIR"
+  [ -s "$MDIR/keys.env.enc" ] || { cp "$VDIR/keys.env.enc" "$MDIR/keys.env.enc"; chmod 600 "$MDIR/keys.env.enc"; }
+  if (cd "$VDIR" && GITHUB_TOKEN="$TOKEN" bash vault.sh open >/dev/null 2>&1) && [ -s "$VDIR/keys.env" ]; then
+    set -a; . "$VDIR/keys.env"; set +a
+    say "infra-keys: vault open — probing liveness…"
+    node "$SANDBOX/engine/key-probe.mjs" || say "key-probe: at least one key DEAD (honest — see above)"
+    rm -f "$VDIR/keys.env"   # היגיינה: גלוי-רק-בזיכרון-התהליך
+  else
+    say "infra-keys: vault stayed sealed (honest) — probe skipped"
+  fi
+fi
+
 # ── 7) קבלה-ודחיפה ─────────────────────────────────────────────────────────
 if [ "$CHECK" = "0" ] && [ -d "$SANDBOX/.git" ]; then
   mkdir -p "$SANDBOX/receipts"
   printf '%s\n' "{\"revivedAt\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"source\":\"$(basename "$SRC")\",\"port\":${PORT},\"fleet\":\"$(basename "$FLEET")\"}" >> "$SANDBOX/receipts/revivals.jsonl"
-  git -C "$SANDBOX" add receipts/revivals.jsonl boot/ 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl boot/ 2>/dev/null || true
   if command -v node >/dev/null 2>&1 && [ -f "$SANDBOX/engine/leak-scan.mjs" ]; then
     node "$SANDBOX/engine/leak-scan.mjs" --staged || { say "leak-scan LIT — receipt push refused (fail-closed)"; exit 1; }
   fi
