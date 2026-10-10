@@ -43,7 +43,7 @@ bash operator/server/deploy.sh
 ```
 
 **מצב-אמת (נמדד):** טוקן-ה-Cloudflare בכספת-הצי (`כספת-מוצפנת` slot `CLOUDFLARE_API_TOKEN`) **מת** —
-`GET /user/tokens/verify` → `Invalid API Token` (נבדק-מול-API-חי בעת-הקמת-השער). ה-`rails.env.enc` נפתח-ולא-מכיל-Cloudflare.
+`GET /user/tokens/verify` → `Invalid API Token` (נבדק-מול-API-חי בעת-הקמת-השער). קובץ-המסילות-המוצפן נפתח-ולא-מכיל-Cloudflare.
 **ההצעה-הקונקרטית (חוק-③):** סבב-ROT5 — טוקן-Workers-חדש → `vault.sh seal` → `deploy.sh` → השער-השרתי-חי.
 
 ## פאנל-העורק-והשרשרת

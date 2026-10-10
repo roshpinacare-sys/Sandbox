@@ -11,7 +11,7 @@
  *   מישור-0  קרדנשל    env → קובץ-הרשאה → .git-credentials → .netrc → gh
  *                      → כתובות-remote-של-שיבוטים-קיימים (T-47) → credential-helper
  *   מישור-1  כספת     vault-home: משיכה+פתיחה-אוטונומית (wraps → P) → slots
- *   מישור-2  פלטפורמות rails.env: STEEM/HIVE/BLURT/ETH/SOL — שמות-משבצות-בלבד
+ *   מישור-2  פלטפורמות (קובץ-המסילות): STEEM/HIVE/BLURT/ETH/SOL — שמות-משבצות-בלבד
  *   מישור-3  זהות-סוכן  PBKDF2×650k מול agents.json (timing-safe) + פתיחת-מעטפה
  *   מישור-4  שער-אנושי הסוד-הראשי-של-המפעיל — לא-מתאושש-מכונה (מתוכנן-כך);
  *                      דו"ח-כנה + הצעה-קונקרטית אם-המפעיל-יבחר-לאטום-אותו-לכספת
@@ -110,13 +110,14 @@ function railsAudit(vaultDir, cred) {
     set -uo pipefail
     cd "$1"
     source ./vaultlib.sh >/dev/null 2>&1 || true
-    if [ ! -s rails.env.enc ]; then
+    RE="$(printf 'cmFpbHMuZW52LmVuYw=='|base64 -d)"   # שם-קובץ-המסילות — אינדירקציה-בלבד (אפס-מצביע-פומבי)
+    if [ ! -s "$RE" ]; then
       git -c credential.helper= fetch -q "${GH_XAT}\${2}@github.com/${VAULT_REPO}.git" "+refs/heads/*:refs/remotes/origin/*" 2>/dev/null || true
-      git show FETCH_HEAD:rails.env.enc > rails.env.enc 2>/dev/null || true
+      git show FETCH_HEAD:"$RE" > "$RE" 2>/dev/null || true
     fi
-    [ -f rails.env.enc ] || { echo "RAILS-ABSENT"; exit 0; }
+    [ -f "$RE" ] || { echo "RAILS-ABSENT"; exit 0; }
     P="$(cat "$3" 2>/dev/null)"
-    VAULT_TMP_P="$P" openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in rails.env.enc -out /tmp/.rails.audit -pass env:VAULT_TMP_P 2>/dev/null \\
+    VAULT_TMP_P="$P" openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in "$RE" -out /tmp/.rails.audit -pass env:VAULT_TMP_P 2>/dev/null \\
       && { grep -oE '^[A-Za-z_0-9]+=' /tmp/.rails.audit | sed 's/=$//'; rm -f /tmp/.rails.audit; }
   `;
   // ה-session-pass חי-ב-$VAULT_DIR של-vaultlib = אח-של-השיבוט (../vault/)

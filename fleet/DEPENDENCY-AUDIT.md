@@ -13,7 +13,7 @@
 |---|---|---|---|
 | 1 | **מנוע-ה-curation** (curator.mjs — חוקי T-35/R289/T-85, selftest) | מקור-האמת: `steem@saos-cockpit` (ריפו-פרטי) + **עורק-התשואה T-45 כאן** שמריץ-אותו-כפועל-ענן | selftest 1218/1218 · ריצות-חיות INTEL-OK · שרשרת `1081abba→992f1867` |
 | 2 | דופק-החברה/ה-DEX (conversation · social · DEX-takeover) | `saos-runtime` (ציבורי) — הדופק-המתזמן-עצמו R280 + cron-גיבוי שעתי | דופקי `SAOS-runtime-ci` חיים על saos-cockpit (c7cc9af ואילך) |
-| 3 | **מפתחות הצי** (WIFs · rails · PAT · ssh) | `vault-home` (פרטי) — keyring · wrap-registry · `rails.env.enc` v2 (10 מסילות, ETH+SOL) · bootstrap אחד→צי-שלם | MANIFEST-22-ריפו · verify.sh · אפס-plaintext בכל-הריפו-הזה (leak-scan) |
+| 3 | **מפתחות הצי** (WIFs · מסילות · PAT · ssh) | `vault-home` (פרטי) — keyring · wrap-registry · קובץ-המסילות-המוצפן v2 (10 מסילות, ETH+SOL) · bootstrap אחד→צי-שלם | MANIFEST-22-ריפו · verify.sh · אפס-plaintext בכל-הריפו-הזה (leak-scan) |
 | 4 | **שער-המפעיל** (סיסמה-ראשית → כספת · חתימה · פרסום) | Pages: `console/` (מוצפן-קליינט) · `docs/` קוקפיט-15-חשבונות · `operator/` שער-מאוחד + שער-שרתי מוכן (PBKDF2·650k · rate-limit · session-HMAC) | חי-ב-`https://roshpinacare-sys.github.io/Sandbox/…` (browser-verified T-39c/T-44) |
 | 5 | **מדינת-הרשת** (מי-חי, מה-נמדד) | `state/network-state.json` + עורק `sovereign-state.yml` (cron+שרשרת-עצמית) + לוח `/status/` | טיק#6 ב-16:28:20Z חי-בעת-כתיבה; chain 6/6 מרקל |
 | 6 | **דופק-הטיק** (רציפות-הבסיס) | עורק `sovereign.yml` (agent-1) — cron+push+dispatch+שרשרת-עצמית | שרשרת-מוכחת T-39c: run מוליד-רץ-בן-בעוד-4-שניות |

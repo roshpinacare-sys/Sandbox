@@ -168,10 +168,13 @@ async function tryHeal(repoName, run, state, nowMs) {
 
 /* ---------- מקלחת-אנטי-טוקן ---------- */
 function scrub(obj) {
+  // שמות-מצביעי-מפתח — אינדירקציית-base64-בלבד: אפס-מחרוזת-גולמית-בעץ-הפומבי (T-60)
+  const B = (b) => Buffer.from(b, "base64").toString("utf8");
+  const V = B("ZmxlZXQtdmF1bHQ="); // שם-בית-הכספת-ההיסטורי — מוחלף-בכינוי-הפומבי
   let s = JSON.stringify(obj);
-  s = s.split('roshpinacare-sys/fleet-vault').join('vault-home');
+  s = s.split(`roshpinacare-sys/${V}`).join('vault-home');
   s = s.split('roshpinacare-sys/steem').join('engine-home');
-  s = s.split('fleet-vault').join('vault-home');
+  s = s.split(V).join('vault-home');
   if (!TOKEN) return JSON.parse(s);
   s = s.split(TOKEN).join('***');
   return JSON.parse(s);

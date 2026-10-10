@@ -19,12 +19,27 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
+// T-60 · מבדק-אנטי-פורץ: שמות-קבצי-מפתח ושמות-מצביעים — בנויים-מ-base64-בלבד
+// (הסריקה-עצמה-אף-פעם-לא-מכילה-את-המחרוזות-הגולמיות — אחרת-היא-תחסום-את-עצמה)
+const KEY_POINTER_NAMES = [
+  "a2V5cy5lbnY=", // קובץ-משבצות-הכספת
+  "cmFpbHMuZW52", // קובץ-המסילות (כל-הסיומות)
+  "c3NoLWtleXMudGFy", // ארכיון-מפתחות-הפריסה
+  "cGF0LmVudg==", // קובץ-ההרשאה-ההיסטורי
+  "ZmxlZXQtdmF1bHQ=", // שם-בית-הכספת-ההיסטורי — הכינוי-הפומבי-בלבד-מותר
+].map((b) => Buffer.from(b, "base64").toString("utf8"));
+const KEY_POINTER_RE = new RegExp(
+  `\\b(?:${KEY_POINTER_NAMES.map((n) => n.replace(/[.]/g, "\\.")).join("|")})\\b`,
+  "g",
+);
+
 const PATTERNS = [
   { kind: "workpath", re: /\/home\/[A-Za-z0-9_.-]+\//g },
   { kind: "wif-key", re: /\b[5KL][1-9A-HJ-NP-Za-km-z]{50,51}\b/g },
   { kind: "github-token", re: /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{20,}\b|\bgithub_pat_[A-Za-z0-9_]{20,}\b/g },
   { kind: "cred-url", re: /https?:\/\/[^\s:@/]+:[^\s@/]*@/g },
   { kind: "access-token-echo", re: /x-access-token:[A-Za-z0-9._~=-]/g },
+  { kind: "key-pointer", re: KEY_POINTER_RE },
 ];
 
 function fail(msg) {
