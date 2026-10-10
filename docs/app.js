@@ -211,6 +211,17 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     }
   }
 
+  /* T-58 · חוק-ההדבקה-הרב-שורה (נמדד-חי): שדה-<input>-חד-שורתי חותך-הדבקה-של-קובץ-סיסמה-מלא
+     (headcorner.txt — 62-בייטים-קנוניים-עם-שורה-פנימית) כבר-בסניטציה-של-הדפדפן, כך-שהקנון-המשותף
+     עם-console/ לא-היה-ניתן-להקלדה-בכלל. לוכדים-את-אירוע-ההדבקה לפני-הסניטציה, טוחנים-שורות-לקנון,
+     ומזרימים-לשדה — ההדבקה-המלאה-פותחת-wrap[canon-62] במדויק-כפי-שהחוקה-מבטיחה. */
+  $("pass").addEventListener("paste", (ev) => {
+    const t = ev.clipboardData?.getData("text");
+    if (!t || !/[\r\n]/.test(t)) return; // הדבקה-חד-שורתית — התנהגות-רגילה
+    ev.preventDefault();
+    $("pass").value = t.replace(/[\r\n]+/g, "").trim();
+  });
+
   $("gate-form").addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const btn = $("unlock-btn");
