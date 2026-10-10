@@ -22,7 +22,7 @@
  *   FLEET_RECEIPTS_DIR  (ברירת-מחדל receipts/fleet-yield)
  *   FLEET_VOTER         (ברירת-מחדל headcorner)        — קריאת-סוללה-בלבד (אפס-חתימה)
  *   FLEET_RPC           (ברירת-מחדל https://api.steemit.com)
- *   FLEET_FETCH_LIMIT   (ברירת-מחדל 50 — R290: קלאמפ 20..50)
+ *   FLEET_FETCH_LIMIT   (ברירת-מחדל 80 — T-62: קלאמפ 20..100; הגבול-האמתי-הוא-גודל-העמוד-של-הצומת ≤100/קריאה)
  *   FLEET_LOG_MAX       (ברירת-מחדל 240 — סבוב-יומן-הקבלות)
  */
 import fs from "node:fs";
@@ -37,7 +37,7 @@ const REC_DIR = path.resolve(process.env.FLEET_RECEIPTS_DIR || "receipts/fleet-y
 const VOTER = String(process.env.FLEET_VOTER || "headcorner").trim();
 const RPC = String(process.env.FLEET_RPC || "https://api.steemit.com").replace(/\/+$/, "");
 const LOG_MAX = Math.max(2, Math.min(2000, Number(process.env.FLEET_LOG_MAX) || 240));
-const FETCH_LIMIT_DEFAULT = 50;
+const FETCH_LIMIT_DEFAULT = 80; // T-62 release: false self-limit raised — real bound is the node page size (≤100/call for get_discussions_by_*); anti-spam spacing and VP laws untouched
 
 const sha256 = (s) => crypto.createHash("sha256").update(s).digest("hex");
 const num = (s) => Number(String(s ?? "0").split(" ")[0].replace(/,/g, "")) || 0;
@@ -163,7 +163,7 @@ async function main() {
     failReceipt("ENGINE-CONTRACT-FAIL", { engineHead, note: "curator.mjs missing law exports" });
   }
 
-  const policy = { ...cur.curatorPolicy(), fetchLimit: Math.min(Math.max(Number(process.env.FLEET_FETCH_LIMIT) || FETCH_LIMIT_DEFAULT, 20), 50) };
+  const policy = { ...cur.curatorPolicy(), fetchLimit: Math.min(Math.max(Number(process.env.FLEET_FETCH_LIMIT) || FETCH_LIMIT_DEFAULT, 20), 100) }; // T-62 release: false self-limit removed (was 20..50 R290 prudence band) — real bound is node page ≤100; VP/anti-spam laws intact
   const nowMs = Date.now();
 
   /* 4 · קריאות-שרשרת (קריאה-בלבד) */
