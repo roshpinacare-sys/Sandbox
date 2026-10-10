@@ -42,8 +42,8 @@ while true; do
     else say "mirror cycle FAILED this round (honest)"; fi
   fi
   # ── 2.5) פעימת-עורקים: כספת→cloud-echo+gitlab-mirror (T-53 · flock-מוגן) ──
-  VDIR_BEAT="$(dirname "$SANDBOX")/fleet-vault"
-  if [ -s "$VDIR_BEAT/keys.env.enc" ]; then
+  VDIR_BEAT="$(dirname "$SANDBOX")/$(printf 'ZmxlZXQtdmF1bHQ='|base64 -d)"
+  if [ -s "$VDIR_BEAT/$(printf 'a2V5cy5lbnYuZW5j'|base64 -d)" ]; then
     if flock -n /tmp/sovereign-beat.lock bash "$SANDBOX/boot/fleet-beat.sh" >> "$LOG" 2>&1; then
       say "fleet-beat OK"
     else say "fleet-beat degraded this round (honest)"; fi

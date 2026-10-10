@@ -167,7 +167,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
     renderLog();
   }
 
-  /* ═══════════════ שער: פענוח הכספת (רישום-מעטפות — חוק fleet-vault) ═══════════════ */
+  /* ═══════════════ שער: פענוח הכספת (רישום-מעטפות — חוק vault-home) ═══════════════ */
   async function tryUnlock(password) {
     const cands = [password, password.replace(/[\r\n]+/g, ""), password.trim()]
       .filter((v, i, a) => v && a.indexOf(v) === i);
@@ -212,7 +212,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   }
 
   /* T-58 · חוק-ההדבקה-הרב-שורה (נמדד-חי): שדה-<input>-חד-שורתי חותך-הדבקה-של-קובץ-סיסמה-מלא
-     (headcorner.txt — 62-בייטים-קנוניים-עם-שורה-פנימית) כבר-בסניטציה-של-הדפדפן, כך-שהקנון-המשותף
+     (קובץ-המפתח-האישי-של-המפעיל — קנון-פנימי-אישי) כבר-בסניטציה-של-הדפדפן, כך-שהקנון-המשותף
      עם-console/ לא-היה-ניתן-להקלדה-בכלל. לוכדים-את-אירוע-ההדבקה לפני-הסניטציה, טוחנים-שורות-לקנון,
      ומזרימים-לשדה — ההדבקה-המלאה-פותחת-wrap[canon-62] במדויק-כפי-שהחוקה-מבטיחה. */
   $("pass").addEventListener("paste", (ev) => {

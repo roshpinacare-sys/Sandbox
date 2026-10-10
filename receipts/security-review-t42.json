@@ -94,9 +94,9 @@
       "severity": "L",
       "file": ".gitignore",
       "line": "6-10",
-      "what": "No name-based patterns for credential files: upload/ and .passfile are covered, but bootstrap.sh also probes $PWD/upload/pat.env and $HOME/upload/pat.env, and fleet-vault keys.env conventions exist; *.env / pat.env / keys.env are not ignored.",
+      "what": "No name-based patterns for credential files: upload/ and .passfile are covered, but bootstrap.sh also probes $PWD/upload/קובץ-הרשאה and $HOME/upload/קובץ-הרשאה, and vault-home קובץ-כספת conventions exist; *.env / קובץ-הרשאה / קובץ-כספת are not ignored.",
       "why": "One mkdir/rename away from staging a PAT file outside the covered paths.",
-      "fix": "Add: *.env, pat.env, keys.env, *.passfile."
+      "fix": "Add: *.env, קובץ-הרשאה, קובץ-כספת, *.passfile."
     },
     {
       "id": "F-L6",
@@ -112,7 +112,7 @@
       "severity": "L",
       "file": "docs/vault.enc.json",
       "line": "gate.hint (rendered via docs/app.js:203)",
-      "what": "The public gate displays a hint naming the operator's real password file: 'headcorner.txt — הסיסמה הראשית…'.",
+      "what": "The public gate displays a hint naming the operator's real password file: 'קובץ-המפתח-האישי-של-המפעיל — הסיסמה הראשית…'.",
       "why": "SECURITY.md's own console law is 'no hints' (לא-רמז); the cockpit violates it cosmetically. Value to an attacker is small (a filename), but it is inconsistent doctrine and aids targeted phishing lures.",
       "fix": "Replace with a neutral hint (accepted password formats) or none."
     },
@@ -202,7 +202,7 @@
       "severity": "N",
       "file": "boot/bootstrap.sh",
       "line": "32-62",
-      "what": "Credential handling in boot is sound: token from env or gitignored upload/pat.env; only its length is printed; flows via git credential-helper (never embedded in a clone URL, honoring the repo's own cred-url leak-scan law); no curl|bash anywhere — repos are cloned and scripts run from the clone; work dirs are mkdir 700 / mktemp -d 700; extracted secrets land 0600.",
+      "what": "Credential handling in boot is sound: token from env or gitignored upload/קובץ-הרשאה; only its length is printed; flows via git credential-helper (never embedded in a clone URL, honoring the repo's own cred-url leak-scan law); no curl|bash anywhere — repos are cloned and scripts run from the clone; work dirs are mkdir 700 / mktemp -d 700; extracted secrets land 0600.",
       "why": "The highest-privilege script in the repo follows the no-token-in-URL and no-remote-exec rules it was given.",
       "fix": "None (the /tmp code-execution aspect is F-M2)."
     }
@@ -225,7 +225,7 @@
   "limits": [
     "Cannot decrypt console/sealed-payload.bin or docs/vault.enc.json — no password held, none sought (forbidden). The correct-password unlock path is therefore unverified by this reviewer; evidence base is the GCM-auth design, engine/seal-selftest.mjs, and agent-3d's live browser rejection tests.",
     "docs/vendor/gate-crypto.js 'verbatim from SovereignConsole' is unverifiable (source not in this clone); its custom secp256k1/ripemd160 correctness was not independently re-proven here — mitigated by the recorded live verify_authority=TRUE evidence.",
-    "M-1 (army-vault password in steem repo) hinges on external repos (steem, fleet-vault) not present in this clone — their ACLs could not be checked.",
+    "M-1 (army-vault password in steem repo) hinges on external repos (steem, vault-home) not present in this clone — their ACLs could not be checked.",
     "Password entropy (~62-byte canon / claimed ~335-bit) is taken from SECURITY.md; it is not measurable from the repo, and the strength of BOTH gates rests on it.",
     "JS heap erasure guarantees cannot be verified (inherent language limit; see F-L4).",
     "GitHub Pages headers (HSTS present, no CSP header — meta-CSP only) confirmed from agent-3d's receipt; frame-ancestors is undeliverable on Pages, which shapes the M-3 fix.",

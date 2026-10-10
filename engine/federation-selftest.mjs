@@ -85,7 +85,7 @@ const ACME = [
   repo("Sandbox", { branch: "main" }),
   repo("saos-runtime", { pushedAgoH: 2 }),
   repo("steem", { private: true, pushedAgoH: 72 }),
-  repo("fleet-vault", { private: true, pushedAgoH: 240 }),
+  repo("vault-home", { private: true, pushedAgoH: 240 }),
   repo("mystery-repo", {}),
   repo("errwf", {}),
 ];
@@ -117,7 +117,7 @@ async function main() {
       { name: "Sandbox", role: "operations-home", visibility: "public", expect: { maxPushAgeHours: 3 } },
       { name: "saos-runtime", role: "pulse", visibility: "public", expect: { maxPushAgeHours: 168 } },
       { name: "steem", role: "engine-truth", visibility: "private", expect: { maxPushAgeHours: 336 } },
-      { name: "fleet-vault", role: "keys", visibility: "private", expect: { maxPushAgeHours: 720 } },
+      { name: "vault-home", role: "keys", visibility: "private", expect: { maxPushAgeHours: 720 } },
     ],
   };
 
@@ -167,7 +167,7 @@ async function main() {
   const runsAnon = new Map();
   for (const r of anonReality) runsAnon.set(r.name, await workflowRuns({ apiBase: base, token: TOKEN, owner: "acme" }, r.name));
   const dAnon = classify(MANIFEST, anonReality, runsAnon, now, "anonymous");
-  ok(flagOf(dAnon, "UNVERIFIED-PRIVATE").sort().join(",") === "fleet-vault,steem", "D4 anonymous + private → UNVERIFIED-PRIVATE (honest, not GONE)");
+  ok(flagOf(dAnon, "UNVERIFIED-PRIVATE").sort().join(",") === "steem,vault-home", "D4 anonymous + private → UNVERIFIED-PRIVATE (honest, not GONE)");
   const dGone = classify(MANIFEST, reality.filter((r) => r.name !== "steem"), runsMap, now, "token");
   ok(flagOf(dGone, "GONE").includes("steem"), "D5 token + private missing → GONE");
   const staleM = { ...MANIFEST, repos: [{ ...MANIFEST.repos[1], expect: { maxPushAgeHours: 1 } }] };

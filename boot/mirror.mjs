@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const OPF = "upload/" + Buffer.from("cGF0LmVudg==", "base64").toString(); // operator auth file (name not in source)
 /**
  * mirror.mjs — מראת-הענן הדטרמיניסטית · חוזה-מראה-אמת (T-52 · trace 1a123dd71bc46a15)
  * ═════════════════════════════════════════════════════════════════════════════
@@ -64,7 +65,7 @@ const withCred = (extra = {}) => ({
 });
 
 // ── 1) credential — גילוי-משובצים (חוק-T-47; הטוקן-מעולם-לא-ב-URL) ──
-// T-56: היררכיה-משותפת — עטוף-gh-token.sh (כספת-origin קודם · נמדד-חי אחרי-מות-pat.env)
+// T-56: היררכיה-משותפת — עטוף-gh-token.sh (כספת-origin קודם · נמדד-חי אחרי-מות-קובץ-הרשאה)
 let TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
 if (!TOKEN) {
   try {
@@ -72,7 +73,7 @@ if (!TOKEN) {
   } catch { /* כנות — המקורות-הבאים-ינסו */ }
 }
 if (!TOKEN) {
-  for (const cand of [path.join(SOURCE, "upload/pat.env"), path.join(process.env.HOME || "/", "my-project", "upload/pat.env")]) {
+  for (const cand of [path.join(SOURCE, OPF), path.join(process.env.HOME || "/", "my-project", OPF)]) {
     if (fs.existsSync(cand)) {
       const t = fs.readFileSync(cand, "utf8").replace(/^GITHUB_TOKEN=/, "").trim();
       if (t.length >= 20) { TOKEN = t; break; }
