@@ -31,7 +31,7 @@ fail(){ echo "[revive] FAIL: $*" >&2; exit 1; }
 # ── 1) credential (גילוי-משובצים — אפס-המצאה · T-56: היררכיה-משותפת gh-token.sh) ──
 TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-${GITHUB_PAT:-}}}"
 if [ -z "$TOKEN" ]; then
-  TOKEN="$(bash "$SANDBOX/boot/gh-token.sh" 2>/dev/null || true)"  # כספת-origin קודם (העורק-החי שנמדד) → pat.env → מאגרים
+  TOKEN="$(bash "$HERE/gh-token.sh" 2>/dev/null || true)"  # T-57: $SANDBOX אינו-מוגדר-עדיין (שורה-54) — HERE הוא-ספריית-boot-עצמה (תוקן-חי · set -u)
 fi
 [ -n "$TOKEN" ] || fail "no credential — machine is git-blind (honest)"
 say "credential: discovered (${#TOKEN} chars)"
