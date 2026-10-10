@@ -534,7 +534,7 @@ if (window.top !== window.self) { try { window.top.location = window.self.locati
   }
 
   $("op-type").addEventListener("change", renderOpsFields);
-  $("op-account").addEventListener("change", () => { if ($("op-type").value === "claim") prefillClaim(); });
+  $("op-account").addEventListener("change", () => { if ($("op-type").value === "claim") prefillClaim(); renderCuration(); });
 
   $("op-dry").addEventListener("click", async () => {
     try {
@@ -631,6 +631,193 @@ txid: ${signed.txid}
     btn.disabled = false;
     setTimeout(refreshLive, 3500);
   });
+
+  /* ═══════════════ עורק-התשואה → תור-ה-curation (T-55 · trace 1a1249d10fa60055) ═══════════════
+   * חוק-המישורים במלואו: המנוע-מתכנן (קבלה-חתומה-בשרשרת בריפו-הציבורי) ·
+   * המפעיל-מאשר (בחירה-חיה) · הדפדפן-חותם-ומשדר. אפס-מפתחות-ברשת.
+   * אפס-אמון-גם-כאן: הקבלה-מאומתת (schema/verdict/selftest) · חלון-הגיל-מחושב-עכשיו
+   * (לא-כפי-שהמנוע-מדד) · יום-מקס · אפס-הצבעה-כפולה (זיכרון-חתימות-מקומי).
+   * הזיכרון-השמור = נתונים-פומביים-בלבד (permlink+txid+תאריך) — אף-סוד-לעולם-לא.
+   * ─────────────────────────────────────────────────────────────────────── */
+  const CUR_SOURCES = [
+    "/api/curation", // ממסר-מקומי (T-55): בסנדבוקס-fetch-דפדפני-לחוץ-חוץ-חסום — נמדד-חי
+    "https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/receipts/fleet-yield/last.json",
+    "https://cdn.jsdelivr.net/gh/roshpinacare-sys/Sandbox@main/receipts/fleet-yield/last.json",
+  ];
+  const CUR = {
+    receipt: null,
+    fetchedAt: null,
+    source: "",
+    queue: new Set(),                    // author/permlink — אישור-המפעיל (סשן-בלבד)
+    signed: (() => { try { return JSON.parse(localStorage.getItem("sovereign-signed-votes") || "{}"); } catch { return {}; } })(),
+  };
+  const saveSigned = () => { try { localStorage.setItem("sovereign-signed-votes", JSON.stringify(CUR.signed)); } catch {} };
+  /* escapeHtml-חי-בקובץ-זה-מלמטה (חוק-T-42) — כל-נתון-חוץ-מהקבלה-עובר-הימלטות */
+  const curKey = (c) => `${c.author}/${c.permlink}`;
+  const REC_TIME = () => Date.parse(CUR.receipt?.at ?? "") || Date.parse((CUR.receipt?.at ?? "") + "Z") || 0;
+  const REC_AGE_MS = () => (REC_TIME() ? Date.now() - REC_TIME() : Number.POSITIVE_INFINITY); // קבלה-בלי-זמן-תקין = זקנה-מיידית (fail-closed)
+  const rowAgeMin = (c) => Math.round((Number(c.ageMinutes) || 0) + REC_AGE_MS() / 60000);
+  const capToday = () => {
+    const today = new Date().toISOString().slice(0, 10);
+    return Object.values(CUR.signed).filter((v) => String(v.at || "").slice(0, 10) === today).length;
+  };
+
+  async function fetchCuration() {
+    const table = $("cur-table");
+    $("cur-verdict").hidden = true;
+    $("cur-provenance").textContent = "מאזין…";
+    for (const src of CUR_SOURCES) {
+      try {
+        const res = await fetch(src, { signal: AbortSignal.timeout(12000), cache: "no-store" });
+        if (!res.ok) continue;
+        let r = await res.json();
+        if (r?.receipt?.schema) { r = r.receipt; CUR.source = new URL(src, location.href).pathname === "/api/curation" ? "api-relay (local)" : new URL(src).host; }
+        else if (src === "/api/curation") { CUR.source = "api-relay (local)"; }
+        else { CUR.source = new URL(src).host; }
+        if (r?.schema !== "fleet-yield/1") throw new Error("schema-לא-מוכר");
+        if (r?.verdict !== "INTEL-OK" && r?.verdict !== "INTEL-PARTIAL") throw new Error("verdict=" + r?.verdict);
+        if (r?.selftest?.status !== "PASS") throw new Error("selftest=" + r?.selftest?.status);
+        CUR.receipt = r;
+        CUR.fetchedAt = Date.now();
+        renderCuration();
+        log("curation-fetch", `INTEL ${r.verdict} · ${r.candidates.selected.length} candidates · engine ${String(r.engineHead).slice(0, 8)}… · ${CUR.source}`, "ok");
+        return;
+      } catch { /* המקור-הבא — כנות: אם-כולם-נפלו נכתוב-זאת-למטה */ }
+    }
+    table.innerHTML = `<div class="muted pad bad">לא ניתן להשיג מקבלת-אינטל-מאומתת מאף-מקור (נמדדו: ${CUR_SOURCES.length}). אפס-ירוק-שקרי — התור-נשאר-ריק.</div>`;
+    log("curation-fetch", "כל-המקורות-נפלו", "bad");
+  }
+
+  function renderCuration() {
+    const r = CUR.receipt;
+    if (!r) return;
+    const table = $("cur-table");
+    const ageH = REC_AGE_MS() / 3600000;
+    const [ageMinRaw, ageMaxRaw] = r.laws?.ageWindow ?? [10, 240];
+    const ageMin = Number(ageMinRaw) || 10, ageMax = Number(ageMaxRaw) || 240;
+    const maxPerDay = Number(r.laws?.maxPerDay) || 4;
+
+    const badge = $("cur-verdict");
+    badge.hidden = false;
+    badge.textContent = `${r.verdict} · selftest ${r.selftest.status} · גיל-המקבלה ${ageH < 1 ? Math.round(ageH * 60) + " דק'" : ageH.toFixed(1) + " שע'"}`;
+    badge.className = "badge " + (ageH > 3 ? "badge-bad" : "badge-ok");
+    $("cur-provenance").textContent = `engine ${String(r.engineHead).slice(0, 8)}… · מרקל ${String(r.chain?.cur || "").slice(0, 8)}… · ${CUR.source}`;
+
+    const staleBlock = ageH > 12;
+    $("cur-meta").innerHTML = [
+      `חוקי-החלון: ${ageMin}–${ageMax} דק' (מחושב-מחדש-כאן, עכשיו)`,
+      `יום-מקס: ${maxPerDay} · חתומו-היום: ${capToday()}`,
+      `נסרקו: ${Number(r.candidates.scanned) || 0} · נבחרו: ${(r.candidates.selected || []).length} · צפופים: ${Number(r.candidates.crowded) || 0}`,
+      r.candidates.dayCapReached ? `<span class="warn">מכסת-היום-הושגה-במנוע</span>` : "",
+    ].filter(Boolean).map((s) => `<span>· ${s}</span>`).join(" ");
+
+    const rows = (r.candidates.selected || []).map((c) => {
+      const key = curKey(c);
+      const w = Math.round(Number(c.weight) || 0);
+      const age = rowAgeMin(c);
+      const expired = age < ageMin || age > ageMax;
+      const signedInfo = CUR.signed[key];
+      const queued = CUR.queue.has(key);
+      const wPct = (w / 100).toFixed(2);
+      const eAuthor = escapeHtml(c.author), eKey = escapeHtml(key);
+      const ePermlink = escapeHtml(String(c.permlink).slice(0, 42)) + (String(c.permlink).length > 42 ? "…" : "");
+      const eTag = escapeHtml(c.tag ?? "");
+      const state = signedInfo
+        ? `<span class="badge badge-ok">חתום ✓</span>`
+        : staleBlock
+        ? `<span class="badge badge-bad">מקבלה-זקנה (${ageH.toFixed(1)} שע') — חסום</span>`
+        : expired
+        ? `<span class="badge badge-bad">פג-חלון-גיל (${age} דק')</span>`
+        : queued
+        ? `<span class="badge badge-ok">בתור</span> <button class="btn btn-ghost btn-mini" data-cur-remove="${eKey}">הסר</button>`
+        : `<button class="btn btn-mini btn-primary" data-cur-add="${eKey}">אשר לתור</button>`;
+      return `<tr>
+        <td><strong>${eAuthor}</strong></td>
+        <td class="s"><a href="https://steemit.com/@${encodeURIComponent(c.author)}/${encodeURIComponent(c.permlink)}" target="_blank" rel="noopener noreferrer">${ePermlink}</a></td>
+        <td>${wPct}%</td>
+        <td>${age} דק'${expired && !signedInfo ? " ⚠" : ""}</td>
+        <td class="muted s">${eTag}</td>
+        <td>${state}${signedInfo ? `<div class="muted s"><a href="https://steemscan.com/transaction/${encodeURIComponent(signedInfo.txid)}" target="_blank" rel="noopener noreferrer">${escapeHtml(String(signedInfo.txid).slice(0, 14))}…</a></div>` : ""}</td>
+      </tr>`;
+    }).join("");
+    table.innerHTML = rows
+      ? `<table style="width:100%;border-collapse:collapse;text-align:right">
+          <thead><tr class="muted s"><th>מחבר</th><th>פוסט</th><th>משקל</th><th>גיל-עכשיו</th><th>תגית</th><th>מצב</th></tr></thead>
+          <tbody>${rows}</tbody></table>`
+      : `<div class="muted pad">המקבלה-אינה-מכילה-מועמדים (כנה).</div>`;
+
+    const remaining = Math.max(0, maxPerDay - capToday());
+    $("cur-cap").textContent = `תור: ${CUR.queue.size} · נותר-במכסה-היום: ${remaining}/${maxPerDay}`;
+    const voter = r.voter?.account ?? "";
+    const acc = $("op-account").value;
+    const voterNote = acc && voter && acc !== voter ? ` · ⚠ חותמים-מ-${acc} (המנוע-תכנן-עבור ${voter})` : "";
+    $("cur-sign").disabled = staleBlock || CUR.queue.size === 0;
+    $("cur-sign").textContent = `חתום ושדר את-התור (${CUR.queue.size})${voterNote}`;
+    $("cur-clear").hidden = CUR.queue.size === 0;
+    $("cur-sign").dataset.remaining = String(remaining);
+    $("cur-sign").dataset.maxperday = String(maxPerDay);
+    $("cur-sign").dataset.stale = staleBlock ? "1" : "0";
+  }
+
+  $("cur-table").addEventListener("click", (e) => {
+    const add = e.target.closest?.("[data-cur-add]");
+    const rem = e.target.closest?.("[data-cur-remove]");
+    if (add) {
+      const c = CUR.receipt.candidates.selected.find((x) => curKey(x) === add.dataset.curAdd);
+      if (c) { CUR.queue.add(curKey(c)); renderCuration(); log("curation-queue", `+ ${curKey(c)} @ ${Math.round(c.weight / 100)}%`); }
+    } else if (rem) {
+      CUR.queue.delete(rem.dataset.curRemove);
+      renderCuration();
+    }
+  });
+  $("cur-refresh").addEventListener("click", fetchCuration);
+  $("cur-clear").addEventListener("click", () => { CUR.queue.clear(); renderCuration(); });
+
+  $("cur-sign").addEventListener("click", async () => {
+    const btn = $("cur-sign");
+    const out = $("cur-result");
+    const n = CUR.queue.size;
+    if (n === 0) return;
+    if (btn.dataset.stale === "1") { out.hidden = false; out.textContent = "נחסם: המקבלה-זקנה-מדי — רענן-מקבלה (אפס-אמון)."; return; }
+    const remaining = Number(btn.dataset.remaining || 0);
+    const maxPerDay = Number(btn.dataset.maxperday || 4);
+    if (n > remaining) { out.hidden = false; out.textContent = `נחסם: התור (${n}) חורג-ממכסת-היום-הנותרת (${remaining}/${maxPerDay}) — חוק-יום-המקס-נאכף-גם-כאן.`; return; }
+    const account = $("op-account").value;
+    if (!account) { out.hidden = false; out.textContent = "בחר חשבון-חתימה למעלה (חתימה-מטעם)."; return; }
+    if (!S.payload) { out.hidden = false; out.textContent = "הכספת-נעולה — פתח-את-הכספת-קודם (החתימה-דורשת-מפתח-פרסומי-חי)."; return; }
+    if (!confirm(`לחתום ולשדר ${n} הצבעות מ-${account}? כל-הצבעה-עסקה-נפרדת-ובלתי-הפיכה.`)) return;
+    btn.disabled = true;
+    out.hidden = false;
+    const lines = [];
+    let okN = 0;
+    const items = CUR.receipt.candidates.selected.filter((c) => CUR.queue.has(curKey(c)));
+    for (const c of items) {
+      const w = Math.round(Number(c.weight) || 0);
+      if (!(w > 0 && w <= 10000)) { lines.push(`${c.author}: נחסם — משקל-שרשרת-לא-חוקי (${w})`); CUR.queue.delete(curKey(c)); continue; }
+      try {
+        const ops = [["vote", { voter: account, author: c.author, permlink: c.permlink, weight: w }]];
+        const signed = await signTx(account, ops);
+        await broadcast(signed.json);
+        CUR.signed[curKey(c)] = { txid: signed.txid, at: new Date().toISOString(), voter: account, weight: w };
+        saveSigned();
+        CUR.queue.delete(curKey(c));
+        lines.push(`${c.author}: ✅ ${w / 100}% → txid ${signed.txid.slice(0, 16)}…`);
+        log("curation-vote", `${account} → ${c.author} @ ${w / 100}% → ${signed.txid.slice(0, 14)}…`, "ok");
+        okN++;
+      } catch (e) {
+        lines.push(`${c.author}: FAIL ${String(e.message).slice(0, 90)}`);
+        log("curation-vote-fail", `${c.author}: ${e.message}`, "bad");
+      }
+    }
+    out.textContent = lines.join("\n") || "התור-התרוקן.";
+    btn.disabled = false;
+    renderCuration();
+    setTimeout(refreshLive, 3500);
+  });
+
+  /* טעינה-ראשונה — נתונים-ציבוריים (אין-צורך-בכספת-פתוחה) */
+  fetchCuration();
+
 
   /* ═══════════════ מפתחות ═══════════════ */
   function currentKey() {
