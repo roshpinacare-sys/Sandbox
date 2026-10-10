@@ -534,3 +534,18 @@ Work Log:
 Stage Summary:
 - אפס-רגל-יחידה-לשער: GitHub-Pages + onrender.com + localhost:3000 — שלושה-בתים-חיים
 - Render=פריסה-אוטומטית-מ-Git+מרפא-עצמי-בכל-פעימה — הבית-השני-אינו-תלוי-אדם
+
+---
+Task ID: T-54b (חוק-נגד-סטייה · trace 1a124659eb347631)
+Agent: agent-2 (Z.ai Code · revival lane)
+Task: ריפוי-אירוע-הסטייה — אח-הסיט-את-שירות-Render-למאגר-אחר
+
+Work Log:
+- גילוי-בלוגים-חיים: clone-של-sovereign-beacon-במקום-Sandbox · "Root directory docs does not exist" · repo-פרטי-בלי-App-לא-ניתן-לשיבוט
+- נמדד: PATCH-repo→400 (immutable) → DELETE+CREATE-מחדש → live-בסיבוב-הראשון → 200×3
+- drift-guard-ב-render-home.mjs: השוואת-svc.repo-מול-origin-בכל-פעימה; סטייה→שחזור-אוטומטי-מתועד
+- הדגמת-שרשרת-מלאה-בפעימה-אחת: heartbeat-id=4 + GitLab-דחף-c11c675 + Render-התעורר-מהתיישנות→live-200 + קבלות-נדחפו
+
+Stage Summary:
+- הבית-השני-לא-ניתן-עוד-להסטה: כל-סטייה-מתוקנת-אוטומטית-תוך-מחזור-אחד
+- שלושה-בתים-חיים-מאומתים: GitHub-Pages · onrender.com · localhost:3000 + Postgres-מחוץ-למכונה + GitLab-שני
