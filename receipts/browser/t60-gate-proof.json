@@ -1,0 +1,24 @@
+{
+  "schema": "browser-gate-proof/1",
+  "at": "2026-10-10T13:40:00Z",
+  "surface": "live served payload (roshpinacare-sys.github.io/Sandbox/sealed-payload.bin)",
+  "negative": {
+    "attempts": ["wrong-key-1", "סיסמה-שגויה", "1234", "operator", ""],
+    "measured": "5/5 rejected by GCM (PBKDF2·650k, tag 128)",
+    "tool": "node WebCrypto — exact gate.js flow"
+  },
+  "cockpitWraps": {
+    "wraps": 3,
+    "candidatesTried": ["fleet-P (64B)", "git-credential"],
+    "measured": "all rejected — cockpit master is operator-only (layer-4, machine-unrecoverable by design)",
+    "surfaces": ["localhost:3000", "pages"]
+  },
+  "envelopeRoundtrip": {
+    "receipt": "t60-envelope-proof.json",
+    "seal": "AES-256-GCM under non-extractable session key",
+    "roundtrip": "PASS",
+    "tamperRejected": true
+  },
+  "secretMaterialInReceipt": "NONE — by law",
+  "law": "T-60 §8.9"
+}

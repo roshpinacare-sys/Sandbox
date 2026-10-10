@@ -74,6 +74,7 @@
     <button class="tab active" data-tab="overview" role="tab" aria-selected="true">סקירה</button>
     <button class="tab" data-tab="accounts" role="tab" aria-selected="false">חשבונות</button>
     <button class="tab" data-tab="ops" role="tab" aria-selected="false">פעולות</button>
+    <button class="tab" data-tab="pulse" role="tab" aria-selected="false">צינור-חתימה</button>
     <button class="tab" data-tab="keys" role="tab" aria-selected="false">מפתחות</button>
     <button class="tab" data-tab="system" role="tab" aria-selected="false">מערכת</button>
     <button class="tab" data-tab="log" role="tab" aria-selected="false">יומן</button>
@@ -172,6 +173,20 @@
   </section>
 
   <!-- מפתחות -->
+  <!-- צינור-החתימה (T-60): המנוע-מתכנן → המפעיל-מאשר → הכספת-חותמת · אפס-מפתח-עובר-על-החוט -->
+  <section class="panel" id="panel-pulse" role="tabpanel">
+    <div class="card">
+      <h3>פולס-המנוע — מועמדי-curation (מנוכה-סודות)</h3>
+      <p class="muted" id="pulse-meta">טוען פולס…</p>
+      <div class="table-wrap" id="pulse-table"><div class="muted pad">אין פולס נטען</div></div>
+    </div>
+    <div class="card">
+      <h3>אישורים-חתומים — מעטפות (זיכרון-סשן בלבד)</h3>
+      <p class="muted">אישור = מעטפת AES-256-GCM תחת מפתח-סשן-לא-ניתן-לחילוץ. המעטפה-בלבד עוברת-לנאמן-המנוע; אף-מפתח-לא-עובר-על-החוט.</p>
+      <pre id="approve-log" class="result">— אין אישורים בסשן-זה —</pre>
+    </div>
+  </section>
+
   <section class="panel" id="panel-keys" role="tabpanel">
     <div class="card">
       <h3>צפייה במפתחות (מוסתר כברירת-מחדל, חשיפה ל-30 שניות)</h3>
