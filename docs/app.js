@@ -640,7 +640,8 @@ txid: ${signed.txid}
    * הזיכרון-השמור = נתונים-פומביים-בלבד (permlink+txid+תאריך) — אף-סוד-לעולם-לא.
    * ─────────────────────────────────────────────────────────────────────── */
   const CUR_SOURCES = [
-    "/api/curation", // ממסר-מקומי (T-55): בסנדבוקס-fetch-דפדפני-לחוץ-חוץ-חסום — נמדד-חי
+    "../receipts/fleet-yield/last.json", // אותו-מקור (T-55b): Pages-מגישה-את-הקבלה-בעצמה — אפס-חוצי-מקור, חי-בכל-מקום
+    "/api/curation", // ממסר-מקומי-כן (T-55): נמדד-חי ש-fetch-דפדפני-לחוץ-חוץ-חסום
     "https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/receipts/fleet-yield/last.json",
     "https://cdn.jsdelivr.net/gh/roshpinacare-sys/Sandbox@main/receipts/fleet-yield/last.json",
   ];
@@ -671,9 +672,9 @@ txid: ${signed.txid}
         const res = await fetch(src, { signal: AbortSignal.timeout(12000), cache: "no-store" });
         if (!res.ok) continue;
         let r = await res.json();
-        if (r?.receipt?.schema) { r = r.receipt; CUR.source = new URL(src, location.href).pathname === "/api/curation" ? "api-relay (local)" : new URL(src).host; }
-        else if (src === "/api/curation") { CUR.source = "api-relay (local)"; }
-        else { CUR.source = new URL(src).host; }
+        const u = new URL(src, location.href); // פריסה-בטוחה-לנתיב-יחסי (new URL(src).host-זורק-ביחסיים-נמדד-חי)
+        if (r?.receipt?.schema) r = r.receipt; // ממסר-אורז ← פתיחה
+        CUR.source = u.origin === location.origin ? "same-origin (Pages artifact)" : u.host;
         if (r?.schema !== "fleet-yield/1") throw new Error("schema-לא-מוכר");
         if (r?.verdict !== "INTEL-OK" && r?.verdict !== "INTEL-PARTIAL") throw new Error("verdict=" + r?.verdict);
         if (r?.selftest?.status !== "PASS") throw new Error("selftest=" + r?.selftest?.status);

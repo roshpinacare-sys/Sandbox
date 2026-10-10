@@ -41,6 +41,14 @@ jobs:
           for f in latest.json ticks.jsonl network.json network-log.jsonl; do
             [ -f "receipts/$f" ] && cp "receipts/$f" _site/receipts/
           done
+          # T-55: the yield-intel receipt rides the same-origin artifact — the cockpit
+          # reads it with ZERO cross-origin fetch (sandbox egress blocks browser fetch
+          # to raw.githubusercontent — measured live). Refreshed on every receipts push
+          # (paths above include receipts/** — every beat refreshes the board).
+          if [ -f "receipts/fleet-yield/last.json" ]; then
+            mkdir -p _site/receipts/fleet-yield
+            cp receipts/fleet-yield/last.json _site/receipts/fleet-yield/last.json
+          fi
           cp -r operator/. _site/operator/
           rm -rf _site/operator/server/.env.local
           cp -r status/. _site/status/
