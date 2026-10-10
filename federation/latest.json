@@ -1,15 +1,15 @@
 {
   "schema": "federation/1",
-  "at": "2026-10-10T05:28:15.935Z",
+  "at": "2026-10-10T06:19:23.825Z",
   "verdict": "FEDERATION-DRIFT",
   "owner": "roshpinacare-sys",
   "authMode": "token",
   "counts": {
     "manifest": 24,
-    "github": 24,
-    "records": 24,
+    "github": 25,
+    "records": 25,
     "flags": 40,
-    "flagsTotal": 40
+    "flagsTotal": 43
   },
   "flags": [
     {
@@ -28,6 +28,11 @@
       "detail": "claims-guard → failure @ 2026-10-06T06:31:41"
     },
     {
+      "repo": "Console",
+      "flag": "WORKFLOW-RED",
+      "detail": "line-agreement → failure @ 2026-10-10T05:50:17"
+    },
+    {
       "repo": "Defi",
       "flag": "WORKFLOW-RED",
       "detail": "gitleaks-secret-scan → failure @ 2026-10-06T11:50:48"
@@ -36,6 +41,11 @@
       "repo": "Defi",
       "flag": "WORKFLOW-RED",
       "detail": "workflow-yaml-guard → failure @ 2026-10-06T11:50:48"
+    },
+    {
+      "repo": "Domain",
+      "flag": "WORKFLOW-RED",
+      "detail": "cloud-pulse → failure @ 2026-10-10T06:18:47"
     },
     {
       "repo": "Project-files",
@@ -155,7 +165,7 @@
     {
       "repo": "saos-dex",
       "flag": "WORKFLOW-RED",
-      "detail": "dex-ci → failure @ 2026-10-10T04:58:49"
+      "detail": "dex-ci → failure @ 2026-10-10T05:58:50"
     },
     {
       "repo": "saos-jummper",
@@ -198,19 +208,9 @@
       "detail": "gitleaks-secret-scan → failure @ 2026-10-06T11:28:51"
     },
     {
-      "repo": "steem",
-      "flag": "WORKFLOW-RED",
-      "detail": "sovereign-cycle → failure @ 2026-10-09T18:13:19"
-    },
-    {
-      "repo": "steem",
-      "flag": "WORKFLOW-RED",
-      "detail": "cloud-heart → failure @ 2026-10-08T05:55:03"
-    },
-    {
-      "repo": "steem",
-      "flag": "WORKFLOW-RED",
-      "detail": "ci-probe → failure @ 2026-10-07T18:03:00"
+      "repo": "sovereign-beacon",
+      "flag": "ADOPT-PENDING",
+      "detail": "discovered on GitHub (public) but not in manifest — zero-trust: adoption requires an explicit manifest commit"
     }
   ],
   "repos": [
@@ -220,7 +220,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 46.4,
+      "ageHours": 47.2,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -235,10 +235,12 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "public",
-      "ageHours": 4.5,
+      "ageHours": 0.2,
       "archived": false,
       "actions": "ok",
-      "redWorkflows": []
+      "redWorkflows": [
+        "line-agreement"
+      ]
     },
     {
       "name": "Defi",
@@ -246,7 +248,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 45.7,
+      "ageHours": 46.6,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -260,10 +262,12 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "public",
-      "ageHours": 3.5,
+      "ageHours": 4.4,
       "archived": false,
       "actions": "ok",
-      "redWorkflows": []
+      "redWorkflows": [
+        "cloud-pulse"
+      ]
     },
     {
       "name": "FleetHQ",
@@ -271,7 +275,7 @@
       "onGithub": true,
       "role": "fleet-headquarters",
       "visibility": "public",
-      "ageHours": 0.8,
+      "ageHours": 0,
       "archived": false,
       "actions": "ok",
       "redWorkflows": []
@@ -282,7 +286,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 44.4,
+      "ageHours": 45.2,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -307,7 +311,7 @@
       "onGithub": true,
       "role": "smart-wallet",
       "visibility": "private",
-      "ageHours": 47.3,
+      "ageHours": 48.2,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -321,7 +325,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 46.9,
+      "ageHours": 47.7,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -336,7 +340,7 @@
       "onGithub": true,
       "role": "console-source",
       "visibility": "private",
-      "ageHours": 0,
+      "ageHours": 0.2,
       "archived": false,
       "actions": "ok",
       "redWorkflows": []
@@ -347,7 +351,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "public",
-      "ageHours": 0.3,
+      "ageHours": 0.2,
       "archived": false,
       "actions": "ok",
       "redWorkflows": []
@@ -358,7 +362,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 5.2,
+      "ageHours": 0.1,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -377,7 +381,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 56.7,
+      "ageHours": 57.5,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -392,7 +396,7 @@
       "onGithub": true,
       "role": "keys-bundle",
       "visibility": "private",
-      "ageHours": 0.8,
+      "ageHours": 0,
       "archived": false,
       "actions": "ok",
       "redWorkflows": []
@@ -403,7 +407,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 45.9,
+      "ageHours": 46.7,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -418,7 +422,7 @@
       "onGithub": true,
       "role": "operator-sovereign-block-T38",
       "visibility": "private",
-      "ageHours": 0.2,
+      "ageHours": 0.1,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -431,7 +435,7 @@
       "onGithub": true,
       "role": "agents-plane",
       "visibility": "public",
-      "ageHours": 46.7,
+      "ageHours": 47.5,
       "archived": false,
       "actions": "ok",
       "redWorkflows": []
@@ -442,7 +446,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 0.3,
+      "ageHours": 0.2,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -456,7 +460,7 @@
       "onGithub": true,
       "role": "dex-plane",
       "visibility": "private",
-      "ageHours": 0.5,
+      "ageHours": 0.3,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -469,7 +473,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 47.5,
+      "ageHours": 48.4,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -484,7 +488,7 @@
       "onGithub": true,
       "role": "social-dex-pulse",
       "visibility": "public",
-      "ageHours": 36.8,
+      "ageHours": 37.7,
       "archived": false,
       "actions": "ok",
       "redWorkflows": []
@@ -495,7 +499,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 50.2,
+      "ageHours": 51,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -509,7 +513,7 @@
       "onGithub": true,
       "role": "discovered-T46-unverified",
       "visibility": "private",
-      "ageHours": 44.9,
+      "ageHours": 45.7,
       "archived": false,
       "actions": "ok",
       "redWorkflows": [
@@ -517,6 +521,17 @@
         "foundry-tests",
         "gitleaks-secret-scan"
       ]
+    },
+    {
+      "name": "sovereign-beacon",
+      "inManifest": false,
+      "onGithub": true,
+      "role": null,
+      "visibility": "public",
+      "ageHours": 0,
+      "archived": false,
+      "actions": "ok",
+      "redWorkflows": []
     },
     {
       "name": "steem",
@@ -534,9 +549,9 @@
       ]
     }
   ],
-  "tookMs": 8650,
+  "tookMs": 7574,
   "chain": {
-    "prev": "8ec749facf189c20e8ed7796a4a263f9b542416116b3e2bf5766f63a975a4b74",
-    "cur": "47b735f115b03ba80200cb3f1566e4bb957c3f26157eeeab54e0b92d597be36d"
+    "prev": "47b735f115b03ba80200cb3f1566e4bb957c3f26157eeeab54e0b92d597be36d",
+    "cur": "8545f7bf2a3688057d7ef027f483913938c030d152bbecc1380c272ea72b7c68"
   }
 }
