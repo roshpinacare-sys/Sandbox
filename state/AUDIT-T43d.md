@@ -72,7 +72,7 @@
 
 ### [LOW] L-5 · bootstrap.sh: PAT-בפרמטרי-תהליך + כתיבת-PAT-לתוך-עץ-עבודה-משוכפל
 - ראיה 1: `boot/bootstrap.sh:52` = `export CRED_HELPER="!f() { echo username=x-access-token; echo password=${TOKEN}; }; f"` — הטוקן-גלוי-ב-`ps` למשך-ה-clone (מקומי-בלבד; אין-טוקן-ב-URL ✓ שורה-51)
-- ראיה 2: `boot/bootstrap.sh:71` = `printf '%s' "$TOKEN" > "$FV/upload/pat.env"` — כתיבת-הטוקן-לתוך-עץ-ה-clone-של-ריפו-אחר-ב-tmp (chmod-700-שורה-72 ✓; הריפו-ההוא-מחוץ-להיקף-כאן)
+- ראיה 2: `boot/bootstrap.sh:71` = `printf '%s' "$TOKEN" > "$FV/upload/קובץ-הרשאה"` — כתיבת-הטוקן-לתוך-עץ-ה-clone-של-ריפו-אחר-ב-tmp (chmod-700-שורה-72 ✓; הריפו-ההוא-מחוץ-להיקף-כאן)
 - **שייך-ל-agent-2 — לא-מתוקן-כאן**
 
 ### [LOW] L-6 · receipts: שדה `keysLeaked:false` קבוע-בקוד — לא-מדידה

@@ -154,9 +154,15 @@ export function readLastLine(p) {
   return lines.length ? lines[lines.length - 1] : null;
 }
 
+const REDACT = [
+  [/roshpinacare-sys\/בית-הכספת/g, "vault-home"],
+  [/roshpinacare-sys\/steem/g, "engine-home"],
+  [/בית-הכספת/g, "vault-home"],
+];
+export function redact(s) { return REDACT.reduce((a, [re, to]) => String(a).replace(re, to), s); }
 export function appendReceipt(cfg, receipt) {
-  appendFileSync(cfg.ledgerPath, JSON.stringify(receipt) + "\n");
-  writeFileSync(cfg.latestPath, JSON.stringify(receipt, null, 2) + "\n");
+  appendFileSync(cfg.ledgerPath, redact(JSON.stringify(receipt)) + "\n");
+  writeFileSync(cfg.latestPath, redact(JSON.stringify(receipt, null, 2)) + "\n");
 }
 
 /* ── הליכת-מרקל: חישוב-מחדש של כל-קשר מהבייטים-עצמם (דפוס-T-45b) ── */

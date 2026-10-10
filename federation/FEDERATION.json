@@ -11,30 +11,242 @@
     "adoptionT46": "סריקה-חיה-ראשונה (18:14Z, טוקן) גילתה 24-ריפואים — כולם-מאומצים-כאן-באימוץ-מפורש; roles-של-מאומצים-שלא-נבדקו = discovered-T46-unverified, לאחים-לאמת-ולתקן"
   },
   "repos": [
-    { "name": "Sandbox", "role": "operations-home", "visibility": "public", "branch": "main", "arteries": ["pulse", "state", "yield", "federation"], "gates": ["console/", "docs/ (cockpit)", "operator/", "agents/", "status/"], "expect": { "maxPushAgeHours": 3, "actionsAlive": true } },
-    { "name": "steem", "role": "curation-engine-truth", "visibility": "private", "branch": "saos-cockpit", "expect": { "maxPushAgeHours": 336, "actionsAlive": true, "note": "תוקן-ב-T46: Actions-חיים-כאן (sovereign-cycle · cloud-heart — נמדדו-אדומים-בסריקה-הראשונה); האודיט-הישן-טען-שהם-מתים" } },
-    { "name": "saos-runtime", "role": "social-dex-pulse", "visibility": "public", "expect": { "maxPushAgeHours": 168, "actionsAlive": true } },
-    { "name": "fleet-vault", "role": "keys-bundle", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true, "note": "צרור-המפתחות — MANIFEST-22-ריפו חי-שם" } },
-    { "name": "sanbox", "role": "operator-sovereign-block-T38", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true, "note": "התיקיה-שפתח-המפעיל (T-38, האיות-שלו) — נמדד-בסריקה-הראשונה: sovereign-heart-אדום; דורש-ריפוי" } },
-    { "name": "FleetHQ", "role": "fleet-headquarters", "visibility": "public", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "SovereignConsole", "role": "console-source", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true, "note": "מקור-gate-crypto שממנו-הוצמד-verbatim-לקוקפיט" } },
-    { "name": "saos-agents", "role": "agents-plane", "visibility": "public", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "saos-dex", "role": "dex-plane", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true, "note": "dex-ci-אדום-בסריקה-הראשונה" } },
-    { "name": "Saosmartwallet", "role": "smart-wallet", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "Console", "role": "discovered-T46-unverified", "visibility": "public", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "Domain", "role": "discovered-T46-unverified", "visibility": "public", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "TruthRail", "role": "discovered-T46-unverified", "visibility": "public", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "saos-control-center", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "saos-jummper", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "saos-sovereign-foundry", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "saos-sovereign-platform", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "Adsmarket", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "Defi", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "Project-files", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "Sdk", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "Zip", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "anchor-baseline", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } },
-    { "name": "roshpina", "role": "discovered-T46-unverified", "visibility": "private", "expect": { "maxPushAgeHours": 720, "actionsAlive": true } }
+    {
+      "name": "Sandbox",
+      "role": "operations-home",
+      "visibility": "public",
+      "branch": "main",
+      "arteries": [
+        "pulse",
+        "state",
+        "yield",
+        "federation"
+      ],
+      "gates": [
+        "console/",
+        "docs/ (cockpit)",
+        "operator/",
+        "agents/",
+        "status/"
+      ],
+      "expect": {
+        "maxPushAgeHours": 3,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "steem",
+      "role": "curation-engine-truth",
+      "visibility": "private",
+      "branch": "saos-cockpit",
+      "expect": {
+        "maxPushAgeHours": 336,
+        "actionsAlive": true,
+        "note": "תוקן-ב-T46: Actions-חיים-כאן (sovereign-cycle · cloud-heart — נמדדו-אדומים-בסריקה-הראשונה); האודיט-הישן-טען-שהם-מתים"
+      }
+    },
+    {
+      "name": "saos-runtime",
+      "role": "social-dex-pulse",
+      "visibility": "public",
+      "expect": {
+        "maxPushAgeHours": 168,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "fleet-vault",
+      "role": "keys-bundle",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true,
+        "note": "צרור-המפתחות — MANIFEST-22-ריפו חי-שם"
+      }
+    },
+    {
+      "name": "sanbox",
+      "role": "operator-sovereign-block-T38",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true,
+        "note": "התיקיה-שפתח-המפעיל (T-38, האיות-שלו) — נמדד-בסריקה-הראשונה: sovereign-heart-אדום; דורש-ריפוי"
+      }
+    },
+    {
+      "name": "FleetHQ",
+      "role": "fleet-headquarters",
+      "visibility": "public",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "SovereignConsole",
+      "role": "console-source",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true,
+        "note": "מקור-gate-crypto שממנו-הוצמד-verbatim-לקוקפיט"
+      }
+    },
+    {
+      "name": "saos-agents",
+      "role": "agents-plane",
+      "visibility": "public",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "saos-dex",
+      "role": "dex-plane",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true,
+        "note": "dex-ci-אדום-בסריקה-הראשונה"
+      }
+    },
+    {
+      "name": "Saosmartwallet",
+      "role": "smart-wallet",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "Console",
+      "role": "discovered-T46-unverified",
+      "visibility": "public",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "Domain",
+      "role": "discovered-T46-unverified",
+      "visibility": "public",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "TruthRail",
+      "role": "discovered-T46-unverified",
+      "visibility": "public",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "saos-control-center",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "saos-jummper",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "saos-sovereign-foundry",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "saos-sovereign-platform",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "Adsmarket",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "Defi",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "Project-files",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "Sdk",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "Zip",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "anchor-baseline",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    },
+    {
+      "name": "roshpina",
+      "role": "discovered-T46-unverified",
+      "visibility": "private",
+      "expect": {
+        "maxPushAgeHours": 720,
+        "actionsAlive": true
+      }
+    }
   ],
   "policy": {
     "cadence": "cron 19,49 * * * * (כל-30-דק') + workflow_dispatch + repository_dispatch(federation-next) לזימון-חיצוני; guard: פנקס-טרי-מ-28-דק' = CHAIN-SUPPRESSED",

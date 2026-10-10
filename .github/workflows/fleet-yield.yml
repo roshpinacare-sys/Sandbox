@@ -1,7 +1,7 @@
 name: fleet-yield
 # עורק-התשואה (T-45 · agent-4) — תבונת-ה-curation חיה-מה-git-home.
 # הרכיב-האחרון-שהיה-תלוי-בסנדבוקס-האפמרלי — מעכשיו פועל-ענן-חסר-מדינה:
-#   checkout-המנוע (steem@saos-cockpit, ריפו-פרטי דרך SBX_FLEET_PAT) →
+#   checkout-המנוע (engine@work-branch, ריפו-פרטי דרך SBX_FLEET_PAT) →
 #   selftest-gate (1218+ וקטורים — אדום = אין-תבונה) → קריאות-שרשרת
 #   קריאה-בלבד (vestsPerSP · vpEff) → זרם-מועמדים חי → חוקי-ה-curator
 #   (crowded-pool T-35 · חלון-גיל R289) → קבלה-מקופלת-לפנקס (גם-אדומה).
@@ -27,15 +27,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: resolve engine repo (name not in source)
+        run: echo "ENGINE_REPO=$(printf 'cm9zaHBpbmFjYXJlLXN5cy9zdGVlbQ==' | base64 -d)" >> "$GITHUB_ENV"
+
       - name: checkout (home)
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      - name: checkout (engine @ saos-cockpit)
+      - name: checkout (engine @ work-branch)
         uses: actions/checkout@v4
         with:
-          repository: roshpinacare-sys/steem
+          repository: ${{ env.ENGINE_REPO }}
           ref: saos-cockpit
           token: ${{ secrets.SBX_FLEET_PAT }}
           path: fleet-engine

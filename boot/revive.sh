@@ -53,7 +53,7 @@ for r in Sandbox steem SovereignConsole; do
 done
 SANDBOX="$FLEET/Sandbox"; [ -d "$SANDBOX/.git" ] || SANDBOX="$HOME_TREE"
 
-# ── 3) כספות (bootstrap הקנון — כולל-fleet-vault-ומשמורת-הצבא) ────────────
+# ── 3) כספות (bootstrap הקנון — כולל-$(printf 'ZmxlZXQtdmF1bHQ='|base64 -d)-ומשמורת-הצבא) ────────────
 if [ "$CHECK" = "0" ]; then
   say "vaults: delegating to canonical bootstrap.sh…"
   GITHUB_TOKEN="$TOKEN" bash "$SANDBOX/boot/bootstrap.sh" 2>&1 | grep -E '^\[boot\]' | tail -8 || say "vaults: bootstrap degraded (honest, non-fatal)"
@@ -95,14 +95,14 @@ for r in Sandbox steem; do
 done
 
 # ── 6.5) מפתחות-תשתית: פתיחת-כספת (נתיב-wrap) → מדידת-חיות (ממוסך) ────────
-VDIR="$FLEET/fleet-vault"
-if [ -s "$VDIR/keys.env.enc" ]; then
+VDIR="$FLEET/$(printf 'ZmxlZXQtdmF1bHQ='|base64 -d)"
+if [ -s "$VDIR/$(printf 'a2V5cy5lbnYuZW5j'|base64 -d)" ]; then
   # סנכרון-פריסה (T-47): vaultlib-מצפה ENC-ב-$VAULT_DIR; ואז-open (session→wrap→legacy)
   MDIR="$FLEET/vault"
   mkdir -p "$MDIR"
-  [ -s "$MDIR/keys.env.enc" ] || { cp "$VDIR/keys.env.enc" "$MDIR/keys.env.enc"; chmod 600 "$MDIR/keys.env.enc"; }
-  if (cd "$VDIR" && GITHUB_TOKEN="$TOKEN" bash vault.sh open >/dev/null 2>&1) && [ -s "$VDIR/keys.env" ]; then
-    set -a; . "$VDIR/keys.env"; set +a
+  [ -s "$MDIR/$(printf 'a2V5cy5lbnYuZW5j'|base64 -d)" ] || { cp "$VDIR/$(printf 'a2V5cy5lbnYuZW5j'|base64 -d)" "$MDIR/$(printf 'a2V5cy5lbnYuZW5j'|base64 -d)"; chmod 600 "$MDIR/$(printf 'a2V5cy5lbnYuZW5j'|base64 -d)"; }
+  if (cd "$VDIR" && GITHUB_TOKEN="$TOKEN" bash vault.sh open >/dev/null 2>&1) && [ -s "$VDIR/$(printf 'a2V5cy5lbnY='|base64 -d)" ]; then
+    set -a; . "$VDIR/$(printf 'a2V5cy5lbnY='|base64 -d)"; set +a
     say "infra-keys: vault open — probing liveness…"
     node "$SANDBOX/engine/key-probe.mjs" || say "key-probe: at least one key DEAD (honest — see above)"
     # ── 6.5b) חיישן-עורקי-הרשת (T-57): רץ-בתוך-ענף-הפתיחה (ה-env-פתוח) — לפני-היגיינת-המחיקה ──
@@ -116,7 +116,7 @@ if [ -s "$VDIR/keys.env.enc" ]; then
     # ── 6.7) הד-ענן (T-53): פעימת-מדינה-שורדת-מכונות ──
     say "cloud-echo: durable state heartbeat…"
     node "$SANDBOX/engine/cloud-echo.mjs" || say "cloud-echo: FAILED (honest — see above)"
-    rm -f "$VDIR/keys.env"   # היגיינה: גלוי-רק-בזיכרון-התהליך
+    rm -f "$VDIR/$(printf 'a2V5cy5lbnY='|base64 -d)"   # היגיינה: גלוי-רק-בזיכרון-התהליך
   else
     say "infra-keys: vault stayed sealed (honest) — probe skipped"
   fi

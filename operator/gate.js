@@ -28,7 +28,7 @@ function candidatesOf(input) {
   return list.filter((v, i, a) => v && a.indexOf(v) === i);
 }
 
-/* ── פענוח-כספת-הקוקפיט (רישום-מעטפות — חוק fleet-vault) — פורט-verbatim של-הלוגיקה ── */
+/* ── פענוח-כספת-הקוקפיט (רישום-מעטפות — חוק בית-הכספת) — פורט-verbatim של-הלוגיקה ── */
 async function openCockpit(passCandidates, meta) {
   for (const c of passCandidates) {
     for (const w of meta.wraps ?? []) {
