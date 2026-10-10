@@ -30,8 +30,7 @@ say(){ echo "[fleet-beat] $*"; }
 mkdir -p "$MDIR"
 [ -s "$MDIR/keys.env.enc" ] || { cp "$VDIR/keys.env.enc" "$MDIR/keys.env.enc"; chmod 600 "$MDIR/keys.env.enc"; }
 if [ ! -s "$MDIR/.session-pass" ] && [ ! -s "$VDIR/.session-pass" ]; then
-  GH="$(tr -d '\r\n "' < "$SRC/upload/pat.env" 2>/dev/null | sed 's/^GITHUB_TOKEN=//' || true)"
-  [ -n "$GH" ] || GH="$(tr -d '\r\n "' < "$HOME/upload/pat.env" 2>/dev/null | sed 's/^GITHUB_TOKEN=//' || true)"
+  GH="$(bash "$SANDBOX/boot/gh-token.sh" 2>/dev/null || true)"  # T-56: היררכיה — כספת-origin קודם (העורק-החי)
   export GITHUB_TOKEN="$GH"
 fi
 (cd "$VDIR" && bash vault.sh open >/dev/null 2>&1) || true
@@ -82,8 +81,7 @@ if [ -d "$SANDBOX/.git" ]; then
     if command -v node >/dev/null 2>&1 && [ -f "$SANDBOX/engine/leak-scan.mjs" ]; then
       node "$SANDBOX/engine/leak-scan.mjs" --staged >/dev/null 2>&1 || { say "leak-scan LIT — receipts push REFUSED (fail-closed)"; exit 1; }
     fi
-    GH="$(tr -d '\r\n "' < "$SRC/upload/pat.env" 2>/dev/null | sed 's/^GITHUB_TOKEN=//' || true)"
-    [ -n "$GH" ] || GH="$(tr -d '\r\n "' < "$HOME/upload/pat.env" 2>/dev/null | sed 's/^GITHUB_TOKEN=//' || true)"
+    GH="$(bash "$SANDBOX/boot/gh-token.sh" 2>/dev/null || true)"  # T-56: היררכיה — כספת-origin קודם (העורק-החי)
     HELPER="!f() { echo username=x-access-token; echo password=$GH; }; f"
     git -C "$SANDBOX" -c user.name=sandbox-sovereign -c user.email=sandbox-sovereign@users.noreply.github.com \
       commit -q -m "[fleet-beat] cloud+gitlab receipts: $(date -u +%Y-%m-%dT%H:%M:%SZ)" 2>/dev/null || true

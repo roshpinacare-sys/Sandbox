@@ -16,6 +16,9 @@
  *   8. אטומיות: אפס-שאריות .tmp בתיקיית-הקבלות
  *   9. קריאת-חשבון-נכשלת → INTEL-PARTIAL · יציאה 0 · התבונה-ממשיכה (כנות)
  *  10. ניקיון-סודות במקורותיי — אפס-דפוסי-טוקן/WIF/cred-url
+ *  11. (T-56) מועמד-שכבר-בשרשרת → יוצא-מהתור-במקור · votedOnChain+recentVotes בקבלה
+ *  12. (T-56) המפל-הכפול: get_account_votes-מת → get_account_history(100)-חי · dedup-נשמר
+ *  13. (T-56) שני-המקורות-מתים → dedup=unavailable · recentVotes=null · אף-ירוק-שקרי
  */
 import fs from "node:fs";
 import os from "node:os";
@@ -88,20 +91,49 @@ console.log("SELFTEST 9/9 PASS"); process.exit(0);
 }
 
 /* ── שרת-RPC מדומה (תוך-התהליך) ─────────────────────────────────────────── */
-function startRpcServer({ accountOk = true } = {}) {
+function startRpcServer({ accountOk = true, votesOk = true, histOk = true, votedFixture = "", voteIdx = 190 } = {}) {
   return new Promise((resolve) => {
     const srv = http.createServer((req, res) => {
       let body = "";
       req.on("data", (c) => { body += c; });
       req.on("end", () => {
         let method = "";
-        try { method = String(JSON.parse(body).method || ""); } catch {}
+        let params = [];
+        try { const b = JSON.parse(body); method = String(b.method || ""); params = Array.isArray(b.params) ? b.params : []; } catch {}
         const reply = (j) => { res.writeHead(200, { "content-type": "application/json" }); res.end(JSON.stringify(j)); };
+        /* T-56: הצבעה-מדומה-לפי-votedFixture — בצורת-השרשרת-האמיתית (authorperm) */
+        const fixtureVote = votedFixture
+          ? [{ authorperm: votedFixture, weight: 7000, rshares: "123456", percent: 7000, time: new Date().toISOString().replace(/\.\d+Z$/, "Z") }]
+          : [];
         if (method === "condenser_api.get_dynamic_global_properties") {
           reply({ jsonrpc: "2.0", id: 1, result: { total_vesting_shares: "200000000000 VESTS", total_vesting_fund_steem: "100000000 STEEM", head_block_number: 4242 } });
         } else if (method === "condenser_api.get_accounts") {
           if (!accountOk) { reply({ jsonrpc: "2.0", id: 1, error: { message: "fixture-account-down" } }); return; }
           reply({ jsonrpc: "2.0", id: 1, result: [{ vesting_shares: "1000 VESTS", received_vesting_shares: "0 VESTS", delegated_vesting_shares: "0 VESTS", voting_manabar: { current_mana: "500000000" } }] });
+        } else if (method === "condenser_api.get_account_votes") {
+          if (!votesOk) { reply({ jsonrpc: "2.0", id: 1, error: { message: "fixture-votes-down" } }); return; }
+          reply({ jsonrpc: "2.0", id: 1, result: fixtureVote });
+        } else if (method === "condenser_api.get_account_history") {
+          if (!histOk) { reply({ jsonrpc: "2.0", id: 1, error: { message: "fixture-history-down" } }); return; }
+          /* צורת-ה-API-האמתית-נמדדה-חי 09:47Z: מפתח-המפה-יחסי-תמיד (0=החדש-ביותר)
+           * והאינדקס-הפנימי-מוחלט. העולם-המדומה: 200-ops · ההצבעה-ב-voteIdx
+           * (190=בעמוד-הראשון · 50=דורש-עימוד-שני) · גבולות-עמוד-נושאים-זמני-עכשיו. */
+          const from = Number(params[1]) || -1;
+          const limit = Math.min(Number(params[2]) || 100, 100);
+          const TOTAL = 200;
+          const nowIso = new Date().toISOString().replace(/\.\d+Z$/, "Z");
+          const lo = from === -1 ? Math.max(0, TOTAL - limit) : Math.max(0, from - limit + 1);
+          const hi = from === -1 ? TOTAL - 1 : Math.min(from, TOTAL - 1);
+          const result = {};
+          for (let i = lo; i <= hi; i++) {
+            let wrap = { op: ["transfer", { from: "x", to: "y", amount: "1.000 STEEM" }], timestamp: nowIso };
+            if (votedFixture && i === voteIdx) {
+              const [author, permlink] = String(votedFixture).split("/");
+              wrap = { op: ["vote", { voter: "headcorner", author, permlink, weight: 7000 }], timestamp: fixtureVote[0].time };
+            }
+            result[String(i - lo)] = [i, wrap]; // מפתח-יחסי · אינדקס-פנימי-מוחלט — כמו-הצומת-האמת
+          }
+          reply({ jsonrpc: "2.0", id: 1, result });
         } else {
           reply({ jsonrpc: "2.0", id: 1, error: { message: "unknown-method" } });
         }
@@ -191,6 +223,9 @@ async function main() {
     check("5 chain.cur 64-hex", /^[0-9a-f]{64}$/.test(last.chain.cur || ""));
     check("5 chain.prev=null (genesis)", last.chain.prev === null);
     check("5 laws recorded (maxPostVotes=100)", last.laws.maxPostVotes === 100, JSON.stringify(last.laws));
+    check("5 votesRead=get_account_votes (primary alive)", last.voter.votesRead === "get_account_votes", JSON.stringify(last.voter.votesRead));
+    check("5 dedup=on-chain · recentVotes array", last.candidates.dedup === "on-chain" && Array.isArray(last.voter.recentVotes), JSON.stringify({ d: last.candidates.dedup, rv: typeof last.voter.recentVotes }));
+    check("5 votedOnChain empty (no fixture vote)", Array.isArray(last.candidates.votedOnChain) && last.candidates.votedOnChain.length === 0, JSON.stringify(last.candidates.votedOnChain));
 
     /* ── ניסוי 6: קיפול-שרשרת ── */
     const first = JSON.parse(JSON.stringify(last));
@@ -226,6 +261,59 @@ async function main() {
       check("9 voter.status=read-failed", last9.voter.status === "read-failed", JSON.stringify(last9.voter));
       check("9 candidate sheet still full", last9.candidates.scanned === 4 && last9.candidates.selected.length === 2, JSON.stringify({ s: last9.candidates.scanned, sel: last9.candidates.selected.length }));
     } finally { srv2.close(); }
+
+    /* ── ניסוי 11 (T-56): מועמד-שכבר-בשרשרת יוצא-מהתור-במקור ── */
+    const { srv: srv11, url: rpcUrl11 } = await startRpcServer({ accountOk: true, votesOk: true, votedFixture: "alice/fresh-a" });
+    try {
+      const r11 = await runEngine({ FLEET_ENGINE_DIR: fx, FLEET_RECEIPTS_DIR: path.join(root, "rc-voted"), FLEET_RPC: rpcUrl11 });
+      check("11 voted-candidate run exits 0", r11.status === 0, `status=${r11.status} out=${(r11.stdout || "").slice(0, 160)}`);
+      const last11 = JSON.parse(fs.readFileSync(path.join(root, "rc-voted/last.json"), "utf8"));
+      check("11 alice excluded from selected", last11.candidates.selected.every((c) => !(c.author === "alice" && c.permlink === "fresh-a")), JSON.stringify(last11.candidates.selected));
+      check("11 bob survives selected", last11.candidates.selected.some((c) => c.author === "bob"), JSON.stringify(last11.candidates.selected));
+      check("11 votedOnChain records alice/fresh-a", (last11.candidates.votedOnChain || []).includes("alice/fresh-a"), JSON.stringify(last11.candidates.votedOnChain));
+      check("11 recentVotes carries the chain vote", (last11.voter.recentVotes || []).some((v) => v.k === "alice/fresh-a" && v.w === 7000), JSON.stringify(last11.voter.recentVotes));
+      check("11 verdict stays INTEL-OK", last11.verdict === "INTEL-OK", last11.verdict);
+    } finally { srv11.close(); }
+
+    /* ── ניסוי 12 (T-56): המפל-הכפול — votes-מת · history-חי ── */
+    const { srv: srv12, url: rpcUrl12 } = await startRpcServer({ accountOk: true, votesOk: false, histOk: true, votedFixture: "bob/fresh-b" });
+    try {
+      const r12 = await runEngine({ FLEET_ENGINE_DIR: fx, FLEET_RECEIPTS_DIR: path.join(root, "rc-fallback"), FLEET_RPC: rpcUrl12 });
+      check("12 fallback run exits 0", r12.status === 0, `status=${r12.status}`);
+      const last12 = JSON.parse(fs.readFileSync(path.join(root, "rc-fallback/last.json"), "utf8"));
+      check("12 votesRead=get_account_history:100xN", /^get_account_history:100x\d+$/.test(String(last12.voter.votesRead)), JSON.stringify(last12.voter.votesRead));
+      check("12 bob excluded via history fallback", !(last12.candidates.selected || []).some((c) => c.author === "bob"), JSON.stringify(last12.candidates.selected));
+      check("12 votedOnChain records bob/fresh-b", (last12.candidates.votedOnChain || []).includes("bob/fresh-b"), JSON.stringify(last12.candidates.votedOnChain));
+      check("12 verdict stays INTEL-OK", last12.verdict === "INTEL-OK", last12.verdict);
+    } finally { srv12.close(); }
+
+    /* ── ניסוי 13 (T-56): שני-המקורות-מתים — כנות מלאה, אף-ירוק-שקרי ── */
+    const { srv: srv13, url: rpcUrl13 } = await startRpcServer({ accountOk: true, votesOk: false, histOk: false });
+    try {
+      const r13 = await runEngine({ FLEET_ENGINE_DIR: fx, FLEET_RECEIPTS_DIR: path.join(root, "rc-nodedup"), FLEET_RPC: rpcUrl13 });
+      check("13 both-votes-sources-down exits 0", r13.status === 0, `status=${r13.status}`);
+      const last13 = JSON.parse(fs.readFileSync(path.join(root, "rc-nodedup/last.json"), "utf8"));
+      check("13 dedup=unavailable (honest)", last13.candidates.dedup === "unavailable", JSON.stringify(last13.candidates.dedup));
+      check("13 recentVotes=null (no fake data)", last13.voter.recentVotes === null, JSON.stringify(last13.voter.recentVotes));
+      check("13 votesRead=failed", last13.voter.votesRead === "failed", JSON.stringify(last13.voter.votesRead));
+      check("13 verdict stays INTEL-OK (intel intact)", last13.verdict === "INTEL-OK", last13.verdict);
+      check("13 candidate sheet intact", last13.candidates.selected.length === 2, String(last13.candidates.selected.length));
+    } finally { srv13.close(); }
+
+    /* ── ניסוי 14 (T-56): הצבעה-עמוקה-מעמוד-הראשון — העימוד-מוצא-אותה ──
+     * voteIdx=50: עמוד-1 (100..199) לא-מכיל-אותה → המנוע-חייב-לעמוד-2 (0..99).
+     * זה-החור-שנמדד-חי: 100-ops-אחרונים-של-headcorner = 1.09-שעות-בלבד.
+     * bob/fresh-b נבחר-בכוונה — מועמד-שה-fixture-מציב-ב-selected (carol-נפסלת-מגיל-ולא-מגיעה-לכאן-מעולם = ירוק-שקרי). */
+    const { srv: srv14, url: rpcUrl14 } = await startRpcServer({ accountOk: true, votesOk: false, histOk: true, votedFixture: "bob/fresh-b", voteIdx: 50 });
+    try {
+      const r14 = await runEngine({ FLEET_ENGINE_DIR: fx, FLEET_RECEIPTS_DIR: path.join(root, "rc-deep"), FLEET_RPC: rpcUrl14 });
+      check("14 deep-pagination run exits 0", r14.status === 0, `status=${r14.status} out=${(r14.stdout || "").slice(0, 160)}`);
+      const last14 = JSON.parse(fs.readFileSync(path.join(root, "rc-deep/last.json"), "utf8"));
+      check("14 carol excluded via deep page", !(last14.candidates.selected || []).some((c) => c.author === "carol"), JSON.stringify(last14.candidates.selected));
+      check("14 votedOnChain records bob/fresh-b", (last14.candidates.votedOnChain || []).includes("bob/fresh-b"), JSON.stringify(last14.candidates.votedOnChain));
+      const px = String(last14.voter.votesRead || "");
+      check("14 pagination covered >1 page", /^get_account_history:100x[2-5]$/.test(px), px);
+    } finally { srv14.close(); }
     } /* סגירת-else-של-דרך-מאושרת */
   } finally { srv.close(); }
 

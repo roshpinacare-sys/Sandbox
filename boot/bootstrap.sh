@@ -31,6 +31,15 @@ fail() { printf '[boot] FAIL: %s\n' "$*" >&2; exit 1; }
 
 # ── 1) credential (T-47: סופרסט — זהה-ל-vaultlib; מכונה-חיה-עם-שיבוט-יחיד מספיקה) ──
 TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-${GITHUB_PAT:-}}}"
+# T-56: הטוקן-המוטמע-ב-origin-של-fleet-vault — קודם-ל-pat.env (העורק-שנמדד-חי אחרי-מות-pat.env)
+if [ -z "$TOKEN" ]; then
+  for vd in "$HOME/fleet/fleet-vault" "$(dirname "$(dirname "$HERE")")/fleet-vault"; do
+    if [ -d "$vd/.git" ]; then
+      t="$(git -C "$vd" remote get-url origin 2>/dev/null | sed -n 's|.*[x-]*access-token:\([^@]*\)@.*|\1|p' | tr -d '\r\n "')"
+      if [ -n "$t" ] && [ "${#t}" -ge 20 ]; then TOKEN="$t"; break; fi
+    fi
+  done
+fi
 for cand in "$HERE/../upload/pat.env" "$PWD/upload/pat.env" "$HOME/upload/pat.env"; do
   if [ -z "$TOKEN" ] && [ -f "$cand" ]; then TOKEN="$(tr -d '\r\n ' < "$cand")"; fi
 done

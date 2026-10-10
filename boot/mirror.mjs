@@ -64,9 +64,20 @@ const withCred = (extra = {}) => ({
 });
 
 // ── 1) credential — גילוי-משובצים (חוק-T-47; הטוקן-מעולם-לא-ב-URL) ──
+// T-56: היררכיה-משותפת — עטוף-gh-token.sh (כספת-origin קודם · נמדד-חי אחרי-מות-pat.env)
 let TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
-for (const cand of [path.join(SOURCE, "upload/pat.env"), path.join(process.env.HOME || "/", "my-project", "upload/pat.env")]) {
-  if (!TOKEN && fs.existsSync(cand)) TOKEN = fs.readFileSync(cand, "utf8").replace(/^GITHUB_TOKEN=/, "").trim();
+if (!TOKEN) {
+  try {
+    TOKEN = execSync(`bash "${path.join(path.dirname(new URL(import.meta.url).pathname), "gh-token.sh")}"`, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch { /* כנות — המקורות-הבאים-ינסו */ }
+}
+if (!TOKEN) {
+  for (const cand of [path.join(SOURCE, "upload/pat.env"), path.join(process.env.HOME || "/", "my-project", "upload/pat.env")]) {
+    if (fs.existsSync(cand)) {
+      const t = fs.readFileSync(cand, "utf8").replace(/^GITHUB_TOKEN=/, "").trim();
+      if (t.length >= 20) { TOKEN = t; break; }
+    }
+  }
 }
 if (!TOKEN) fail("no credential — git-blind (honest)");
 const CRED_HELPER = `!f() { echo username=x-access-token; echo password=${TOKEN}; }; f`;

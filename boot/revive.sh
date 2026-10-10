@@ -28,13 +28,10 @@ CHECK=0; [ "${1:-}" = "--check" ] && CHECK=1
 say(){ echo "[revive] $*"; }
 fail(){ echo "[revive] FAIL: $*" >&2; exit 1; }
 
-# ── 1) credential (גילוי-משובצים — אפס-המצאה) ──────────────────────────────
+# ── 1) credential (גילוי-משובצים — אפס-המצאה · T-56: היררכיה-משותפת gh-token.sh) ──
 TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-${GITHUB_PAT:-}}}"
-if [ -z "$TOKEN" ] && [ -f "$SRC/upload/pat.env" ]; then
-  TOKEN="$(tr -d '\r\n "' < "$SRC/upload/pat.env" | sed 's/^GITHUB_TOKEN=//')"
-fi
-if [ -z "$TOKEN" ] && [ -f "$HOME/upload/pat.env" ]; then
-  TOKEN="$(tr -d '\r\n "' < "$HOME/upload/pat.env" | sed 's/^GITHUB_TOKEN=//')"
+if [ -z "$TOKEN" ]; then
+  TOKEN="$(bash "$SANDBOX/boot/gh-token.sh" 2>/dev/null || true)"  # כספת-origin קודם (העורק-החי שנמדד) → pat.env → מאגרים
 fi
 [ -n "$TOKEN" ] || fail "no credential — machine is git-blind (honest)"
 say "credential: discovered (${#TOKEN} chars)"
