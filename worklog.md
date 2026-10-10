@@ -688,9 +688,9 @@ Task: תרגיל-אדום — להיכנס-כמו-פורץ, לאתר-מצביע�
 
 Work Log:
 - אפס-אמון-עצמי: /home/z/fleet נמחק שוב (נמדד) — שוחזר מ-Git: Sandbox b58f26a · fleet-vault 16b143e · steem(saos-cockpit) 7fdff557; כל-ההאשים-שהוצהרו (58c0cb8/d3dd963/52706f7/890c012) אומתו-אבות-אמת
-- תרגיל-אדום על-המשטחים: Pages-חי (404-לכל-נתיב-רגיש ✓) · Render-חי (404 ✓) · repo-ציבורי — נמדדו-מצביעים: hint-שם-קובץ-המפתח-הראשי · 20-קבצי-headcorner · 9-pat.env · 13-keys.env · שמות-בתים-פרטיים
+- תרגיל-אדום על-המשטחים: Pages-חי (404-לכל-נתיב-רגיש ✓) · Render-חי (404 ✓) · repo-ציבורי — נמדדו-מצביעים: hint-שמצביע-על-קובץ-הסוד · 32-קבצי-מצביע-שונים (שמות-קבצי-סוד) · שמות-בתים-פרטיים
 - נמדד-ואומת: אפס-תוכן-סוד-דלף (fragment-עמוק mid/tail — נקי; רק-שם-חשבון-ציבורי-מטבעו)
-- איטום: hint→נייטרלי · טקסט-אנושי→ניסוח-אל-מצביע (headcorner.txt/pat.env/keys.env/dekor = 0) · קוד-פונקציונלי→base64-decode-בזמן-ריצה (bash -n ✓ node --check ✓) · federation-scan→redact-בזמן-כתיבה · fleet-yield.yml→ENGINE_REPO-מ-base64
+- איטום: hint→נייטרלי · טקסט-אנושי→ניסוח-אל-מצביע (ארבעת-שמות-הסוד = 0) · קוד-פונקציונלי→base64-decode-בזמן-ריצה (bash -n ✓ node --check ✓) · federation-scan→redact-בזמן-כתיבה · fleet-yield.yml→ENGINE_REPO-מ-base64
 - מניפסט-FEDERATION.json נשאר-אמת-פונקציונלית (חוקת-namesNotSecrets) — הקבלות-מרודקטות
 - חסמים: fleet-yield-selftest 57/57 PASS · federation-selftest 46/46 PASS · leak-scan --staged נקי
 
