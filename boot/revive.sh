@@ -130,11 +130,21 @@ if [ -f "$SANDBOX/engine/fleet-yield.mjs" ]; then
   fi
 fi
 
+# ── 6.9) חיישן-עורקי-הרשת (T-57): Tavily×2 · Jina — מיכסה-מודע, אפס-סודות-בקבלות ─
+# רץ-רק-אם-הכספת-פתוחה (keys.env קיים) — עורקי-אינטל הם יכולת; מותם נרשם-בכנות, לא-מפיל-שרשרת.
+if [ -f "$SANDBOX/engine/vein-probe.mjs" ] && [ -f "$VDIR/keys.env" ]; then
+  say "vein-probe: web veins (tavily/jina — quota-aware)…"
+  set -a; . "$VDIR/keys.env" 2>/dev/null || true; set +a
+  node "$SANDBOX/engine/vein-probe.mjs" || say "vein-probe: skipped (honest)"
+else
+  say "vein-probe: vault sealed or sensor missing (honest skip)"
+fi
+
 # ── 7) קבלה-ודחיפה ─────────────────────────────────────────────────────────
 if [ "$CHECK" = "0" ] && [ -d "$SANDBOX/.git" ]; then
   mkdir -p "$SANDBOX/receipts"
   printf '%s\n' "{\"revivedAt\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"source\":\"$(basename "$SRC")\",\"port\":${PORT},\"fleet\":\"$(basename "$FLEET")\"}" >> "$SANDBOX/receipts/revivals.jsonl"
-  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl receipts/gitlab-mirror.jsonl receipts/cloud-echo.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl boot/ 2>/dev/null || true
+  git -C "$SANDBOX" add receipts/revivals.jsonl receipts/key-probe.jsonl receipts/gitlab-mirror.jsonl receipts/cloud-echo.jsonl receipts/fleet-yield/last.json receipts/fleet-yield/log.jsonl receipts/veins.jsonl boot/ 2>/dev/null || true
   if command -v node >/dev/null 2>&1 && [ -f "$SANDBOX/engine/leak-scan.mjs" ]; then
     node "$SANDBOX/engine/leak-scan.mjs" --staged || { say "leak-scan LIT — receipt push refused (fail-closed)"; exit 1; }
   fi
