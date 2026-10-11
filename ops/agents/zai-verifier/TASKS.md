@@ -9,3 +9,5 @@
 - [OPEN] V-BLURT-REVIVE (FAIL @ 2026-10-11T13:14:11.915Z): החייאת-לופ-בלורט דרך gated blurt-connector (תנאי: P0 מפתחות-חדשים; workflow_dispatch בלבד + reviewer) | ראיה: blurt fleet silent 186h > 168d — loop dead until proven otherwise
 - [CLOSED 2026-10-11T13:48:44.565Z] V-DEV-FOCUS — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
 - [CLOSED 2026-10-11T14:48:53.225Z] V-ROT-HYGIENE — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
+- [OPEN] V-LOOP-SOVEREIGN-TICK (FAIL @ 2026-10-11T15:14:32.301Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: no success in last 8 runs of sovereign.yml
+- [OPEN] V-LOOP-FLEET-YIELD (DEGRADED @ 2026-10-11T15:14:32.301Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: last success 154min ago > slot
