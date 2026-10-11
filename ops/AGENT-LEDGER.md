@@ -25,3 +25,4 @@
 2026-10-11 | zai-code-3 | T-62: טיק-ה-grid חזר-לחיים מהגיט — burst תחום בכל-דופק saos-runtime (c69c38d + fa6a6f7), fail-closed, מדד-כפול-לפני-דחיפה | steem@c69c38d + runtime@fa6a6f7 | mini-services/saos-engine/hypergrid-burst.mjs
 2026-10-11 | zai-code-3 | T-63: artery-grid — השעון-של-הטיק, 30 דק', אדום-כנה-ראשון (1323 דק'-stall נמדד) | Sandbox | receipts/grid/ + artery-grid.yml
 2026-10-11 | zai-code-3 | T-64: חוקי-הארנק-5 = חוזה-צי (מדידה-כפולה); gitleaks-push הושלם ל-steem+saos-agents; OWNER-P0-2026-10-11.md לבעלים | Sandbox | engine/fleet-verify.mjs + ops/OWNER-P0-2026-10-11.md
+2026-10-11 | zai-code-5 | רישום-סקופ: סגירת-שארית-חשיפה P2 (מחיקת key-check receipts מ-Console) + אימות-שער-R293 במחזור-מלא + דלתא-חשיפה ציבורית | (sha-בדחיפה) | ops/agents/zai-code-5/STATUS-2026-10-11.md
