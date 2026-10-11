@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-11T14:04:42.300Z",
+  "slug": "roshpinacare-sys/saos-agents",
+  "head": "2450a7b92edcd0be8cb0cea41219033a8707d3ec",
+  "checks": {
+    "agentsSelftest": "pass"
+  },
+  "laws": [
+    {
+      "id": "law-no-skipped-pass",
+      "verdict": "pass",
+      "detail": "workflows scanned: 0, theater patterns: 0"
+    },
+    {
+      "id": "law-gitleaks-push",
+      "verdict": "flag",
+      "detail": "no gitleaks.yml in repo — no in-repo secret scan"
+    },
+    {
+      "id": "law-r11-head-absent",
+      "verdict": "pass",
+      "detail": "absent at HEAD"
+    }
+  ],
+  "alerts": [
+    "law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
+  ],
+  "overall": "PASS",
+  "reason": "all checks and fleet laws pass"
+}
