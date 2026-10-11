@@ -68,3 +68,18 @@
 **לא איגע ב:** עולמות/סריקת-ערך (T13), משרד-חי ב-FleetHQ+דומיין (zai-sec), office-3D-v2, verifier.mjs (zai-verifier — אני משלים אותו, לא מחליף: הוא בודק-חיות, אני בודק-זיופים), כלכלה (הכרעת-בעלים).
 
 **ניתוב-ממצאים לבעלים-הרלוונטיים (unprovenanced → שדרוג-provenance):** receipts/fleet (artery-fleet lane) · receipts/grid (grid-watch lane) · receipts/latest.json (sovereign-state lane) · state/verifier/verdict-latest.json (zai-verifier) · Domain agents/office-live.json (office lane). ops/flow/receipt.json שלי — תוקן-כבר-במקור, יתנקה-בריצה-הבאה.
+
+
+## עדכון-scope (H-סדרה, 2026-10-11 לילה) — עורק-אמת-ההכרעות: מתיאור למעשים
+
+**דרישת-בעלים (מילה-במילה, trace 1a12cf891f8dad2d):** "לבדוק מה לא מחובר... בלי לסמוך על טענות יש לנו דרך לאמת... להפוך מתיאור למעשים אוטונומית ריבונית למעשה".
+
+**הליין שלי (H):**
+1. **engine/decision-truth.mjs (Sandbox):** כל-הכרעה ENFORCED של צו-הריבונות (T14 CHARTER R1) נבדקת-עצמאית: (א) כל-מספר-עדות נמדד-מחדש באותו-נוסחה-בריצה-עצמאית (api.steemit.com + משואה + פורמן + FleetHQ-runs) (ב) EXECUTION-EXISTENCE — סריקת-צרכנים בקורפוס-האחוזה; ENFORCED בלי-צרכן = UNEXECUTED (תיאור, לא מעשה) (ג) עדויות-שהעולם-עבר-מעליהן = STALE-TRUTH (RE-MEASURE) (ד) מקור-שנפל = UNVERIFIABLE — כנות (ה) שעון-ללב-ההכרעות-עצמו (decider שקט >90 דק׳ = דגל). selftest 16 וקטורים fail-closed.
+2. **artery-decision-truth.yml:** cron 16,46 (אחרי-פרסום-T14 4,34) + dispatch + decision-truth-tick + רישום-ב-watch (maxAge 2700). קבלות ops/decision-truth, verdict-law אדום-על-FAIL.
+3. **scribe סעיף 11:** הלמידה קוראת-את-אמת-ההכרעות — UNEXECUTED/STALE הופכים-להצעות-חוק-מנותבות.
+4. **Domain:** פאנל "הכרעות-הריבונות" חי — הדף-מציג-את-ההכרעות + אמת-המדידה-שלהן.
+
+**ממצא-ראשון-מדוד (חי, לפני-הדחיפה):** D1 UNEXECUTED (עדויות-מאומתות-מלאות אך-אפס-צרכנים-למדיניות), D2 UNEXECUTED (הסוכנים-aluf/gal/erez עדיין-בתקלה — התיקון-המנותב-לא-קרה; ה-WOs-חסרי-שדה-סטטוס), D3 UNEXECUTED (2 רוחות-רפאים-לא-טופלו-מאז-ההכרעה). **פער-תיאור-מול-מעשה הוא-עתה מדידה-קבועה-כל-30-דק׳.**
+
+**לא איגע ב:** ops/sovereign/DECIDER/** (T14 — קריאה-בלבד), ops/office/** (מנוע-הצמיחה), fleet-yield (T-45), VALUE-SCAN (T13), FleetHQ פנימי, מפתחות/סודות.
