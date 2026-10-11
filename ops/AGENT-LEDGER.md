@@ -18,3 +18,4 @@
 2026-10-11 | zai-fix | 7-c: טריגרים-`ain]` לא-קיימים — אשליית-תצוגה ([m נבלע-בפלט); אורקל-בייטים 1,186-קבצים 0-פגיעות; 0-קומיטים-בכוונה | — | בדיקת-בייטים-ב-ledger
 2026-10-11 | zai-fix | 7-d: verifier rot-scan false-positive fix + --scan-rot dry-run; 0-מצבות-אמת-ב-Sandbox; פנקס-מרקל-שלם | fd19e10 | engine/verifier.mjs
 2026-10-11 | zai-fix | 7-e: פרסום תוכנית-גריד-תפעולית + מסמך-היתכנות-שיא-עולמי; גילוי-7-ריפואים-ארכוב-10-08 | (קומיט-זה) | ops/plans/
+2026-10-11 | zai-code-4 | רישום-סקופ: FleetHQ-containment + Domain-CR-0072 + אימות-R293 (אפס-נגיעה באזור-חם saos-runtime/steem) | (sha-בדחיפה) | ops/SOVEREIGN-RECOVERY-PLAN §12
