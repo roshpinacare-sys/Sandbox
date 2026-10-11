@@ -1,0 +1,110 @@
+name: verifier (truth & quality)
+# ═══════════════════════════════════════════════════════════════════════
+# עורק-האמת (zai-verifier) — הבקר שמוכיח בראיות-חיצוניות מה-עובד ומה-מת.
+# לקח-חי-2026-10-11: סוכנים-מקבילים "מאשרים-הכל-תקין" והבעלים מגלה שדברים לא
+# עובדים. העורק-הזה אינו-מאשר — הוא מודד: בריאות-עורקי-הסנדבוקס · קצב-בנייה-אמת
+# (code מול churn) · אמת-על-השרשרת (Steem/Blurt RPC ציבורי keyless) · ריקבון-מצבות.
+# כל-טענה = כלל-אובייקטיבי מ-config.json; דוח-מלא: ops/agents/zai-verifier/REPORT.md.
+#
+# דפוס-T-42 המוכח: ארבעה-גורמי-מכניסה (schedule · push-ל-main-על-קבצי · workflow_dispatch ·
+# repository_dispatch-שרשרת-עצמית) + מצערת-פנימית (22-דק') + concurrency — אפס-טביעות-כפולות.
+# אפס-מפתחות-חתימה: FED_TOKEN=SBX_FLEET_PAT לקריאת-ריפואים-פרטיים בלבד (דפוס-federation).
+# ═══════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "7,37 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - "engine/verifier.mjs"
+      - ".github/workflows/verifier.yml"
+      - "ops/agents/zai-verifier/**"
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [verifier-next, revive-verifier]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verifier
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: verify (measure truth — keyless on-chain + API read-only)
+        id: verify
+        env:
+          FED_TOKEN: ${{ secrets.SBX_FLEET_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node engine/verifier.mjs --guard-minutes 22
+
+      # חסם-הדחיפה (fail-closed) על-הטריטוריה-שלי בלבד (דפוס-sovereign.yml).
+      # לקח-חי: --staged סורק-את-כל-העץ ונחסם-על-קבצי-audit של-סוכנים-אחרים —
+      # חסימה-שאינה-שלי. שער-הטריטוריה = כל-קובץ-שעומד-להידחף-מהעורק-הזה.
+      - name: leak-scan (fail-closed, territory-only)
+        if: always()
+        run: |
+          node engine/leak-scan.mjs ops/agents/zai-verifier/REPORT.md ops/agents/zai-verifier/TASKS.md
+          for f in ops/agents/zai-verifier/config.json ops/agents/zai-verifier/README.md state/verifier/history.jsonl state/verifier/verdict-latest.json; do
+            [ -f "$f" ] && node engine/leak-scan.mjs "$f"
+          done
+
+      - name: commit + push (rebase-safe, territory-only)
+        run: |
+          git config user.name "sandbox-verifier"
+          git config user.email "sandbox-verifier@users.noreply.github.com"
+          git add ops/agents/zai-verifier state/verifier
+          if git diff --cached --quiet; then
+            echo "no verdict changes — skip"
+          else
+            git commit -m "[verifier] honest verdict: $(date -u +%FT%TZ) [skip ci]"
+            git pull --rebase origin main
+            git push origin main
+          fi
+
+      # חוליית-השרשרת (דפוס-T-42 verbatim): רק-אימות-אמת (ticked=1) או-כישלון מולידים-יורשת;
+      # הרצה-מוצערת (ticked=0) מתה-בלי-יורש. sleep-עד-המשבצת-הבאה (30-דק' מהקבלה; תקרה-1740ש);
+      # אין-קבלה-טרייה = נסיגה-קבועה-900ש. כישלון-dispatch = יציאה-1 (נראה-ב-Actions;
+      # הצתה-מחדש-ידנית-אפשרית-תמיד: Actions → Run-workflow).
+      - name: chain-next (sleep to next slot, then dispatch the next beat)
+        if: always() && steps.verify.outputs.ticked != '0'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          SLEEP_S="$(node -e '
+            const fs = require("fs");
+            let last = 0;
+            try { last = Date.parse(JSON.parse(fs.readFileSync("state/verifier/verdict-latest.json", "utf8")).at) || 0; } catch {}
+            const elapsed = Date.now() - last;
+            const s = (last > 0 && elapsed >= 0 && elapsed <= 1800000)
+              ? Math.max(5, Math.min(1740, Math.ceil((1800000 - elapsed) / 1000)))
+              : 900;
+            process.stdout.write(String(s));
+          ')"
+          echo "chain-next: sleeping ${SLEEP_S}s until next slot"
+          sleep "$SLEEP_S"
+          HTTP="$(curl -sS -o /dev/null -w '%{http_code}' -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches \
+            -d '{"event_type":"verifier-next","client_payload":{"from":"chain"}}')"
+          echo "dispatch http=$HTTP"
+          if [ "$HTTP" != "204" ]; then
+            echo "dispatch-failed — chain broken; re-ignite via workflow_dispatch"
+            exit 1
+          fi

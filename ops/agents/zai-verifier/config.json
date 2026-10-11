@@ -1,0 +1,50 @@
+{
+  "schema": "verifier-config/1",
+  "owner": "roshpinacare-sys",
+  "sandboxRepo": "Sandbox",
+  "sandbox": {
+    "coreWorkflows": [
+      { "name": "sovereign-tick", "file": "sovereign.yml" },
+      { "name": "sovereign-state", "file": "sovereign-state.yml" },
+      { "name": "artery-watch", "file": "artery-watch.yml" },
+      { "name": "federation", "file": "federation.yml" },
+      { "name": "fleet-yield", "file": "fleet-yield.yml" },
+      { "name": "fleet-heal", "file": "fleet-heal.yml" }
+    ],
+    "maxGapMinutes": 120,
+    "wfMaxGapMinutes": {
+      "sovereign-tick": 90,
+      "sovereign-state": 90,
+      "artery-watch": 90,
+      "federation": 150,
+      "fleet-yield": 150,
+      "fleet-heal": 240
+    }
+  },
+  "monitor": {
+    "repos": [
+      "Sandbox", "Console", "Domain", "TruthRail", "saos-dex", "saos-control-center",
+      "saos-agents", "FleetHQ", "saos-runtime", "sovereign-lighthouse",
+      "saos-sovereign-foundry", "steem"
+    ]
+  },
+  "steem": {
+    "rpc": ["https://api.steemit.com"],
+    "accounts": ["headcorner", "haran", "cashmachine", "wic", "woq", "tov", "spaminator", "saos", "powerspan", "ynet", "hcsoldier4", "hcsoldier6"],
+    "treasury": "headcorner"
+  },
+  "blurt": {
+    "rpc": ["https://rpc.beblurt.com", "https://rpc.blurt.world"],
+    "accounts": ["headcorner", "haran", "cashmachine", "wic", "woq", "tov", "spaminator", "saos", "powerspan", "ynet"]
+  },
+  "rules": {
+    "lowDevMinCommits": 15,
+    "lowDevPercent": 10,
+    "buildingPercent": 25,
+    "steemDegradedHours": 48,
+    "steemFailDays": 7,
+    "treasuryMinSp": 3000,
+    "blurtDeadDays": 7,
+    "fileBudget": 42
+  }
+}

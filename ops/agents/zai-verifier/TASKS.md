@@ -1,0 +1,7 @@
+# TASKS · מאגר-משימות-חי של-עורק-האמת · append-only
+# נפתח-אוטומטית כשכלל נצרת (DEGRADED/FAIL) · נסגר-אוטומטית כשהכלל כבר-לא-נצרת
+- [OPEN] V-LOOP-FLEET-HEAL (FAIL @ 2026-10-11T12:59:18.843Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: no successful run in last 15
+- [OPEN] V-DEV-FOCUS (DEGRADED @ 2026-10-11T12:59:18.843Z): דופק-בלי-בנייה: להפנות-משאב-סוכנים מטביעות-מצב לבניית-מוצר/תיקונים אמתיים | ראיה: heartbeat-without-building: codeShare 2% < 10% over 467 commits/24h
+- [OPEN] V-GRID-REVIVE (DEGRADED @ 2026-10-11T12:59:18.843Z): החייאת-מסלול-פרסום-הצי לפי-מדיניות §4 (2-3 פוסטים/שבוע/חשבון, ייחודיות, גילוי-נאות) | ראיה: no fleet post timestamp measurable (all never-posted or rpc partial)
+- [CLOSED 2026-10-11T13:02:45.732Z] V-LOOP-FLEET-HEAL — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
+- [CLOSED 2026-10-11T13:02:45.732Z] V-GRID-REVIVE — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
