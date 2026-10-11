@@ -1,26 +1,26 @@
 {
   "schema": "integrity-guard/2",
-  "at": "2026-10-11T22:59:06.821Z",
-  "overall": "PASS_WITH_ALERTS",
+  "at": "2026-10-11T23:46:37.496Z",
+  "overall": "FAIL",
   "summary": {
     "sources": 11,
-    "verified": 8,
-    "findings": 7,
+    "verified": 7,
+    "findings": 6,
     "counts": {
       "FLAG": 5,
-      "MEDIUM": 2
+      "CRITICAL": 1
     }
   },
   "provenance": {
-    "runId": "38182531587",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38182531587",
-    "sha": "6596233617cf4ae913be238aa98a8a083dd44bde"
+    "runId": "38185532451",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38185532451",
+    "sha": "ce745bfe1e1fe5469a22f9951ee524c258fa707d"
   },
   "verified": [
     {
       "where": "self:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=38176261296 conc=success repo=Sandbox"
+      "detail": "run=38182531587 conc=success repo=Sandbox"
     },
     {
       "where": "Sandbox:receipts/wallet/verdict.json",
@@ -33,14 +33,9 @@
       "detail": "run=38180410722 conc=success repo=Sandbox"
     },
     {
-      "where": "FleetHQ:receipts/office-ci/verdict.json",
-      "law": "verified",
-      "detail": "run=38182218205 conc=success repo=FleetHQ"
-    },
-    {
       "where": "Domain:office/data.json",
       "law": "verified",
-      "detail": "run=38181845184 conc=success repo=FleetHQ"
+      "detail": "run=38182218205 conc=success repo=FleetHQ"
     },
     {
       "where": "Domain:office/data.json",
@@ -50,12 +45,12 @@
     {
       "where": "Sandbox:ops/decision-truth/verdict.json",
       "law": "verified",
-      "detail": "run=38180507057 conc=success repo=Sandbox"
+      "detail": "run=38184226724 conc=success repo=Sandbox"
     },
     {
       "where": "Sandbox:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=38176261296 conc=success repo=Sandbox"
+      "detail": "run=38182531587 conc=success repo=Sandbox"
     }
   ],
   "findings": [
@@ -84,22 +79,16 @@
       "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: verifier.yml"
     },
     {
+      "level": "CRITICAL",
+      "where": "FleetHQ:receipts/office-ci/verdict.json",
+      "law": "conclusion-contradiction",
+      "detail": "receipt=PASS run=null"
+    },
+    {
       "level": "FLAG",
       "where": "Domain:agents/office-live.json",
       "law": "unprovenanced",
       "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: office lane"
-    },
-    {
-      "level": "MEDIUM",
-      "where": "Sandbox:ops/flow/receipt.json",
-      "law": "agent-authored-receipt",
-      "detail": "committer=roshpinacare@gmail.com — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions"
-    },
-    {
-      "level": "MEDIUM",
-      "where": "Sandbox:receipts/wallet/verdict.json",
-      "law": "agent-authored-receipt",
-      "detail": "committer=roshpinacare@gmail.com — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions"
     }
   ]
 }

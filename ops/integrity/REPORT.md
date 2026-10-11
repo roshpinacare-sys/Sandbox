@@ -1,20 +1,18 @@
-# דוח-שומר-השלמות — 2026-10-11T22:59:06.821Z
+# דוח-שומר-השלמות — 2026-10-11T23:46:37.496Z
 
-**פסק-דין: PASS_WITH_ALERTS** · מקורות=11 · טענות-שאומתו=8 · ממצאים=7
+**פסק-דין: FAIL** · מקורות=11 · טענות-שאומתו=7 · ממצאים=6
 
 ## טענות-שאומתו מול Actions API
-- ✅ `self:ops/integrity/verdict.json` — run=38176261296 conc=success repo=Sandbox
+- ✅ `self:ops/integrity/verdict.json` — run=38182531587 conc=success repo=Sandbox
 - ✅ `Sandbox:receipts/wallet/verdict.json` — run=38180404704 conc=success repo=Sandbox
 - ✅ `Sandbox:ops/flow/receipt.json` — run=38180410722 conc=success repo=Sandbox
-- ✅ `FleetHQ:receipts/office-ci/verdict.json` — run=38182218205 conc=success repo=FleetHQ
-- ✅ `Domain:office/data.json` — run=38181845184 conc=success repo=FleetHQ
+- ✅ `Domain:office/data.json` — run=38182218205 conc=success repo=FleetHQ
 - ✅ `Domain:office/data.json` — run=38180404704 conc=success repo=Sandbox
-- ✅ `Sandbox:ops/decision-truth/verdict.json` — run=38180507057 conc=success repo=Sandbox
-- ✅ `Sandbox:ops/integrity/verdict.json` — run=38176261296 conc=success repo=Sandbox
+- ✅ `Sandbox:ops/decision-truth/verdict.json` — run=38184226724 conc=success repo=Sandbox
+- ✅ `Sandbox:ops/integrity/verdict.json` — run=38182531587 conc=success repo=Sandbox
 
 ## ממצאים (מדורג — כשל-רשת-שלנו לעולם לא מדווח כזיוף)
-- **MEDIUM** `Sandbox:ops/flow/receipt.json` — agent-authored-receipt — committer=roshpinacare@gmail.com — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions
-- **MEDIUM** `Sandbox:receipts/wallet/verdict.json` — agent-authored-receipt — committer=roshpinacare@gmail.com — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions
+- **CRITICAL** `FleetHQ:receipts/office-ci/verdict.json` — conclusion-contradiction — receipt=PASS run=null
 - **FLAG** `Sandbox:receipts/fleet/verdict.json` — unprovenanced — אין-טענת-run — שדרוג-מתוכנן ל-lane: artery-fleet
 - **FLAG** `Sandbox:receipts/grid/verdict.json` — unprovenanced — אין-טענת-run — שדרוג-מתוכנן ל-lane: artery-grid
 - **FLAG** `Sandbox:receipts/latest.json` — unprovenanced — אין-טענת-run — שדרוג-מתוכנן ל-lane: sovereign.yml
