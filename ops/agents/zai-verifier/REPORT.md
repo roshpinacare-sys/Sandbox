@@ -1,6 +1,6 @@
-# דוח-אמת (verifier) · 2026-10-11T20:16:27.722Z
+# דוח-אמת (verifier) · 2026-10-11T22:23:35.965Z
 
-**overall: FAIL** · auth: token(fed) · took: 17394ms · כללים: config.json (אפס-דעה-אישית)
+**overall: FAIL** · auth: token(fed) · took: 15370ms · כללים: config.json (אפס-דעה-אישית)
 
 > יש-דברים-שבורים-ממש — זה הדוח-הכן, בלי-קישוטים.
 
@@ -18,49 +18,49 @@
 | ריפו | נראות | commits-24h | code-חלק | הערה |
 |---|---|---|---|---|
 | Sandbox | public | 100+ | 17% | ok |
-| Console | public | 49 | 25% | ok |
+| Console | public | 57 | 0% | ok |
 | Domain | public | 100+ | 50% | ok |
-| TruthRail | public | 14 | 17% | ok |
+| TruthRail | public | 18 | 0% | ok |
 | saos-dex | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | saos-control-center | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | saos-agents | public | 4 | UNMEASURED (budget) | ok |
-| FleetHQ | public | 23 | UNMEASURED (budget) | ok |
-| saos-runtime | public | 33 | UNMEASURED (budget) | ok |
+| FleetHQ | public | 100+ | UNMEASURED (budget) | ok |
+| saos-runtime | public | 34 | UNMEASURED (budget) | ok |
 | sovereign-lighthouse | public | 6 | UNMEASURED (budget) | ok |
 | saos-sovereign-foundry | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | steem | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 
-**מדד-מסכם:** codeShare = 29% (42 commits מסווגים מתוך 329)
-> שיפוט: `dev.rate` = **OK** — building: codeShare 29% over 329 commits/24h
+**מדד-מסכם:** codeShare = 19% (42 commits מסווגים מתוך 419)
+> שיפוט: `dev.rate` = **NOTICE** — mixed activity: codeShare 19%
 
 ## 3. אמת-על-השרשרת · Steem (https://api.steemit.com)
 | חשבון | SP אפקטיבי | VP% | פוסט-אחרון | הצבעה-אחרונה |
 |---|---|---|---|---|
-| @headcorner | 2926 | 51% | 1.8h | 0h |
-| @haran | 78 | 78% | 2.1h | 1.4h |
-| @cashmachine | 75 | 78% | 2.5h | 1.4h |
-| @wic | 33 | 81% | 1.1h | 1.4h |
-| @woq | 70 | 90% | 1h | 1.1h |
-| @tov | 31 | 83% | 1.1h | 1.4h |
-| @spaminator | 69 | 0% | 57498.2h | 12900h |
+| @headcorner | 2926 | 50% | 3.9h | 0.2h |
+| @haran | 78 | 78% | 4.3h | 3.6h |
+| @cashmachine | 75 | 78% | 4.6h | 3.6h |
+| @wic | 33 | 81% | 3.2h | 3.5h |
+| @woq | 70 | 90% | 3.1h | 3.2h |
+| @tov | 31 | 83% | 3.2h | 3.5h |
+| @spaminator | 69 | 0% | 57500.3h | 12902.1h |
 | @saos | 5 | 0% | מעולם-לא | — |
-| @powerspan | 0 | 0% | מעולם-לא | 883.9h |
-| @ynet | 0 | 0% | 25163.8h | 763.8h |
-| @hcsoldier4 | 17 | 98% | 0.6h | 1.1h |
-| @hcsoldier6 | 17 | 99% | 3.2h | 1.3h |
+| @powerspan | 0 | 0% | מעולם-לא | 886h |
+| @ynet | 0 | 0% | 25165.9h | 766h |
+| @hcsoldier4 | 17 | 98% | 2.8h | 3.2h |
+| @hcsoldier6 | 17 | 99% | 1.7h | 3.4h |
 
-> `steem.fleet` = **OK** — fleet posted 0.6h ago
+> `steem.fleet` = **OK** — fleet posted 1.7h ago
 > `steem.treasury` = **DEGRADED** — treasury headcorner at 2926 SP < 3000 (recovery-plan §3)
 
 ## 4. Blurt (https://rpc.blurt.blog)
-פוסט-צי-הכי-חדש: 193.3h · נמדד 2026-10-11T20:16:45.075Z
-> `blurt.alive` = **FAIL** — blurt fleet silent 193h > 168h — loop dead until proven otherwise
+פוסט-צי-הכי-חדש: 195.4h · נמדד 2026-10-11T22:23:51.283Z
+> `blurt.alive` = **FAIL** — blurt fleet silent 195h > 168h — loop dead until proven otherwise
 
 ## 5. שלמות-עץ (ריקבון-מצבות)
-נסרקו 108 קבצים; פגומים: 0
+נסרקו 139 קבצים; פגומים: 0
 
 ## 6. דלתא-מול-הריצה-הקודמת
-- ↗ השתפר: `dev.rate` NOTICE → **OK**
+- ↘ התדרדר: `dev.rate` OK → **NOTICE**
 
 ## 7. משימות-שנצרתו-עכשיו
 - **V-TREASURY-BALANCE** — איזון-אוצר לפי §3: לשמר ≥3,000 SP אצל-האוצר; top-up חשבונות-פעילים ל-100 SP
