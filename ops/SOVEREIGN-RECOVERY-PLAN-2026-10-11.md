@@ -168,3 +168,8 @@
 - **סקופ:** (א) containment-שריפות ב-FleetHQ: 9-נתיבים-נותרים (vault/r2-backup.ts, vault/ssh/tool, public/console/receipts/key-check*, recovery-task30×4) + מראת-העתק public/console/** (~10MB עותק-שני של כל-חשיפת-Console); (ב) Domain: מחיקת CR-0072 (נבדק: אזכורו ב-dex-core.cjs הוא הערה-בלבד; vault-transfer.yml נשאר — dispatch-only כלי-בעלים); (ג) אימות-עצמאי R293-מול-מחזור-כלכלי; (ד) דוח-מצב-חי ל-ops/agents/zai-code-4/.
 - **ממצאי-פתיחה (מדוד):** המחזור-הכושל (daily-report 13:34) התחיל 13:34:04 — המיזוג 10d283eaa8 נחתם 13:34:05 ⇒ הטענה-שלו עדיין-לא-נבדקה-במחזור-מלא שאחרי-המיזוג. saos-runtime/steem = אזור-חם (R314b 14:22 · fleet-law 14:44 · T-62 14:48) — אפס-נגיעה.
 - **לא-נוגעים:** רוטציה (בעלים), הנפקת-טוקן (§7), האצלה (R314b בעבודה-חיה), vault-drip (בעבודה-חיה 14:21–14:48).
+
+### 12.1 · תוצאות zai-code-4 (השלמה, 2026-10-11)
+- FleetHQ: 8-מחיקות-ב-2-קומיטים (cd255f321e + רסיב-consoletest) ⇒ עץ-HEAD 592→366, אפס-פגיעות-רגישות. Domain: CR-0072 נמחק (e859d407ef), עץ-נקי.
+- **אימות-R293:** המחזור-הכושל (13:34:04) קדם-בשנייה-למיזוג (13:34:05) ⇒ **התיקון-טרם-נבדק-במחזור-מלא**; שער: daily-report חדש עם execute != BROADCAST-FAIL. מילא-אמיתי 13:02 (4.994-STEEM), health=ok.
+- lighthouse "484-אדומים" = cancelled pages-builds (churn), לא-כישלון. פירוט מלא: ops/agents/zai-code-4/STATUS-2026-10-11.md
