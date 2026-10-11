@@ -32,7 +32,7 @@ jobs:
           done
           for R in FleetHQ Sandbox Domain saos-runtime; do
             curl -s "${AUTH[@]}" "https://api.github.com/repos/roshpinacare-sys/$R/actions/runs?per_page=30" \
-              | jq -c '{repo:"'$R'",reds:[.workflow_runs[]? | select(.conclusion=="failure" and (.created_at > (now - 172800) | todateiso8601)) | {name,at:.created_at}]}' >> /tmp/runs.ndjson 2>/dev/null || true
+              | jq -c '{repo:"'$R'",reds:[.workflow_runs[]? | select(.conclusion=="failure") | select(.created_at > ((now - 172800) | todateiso8601)) | {name,at:.created_at}]}' >> /tmp/runs.ndjson 2>/dev/null || true
           done
           : > /tmp/feeds.ndjson
           probe_feed() {
