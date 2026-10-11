@@ -143,6 +143,40 @@ try {
   } else observations.push("integrity guard: no verdict yet (artery-integrity first run pending)");
 } catch (e) { observations.push(`integrity read: ${String(e.message).slice(0, 100)}`); }
 
+// 10) DEX BOOKS CENSUS: the Console-truth mirrors finally get a reader (G-series wiring —
+//     orphans -> the brain; literal dex/*.json paths here are what the flow map counts as edges)
+try {
+  const dexBooks = [
+    "dex/bridge.json", "dex/fleet.json", "dex/relay.json", "dex/onramp.json",
+    "dex/showcase.json", "dex/redeem-requests.json", "dex/mirror-stub.json",
+  ];
+  const sigOf = (p, d) => {
+    if (p === "dex/bridge.json") { const b = d.bridge || {}; return "escrow=" + (Array.isArray(b.escrow) ? b.escrow.length : (b.escrow ? 1 : 0)) + " intents=" + (Array.isArray(b.intents) ? b.intents.length : 0) + " chains=" + (Array.isArray(b.chains) ? b.chains.length : 0); }
+    if (p === "dex/fleet.json") { const f = d.fleet || {}; return "configured=" + f.configured + " probedAt=" + (f.probedAt || "unknown"); }
+    if (p === "dex/relay.json") { const r = d.relay || {}; return "enabled=" + r.enabled + " anchor=" + (r.anchorId || "none") + " uptimeMs=" + (r.uptimeMs || 0); }
+    if (p === "dex/onramp.json") { const o = d.onramp || {}; return "stale=" + o.stale + " steemHead=" + (o.steemHead || "unknown"); }
+    if (p === "dex/showcase.json") return "pair=" + ((d.sovereignPair && d.sovereignPair.pair) || "unknown");
+    if (p === "dex/redeem-requests.json") return "requests=" + (Array.isArray(d.requests) ? d.requests.length : 0) + " protocol=" + (d.protocol || "unknown");
+    return "ok=" + d.ok + " note=" + (d.note || "none");
+  };
+  let okN = 0;
+  for (const p of dexBooks) {
+    try {
+      const res = await fetch("https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/" + p, { headers: { "user-agent": "scribe/1" } });
+      if (!res.ok) { observations.push(`dex book ${p}: unreadable (HTTP ${res.status}) - honest unknown`); continue; }
+      const d = await res.json();
+      const atRaw = d.at || (d.onramp && d.onramp.at) || null;
+      const t = atRaw === null ? null : (typeof atRaw === "number" ? atRaw : Date.parse(atRaw));
+      const ageH = t && Number.isFinite(t) ? (Date.now() - t) / 3600000 : null;
+      const ageTag = ageH === null ? "age=unknown" : "age=" + Math.round(ageH) + "h";
+      if (ageH !== null && ageH > 30) proposals.push(`dex book ${p} is ${Math.round(ageH)}h old (mirror workflow may skip it) - refresh its producer or retire it honestly with a dated note`);
+      if (p === "dex/mirror-stub.json" && d.ok === false) observations.push(`dex book ${p}: honest stub (ok=false) - declares itself a placeholder, kept as truth-marker`);
+      else { okN++; observations.push(`dex book ${p}: ok sig=${sigOf(p, d)} ${ageTag}`); }
+    } catch (e) { observations.push(`dex book ${p}: parse/read fail ${String(e.message).slice(0, 60)}`); }
+  }
+  if (okN >= 6) observations.push(`dex books: ${okN}/7 carry live Console-truth (escrow/fleet/relay/onramp) - the business organs are publicly mirrored; wired to the learning loop this run`);
+} catch (e) { observations.push(`dex census: ${String(e.message).slice(0, 100)}`); }
+
 const at = new Date().toISOString();
 const n = (() => { try { return readFileSync("ops/lessons/ledger.md", "utf8").split("## ").length - 1 + 1; } catch { return 1; } })();
 
