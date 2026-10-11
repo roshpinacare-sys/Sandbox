@@ -1,14 +1,14 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-11T21:37:07Z",
+ "generatedAt": "2026-10-11T23:12:04Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "זה צריך להיות מוכרע על ידי הריבונות ממש לא על ידי תמשיך מה שהכי טוב ושיועיל שיעשו לבד הם לא צריכים לחכות להוראות וודא את זה",
  "degraded": [],
  "chainVerify": {
-  "head": 110357634,
-  "mult": 0.0006202045114682183,
+  "head": 110359522,
+  "mult": 0.0006202072729335086,
   "treasuryNetSp": 2925.6,
   "minOperatorSp": 11.9,
   "beaconChainMatch": true
@@ -63,11 +63,11 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 2925.6 SP (ראש 110357634, מכפיל 0.000620205)",
+    "אוצרה נמדדת 2925.6 SP (ראש 110359522, מכפיל 0.000620207)",
     "יעד 3000 · פער 74.4 SP · מסילת-שימור 2800 (R2)",
     "האצלה-יוצאת-נמדדת 1344.6 SP · נכנסת-נמדדת 244.2 SP",
     "משואה מפרסמת 2925.6 SP · תואם=True",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 87207)",
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 87226)",
     "האצלות-אחרונות למפעילי-הצי: ~242.1 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
@@ -171,7 +171,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-11T21:37:07Z",
+   "decidedAt": "2026-10-11T23:12:04Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -180,37 +180,51 @@
    "status": "ENFORCED",
    "priority": "P0",
    "titleHe": "תקלות-הצוות — ניתוב-תיקון-ריבוני",
-   "verdictHe": "הריבונות מדרגת P0 עצמאית: תיקון 3 סוכנים בתקלה ושחרור 1 משימות חסומות — מנותב למסילות-ההנדסה ולמנוע-הצמיחה (work-orders) מיד, ללא-המתנה-להוראות (צו-סעיף 1).",
+   "verdictHe": "הריבונות מדרגת P0 עצמאית: תיקון 0 סוכנים בתקלה ושחרור 1 משימות חסומות — מנותב למסילות-ההנדסה ולמנוע-הצמיחה (work-orders) מיד, ללא-המתנה-להוראות (צו-סעיף 1).",
    "evidence": [
-    "סוכנים בתקלה (מדוד): aluf, gal, erez",
+    "סוכנים בתקלה (מדוד): —",
     "משימות חסומות (מדוד): t1083",
-    "עבודות-פתוחות ממנוע-הצמיחה (צריכה): WO-FleetHQ-reds, WO-saos-runtime-reds"
+    "עבודות-פתוחות ממנוע-הצמיחה (צריכה): WO-FleetHQ-reds, WO-saos-runtime-reds, WO-unwired-dex-mirror, WO-unwired-steem-social-cadence, WO-unwired-evo-windows, WO-unwired-fleethq-gitignore, WO-unwired-fleethq-potential-link, WO-unwired-sandbox-ops-docs"
    ],
    "routing": {
-    "foreman": [
-     "aluf",
-     "gal",
-     "erez"
-    ],
+    "foreman": [],
     "officeGrowthWorkOrders": [
      "WO-FleetHQ-reds",
-     "WO-saos-runtime-reds"
+     "WO-saos-runtime-reds",
+     "WO-unwired-dex-mirror",
+     "WO-unwired-steem-social-cadence",
+     "WO-unwired-evo-windows",
+     "WO-unwired-fleethq-gitignore",
+     "WO-unwired-fleethq-potential-link",
+     "WO-unwired-sandbox-ops-docs"
     ]
    },
-   "decidedAt": "2026-10-11T21:37:07Z",
+   "decidedAt": "2026-10-11T23:12:04Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
    "id": "D3-flow-weave",
    "area": "רשת",
    "status": "ENFORCED",
-   "priority": "P2",
-   "titleHe": "מפת-הזרימה — חיבור-עורקים",
-   "verdictHe": "הריבונות מכריעה: חיבור 0 יתומים וטיפול ב-2 רוחות-רפאים במסילת-מחבר-העורקים — everything-uses-everything, ללא-המתנה.",
+   "titleHe": "מפת-הזרימה",
+   "verdictHe": "הרשת נמדדה מחוברת (אפס-יתומים, אפס-רוחות) — המשך",
    "evidence": [
-    "orphans=0 · ghosts=2 (flow-map.json, F-series — צריכה בלבד)"
+    "orphans=0 · ghosts=0"
    ],
-   "decidedAt": "2026-10-11T21:37:07Z",
+   "decidedAt": "2026-10-11T23:12:04Z",
+   "decidedBy": "sovereign-decider-v1 (CHARTER)"
+  },
+  {
+   "id": "D4-truth-network",
+   "area": "אימות-עצמי",
+   "status": "OBSERVING",
+   "titleHe": "רשת-האמת",
+   "verdictHe": "הגוף מאמת-את-עצמו ירוק בפומבי (51/51 + שער-ירוק) — ממשיכים-למדוד",
+   "evidence": [
+    "מאמת-הרשת: 51/51 ALL_PASS (2026-10-11T22:59:03.554Z)",
+    "שער-האמת: ALL-GREEN (pass=7 fail=0)"
+   ],
+   "decidedAt": "2026-10-11T23:12:04Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
