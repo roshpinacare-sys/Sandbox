@@ -1,0 +1,90 @@
+{
+  "schema": "integrity-guard/2",
+  "at": "2026-10-11T21:06:55.622Z",
+  "overall": "PASS_WITH_ALERTS",
+  "summary": {
+    "sources": 9,
+    "verified": 5,
+    "findings": 7,
+    "counts": {
+      "FLAG": 6,
+      "MEDIUM": 1
+    }
+  },
+  "provenance": {
+    "runId": "38174987294",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38174987294",
+    "sha": "3bd2a88fada38bc71effefce6af185224174f7ba"
+  },
+  "verified": [
+    {
+      "where": "self:ops/integrity/verdict.json",
+      "law": "first-run",
+      "detail": "אין-קבלה-קודמת — ריצה-ראשונה"
+    },
+    {
+      "where": "Sandbox:receipts/wallet/verdict.json",
+      "law": "verified",
+      "detail": "run=38170823364 conc=success repo=Sandbox"
+    },
+    {
+      "where": "FleetHQ:receipts/office-ci/verdict.json",
+      "law": "verified",
+      "detail": "run=38174549702 conc=failure repo=FleetHQ"
+    },
+    {
+      "where": "Domain:office/data.json",
+      "law": "verified",
+      "detail": "run=38168008222 conc=success repo=FleetHQ"
+    },
+    {
+      "where": "Domain:office/data.json",
+      "law": "verified",
+      "detail": "run=38163792454 conc=success repo=Sandbox"
+    }
+  ],
+  "findings": [
+    {
+      "level": "FLAG",
+      "where": "Sandbox:receipts/fleet/verdict.json",
+      "law": "unprovenanced",
+      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: artery-fleet"
+    },
+    {
+      "level": "FLAG",
+      "where": "Sandbox:receipts/grid/verdict.json",
+      "law": "unprovenanced",
+      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: artery-grid"
+    },
+    {
+      "level": "FLAG",
+      "where": "Sandbox:receipts/latest.json",
+      "law": "unprovenanced",
+      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: sovereign.yml"
+    },
+    {
+      "level": "FLAG",
+      "where": "Sandbox:ops/flow/receipt.json",
+      "law": "unprovenanced",
+      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: artery-flow"
+    },
+    {
+      "level": "FLAG",
+      "where": "Sandbox:state/verifier/verdict-latest.json",
+      "law": "unprovenanced",
+      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: verifier.yml"
+    },
+    {
+      "level": "FLAG",
+      "where": "Domain:agents/office-live.json",
+      "law": "unprovenanced",
+      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: office lane"
+    },
+    {
+      "level": "MEDIUM",
+      "where": "Sandbox:receipts/wallet/verdict.json",
+      "law": "agent-authored-receipt",
+      "detail": "committer=z@container — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions"
+    }
+  ]
+}
