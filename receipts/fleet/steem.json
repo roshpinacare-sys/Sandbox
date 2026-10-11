@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-11T21:39:39.907Z",
+  "at": "2026-10-11T23:06:05.524Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "107d7748ba74abd54e50bf4f022d0bae9e414e81",
+  "head": "6d2c738cdedf22aaaca0658e8c46fa5fa266b11d",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -10,13 +10,13 @@
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "flag",
-      "detail": "gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/agent/vault/GEN-1-ERA-META.json, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/mini-services/saos-engine/probe-auth2-r255.mjs, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/mini-services/saos-engine/selftest.mjs, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/mini-services/saos-engine/state/r267-crosschain.json"
+      "verdict": "pass",
+      "detail": "gitleaks HEAD scan: 0 findings"
     },
     {
       "id": "law-no-skipped-pass",
       "verdict": "pass",
-      "detail": "workflows scanned: 4, theater patterns: 0"
+      "detail": "workflows scanned: 5, theater patterns: 0"
     },
     {
       "id": "law-gitleaks-push",
@@ -29,9 +29,7 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [
-    "law-no-secrets-at-head: gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/agent/vault/GEN-1-ERA-META.json, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/mini-services/saos-engine/probe-auth2-r255.mjs, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/mini-services/saos-engine/selftest.mjs, generic-api-key@/tmp/fleet-verify-tAzODc/steem-cockpit/mini-services/saos-engine/state/r267-crosschain.json"
-  ],
+  "alerts": [],
   "overall": "PASS",
   "reason": "all checks and fleet laws pass"
 }
