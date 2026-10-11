@@ -1,0 +1,310 @@
+From 764f49aa71a741ff8d6a30895bb6f910129cbf1a Mon Sep 17 00:00:00 2001
+From: zai-revive-10b <agent@saos.local>
+Date: Sun, 11 Oct 2026 19:24:35 +0000
+Subject: [PATCH] =?UTF-8?q?D-8=20revive-not-kill=20=C2=B7=20office-first:?=
+ =?UTF-8?q?=20=D7=94=D7=9E=D7=A9=D7=A8=D7=93=20=D7=A0=D7=A4=D7=AA=D7=97=20?=
+ =?UTF-8?q?=D7=A7=D7=95=D7=93=D7=9D=20+=20=D7=A9=D7=99=D7=9E=D7=95=D7=A9?=
+ =?UTF-8?q?=D7=99=D7=9D=20=D7=97=D7=99=D7=99=D7=9D=20=D7=A9=D7=9C=20=D7=94?=
+ =?UTF-8?q?=D7=A8=D7=A9=D7=AA=20(Task=2010-b)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- מסך ראשון חדש: כרטיס "המשרד — Fleet HQ" ראשון — same-origin fetch של /FleetHQ/status/office.json עם תיוג DEMO·SIMULATION והידרדרות כנה ("ממתין לאפיית ה-CI הראשונה") כשהפיד חסר; דלת המשרד תמיד פתוחה בקישור.
+- מתחתיו: "שימושים חיים של הרשת" — 6 אריחים עם טריות אמיתית שנקראת מהפיד המחויב של עצמו: agents/grid-truth, agents/market-grid, twin-audit/latest, truth/latest (שער האמת), dex/world (הארנק), agents/registry (רישום הצי). אפס מספרים מומצאים; פיד חסר = מצב כנה.
+- סימון-תאריך לסקציות שנשמרו: "עודכן לאחרונה" לשורת ה-KPIs, לפעימות ולתוכנית המשימות (agent/state.json מסומן כעשוי להיות מיושן). פידים לא-טריים (human-cadence-status, office-memory, fleet-census) לא שובצו במסך החי.
+- חוקי האתר נשמרים: נתיבים יחסיים/מקור-זהה בלבד, אפס CDN/סקריפטים חיצוניים/מעקב, RTL עברית, בלי שלב בנייה.
+- בדיקות: node --check; e2e headless לוקאלי — אפס שגיאות, fallback + happy-path (מוק) + מעבר HE/EN מאומתים; אורקל-בתים לפני/אחרי; אפס כתובות absolute חדשות.
+---
+ index.html | 195 +++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 191 insertions(+), 4 deletions(-)
+
+diff --git a/index.html b/index.html
+index 6419e63a..a1391972 100644
+--- a/index.html
++++ b/index.html
+@@ -234,6 +234,26 @@ footer.site a:hover{color:var(--text)}
+ #toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:#18181b;border:1px solid var(--line2);color:var(--text);border-radius:var(--r-sm);padding:12px 20px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90vw}
+ #toast.show{opacity:1;transform:translate(-50%,0)}
+ 
++/* ── D-8 office-first + alive strip (Task 10-b, revive-not-kill) ── */
++.office{margin-top:30px;border:1px solid rgba(212,175,55,.42);border-radius:var(--r);background:linear-gradient(180deg, rgba(212,175,55,.10), rgba(212,175,55,.02) 55%, transparent),var(--panel);padding:24px}
++.office .okick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
++.office h2{font-size:clamp(20px,3vw,27px);letter-spacing:-.4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
++.office h2 svg{width:24px;height:24px;color:#e8cd6e;flex:none}
++.office p.osub{color:var(--dim);font-size:14.5px;max-width:840px;line-height:1.7;margin-top:8px}
++.office .ostate{margin-top:14px;font-size:13.5px;color:var(--dim);line-height:1.7}
++.office .ostatrow{display:flex;gap:26px;flex-wrap:wrap;margin-top:14px}
++.office .ostat .v{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;color:#e8cd6e}
++.office .ostat .l{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
++.office .odoor{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
++.alive{margin-top:36px}
++.alive .atile{display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:border-color .18s,transform .18s}
++.alive .atile:hover{border-color:var(--line2);transform:translateY(-2px);text-decoration:none}
++.alive .atile .at-name{font-size:14.5px;font-weight:600;color:var(--text)}
++.alive .atile .at-sub{color:var(--dim);font-size:12.5px;line-height:1.55;margin-top:6px}
++.alive .atile .at-fresh{margin-top:10px;font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
++.alive .atile .at-fresh .mono{font-size:10.5px}
++.upline{font-size:11.5px;color:var(--faint);margin-top:10px;line-height:1.7}
++
+ @media(max-width:1140px){
+   nav.sections a{padding:8px 10px;font-size:12.5px}
+   .brand b{font-size:15px}
+@@ -305,6 +325,31 @@ footer.site a:hover{color:var(--text)}
+ <!-- ═══════════════ HOME - the big picture ═══════════════ -->
+ <section class="view" id="view-home" data-console-section="home">
+   <div class="wrap">
++    <!-- ═══════ D-8 · revive-not-kill · OFFICE-FIRST: המשרד נפתח קודם ═══════ -->
++    <div class="office" id="office-card">
++      <div class="okick">
++        <span class="tag amber">D-8 · REVIVE-NOT-KILL</span>
++        <span class="tag emerald">OFFICE-FIRST</span>
++        <span class="tag" id="office-demo-tag" hidden>DEMO · SIMULATION</span>
++      </div>
++      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 21v-4h6v4" stroke-linecap="round"/><path d="M9 7h2.5M12.5 7H15M9 11h2.5M12.5 11H15" stroke-linecap="round"/></svg><span data-i="off.title">המשרד — Fleet HQ</span></h2>
++      <p class="osub" data-i="off.sub">הדלתות נפתחות כאן קודם: Fleet HQ הוא המשרד החי של הרשת — הצוות, קיר המשימות וספר המשמרות — מוגש מהריפו הציבורי שלו, באותו מקור (same-origin). בלי שרתים, בלי מעקב, בלי שלב בנייה.</p>
++      <div class="ostate" id="office-state" data-i="off.pending">תמונת-המצב החיה ממתינה לאפיית ה-CI הראשונה של Fleet HQ — זה המצב הכנה, לא סיפור. דלת המשרד עצמה פתוחה:</div>
++      <div class="ostatrow" id="office-stats" hidden></div>
++      <div class="odoor">
++        <a class="btn" href="/FleetHQ/status/office.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg><span data-i="off.open">להיכנס למשרד</span></a>
++        <span class="srcnote" id="office-src"></span>
++      </div>
++    </div>
++
++    <!-- ═══════ שימושים חיים של הרשת · ALIVE strip (D-8): רק פידים מחויבים אמיתיים ═══════ -->
++    <div class="alive" id="alive-strip">
++      <h2 class="sb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4.5 13.5H11L9.5 22 19 9.5h-6.5z"/></svg><span data-i="alive.h">שימושים חיים של הרשת</span></h2>
++      <p class="pgsub" data-i="alive.sub">משטחים שאפשר באמת להשתמש בהם עכשיו, כל אחד עם חותמת-טריות שנקראת מהפיד המחויב של עצמו. אפס מספרים מומצאים.</p>
++      <div class="grid g3" id="alive-grid"><div class="skel">…</div></div>
++      <div class="srcnote" id="alive-src"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4M12 16h.01" stroke-linecap="round"/></svg><span data-i="alive.src">כל חותמת-זמן נקראת מקובץ הפיד המחויב עצמו. פיד חסר מציג את מצבו הכנה — לעולם לא נתונים מומצאים.</span></div>
++    </div>
++
+     <div class="hero" id="hero-bigpicture">
+       <div class="eyebrow" data-i="hero.eyebrow">THE VERIFYING NETWORK</div>
+       <h1 data-i-html="hero.h1">AI agents that <em>prove</em> their own work.</h1>
+@@ -326,6 +371,7 @@ footer.site a:hover{color:var(--text)}
+       <div class="card hov"><div class="kpi num" id="k-fleet">…</div><div class="kplabel" data-i="home.kFleet">Cloud agents alive</div><div class="srcnote" id="k-fleet-sub"></div></div>
+       <div class="card hov"><div class="kpi num" id="k-brain">…</div><div class="kplabel" data-i="home.kBrain">Live brain keys</div><div class="srcnote" id="k-brain-sub"></div></div>
+     </div>
++    <div class="upline" id="src-now"></div>
+ 
+     <h2 class="sb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12h4l3-8 4 16 3-8h6"/></svg><span data-i="home.how">How it works</span></h2>
+     <div class="steps">
+@@ -438,6 +484,7 @@ footer.site a:hover{color:var(--text)}
+       <h2 class="sb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg><span data-i="net.plan">Open loops and gates</span></h2>
+       <p class="pgsub" data-i="net.planSub">The live mission queue the agents work from, read straight from the bridgehead. Priorities: P0 urgent, P1 important, P2 background, P3 optional.</p>
+       <div id="plan-list"><div class="skel">…</div></div>
++      <div class="srcnote" id="plan-src"></div>
+     </div>
+   </div>
+ </section>
+@@ -676,6 +723,7 @@ footer.site a:hover{color:var(--text)}
+       </div>
+       <div>
+         <h5 data-i="f.explore">Explore</h5>
++        <a href="/FleetHQ/status/office.html" data-i="foot.office">המשרד · Fleet HQ</a>
+         <a href="#/network/overview" data-i="navNetwork">Network</a>
+         <a href="#/agents/fleet" data-i="navAgents">Agents</a>
+         <a href="#/knowledge/doctrine" data-i="kn.doc">Doctrine</a>
+@@ -870,6 +918,26 @@ en: {
+   "evo.none":"No measured discoveries recorded yet; the honest state is an empty list, not an invented story.",
+   "evo.miles":"Measured milestones","evo.milesSub":"Every line below was a real failure or a real cure, measured in the terminal and published with a receipt. The links open the public evidence.",
+   "evo.disc":"Sovereign discoveries","evo.discSub":"Public recipes the network reproduced by itself (ACID engine). Not yet recorded - this stays empty until one truly exists.",
++  "up.now":"Recently updated",
++  "up.stalewarn":"this section may be outdated",
++  "off.title":"The office — Fleet HQ",
++  "off.sub":"The doors open here first: Fleet HQ is the living office of the network — the crew, the task wall and the shift ledger, served from its own public repository on this same origin. No servers, no tracking, no build step.",
++  "off.open":"Enter the office",
++  "off.pending":"Live snapshot pending Fleet HQ's first CI bake — this is the honest state, not a story. The office door itself is open:",
++  "off.pendingSrc":"office feed unreachable — the honest state, no invented numbers.",
++  "off.fedLive":"Live from the office feed:",
++  "off.fedNoCounts":"The office feed is up, but publishes no counts in this bake — shown as-is, honestly.",
++  "off.crew":"Crew","off.tasks":"Task wall","off.shifts":"Shifts",
++  "alive.h":"Live uses of the network",
++  "alive.sub":"Surfaces you can actually use right now, each stamped with the freshness read from its own committed feed. Zero fabricated numbers.",
++  "alive.src":"Every timestamp is read from the feed's own committed file. A missing feed shows its honest state — never invented data.",
++  "alive.grid.n":"Grid truth","alive.grid.s":"Live chain RPC across Steem/Hive/Blurt, zero self-reports — the fleet's real measured power.",
++  "alive.market.n":"Market grid","alive.market.s":"The internal-market desk: measured bands, spreads and grid levels, keyless reads only.",
++  "alive.twin.n":"Twin audit","alive.twin.s":"Measured near-duplicate audit over the fleet's public content, committed every run.",
++  "alive.truth.n":"The truth gate","alive.truth.s":"A machine measures the public site in CI: verdict, gates, history. No hand-written grades.",
++  "alive.wallet.n":"The wallet","alive.wallet.s":"Open a wallet in seconds; keys never leave the device. Stamped by the money layer's published state.",
++  "alive.fleet.n":"The fleet registry","alive.fleet.s":"Which agents are alive, on-demand or honest-red, refreshed straight from the GitHub API.",
++  "foot.office":"The office · Fleet HQ",
+   "fail.fetch":"Unreachable; showing the last committed mirror state honestly."
+ },
+ he: {
+@@ -1018,6 +1086,26 @@ he: {
+   "evo.none":"אין עדיין תגליות נמדדות רשומות; המצב הכן הוא רשימה ריקה, לא סיפור שהומצא.",
+   "evo.miles":"אבני דרך נמדדות","evo.milesSub":"כל שורה למטה היא כישלון או ריפוי אמיתי, שנמדד בטרמינל ופורסם עם קבלה. הקישורים פותחים את הראיות הציבוריות.",
+   "evo.disc":"תגליות ריבוניות","evo.discSub":"מתכונים ציבוריים שהרשת שחזרה בעצמה (מנוע ה-ACID). טרם נרשמו - נשאר ריק עד שאחד יתקיים באמת.",
++  "up.now":"עודכן לאחרונה",
++  "up.stalewarn":"הסקציה עשויה להיות מיושנת",
++  "off.title":"המשרד — Fleet HQ",
++  "off.sub":"הדלתות נפתחות כאן קודם: Fleet HQ הוא המשרד החי של הרשת — הצוות, קיר המשימות וספר המשמרות — מוגש מהריפו הציבורי שלו, באותו מקור (same-origin). בלי שרתים, בלי מעקב, בלי שלב בנייה.",
++  "off.open":"להיכנס למשרד",
++  "off.pending":"תמונת-המצב החיה ממתינה לאפיית ה-CI הראשונה של Fleet HQ — זה המצב הכנה, לא סיפור. דלת המשרד עצמה פתוחה:",
++  "off.pendingSrc":"פיד המשרד לא נגיש — המצב הכנה, בלי מספרים מומצאים.",
++  "off.fedLive":"חי מפיד המשרד:",
++  "off.fedNoCounts":"פיד המשרד חי, אך אינו מפרסם מספרים באפייה הזאת — מוצג כמות שהוא, בכנות.",
++  "off.crew":"צוות","off.tasks":"קיר משימות","off.shifts":"משמרות",
++  "alive.h":"שימושים חיים של הרשת",
++  "alive.sub":"משטחים שאפשר באמת להשתמש בהם עכשיו, כל אחד עם חותמת-טריות שנקראת מהפיד המחויב של עצמו. אפס מספרים מומצאים.",
++  "alive.src":"כל חותמת-זמן נקראת מקובץ הפיד המחויב עצמו. פיד חסר מציג את מצבו הכנה — לעולם לא נתונים מומצאים.",
++  "alive.grid.n":"אמת הגריד","alive.grid.s":"קריאת שרשרת חיה (Steem/Hive/Blurt), אפס דיווח-עצמי — הכוח הממודד האמיתי של הצי.",
++  "alive.market.n":"שוק הגריד","alive.market.s":"שולחן השוק הפנימי: רצועות, פערים ורמות גריד ממודדות — קריאות בלי מפתחות בלבד.",
++  "alive.twin.n":"ביקורת התאומים","alive.twin.s":"ביקורת תאומי-תוכן ממודדת על התוצר הציבורי של הצי, מחויבת בכל ריצה.",
++  "alive.truth.n":"שער האמת","alive.truth.s":"מכונה מודדת את האתר הציבורי ב-CI: פסק, שערים והיסטוריה. בלי ציונים כתובי-יד.",
++  "alive.wallet.n":"הארנק","alive.wallet.s":"ארנק נפתח בשניות; המפתחות לא עוזבים את המכשיר. נחתם מהמצב המפורסם של שכבת הכסף.",
++  "alive.fleet.n":"רישום הצי","alive.fleet.s":"אילו סוכנים חיים, לפי-דרישה או אדומים-בכנות — מתרענן ישירות מה-API של גיטהאב.",
++  "foot.office":"המשרד · Fleet HQ",
+   "fail.fetch":"לא נגיש; מוצג מצב המראה האחרון שנשמר, בכנות."
+ }};
+ function t(k){ const v = (I18N[LANG] && I18N[LANG][k]) ?? I18N.en[k] ?? k; return v; }
+@@ -1210,6 +1298,93 @@ function srcNote(id, txt, ok=true){
+   el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg><span'+(ok?"":" class='failhonest'")+">"+esc(txt)+"</span>";
+ }
+ 
++/* ═══════════ D-8 office-first · המשרד + שימושים חיים (Task 10-b) ═══════════
++ * חוק הכנות: כל טריות נקראת משדה הזמן של הפיד המחויב עצמו; פיד חסר =
++ * מצב כנה מוצהר, לעולם לא מספר מומצא. פיד המשרד הוא same-origin
++ * (/FleetHQ/status/office.json) — ואם הוא עוד לא נאפה ב-CI, הכרטיס
++ * נשאר פתוח עם קישור ומצב "ממתין לאפייה ראשונה", בלי שום המצאה. */
++const OFFICE = { fed:null, fedFail:false };
++const ALIVE = {};
++const ALIVE_FEEDS = [
++  { key:"grid",  feed:"agents/grid-truth.json",  ts:"generatedAt", page:"agents/grid-truth.json" },
++  { key:"market",feed:"agents/market-grid.json", ts:"at",          page:"agents/market-grid.json" },
++  { key:"twin",  feed:"twin-audit/latest.json",  ts:"at",          page:"twin-audit/latest.json" },
++  { key:"truth", feed:"truth/latest.json",       ts:"at",          page:"truth.html" },
++  { key:"wallet",feed:"dex/world.json",          ts:"publishedAt", page:"wallet.html" },
++  { key:"fleet", feed:"agents/registry.json",    ts:"generatedAt", page:"#/agents/fleet" }
++];
++function pickAt(j, ts){ return (j && (j[ts] || j.at || j.generatedAt || j.publishedAt || j.updatedAt)) || null; }
++function gradeOf(iso){
++  const ms = Date.now() - Date.parse(iso);
++  if(!isFinite(ms)) return { cls:"dormant", key:"st.dead" };
++  const h = ms/36e5;
++  return h<=36 ? { cls:"live", key:"st.fresh" } : (h<=168 ? { cls:"aging", key:"st.stale" } : { cls:"dormant", key:"st.dead" });
++}
++async function loadOffice(){
++  try{ OFFICE.fed = await jget("/FleetHQ/status/office.json"); OFFICE.fedFail = false; }
++  catch{ OFFICE.fed = null; OFFICE.fedFail = true; }
++}
++async function loadAlive(){
++  await Promise.all(ALIVE_FEEDS.map(f=>
++    jget(f.feed).then(j=>{ ALIVE[f.key] = { j, at: pickAt(j, f.ts) }; }).catch(()=>{ ALIVE[f.key] = null; })
++  ));
++}
++function renderOffice(){
++  const st = $("office-state"), stats = $("office-stats"), tag = $("office-demo-tag"), src = $("office-src");
++  if(!st) return;
++  const f = OFFICE.fed;
++  if(f && typeof f === "object"){
++    /* רינדור סובלני: רק שדות שנמצאו בפועל בפיד. אפס מספרים מומצאים. */
++    const num = (v)=> (typeof v === "number") ? v : (Array.isArray(v) ? v.length : null);
++    const crew = num(f.crew) ?? num(f.crewMembers) ?? num(f.crewCount);
++    const tasks = num(f.tasks) ?? num(f.taskWall) ?? num(f.openTasks);
++    const shifts = num(f.shifts) ?? num(f.shiftCount);
++    const at = pickAt(f, "generatedAt");
++    const cells = [];
++    if(crew != null) cells.push([fmtInt(crew), t("off.crew")]);
++    if(tasks != null) cells.push([fmtInt(tasks), t("off.tasks")]);
++    if(shifts != null) cells.push([fmtInt(shifts), t("off.shifts")]);
++    if(cells.length){
++      stats.innerHTML = cells.map(c=>'<div class="ostat"><div class="v num">'+esc(c[0])+'</div><div class="l">'+esc(c[1])+'</div></div>').join("");
++      stats.hidden = false;
++      tag.hidden = false; /* ספירות המשרד הן דמו/סימולציה — מתויג בגלוי */
++      st.textContent = t("off.fedLive");
++    } else {
++      stats.hidden = true; tag.hidden = true;
++      st.textContent = t("off.fedNoCounts");
++    }
++    src.innerHTML = at ? '<span class="dot '+gradeOf(at).cls+'"></span><span>'+esc(timeAgo(at))+' · /FleetHQ/status/office.json</span>' : "";
++  } else {
++    /* המצב הכנה: הפיד עוד לא נאפה — הכרטיס נשאר פתוח, בלי מספרים */
++    stats.hidden = true; tag.hidden = true;
++    st.textContent = t("off.pending");
++    src.innerHTML = OFFICE.fedFail ? '<span class="failhonest">'+esc(t("off.pendingSrc"))+'</span>' : "";
++  }
++}
++function renderAlive(){
++  const grid = $("alive-grid"); if(!grid) return;
++  grid.innerHTML = ALIVE_FEEDS.map(f=>{
++    const e = ALIVE[f.key];
++    let fresh;
++    if(e && e.at){
++      const g = gradeOf(e.at);
++      fresh = '<span class="dot '+g.cls+'"></span><span>'+esc(t(g.key))+' · '+esc(timeAgo(e.at))+'</span><span class="mono">'+esc(f.feed)+'</span>';
++    } else {
++      fresh = '<span class="dot dormant"></span><span class="failhonest">'+esc(t("fail.fetch"))+'</span>';
++    }
++    return '<a class="atile" href="'+f.page+'"><div class="at-name">'+esc(t("alive."+f.key+".n"))+'</div><div class="at-sub">'+esc(t("alive."+f.key+".s"))+'</div><div class="at-fresh">'+fresh+'</div></a>';
++  }).join("");
++}
++function renderNow(){
++  const el = $("src-now"); if(!el) return;
++  const stamp = (label, j, ts)=> label+" "+((j && pickAt(j, ts)) ? timeAgo(pickAt(j, ts)) : "—");
++  el.textContent = t("up.now")+": " + [
++    stamp("status.json", CACHE.status, "generatedAt"),
++    stamp("mirror.json", CACHE.mirror, "generatedAt"),
++    stamp("agents/registry.json", CACHE.registry, "generatedAt")
++  ].join(" · ");
++}
++
+ /* ═══════════ dynamic renderers ═══════════ */
+ /* אבני-דרך נמדדות של הרשת - עובדות היסטוריות עם קבלות ציבוריות.
+  * כל שורה: כישלון אמיתי שנתפס, ריפוי שנמדד, או הוכחה שנפתחת לבדיקה.
+@@ -1317,6 +1492,7 @@ function renderHome(){
+     $("k-brain").textContent = (mi.stats.brainLive??"…") + (mi.stats.brainKeys?(" / "+mi.stats.brainKeys):"");
+     $("k-brain-sub").textContent = t("kn.brain");
+   }
++  if(mi && mi.generatedAt) srcNote("src-home", t("src.mirror")+" · "+t("up.now")+": mirror.json "+timeAgo(mi.generatedAt), true);
+   const tb = $("home-beats");
+   if(mi && mi.attestations){
+     tb.innerHTML = mi.attestations.slice(0,6).map(a=>
+@@ -1385,6 +1561,14 @@ function renderNetwork(){
+ function renderPlan(){
+   const el = $("plan-list");
+   const s = CACHE.state;
++  /* D-8: חותמת עדכון כנה — state.json של המאחז יכול להיות ישן; מסמנים במפורש */
++  const ps = $("plan-src");
++  if(ps){
++    const at = s && pickAt(s, "generatedAt");
++    let ph = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg><span>'+esc(t("up.now"))+': agent/state.json'+(at?' · '+esc(timeAgo(at)):'')+'</span>';
++    if(at && (Date.now()-Date.parse(at)) > 14*864e5) ph += '<span class="failhonest"> · '+esc(t("up.stalewarn"))+'</span>';
++    ps.innerHTML = ph;
++  }
+   if(s && Array.isArray(s.openLoops) && s.openLoops.length){
+     const pri = {P0:"red",P1:"amber",P2:"emerald",P3:"green"};
+     el.innerHTML = s.openLoops.map(o=>{
+@@ -1675,7 +1859,7 @@ function renderLoop(){
+     srcNote("loop-ach-sub", t("loop.achSub"), true);
+   }
+ }
+-function renderDynamic(){ renderHome(); renderLoop(); renderNetwork(); renderAgents(); renderExchange(); renderKnowledge(); renderAdmin(); if(OP && OP.pub) opRenderPanels(); }
++function renderDynamic(){ renderHome(); renderLoop(); renderNetwork(); renderAgents(); renderExchange(); renderKnowledge(); renderAdmin(); renderOffice(); renderAlive(); renderNow(); if(OP && OP.pub) opRenderPanels(); }
+ 
+ /* ═══════════ operator login · המקום להתחבר עם המפתח ═══════════ */
+ let OP = null;
+@@ -1827,12 +2011,15 @@ function opInit(){
+ }
+ 
+ /* ═══════════ boot ═══════════ */
++async function refreshAll(){
++  await Promise.all([loadAll(), loadOffice(), loadAlive()]);
++  renderDynamic();
++}
+ async function boot(){
+   route();
+   opInit();
+-  await loadAll();
+-  renderDynamic();
+-  setInterval(()=>{ loadAll().then(renderDynamic).catch(()=>{}); }, 300000);
++  await refreshAll();
++  setInterval(()=>{ refreshAll().catch(()=>{}); }, 300000);
+ }
+ applyLang();
+ boot();
+-- 
+2.47.3
+

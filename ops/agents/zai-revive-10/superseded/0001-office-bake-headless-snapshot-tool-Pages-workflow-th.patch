@@ -1,0 +1,688 @@
+From 4aab52afcde4c35109e7fa2b04684097ae668ade Mon Sep 17 00:00:00 2001
+From: zai-revive-10a <zai-revive-10a@users.noreply.github.com>
+Date: Sun, 11 Oct 2026 19:24:49 +0000
+Subject: [PATCH 1/3] =?UTF-8?q?office-bake:=20headless=20snapshot=20tool?=
+ =?UTF-8?q?=20+=20Pages=20workflow=20=E2=80=94=20the=20office=20bakes=20it?=
+ =?UTF-8?q?self=20in=20public?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+tools/office-snapshot.mjs imports the REAL foreman engine
+(mini-services/agent-hq/src/office.ts) and runs its own scripted sim
+scenario (src/sim.ts) over the bundled demo-data/ books — no parallel
+fake office, no LLM, no keys. Emits status/office.json (every value
+measured; peak-frame rule + provenance recorded) and status/office.html
+(self-contained RTL dark page, zero JS, zero external assets, DEMO ·
+SIMULATION watermark, palette/naming from the UI's own law: globals.css
+night palette + tokens.ts + i18n.ts).
+
+.github/workflows/office-snapshot.yml: dispatch + cron '17 */3 * * *' +
+push(main, paths-filtered) -> bun install -> bake -> Pages artifact
+staged under _pages/status so the URL keeps /status/office.html ->
+deploy-pages@v4. permissions pages:write/id-token:write/contents:read,
+concurrency office-snapshot-pages. Public repo => free Actions minutes.
+---
+ .github/workflows/office-snapshot.yml |  92 +++++
+ tools/office-snapshot.mjs             | 550 ++++++++++++++++++++++++++
+ 2 files changed, 642 insertions(+)
+ create mode 100644 .github/workflows/office-snapshot.yml
+ create mode 100644 tools/office-snapshot.mjs
+
+diff --git a/.github/workflows/office-snapshot.yml b/.github/workflows/office-snapshot.yml
+new file mode 100644
+index 0000000..188771d
+--- /dev/null
++++ b/.github/workflows/office-snapshot.yml
+@@ -0,0 +1,92 @@
++name: office-snapshot
++
++# ============================================================================
++# FleetHQ office bake — the public face of מפקדת הצי.
++# ----------------------------------------------------------------------------
++# The office (mini-services/agent-hq) is the live operations room of the
++# sovereignty. This workflow bakes a headless snapshot of it with the office's
++# OWN engine (tools/office-snapshot.mjs imports Office from
++# mini-services/agent-hq/src/office.ts and runs its scripted sim scenario over
++# demo-data/) and publishes the result to GitHub Pages:
++#
++#     https://roshpinacare-sys.github.io/FleetHQ/status/office.html
++#
++# GitHub minutes law: this is a PUBLIC repo — Actions minutes are free, so the
++# scheduled bake is legal and costs nothing.
++# Honesty law: the bake is REAL work (it runs the real engine); every value in
++# the artifacts is measured from the run — nothing invented, failures exit 1.
++# ============================================================================
++
++on:
++  workflow_dispatch:
++  schedule:
++    # every 3 hours at :17 — the office's public window refreshes around the clock
++    - cron: '17 */3 * * *'
++  push:
++    branches: [main]
++    paths:
++      - 'tools/office-snapshot.mjs'
++      - 'mini-services/agent-hq/**'
++      - 'src/components/agent-hq/**'
++      - 'src/components/hq/**'
++      - '.github/workflows/office-snapshot.yml'
++
++permissions:
++  contents: read
++  pages: write
++  id-token: write
++
++concurrency:
++  group: office-snapshot-pages
++  cancel-in-progress: false
++
++jobs:
++  bake:
++    name: bake & publish office snapshot
++    runs-on: ubuntu-latest
++    timeout-minutes: 15
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v4
++
++      - name: Setup Bun
++        uses: oven-sh/setup-bun@v2
++        with:
++          bun-version: latest
++
++      - name: Install dependencies
++        run: bun install --frozen-lockfile
++
++      - name: Bake office snapshot (real engine, sim mode, zero LLM keys)
++        run: bun tools/office-snapshot.mjs
++
++      # The artifact must keep the status/ path segment so the page lives at
++      # /FleetHQ/status/office.html (upload-pages-artifact treats `path` as the
++      # site root — so we stage status/ under _pages/status/ and add a tiny
++      # zero-JS redirect at the site root).
++      - name: Stage Pages artifact
++        run: |
++          set -e
++          mkdir -p _pages/status
++          cp status/office.json status/office.html _pages/status/
++          cat > _pages/index.html <<'HTML'
++          <!doctype html>
++          <html lang="he" dir="rtl">
++          <head>
++          <meta charset="utf-8">
++          <meta http-equiv="refresh" content="0; url=./status/office.html">
++          <title>מפקדת הצי — מפנה לתמונת המצב · FleetHQ</title>
++          </head>
++          <body>
++          <p><a href="./status/office.html">לתמונת המצב של המשרד · to the office snapshot</a></p>
++          </body>
++          </html>
++          HTML
++
++      - name: Upload Pages artifact
++        uses: actions/upload-pages-artifact@v3
++        with:
++          path: _pages
++
++      - name: Deploy to GitHub Pages
++        uses: actions/deploy-pages@v4
+diff --git a/tools/office-snapshot.mjs b/tools/office-snapshot.mjs
+new file mode 100644
+index 0000000..4da1da2
+--- /dev/null
++++ b/tools/office-snapshot.mjs
+@@ -0,0 +1,550 @@
++#!/usr/bin/env bun
++// ============================================================================
++// office-snapshot — headless bake of מפקדת הצי (FleetHQ office)
++// ----------------------------------------------------------------------------
++// NO parallel fake office here: this tool imports the REAL foreman engine
++// (mini-services/agent-hq/src/office.ts — the same Office class index.ts serves
++// over socket.io) and runs its OWN scripted demo scenario (src/sim.ts) against
++// the bundled demo-data/ books, exactly like `AGENT_HQ_MODE=sim` does live.
++//
++// What it emits (into status/):
++//   office.json — machine-readable office state; every value is MEASURED from
++//                 the engine snapshot, the real demo books on disk, or the run
++//                 itself. Zero invented numbers; failures exit non-zero.
++//   office.html — self-contained RTL dark page (Hebrew + English), zero
++//                 external assets, zero JS, loud DEMO · SIMULATION watermark.
++//                 Palette + state/task naming reuse the UI's own law
++//                 (globals.css night palette, src/components/hq/tokens.ts,
++//                 src/components/agent-hq/i18n.ts).
++//
++// Honesty laws kept here:
++//   · the office never calls an LLM (sim scenario is scripted — llmUsed:false)
++//   · demo-data is copied byte-for-byte to a runtime temp dir (the engine
++//     writes its durable journal/task state next to its data dir; the copy
++//     keeps the repo tree clean and the provenance explicit)
++//   · crew "peak" frame selection rule is recorded in the JSON itself
++//   · any engine failure or scenario timeout = no files, exit 1
++// ============================================================================
++
++import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import { join, resolve } from 'node:path';
++import { fileURLToPath, pathToFileURL } from 'node:url';
++
++function fail(msg) {
++  console.error(`[office-snapshot] FAIL: ${msg}`);
++  if (typeof RUNTIME_DATA === 'string') {
++    try { rmSync(RUNTIME_DATA, { recursive: true, force: true }); } catch { /* best effort */ }
++  }
++  process.exit(1);
++}
++
++const TOOL_DIR = fileURLToPath(new URL('.', import.meta.url));
++const REPO_ROOT = resolve(TOOL_DIR, '..');
++const DEMO_DATA = join(REPO_ROOT, 'mini-services', 'agent-hq', 'demo-data');
++const OUT_DIR = join(REPO_ROOT, 'status');
++
++const SCENARIO_TIMEOUT_MS = 120_000;
++const PEAK_POLL_MS = 350;
++const DECISION_ANSWER_DELAY_MS = 900;
++
++// ---- the office's own vocabulary (mirrors src/components/agent-hq/i18n.ts) --
++const STATE_HE = {
++  idle: 'פנוי', thinking: 'חושב', reading: 'קורא ספר', checking: 'מצליב נתונים',
++  writing: 'כותב דוח', walking: 'הולך', waiting_user: 'ממתין להכרעה אוטונומית',
++  blocked: 'חסום', done: 'סיים', error: 'תקלה',
++};
++const STATE_EN = {
++  idle: 'Idle', thinking: 'Thinking', reading: 'Reading a book', checking: 'Cross-checking',
++  writing: 'Writing a report', walking: 'Walking', waiting_user: 'Awaiting autonomous resolution',
++  blocked: 'Blocked', done: 'Done', error: 'Error',
++};
++const TASK_HE = {
++  todo: 'מתוכנן', doing: 'בעבודה', review: 'לביקורת', done: 'הושלם',
++  blocked: 'חסום', cancelled: 'בוטל',
++};
++const TASK_EN = {
++  todo: 'Planned', doing: 'In work', review: 'In review', done: 'Done',
++  blocked: 'Blocked', cancelled: 'Cancelled',
++};
++const STATION_HE = { desk: 'שולחן עבודה', wall: 'לוח המשימות', podium: 'שלט ההחלטות', library: 'הספרייה', coffee: 'בר הקפה', offstage: 'מחוץ לחדר' };
++const STATION_EN = { desk: 'Desk', wall: 'Task wall', podium: 'Podium', library: 'Library', coffee: 'Coffee bar', offstage: 'Offstage' };
++
++// semantic law — src/components/hq/tokens.ts (AGENT_SEMANTIC / TASK_SEMANTIC)
++const STATE_SEMANTIC = {
++  idle: 'neutral', thinking: 'working', reading: 'working', checking: 'working', writing: 'working',
++  walking: 'neutral', waiting_user: 'attention', blocked: 'danger', done: 'ok', error: 'danger',
++};
++const TASK_SEMANTIC = {
++  todo: 'neutral', doing: 'working', review: 'attention', done: 'ok', blocked: 'danger', cancelled: 'neutral',
++};
++
++// night palette — src/app/globals.css `.dark` block (the UI's own colors)
++const SEM = {
++  working: '#d9a441', ok: '#46c98a', attention: '#e0b34d', danger: '#e5615e', neutral: '#8a8a95', info: '#9a8ec8',
++};
++const P = {
++  bg: '#0b0b0e', surface: '#131318', surface2: '#1a1a21', surface3: '#22222b',
++  line: 'rgba(255,255,255,0.08)', lineStrong: 'rgba(255,255,255,0.14)',
++  ink: '#e6e6ea', ink2: '#a1a1ab', ink3: '#6b6b76', accent: '#e05fd0', accentDim: 'rgba(224,95,208,0.13)',
++};
++
++const esc = (s) => String(s ?? '')
++  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
++  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
++
++// ============================================================================
++// 1) environment + engine import (env MUST be set before office.ts evaluates:
++//    books.ts freezes DATA_DIR at module load)
++// ============================================================================
++let RUNTIME_DATA = null;
++if (!existsSync(DEMO_DATA)) fail(`demo-data missing: ${DEMO_DATA}`);
++RUNTIME_DATA = mkdtempSync(join(tmpdir(), 'fleet-hq-office-bake-'));
++cpSync(DEMO_DATA, RUNTIME_DATA, { recursive: true });
++for (const must of ['status.json', 'mirror.json', 'agents/dex-book.json', 'agents/claims-audit.json', 'agents/fleet-indicators.json']) {
++  if (!existsSync(join(RUNTIME_DATA, must))) fail(`demo-data copy incomplete (missing ${must}) — refusing to bake`);
++}
++
++process.env.AGENT_HQ_MODE = 'sim';
++process.env.AGENT_HQ_DATA_DIR = RUNTIME_DATA;
++delete process.env.AGENT_HQ_FLEET_DIR; // demo law: no receipts/ mirror writes
++
++const bakeStart = Date.now();
++const { Office } = await import(pathToFileURL(join(REPO_ROOT, 'mini-services', 'agent-hq', 'src', 'office.ts')).href);
++
++// ============================================================================
++// 2) run the office's own sim scenario headlessly (no boot(): no floor lock,
++//    no git wire spawn, no LLM probing — status mirrors the engine's own sim
++//    boot branch from office.ts#boot, word for word)
++// ============================================================================
++const decisionsSeen = [];
++const answersGiven = [];
++let closingFeedSeen = false;
++
++const office = new Office((event, payload) => {
++  if (event === 'decision' && payload && payload.status === 'open' && !decisionsSeen.some((d) => d.id === payload.id)) {
++    decisionsSeen.push({ id: payload.id, question: payload.question, options: payload.options ?? [], agentId: payload.agentId, createdAt: payload.createdAt });
++    // the scenario itself defines a default answer after 45s (sim.ts); the bake
++    // resolves it faster via the same autonomous-operator policy path.
++    setTimeout(() => {
++      const option = (payload.options && payload.options[0]) || 'לאשר פרסום';
++      const ok = office.answerDecision(payload.id, option, 'החלטת מפעיל אוטונומי באפייה — מדיניות: הנתיב הבטוח');
++      if (ok) answersGiven.push({ id: payload.id, option });
++    }, DECISION_ANSWER_DELAY_MS);
++  }
++  if (event === 'feed' && payload && typeof payload.text === 'string' && payload.text.includes('התרחיש המדומה הסתיים')) {
++    closingFeedSeen = true;
++  }
++});
++
++office.status = {
++  backend: 'sim',
++  llmProvider: 'none',
++  message: {
++    he: 'מצב הדגמה — צוות מדומה (אפייה מתוזמנת, ללא מפתח מודל)',
++    en: 'Demo mode — simulated crew (scheduled bake, no LLM key)',
++  },
++  startedAt: bakeStart,
++  opsDone: 0,
++};
++office.feedPush('system', 'אפיית תמונת-מצב מתוזמנת (tools/office-snapshot.mjs) — תרחיש הדגמה של המשרד עצמו');
++
++const GOAL_TEXT = 'תרחיש הדגמה מתוזמן — סיור משרד ואפיית תמונת-מצב ציבורית';
++const submitted = office.submitGoal(GOAL_TEXT);
++if (!submitted.ok) fail(`engine refused the bake goal: ${submitted.error}`);
++
++// peak-frame selection (the rule is recorded in the JSON — nothing hidden)
++const peakScore = (snap) => {
++  const nonIdle = snap.agents.filter((a) => a.state !== 'idle').length;
++  const distinct = new Set(snap.tasks.map((t) => t.status)).size;
++  const open = snap.tasks.filter((t) => t.status === 'todo' || t.status === 'doing' || t.status === 'review').length;
++  return nonIdle * 10 + open * 3 + distinct * 5;
++};
++let peak = { score: -1, snap: null, at: 0 };
++
++const t0 = Date.now();
++while (Date.now() - t0 < SCENARIO_TIMEOUT_MS) {
++  const snap = office.snapshot();
++  const score = peakScore(snap);
++  if (score > peak.score) peak = { score, snap, at: Date.now() };
++  if (office.goal?.status === 'done' && closingFeedSeen) break;
++  await new Promise((r) => setTimeout(r, PEAK_POLL_MS));
++}
++if (!(office.goal?.status === 'done' && closingFeedSeen)) {
++  fail(`sim scenario did not complete within ${SCENARIO_TIMEOUT_MS}ms (goal=${office.goal?.status ?? 'none'}, closing feed seen=${closingFeedSeen})`);
++}
++await new Promise((r) => setTimeout(r, 600)); // let the engine settle its final idle states
++
++const finalSnap = office.snapshot();
++const bakeDurationMs = Date.now() - bakeStart;
++
++// ============================================================================
++// 3) measured office state → status/office.json
++// ============================================================================
++const crewOf = (id) => finalSnap.crew.find((c) => c.id === id) ?? peak.snap?.crew.find((c) => c.id === id);
++const agentOf = (snap, id) => snap.agents.find((a) => a.id === id);
++
++const crew = finalSnap.crew.map((c) => {
++  const a = agentOf(peak.snap, c.id) ?? agentOf(finalSnap, c.id);
++  return {
++    id: c.id,
++    name: c.name,            // {he,en} — from the engine's own cast (src/cast.ts)
++    role: c.role,            // 'lead' | 'worker'
++    title: c.title,          // {he,en}
++    color: c.color,
++    specialty: c.specialty,  // {he,en}
++    status: a?.state ?? 'idle',   // measured agent state at the scenario peak
++    statusHe: STATE_HE[a?.state ?? 'idle'] ?? a?.state ?? 'idle',
++    activity: a?.activity ?? '',
++    station: a?.station ?? (c.role === 'lead' ? 'wall' : 'desk'),
++    stationHe: STATION_HE[a?.station ?? 'desk'] ?? '—',
++    capturedAt: new Date(peak.at).toISOString(),
++  };
++});
++
++const wallCounts = (snap) => {
++  const out = { planned: 0, inWork: 0, inReview: 0, done: 0, blocked: 0, cancelled: 0, total: snap.tasks.length };
++  for (const t of snap.tasks) {
++    if (t.status === 'todo') out.planned++;
++    else if (t.status === 'doing') out.inWork++;
++    else if (t.status === 'review') out.inReview++;
++    else if (t.status === 'done') out.done++;
++    else if (t.status === 'blocked') out.blocked++;
++    else if (t.status === 'cancelled') out.cancelled++;
++  }
++  return out;
++};
++
++const tasks = finalSnap.tasks.map((t) => {
++  const c = t.assignee ? crewOf(t.assignee) : undefined;
++  return {
++    id: t.id,
++    title: t.title,
++    status: t.status,
++    statusHe: TASK_HE[t.status] ?? t.status,
++    assignee: t.assignee ?? null,
++    assigneeName: c?.name ?? null,
++    summary: t.summary ?? null,
++    durationMs: t.durationMs ?? null,
++  };
++});
++
++const podium = decisionsSeen.map((d) => {
++  const after = finalSnap.decisions.find((x) => x.id === d.id);
++  const c = crewOf(d.agentId);
++  return {
++    id: d.id,
++    agent: d.agentId,
++    agentName: c?.name ?? null,
++    question: after?.question ?? d.question,
++    options: d.options,
++    status: after?.status ?? 'open',
++    answer: after?.answer ?? null,
++    taskId: after?.taskId ?? null,
++  };
++});
++
++const library = finalSnap.reports.map((r) => ({
++  id: r.id,
++  title: r.title,
++  body: r.body,
++  author: r.author,
++  authorName: crewOf(r.author)?.name ?? null,
++  ts: r.ts,
++}));
++
++const books = finalSnap.books.map((b) => ({
++  id: b.id,
++  title: b.title,
++  category: b.category,
++  bytes: b.bytes,
++  ok: b.ok ?? null,
++  verdict: b.verdict ?? null,
++  owner: b.owner ?? null,
++  heartbeat: b.heartbeat ?? null,
++  ageHours: b.ageHours === undefined ? null : Number(b.ageHours.toFixed(2)),
++}));
++
++const feed = finalSnap.feed.slice(-24).map((f) => ({ ts: f.ts, kind: f.kind, text: f.text, agentId: f.agentId ?? null }));
++
++const officeJson = {
++  v: 1,
++  generatedAt: new Date().toISOString(),
++  generator: 'tools/office-snapshot.mjs',
++  mode: 'sim',
++  watermark: 'DEMO · SIMULATION',
++  watermarkHe: 'דמו · סימולציה',
++  source: 'mini-services/agent-hq/demo-data',
++  provenance: {
++    engine: 'mini-services/agent-hq/src/office.ts (Office — the real foreman engine, sim scenario from src/sim.ts)',
++    books: `${DEMO_DATA} (synthetic demo books, copied byte-for-byte to a runtime temp dir; the engine's durable journal stays in the temp dir)`,
++    namingAndColors: 'src/components/agent-hq/i18n.ts + src/components/hq/tokens.ts + src/app/globals.css night palette',
++    runtimeDataDir: 'os-temp-copy',
++    llmUsed: false,
++    bakeDurationMs,
++    peakRule: 'max(active agents ×10 + open tasks ×3 + distinct task statuses ×5), sampled every 350ms',
++    peakAt: new Date(peak.at).toISOString(),
++    decisionPolicy: 'autonomous operator answered the scenario decision with its own default option (sim.ts law) after 900ms',
++    demoNotice: 'all data synthetic and labeled — no internal fleet info (the office demo law)',
++  },
++  status: {
++    backend: finalSnap.status.backend,
++    llmProvider: finalSnap.status.llmProvider,
++    message: finalSnap.status.message,
++    opsDone: finalSnap.status.opsDone,
++  },
++  scenario: {
++    goal: office.goal?.text ?? GOAL_TEXT,
++    goalStatus: office.goal?.status ?? null,
++    progress: office.goal?.progress ?? null,
++    tasksCreated: finalSnap.tasks.length,
++    reportsPublished: finalSnap.reports.length,
++    decisionsAsked: decisionsSeen.length,
++    decisionsResolved: finalSnap.decisions.filter((d) => d.status === 'answered').length,
++    feedItems: finalSnap.feed.length,
++  },
++  crew,
++  taskWall: wallCounts(finalSnap),
++  taskWallPeak: wallCounts(peak.snap),
++  tasks,
++  podium,
++  library,
++  books,
++  feed,
++};
++
++// ============================================================================
++// 4) status/office.html — self-contained RTL dark page, zero JS, zero assets
++// ============================================================================
++const heDate = (iso) => new Date(iso).toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC');
++const stateBadge = (state, heLabel) => `<span class="badge" style="color:${SEM[STATE_SEMANTIC[state] ?? 'neutral']};border-color:${SEM[STATE_SEMANTIC[state] ?? 'neutral']}55;background:${SEM[STATE_SEMANTIC[state] ?? 'neutral']}14">${esc(heLabel)}</span>`;
++
++const crewCards = crew.map((c) => `
++  <div class="desk" style="border-top:3px solid ${esc(c.color)}">
++    <div class="desk-head"><span class="dot" style="background:${esc(c.color)}"></span>
++      <b>${esc(c.name.he)}</b> <span class="en">${esc(c.name.en)}</span></div>
++    <div class="desk-title">${esc(c.title.he)} · <span class="en">${esc(c.title.en)}</span></div>
++    <div class="desk-state">${stateBadge(c.status, c.statusHe)} <span class="st">${esc(c.stationHe)}</span></div>
++    ${c.activity ? `<div class="desk-act">“${esc(c.activity)}”</div>` : ''}
++  </div>`).join('\n');
++
++const wallCols = [
++  ['planned', 'מתוכנן', 'Planned', 'todo'],
++  ['inWork', 'בעבודה', 'In work', 'doing'],
++  ['inReview', 'לביקורת', 'In review', 'review'],
++  ['done', 'הושלם', 'Done', 'done'],
++].map(([key, he, en, status]) => {
++  const cards = tasks.filter((t) => t.status === status).map((t) => `
++      <div class="tcard">
++        <div class="tt">${esc(t.title)}</div>
++        <div class="ta">${t.assigneeName ? esc(t.assigneeName.he) : (t.assignee ? esc(t.assignee) : 'לא שובץ')}<span class="en"> · ${esc(t.assignee ?? 'unassigned')}</span></div>
++        ${t.summary ? `<div class="ts">${esc(t.summary)}</div>` : ''}
++      </div>`).join('\n');
++  const extra = (status === 'done' && officeJson.taskWall.blocked + officeJson.taskWall.cancelled > 0)
++    ? `<div class="col-extra">חסומות: ${officeJson.taskWall.blocked} · בוטלות: ${officeJson.taskWall.cancelled}</div>` : '';
++  return `
++    <div class="wcol">
++      <div class="wcol-head" style="color:${SEM[TASK_SEMANTIC[status]]}">${esc(he)} <span class="en">${esc(en)}</span><span class="cnt">${officeJson.taskWall[key]}</span></div>
++      ${cards || '<div class="wcol-empty">—</div>'}${extra}
++    </div>`;
++}).join('\n');
++
++const podiumCards = podium.map((d) => `
++  <div class="pcard">
++    <div class="pq">“${esc(d.question)}”</div>
++    <div class="pa">${d.agentName ? esc(d.agentName.he) : esc(d.agent)} · ${esc(d.status === 'answered' ? 'הוכרע אוטונומית' : d.status)}${d.answer?.option ? ` → <b>${esc(d.answer.option)}</b>` : ''}</div>
++    ${d.answer?.text ? `<div class="pt">${esc(d.answer.text)}</div>` : ''}
++  </div>`).join('\n') || '<div class="empty">אין הכרעות בתרחיש זה</div>';
++
++const reportCards = library.map((r) => `
++  <div class="rcard">
++    <div class="rt">${esc(r.title)}</div>
++    <div class="ra">${esc(r.authorName?.he ?? r.author)} · ${esc(heDate(new Date(r.ts).toISOString()))}</div>
++    <div class="rb">${esc(r.body)}</div>
++  </div>`).join('\n') || '<div class="empty">הספרייה ריקה</div>';
++
++const bookRows = books.map((b) => `
++  <tr>
++    <td><span class="bt">${esc(b.title.he)}</span> <span class="en">${esc(b.title.en)}</span><br><span class="bid en">${esc(b.id)}</span></td>
++    <td>${esc(b.category.he)}</td>
++    <td class="en" dir="ltr">${b.bytes}</td>
++    <td>${b.ok === null ? '<span class="dim">—</span>' : (b.ok ? `<span style="color:${SEM.ok}">תקין</span>` : `<span style="color:${SEM.danger}">לא תקין</span>`)}</td>
++    <td>${b.verdict ? esc(b.verdict) : '<span class="dim">—</span>'}</td>
++    <td>${b.owner ? esc(crewOf(b.owner)?.name.he ?? b.owner) : '<span class="dim">—</span>'}</td>
++    <td class="en" dir="ltr">${b.ageHours === null ? '—' : b.ageHours.toFixed(1) + 'h'}</td>
++  </tr>`).join('\n');
++
++const feedRows = feed.slice().reverse().map((f) => `
++  <div class="frow"><span class="fk" style="color:${f.kind === 'error' ? SEM.danger : f.kind === 'report' || f.kind === 'decision' || f.kind === 'git' ? SEM.ok : SEM.neutral}">${esc(f.kind)}</span>
++  <span class="ft">${esc(f.text)}</span></div>`).join('\n');
++
++const wallSummaryHe = `בסיום: ${officeJson.taskWall.done} הושלמו · בשיא התרחיש: ${officeJson.taskWallPeak.inReview} לביקורת, ${officeJson.taskWallPeak.inWork} בעבודה, ${officeJson.taskWallPeak.planned} מתוכננות`;
++
++const html = `<!doctype html>
++<html lang="he" dir="rtl">
++<head>
++<meta charset="utf-8">
++<meta name="viewport" content="width=device-width, initial-scale=1">
++<meta name="robots" content="index,follow">
++<meta name="generator" content="FleetHQ tools/office-snapshot.mjs (sim-mode bake of the real office engine)">
++<title>מפקדת הצי — תמונת מצב · FleetHQ Office Snapshot (DEMO)</title>
++<style>
++  :root{
++    --bg:${P.bg};--surface:${P.surface};--surface2:${P.surface2};--surface3:${P.surface3};
++    --line:${P.line};--line-strong:${P.lineStrong};--ink:${P.ink};--ink2:${P.ink2};--ink3:${P.ink3};
++    --accent:${P.accent};--accent-dim:${P.accentDim};
++  }
++  *{box-sizing:border-box}
++  html,body{margin:0;padding:0}
++  body{background:var(--bg);color:var(--ink);font:15px/1.55 "Segoe UI","Helvetica Neue",Arial,"Noto Sans Hebrew",sans-serif;padding:28px 18px 60px}
++  .wrap{max-width:1080px;margin:0 auto}
++  .wm{display:inline-block;font-weight:800;letter-spacing:.12em;font-size:12px;color:#0b0b0e;background:var(--accent);border-radius:6px;padding:4px 12px}
++  .wm-he{font-weight:800;font-size:12px;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:3px 10px;margin-inline-start:8px}
++  h1{font-size:30px;margin:16px 0 2px}
++  .sub{color:var(--ink2);margin:0 0 4px}
++  .sub .en{font-size:13px}
++  .meta{color:var(--ink3);font-size:12.5px;margin:2px 0 22px}
++  .meta b{color:var(--ink2);font-weight:600}
++  .strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 26px}
++  .cell{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
++  .cell .k{font-size:11.5px;color:var(--ink3);letter-spacing:.04em}
++  .cell .v{font-size:19px;font-weight:700}
++  .cell .v.ok{color:${SEM.ok}}
++  h2{font-size:17px;margin:34px 0 12px;color:var(--ink);letter-spacing:.02em}
++  h2 .en{color:var(--ink3);font-size:12px;font-weight:600;letter-spacing:.14em}
++  h2 .note{color:var(--ink3);font-size:12px;font-weight:400;margin-inline-start:10px}
++  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
++  .desk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
++  .desk-head{display:flex;align-items:center;gap:8px;font-size:16px}
++  .desk-head .en{color:var(--ink3);font-size:12.5px;font-weight:400}
++  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
++  .desk-title{color:var(--ink2);font-size:12.5px;margin:3px 0 8px}
++  .desk-title .en{color:var(--ink3)}
++  .desk-state{display:flex;align-items:center;gap:8px;margin:6px 0 2px;flex-wrap:wrap}
++  .st{color:var(--ink3);font-size:12px}
++  .badge{border:1px solid;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:600}
++  .desk-act{color:var(--ink2);font-size:13px;margin-top:6px}
++  .wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
++  .wcol{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
++  .wcol-head{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px}
++  .wcol-head .en{font-size:11px;color:var(--ink3);font-weight:600}
++  .wcol-head .cnt{margin-inline-start:auto;background:var(--surface3);border-radius:999px;padding:0 10px;font-size:13px;color:var(--ink)}
++  .wcol-extra{color:var(--ink3);font-size:12px;margin-top:8px}
++  .tcard{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px}
++  .tt{font-size:13.5px;font-weight:600}
++  .ta{font-size:12px;color:var(--ink2);margin-top:2px}
++  .ta .en{color:var(--ink3);font-size:11px}
++  .ts{font-size:12px;color:var(--ink3);margin-top:4px}
++  .wcol-empty{color:var(--ink3);margin-top:8px;font-size:13px}
++  .pcard,.rcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
++  .pq{font-size:14.5px;font-weight:600}
++  .pa{color:var(--ink2);font-size:13px;margin-top:5px}
++  .pa b{color:${SEM.ok}}
++  .pt{color:var(--ink3);font-size:12.5px;margin-top:4px}
++  .rt{font-size:15px;font-weight:700}
++  .ra{color:var(--ink3);font-size:12px;margin:3px 0 6px}
++  .rb{color:var(--ink2);font-size:13.5px;white-space:pre-line}
++  .empty{color:var(--ink3);font-size:13.5px}
++  table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13px}
++  th{background:var(--surface2);color:var(--ink3);font-weight:600;font-size:11.5px;text-align:right;padding:8px 10px;letter-spacing:.03em}
++  td{border-top:1px solid var(--line);padding:8px 10px;vertical-align:top}
++  .bt{font-weight:600}
++  .bid{color:var(--ink3);font-size:11px}
++  .dim{color:var(--ink3)}
++  .frow{display:flex;gap:10px;padding:4px 0;border-bottom:1px dashed var(--line);font-size:13px}
++  .fk{min-width:74px;font-size:11.5px;font-weight:700;letter-spacing:.05em}
++  .ft{color:var(--ink2)}
++  .honesty{margin-top:34px;background:var(--surface);border:1px solid var(--line-strong);border-inline-start:4px solid var(--accent);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink2)}
++  .honesty b{color:var(--ink)}
++  footer{margin-top:26px;color:var(--ink3);font-size:12px;line-height:1.8}
++  footer .en{direction:ltr;unicode-bidi:embed}
++  a{color:var(--accent);text-decoration:none}
++  .en{font-family:"Segoe UI",Arial,sans-serif}
++</style>
++</head>
++<body>
++<div class="wrap">
++  <header>
++    <span class="wm">DEMO · SIMULATION</span><span class="wm-he">דמו · סימולציה</span>
++    <h1>מפקדת הצי <span style="color:var(--ink3);font-size:16px;font-weight:400">· FleetHQ — the office</span></h1>
++    <p class="sub">תמונת מצב של חדר הפעולה — נאפה ראש-לחדר מתוך מנוע המשרד האמיתי במצב הדגמה
++      <span class="en">Office snapshot baked headlessly from the real foreman engine, sim mode</span></p>
++    <p class="meta">
++      נאפה ב-<b>${esc(heDate(officeJson.generatedAt))}</b> ·
++      מקור הנתונים: <b dir="ltr">${esc(officeJson.source)}</b> ·
++      מנוע: <b dir="ltr">mini-services/agent-hq/src/office.ts</b> ·
++      מודל שפה: <b>לא הופעל</b> (llmUsed=false) ·
++      משך אפייה: <b>${bakeDurationMs}ms</b>
++    </p>
++  </header>
++
++  <div class="strip">
++    <div class="cell"><div class="k">מצב</div><div class="v">${esc(officeJson.status.backend === 'sim' ? 'הדגמה' : officeJson.status.backend)}</div></div>
++    <div class="cell"><div class="k">סוכנים</div><div class="v">${crew.length}</div></div>
++    <div class="cell"><div class="k">משימות שהושלמו</div><div class="v ok">${officeJson.taskWall.done}</div></div>
++    <div class="cell"><div class="k">דוחות בספרייה</div><div class="v">${library.length}</div></div>
++    <div class="cell"><div class="k">ספרים במדף</div><div class="v">${books.length}</div></div>
++    <div class="cell"><div class="k">הכרעות שהוכרעו</div><div class="v ok">${officeJson.scenario.decisionsResolved}/${officeJson.scenario.decisionsAsked}</div></div>
++  </div>
++
++  <h2>שולחנות הצוות <span class="en">CREW DESKS</span><span class="note">נלכד בשיא התרחיש (${esc(heDate(officeJson.provenance.peakAt))}) — כל שורה נמדדה</span></h2>
++  <div class="grid">${crewCards}</div>
++
++  <h2>לוח המשימות <span class="en">TASK WALL</span><span class="note">${esc(wallSummaryHe)}</span></h2>
++  <div class="wall">${wallCols}</div>
++
++  <h2>שלט ההחלטות <span class="en">DECISIONS PODIUM</span><span class="note">כל שאלה מוכרעת אוטונומית — למבקרים אין שליטה על הצוות, בכוונה</span></h2>
++  ${podiumCards}
++
++  <h2>ספריית המפקדה <span class="en">HQ LIBRARY</span><span class="note">דוחות שנכתבו בתרחיש — מתוך הספרים הדמו שנקראו בפועל</span></h2>
++  ${reportCards}
++
++  <h2>מדף הספרים <span class="en">BOOK SHELF</span><span class="note">ספרי דמו סינתטיים — גודל ותקינות נמדדו מהדיסק</span></h2>
++  <table>
++    <thead><tr><th>ספר</th><th>קטגוריה</th><th>בתים</th><th>תקין</th><th>פסק-דין</th><th>אחראי</th><th>גיל</th></tr></thead>
++    <tbody>${bookRows}</tbody>
++  </table>
++
++  <h2>יומן המפקדה <span class="en">HQ JOURNAL</span><span class="note">${feed.length} אירועים אחרונים מתוך ${officeJson.scenario.feedItems}</span></h2>
++  ${feedRows}
++
++  <div class="honesty">
++    <b>חוק הכנות:</b> כל ערך בדף הזה נמדד מהריצה עצמה — מצבי הסוכנים, הלוח, ההכרעות והדוחות מגיעים ממנוע המשרד האמיתי
++    (<span dir="ltr">mini-services/agent-hq/src/office.ts</span>) שרץ בתרחיש ההדגמה המתוסקריפט שלו; הספרים סינתטיים ומסומנים.
++    אין כאן נתוני צי אמיתיים, ואין מספר שהומצא.
++    <span class="en" dir="ltr"><b>Honesty law:</b> every value here was measured from the run itself — the real office engine executing its own scripted demo scenario over synthetic, clearly-labeled books. No real fleet data, nothing invented.</span>
++  </div>
++
++  <footer>
++    נוצר על-ידי <span dir="ltr">tools/office-snapshot.mjs</span> · מפקדת הצי · FleetHQ ·
++    <a href="https://github.com/roshpinacare-sys/FleetHQ" class="en" dir="ltr">github.com/roshpinacare-sys/FleetHQ</a><br>
++    המשרד החי (עם מפתחות אמיתיים) רץ אצל המפעיל — ראו README · Quick Start ·
++    <span class="en" dir="ltr">the LIVE office (real keys) runs on the operator's machine — see README · Quick Start</span>
++  </footer>
++</div>
++</body>
++</html>
++`;
++
++// ============================================================================
++// 5) write + report
++// ============================================================================
++mkdirSync(OUT_DIR, { recursive: true });
++const jsonPath = join(OUT_DIR, 'office.json');
++const htmlPath = join(OUT_DIR, 'office.html');
++writeFileSync(jsonPath, JSON.stringify(officeJson, null, 2) + '\n', 'utf8');
++writeFileSync(htmlPath, html, 'utf8');
++
++const sum = (p) => statSync(p).size;
++console.log(`[office-snapshot] baked in ${bakeDurationMs}ms`);
++console.log(`[office-snapshot] status/office.json  ${sum(jsonPath)} bytes — crew:${crew.length} tasks:${tasks.length}(done:${officeJson.taskWall.done}) reports:${library.length} books:${books.length} decisions:${podium.length}/${officeJson.scenario.decisionsResolved} resolved feed:${feed.length}`);
++console.log(`[office-snapshot] status/office.html  ${sum(htmlPath)} bytes — RTL dark, zero JS, zero external assets`);
++
++// the runtime copy (engine journal + durable state inside) is bake residue —
++// let the engine's fail-soft write queues drain, then remove it (twice: a
++// straggler queue can resurrect the dir; the second pass is the proof)
++await new Promise((r) => setTimeout(r, 500));
++rmSync(RUNTIME_DATA, { recursive: true, force: true });
++setTimeout(() => {
++  try { rmSync(RUNTIME_DATA, { recursive: true, force: true }); } catch { /* best effort */ }
++}, 400);
+-- 
+2.47.3
+

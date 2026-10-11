@@ -1,0 +1,47 @@
+From 95091c4db050ca920e1d8f714dcc4e0aaf908657 Mon Sep 17 00:00:00 2001
+From: zai-revive-10a <zai-revive-10a@users.noreply.github.com>
+Date: Sun, 11 Oct 2026 19:25:04 +0000
+Subject: [PATCH 3/3] =?UTF-8?q?readme:=20'=D7=94=D7=9E=D7=A9=D7=A8=D7=93?=
+ =?UTF-8?q?=20=D7=97=D7=99'=20revival=20note=20=E2=80=94=20public=20snapsh?=
+ =?UTF-8?q?ot=20URL=20+=20live-mode=20pointer?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Archived 2026-10-11 by the parallel archive wave, unarchived same day
+per owner directive D-8 (revive-not-kill). Hebrew-first section + English
+mirror: the public snapshot URL, what bakes it, the honesty law, and the
+one-line pointer that live mode (real keys) stays on the operator's
+machine per README Quick Start / Going live.
+---
+ README.md | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/README.md b/README.md
+index ba4b857..e07c99e 100644
+--- a/README.md
++++ b/README.md
+@@ -165,6 +165,20 @@ The front desk of the office has a person — **עמית / Amit**, the office re
+ 
+ Each crew member has a distinct silhouette (cap, beanie, bun, hood, headphones) and color — the same desk always belongs to the same operator, and every nameplate carries the agent's live activity line.
+ 
++## המשרד חי
++
++המשרד הושבת בטעות בגל-ארכוב של 2026-10-11 והושב לחיים באותו יום מחדש, בהוראת הבעלים (D-8 — דוקטרינת revive-not-kill). מפקדת הצי היא המשרד של הריבונות: חדר פעולה חי שבו סוכנים מתכננים, עובדים ומדווחים — והוא חייב תמיד לעבוד ולהיות גלוי לציבור.
++
++- **תמונת-מצב ציבורית (אפייה אוטומטית כל 3 שעות):** [roshpinacare-sys.github.io/FleetHQ/status/office.html](https://roshpinacare-sys.github.io/FleetHQ/status/office.html) — נבנית על-ידי `tools/office-snapshot.mjs`, שמריץ את מנוע המשרד האמיתי (`mini-services/agent-hq`) בתרחיש ההדגמה המתוסקריפט שלו על ספרי הדמו, ומפיק HTML כהה-RTL עצאי (אפס JavaScript, אפס נכסים חיצוניים) + `status/office.json` מכני. חוק הכנות נשמר: כל ערך נמדד, הסימון "DEMO · SIMULATION" גלוי, ואפס מפתחות.
++- **המצב החי (מפתחות אמיתיים) עדיין רץ אצל המפעיל** — בדיוק כמו ב-[Quick Start](#quick-start) וב-[Going live](#going-live): הפורמן בסביבת ההפעלה שלך, לא בענן.
++
++## The office is alive (English)
++
++FleetHQ was accidentally archived in the 2026-10-11 archive wave and revived the same day on the owner's directive (D-8 — the *revive-not-kill* doctrine). The office is the sovereign's own operations room: it must always work, serve the network, and be publicly visible.
++
++- **Public snapshot (auto-baked every 3 hours):** [roshpinacare-sys.github.io/FleetHQ/status/office.html](https://roshpinacare-sys.github.io/FleetHQ/status/office.html) — baked by `tools/office-snapshot.mjs`, which runs the REAL office engine (`mini-services/agent-hq`) through its own scripted sim scenario over the demo books and emits a self-contained RTL dark page (zero JS, zero external assets) plus a machine-readable `status/office.json`. Honesty law holds: every value is measured, the "DEMO · SIMULATION" watermark is loud, and no keys are involved.
++- **Live mode (real keys) still runs on the operator's machine** — exactly per [Quick Start](#quick-start) / [Going live](#going-live): the foreman belongs to your runtime, not to the cloud.
++
+ ## License
+ 
+ MIT — see [LICENSE](LICENSE).
+-- 
+2.47.3
+

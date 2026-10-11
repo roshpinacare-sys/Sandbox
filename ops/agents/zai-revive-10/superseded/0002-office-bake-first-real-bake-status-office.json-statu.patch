@@ -1,0 +1,1097 @@
+From 419f43cf555eda9d4103da0f5e4272ae636bef2f Mon Sep 17 00:00:00 2001
+From: zai-revive-10a <zai-revive-10a@users.noreply.github.com>
+Date: Sun, 11 Oct 2026 19:25:04 +0000
+Subject: [PATCH 2/3] =?UTF-8?q?office-bake:=20first=20real=20bake=20?=
+ =?UTF-8?q?=E2=80=94=20status/office.json=20+=20status/office.html?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Produced by: bun tools/office-snapshot.mjs (16.7s, exit 0).
+Measured: 6 crew (real engine states at scenario peak), 3/3 tasks done,
+1 decision asked / 1 resolved autonomously, 3 reports published,
+15 demo books measured from disk (bytes/ok/verdict/age), 12 journal
+events, llmUsed=false, bakeDurationMs=16741. mode=sim, watermark
+'DEMO · SIMULATION', source=mini-services/agent-hq/demo-data.
+---
+ status/office.html | 433 +++++++++++++++++++++++++++++++
+ status/office.json | 627 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 1060 insertions(+)
+ create mode 100644 status/office.html
+ create mode 100644 status/office.json
+
+diff --git a/status/office.html b/status/office.html
+new file mode 100644
+index 0000000..5fdcd72
+--- /dev/null
++++ b/status/office.html
+@@ -0,0 +1,433 @@
++<!doctype html>
++<html lang="he" dir="rtl">
++<head>
++<meta charset="utf-8">
++<meta name="viewport" content="width=device-width, initial-scale=1">
++<meta name="robots" content="index,follow">
++<meta name="generator" content="FleetHQ tools/office-snapshot.mjs (sim-mode bake of the real office engine)">
++<title>מפקדת הצי — תמונת מצב · FleetHQ Office Snapshot (DEMO)</title>
++<style>
++  :root{
++    --bg:#0b0b0e;--surface:#131318;--surface2:#1a1a21;--surface3:#22222b;
++    --line:rgba(255,255,255,0.08);--line-strong:rgba(255,255,255,0.14);--ink:#e6e6ea;--ink2:#a1a1ab;--ink3:#6b6b76;
++    --accent:#e05fd0;--accent-dim:rgba(224,95,208,0.13);
++  }
++  *{box-sizing:border-box}
++  html,body{margin:0;padding:0}
++  body{background:var(--bg);color:var(--ink);font:15px/1.55 "Segoe UI","Helvetica Neue",Arial,"Noto Sans Hebrew",sans-serif;padding:28px 18px 60px}
++  .wrap{max-width:1080px;margin:0 auto}
++  .wm{display:inline-block;font-weight:800;letter-spacing:.12em;font-size:12px;color:#0b0b0e;background:var(--accent);border-radius:6px;padding:4px 12px}
++  .wm-he{font-weight:800;font-size:12px;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:3px 10px;margin-inline-start:8px}
++  h1{font-size:30px;margin:16px 0 2px}
++  .sub{color:var(--ink2);margin:0 0 4px}
++  .sub .en{font-size:13px}
++  .meta{color:var(--ink3);font-size:12.5px;margin:2px 0 22px}
++  .meta b{color:var(--ink2);font-weight:600}
++  .strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 26px}
++  .cell{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
++  .cell .k{font-size:11.5px;color:var(--ink3);letter-spacing:.04em}
++  .cell .v{font-size:19px;font-weight:700}
++  .cell .v.ok{color:#46c98a}
++  h2{font-size:17px;margin:34px 0 12px;color:var(--ink);letter-spacing:.02em}
++  h2 .en{color:var(--ink3);font-size:12px;font-weight:600;letter-spacing:.14em}
++  h2 .note{color:var(--ink3);font-size:12px;font-weight:400;margin-inline-start:10px}
++  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
++  .desk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
++  .desk-head{display:flex;align-items:center;gap:8px;font-size:16px}
++  .desk-head .en{color:var(--ink3);font-size:12.5px;font-weight:400}
++  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
++  .desk-title{color:var(--ink2);font-size:12.5px;margin:3px 0 8px}
++  .desk-title .en{color:var(--ink3)}
++  .desk-state{display:flex;align-items:center;gap:8px;margin:6px 0 2px;flex-wrap:wrap}
++  .st{color:var(--ink3);font-size:12px}
++  .badge{border:1px solid;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:600}
++  .desk-act{color:var(--ink2);font-size:13px;margin-top:6px}
++  .wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
++  .wcol{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
++  .wcol-head{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px}
++  .wcol-head .en{font-size:11px;color:var(--ink3);font-weight:600}
++  .wcol-head .cnt{margin-inline-start:auto;background:var(--surface3);border-radius:999px;padding:0 10px;font-size:13px;color:var(--ink)}
++  .wcol-extra{color:var(--ink3);font-size:12px;margin-top:8px}
++  .tcard{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px}
++  .tt{font-size:13.5px;font-weight:600}
++  .ta{font-size:12px;color:var(--ink2);margin-top:2px}
++  .ta .en{color:var(--ink3);font-size:11px}
++  .ts{font-size:12px;color:var(--ink3);margin-top:4px}
++  .wcol-empty{color:var(--ink3);margin-top:8px;font-size:13px}
++  .pcard,.rcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
++  .pq{font-size:14.5px;font-weight:600}
++  .pa{color:var(--ink2);font-size:13px;margin-top:5px}
++  .pa b{color:#46c98a}
++  .pt{color:var(--ink3);font-size:12.5px;margin-top:4px}
++  .rt{font-size:15px;font-weight:700}
++  .ra{color:var(--ink3);font-size:12px;margin:3px 0 6px}
++  .rb{color:var(--ink2);font-size:13.5px;white-space:pre-line}
++  .empty{color:var(--ink3);font-size:13.5px}
++  table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13px}
++  th{background:var(--surface2);color:var(--ink3);font-weight:600;font-size:11.5px;text-align:right;padding:8px 10px;letter-spacing:.03em}
++  td{border-top:1px solid var(--line);padding:8px 10px;vertical-align:top}
++  .bt{font-weight:600}
++  .bid{color:var(--ink3);font-size:11px}
++  .dim{color:var(--ink3)}
++  .frow{display:flex;gap:10px;padding:4px 0;border-bottom:1px dashed var(--line);font-size:13px}
++  .fk{min-width:74px;font-size:11.5px;font-weight:700;letter-spacing:.05em}
++  .ft{color:var(--ink2)}
++  .honesty{margin-top:34px;background:var(--surface);border:1px solid var(--line-strong);border-inline-start:4px solid var(--accent);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink2)}
++  .honesty b{color:var(--ink)}
++  footer{margin-top:26px;color:var(--ink3);font-size:12px;line-height:1.8}
++  footer .en{direction:ltr;unicode-bidi:embed}
++  a{color:var(--accent);text-decoration:none}
++  .en{font-family:"Segoe UI",Arial,sans-serif}
++</style>
++</head>
++<body>
++<div class="wrap">
++  <header>
++    <span class="wm">DEMO · SIMULATION</span><span class="wm-he">דמו · סימולציה</span>
++    <h1>מפקדת הצי <span style="color:var(--ink3);font-size:16px;font-weight:400">· FleetHQ — the office</span></h1>
++    <p class="sub">תמונת מצב של חדר הפעולה — נאפה ראש-לחדר מתוך מנוע המשרד האמיתי במצב הדגמה
++      <span class="en">Office snapshot baked headlessly from the real foreman engine, sim mode</span></p>
++    <p class="meta">
++      נאפה ב-<b>2026-10-11 19:24:00 UTC</b> ·
++      מקור הנתונים: <b dir="ltr">mini-services/agent-hq/demo-data</b> ·
++      מנוע: <b dir="ltr">mini-services/agent-hq/src/office.ts</b> ·
++      מודל שפה: <b>לא הופעל</b> (llmUsed=false) ·
++      משך אפייה: <b>16740ms</b>
++    </p>
++  </header>
++
++  <div class="strip">
++    <div class="cell"><div class="k">מצב</div><div class="v">הדגמה</div></div>
++    <div class="cell"><div class="k">סוכנים</div><div class="v">6</div></div>
++    <div class="cell"><div class="k">משימות שהושלמו</div><div class="v ok">3</div></div>
++    <div class="cell"><div class="k">דוחות בספרייה</div><div class="v">3</div></div>
++    <div class="cell"><div class="k">ספרים במדף</div><div class="v">15</div></div>
++    <div class="cell"><div class="k">הכרעות שהוכרעו</div><div class="v ok">1/1</div></div>
++  </div>
++
++  <h2>שולחנות הצוות <span class="en">CREW DESKS</span><span class="note">נלכד בשיא התרחיש (2026-10-11 19:23:47 UTC) — כל שורה נמדדה</span></h2>
++  <div class="grid">
++  <div class="desk" style="border-top:3px solid #E0973F">
++    <div class="desk-head"><span class="dot" style="background:#E0973F"></span>
++      <b>אלוף</b> <span class="en">Aluf</span></div>
++    <div class="desk-title">ראש-המטה · <span class="en">Chief of staff</span></div>
++    <div class="desk-state"><span class="badge" style="color:#d9a441;border-color:#d9a44155;background:#d9a44114">חושב</span> <span class="st">לוח המשימות</span></div>
++    <div class="desk-act">“מתכנן (דמו)…”</div>
++  </div>
++
++  <div class="desk" style="border-top:3px solid #3BA08F">
++    <div class="desk-head"><span class="dot" style="background:#3BA08F"></span>
++      <b>גל</b> <span class="en">Gal</span></div>
++    <div class="desk-title">מפעיל שוק · <span class="en">Market operator</span></div>
++    <div class="desk-state"><span class="badge" style="color:#8a8a95;border-color:#8a8a9555;background:#8a8a9514">פנוי</span> <span class="st">שולחן עבודה</span></div>
++    
++  </div>
++
++  <div class="desk" style="border-top:3px solid #C9A227">
++    <div class="desk-head"><span class="dot" style="background:#C9A227"></span>
++      <b>ארז</b> <span class="en">Erez</span></div>
++    <div class="desk-title">מבקר פנים · <span class="en">Internal auditor</span></div>
++    <div class="desk-state"><span class="badge" style="color:#8a8a95;border-color:#8a8a9555;background:#8a8a9514">הולך</span> <span class="st">שולחן עבודה</span></div>
++    <div class="desk-act">“הולך לשולחן”</div>
++  </div>
++
++  <div class="desk" style="border-top:3px solid #7BA05B">
++    <div class="desk-head"><span class="dot" style="background:#7BA05B"></span>
++      <b>תמר</b> <span class="en">Tamar</span></div>
++    <div class="desk-title">כלכלנית הצי · <span class="en">Fleet economist</span></div>
++    <div class="desk-state"><span class="badge" style="color:#8a8a95;border-color:#8a8a9555;background:#8a8a9514">פנוי</span> <span class="st">שולחן עבודה</span></div>
++    
++  </div>
++
++  <div class="desk" style="border-top:3px solid #C76B4A">
++    <div class="desk-head"><span class="dot" style="background:#C76B4A"></span>
++      <b>שחר</b> <span class="en">Shachar</span></div>
++    <div class="desk-title">קצין מודיעין · <span class="en">Intelligence officer</span></div>
++    <div class="desk-state"><span class="badge" style="color:#8a8a95;border-color:#8a8a9555;background:#8a8a9514">פנוי</span> <span class="st">שולחן עבודה</span></div>
++    
++  </div>
++
++  <div class="desk" style="border-top:3px solid #6E8FA8">
++    <div class="desk-head"><span class="dot" style="background:#6E8FA8"></span>
++      <b>ירדן</b> <span class="en">Yarden</span></div>
++    <div class="desk-title">מהנדס תשתיות · <span class="en">Infrastructure engineer</span></div>
++    <div class="desk-state"><span class="badge" style="color:#8a8a95;border-color:#8a8a9555;background:#8a8a9514">פנוי</span> <span class="st">שולחן עבודה</span></div>
++    
++  </div></div>
++
++  <h2>לוח המשימות <span class="en">TASK WALL</span><span class="note">בסיום: 3 הושלמו · בשיא התרחיש: 1 לביקורת, 0 בעבודה, 2 מתוכננות</span></h2>
++  <div class="wall">
++    <div class="wcol">
++      <div class="wcol-head" style="color:#8a8a95">מתוכנן <span class="en">Planned</span><span class="cnt">0</span></div>
++      <div class="wcol-empty">—</div>
++    </div>
++
++    <div class="wcol">
++      <div class="wcol-head" style="color:#d9a441">בעבודה <span class="en">In work</span><span class="cnt">0</span></div>
++      <div class="wcol-empty">—</div>
++    </div>
++
++    <div class="wcol">
++      <div class="wcol-head" style="color:#e0b34d">לביקורת <span class="en">In review</span><span class="cnt">0</span></div>
++      <div class="wcol-empty">—</div>
++    </div>
++
++    <div class="wcol">
++      <div class="wcol-head" style="color:#46c98a">הושלם <span class="en">Done</span><span class="cnt">3</span></div>
++      
++      <div class="tcard">
++        <div class="tt">קריאת ספר הדקס הדמו</div>
++        <div class="ta">גל<span class="en"> · gal</span></div>
++        <div class="ts">דמו: ספר הדקס נקרא וסוכם מתוך הקובץ בפועל</div>
++      </div>
++
++      <div class="tcard">
++        <div class="tt">ביקורת טענות דמו</div>
++        <div class="ta">ארז<span class="en"> · erez</span></div>
++        <div class="ts">דמו: ביקורת בוצעה על ספרי הדמו</div>
++      </div>
++
++      <div class="tcard">
++        <div class="tt">סיכום מדדי הצי הדמו</div>
++        <div class="ta">שחר<span class="en"> · shachar</span></div>
++        <div class="ts">דמו: מדדים סוכמו</div>
++      </div>
++    </div></div>
++
++  <h2>שלט ההחלטות <span class="en">DECISIONS PODIUM</span><span class="note">כל שאלה מוכרעת אוטונומית — למבקרים אין שליטה על הצוות, בכוונה</span></h2>
++  
++  <div class="pcard">
++    <div class="pq">“דמו: לאשר את ממצאי הביקורת לפרסום בספרייה?”</div>
++    <div class="pa">ארז · הוכרע אוטונומית → <b>לאשר פרסום</b></div>
++    <div class="pt">החלטת מפעיל אוטונומי באפייה — מדיניות: הנתיב הבטוח</div>
++  </div>
++
++  <h2>ספריית המפקדה <span class="en">HQ LIBRARY</span><span class="note">דוחות שנכתבו בתרחיש — מתוך הספרים הדמו שנקראו בפועל</span></h2>
++  
++  <div class="rcard">
++    <div class="rt">סיכום מבצע — הדגמה של מפקדת הצי</div>
++    <div class="ra">אלוף · 2026-10-11 19:23:55 UTC</div>
++    <div class="rb">תרחיש הדגמה שהושלם על ידי הצוות המדומה. במצב החי, הצוות הוא סוכני מודל אמיתיים שקוראים את ספרי הצי האמיתיים.</div>
++  </div>
++
++  <div class="rcard">
++    <div class="rt">סיכום מדדי הצי — הדגמה</div>
++    <div class="ra">שחר · 2026-10-11 19:23:53 UTC</div>
++    <div class="rb">דוח הדגמה שנכתב מתוך ספר מדדי הדמו. כל המספרים סינתטיים ומסומנים בבירור.</div>
++  </div>
++
++  <div class="rcard">
++    <div class="rt">ממצאי ביקורת דמו — מאושר לספרייה</div>
++    <div class="ra">ארז · 2026-10-11 19:23:51 UTC</div>
++    <div class="rb">דוח הדגמה: נכתב מתוך הספרים הדמו שנקראו בפועל בתרחיש זה. אין כאן נתוני צי אמיתיים.</div>
++  </div>
++
++  <h2>מדף הספרים <span class="en">BOOK SHELF</span><span class="note">ספרי דמו סינתטיים — גודל ותקינות נמדדו מהדיסק</span></h2>
++  <table>
++    <thead><tr><th>ספר</th><th>קטגוריה</th><th>בתים</th><th>תקין</th><th>פסק-דין</th><th>אחראי</th><th>גיל</th></tr></thead>
++    <tbody>
++  <tr>
++    <td><span class="bt">ספר הדקס</span> <span class="en">DEX book</span><br><span class="bid en">dex-book</span></td>
++    <td>שוק</td>
++    <td class="en" dir="ltr">761</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td>DEMO-BOOK</td>
++    <td>גל</td>
++    <td class="en" dir="ltr">103.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">פנקס הביצועים</span> <span class="en">Fills ledger</span><br><span class="bid en">fills-ledger</span></td>
++    <td>שוק</td>
++    <td class="en" dir="ltr">131</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>גל</td>
++    <td class="en" dir="ltr">103.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">רשת השוק</span> <span class="en">Market grid</span><br><span class="bid en">market-grid</span></td>
++    <td>שוק</td>
++    <td class="en" dir="ltr">167</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>גל</td>
++    <td class="en" dir="ltr">103.7h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">היסטוריית שערי-אמת</span> <span class="en">Truth gate history</span><br><span class="bid en">truth-history</span></td>
++    <td>אמת</td>
++    <td class="en" dir="ltr">312</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>גל</td>
++    <td class="en" dir="ltr">103.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">ביקורת טענות</span> <span class="en">Claims audit</span><br><span class="bid en">claims-audit</span></td>
++    <td>ביקורת</td>
++    <td class="en" dir="ltr">476</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td>DEMO-CLAIMS</td>
++    <td>ארז</td>
++    <td class="en" dir="ltr">104.9h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">ספר הכלכלה</span> <span class="en">Econ book</span><br><span class="bid en">econ-book</span></td>
++    <td>כלכלה</td>
++    <td class="en" dir="ltr">210</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>תמר</td>
++    <td class="en" dir="ltr">105.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">מצב הריבונות</span> <span class="en">Sovereign state</span><br><span class="bid en">sovereign-state</span></td>
++    <td>כלכלה</td>
++    <td class="en" dir="ltr">144</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>תמר</td>
++    <td class="en" dir="ltr">108.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">מדדי הצי</span> <span class="en">Fleet indicators</span><br><span class="bid en">fleet-indicators</span></td>
++    <td>מודיעין</td>
++    <td class="en" dir="ltr">386</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td>DEMO-INDICATORS</td>
++    <td>שחר</td>
++    <td class="en" dir="ltr">103.7h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">מפקד הצי</span> <span class="en">Fleet census</span><br><span class="bid en">fleet-census</span></td>
++    <td>מודיעין</td>
++    <td class="en" dir="ltr">388</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>שחר</td>
++    <td class="en" dir="ltr">106.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">ספר הדופק</span> <span class="en">Pulse book</span><br><span class="bid en">pulse-book</span></td>
++    <td>מודיעין</td>
++    <td class="en" dir="ltr">194</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>שחר</td>
++    <td class="en" dir="ltr">103.9h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">סיכום למידה</span> <span class="en">Learning summary</span><br><span class="bid en">learning-summary</span></td>
++    <td>מודיעין</td>
++    <td class="en" dir="ltr">207</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>שחר</td>
++    <td class="en" dir="ltr">107.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">רישום הסוכנים</span> <span class="en">Agent registry</span><br><span class="bid en">registry</span></td>
++    <td>תשתיות</td>
++    <td class="en" dir="ltr">378</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>ירדן</td>
++    <td class="en" dir="ltr">104.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">אוטובוס תיאום</span> <span class="en">Coordination bus</span><br><span class="bid en">coord-bus</span></td>
++    <td>תשתיות</td>
++    <td class="en" dir="ltr">318</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>ירדן</td>
++    <td class="en" dir="ltr">103.6h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">מצב הרשת</span> <span class="en">Network status</span><br><span class="bid en">status</span></td>
++    <td>תשתיות</td>
++    <td class="en" dir="ltr">154</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>ירדן</td>
++    <td class="en" dir="ltr">103.4h</td>
++  </tr>
++
++  <tr>
++    <td><span class="bt">ספר המראה</span> <span class="en">Mirror book</span><br><span class="bid en">mirror</span></td>
++    <td>תשתיות</td>
++    <td class="en" dir="ltr">135</td>
++    <td><span style="color:#46c98a">תקין</span></td>
++    <td><span class="dim">—</span></td>
++    <td>ירדן</td>
++    <td class="en" dir="ltr">104.4h</td>
++  </tr></tbody>
++  </table>
++
++  <h2>יומן המפקדה <span class="en">HQ JOURNAL</span><span class="note">12 אירועים אחרונים מתוך 12</span></h2>
++  
++  <div class="frow"><span class="fk" style="color:#8a8a95">system</span>
++  <span class="ft">DEMO — התרחיש המדומה הסתיים</span></div>
++
++  <div class="frow"><span class="fk" style="color:#46c98a">report</span>
++  <span class="ft">דוח חדש בספרייה: סיכום מבצע — הדגמה של מפקדת הצי</span></div>
++
++  <div class="frow"><span class="fk" style="color:#46c98a">report</span>
++  <span class="ft">דוח חדש בספרייה: סיכום מדדי הצי — הדגמה</span></div>
++
++  <div class="frow"><span class="fk" style="color:#46c98a">report</span>
++  <span class="ft">דוח חדש בספרייה: ממצאי ביקורת דמו — מאושר לספרייה</span></div>
++
++  <div class="frow"><span class="fk" style="color:#46c98a">decision</span>
++  <span class="ft">המפעיל האוטונומי הכריע: לאשר פרסום</span></div>
++
++  <div class="frow"><span class="fk" style="color:#46c98a">decision</span>
++  <span class="ft">שאלה למפעיל האוטונומי: דמו: לאשר את ממצאי הביקורת לפרסום בספרייה?</span></div>
++
++  <div class="frow"><span class="fk" style="color:#8a8a95">task</span>
++  <span class="ft">משימה חדשה: סיכום מדדי הצי הדמו</span></div>
++
++  <div class="frow"><span class="fk" style="color:#8a8a95">task</span>
++  <span class="ft">משימה חדשה: ביקורת טענות דמו</span></div>
++
++  <div class="frow"><span class="fk" style="color:#8a8a95">task</span>
++  <span class="ft">משימה חדשה: קריאת ספר הדקס הדמו</span></div>
++
++  <div class="frow"><span class="fk" style="color:#8a8a95">system</span>
++  <span class="ft">DEMO — צוות מדומה מבצע תרחיש הדגמה (לא סוכני מודל אמיתיים)</span></div>
++
++  <div class="frow"><span class="fk" style="color:#8a8a95">user</span>
++  <span class="ft">תרחיש הדגמה מתוזמן — סיור משרד ואפיית תמונת-מצב ציבורית</span></div>
++
++  <div class="frow"><span class="fk" style="color:#8a8a95">system</span>
++  <span class="ft">אפיית תמונת-מצב מתוזמנת (tools/office-snapshot.mjs) — תרחיש הדגמה של המשרד עצמו</span></div>
++
++  <div class="honesty">
++    <b>חוק הכנות:</b> כל ערך בדף הזה נמדד מהריצה עצמה — מצבי הסוכנים, הלוח, ההכרעות והדוחות מגיעים ממנוע המשרד האמיתי
++    (<span dir="ltr">mini-services/agent-hq/src/office.ts</span>) שרץ בתרחיש ההדגמה המתוסקריפט שלו; הספרים סינתטיים ומסומנים.
++    אין כאן נתוני צי אמיתיים, ואין מספר שהומצא.
++    <span class="en" dir="ltr"><b>Honesty law:</b> every value here was measured from the run itself — the real office engine executing its own scripted demo scenario over synthetic, clearly-labeled books. No real fleet data, nothing invented.</span>
++  </div>
++
++  <footer>
++    נוצר על-ידי <span dir="ltr">tools/office-snapshot.mjs</span> · מפקדת הצי · FleetHQ ·
++    <a href="https://github.com/roshpinacare-sys/FleetHQ" class="en" dir="ltr">github.com/roshpinacare-sys/FleetHQ</a><br>
++    המשרד החי (עם מפתחות אמיתיים) רץ אצל המפעיל — ראו README · Quick Start ·
++    <span class="en" dir="ltr">the LIVE office (real keys) runs on the operator's machine — see README · Quick Start</span>
++  </footer>
++</div>
++</body>
++</html>
+diff --git a/status/office.json b/status/office.json
+new file mode 100644
+index 0000000..afbb242
+--- /dev/null
++++ b/status/office.json
+@@ -0,0 +1,627 @@
++{
++  "v": 1,
++  "generatedAt": "2026-10-11T19:24:00.114Z",
++  "generator": "tools/office-snapshot.mjs",
++  "mode": "sim",
++  "watermark": "DEMO · SIMULATION",
++  "watermarkHe": "דמו · סימולציה",
++  "source": "mini-services/agent-hq/demo-data",
++  "provenance": {
++    "engine": "mini-services/agent-hq/src/office.ts (Office — the real foreman engine, sim scenario from src/sim.ts)",
++    "books": "/home/z/estate/FleetHQ/mini-services/agent-hq/demo-data (synthetic demo books, copied byte-for-byte to a runtime temp dir; the engine's durable journal stays in the temp dir)",
++    "namingAndColors": "src/components/agent-hq/i18n.ts + src/components/hq/tokens.ts + src/app/globals.css night palette",
++    "runtimeDataDir": "os-temp-copy",
++    "llmUsed": false,
++    "bakeDurationMs": 16740,
++    "peakRule": "max(active agents ×10 + open tasks ×3 + distinct task statuses ×5), sampled every 350ms",
++    "peakAt": "2026-10-11T19:23:47.945Z",
++    "decisionPolicy": "autonomous operator answered the scenario decision with its own default option (sim.ts law) after 900ms",
++    "demoNotice": "all data synthetic and labeled — no internal fleet info (the office demo law)"
++  },
++  "status": {
++    "backend": "sim",
++    "llmProvider": "none",
++    "message": {
++      "he": "מצב הדגמה — צוות מדומה (אפייה מתוזמנת, ללא מפתח מודל)",
++      "en": "Demo mode — simulated crew (scheduled bake, no LLM key)"
++    },
++    "opsDone": 0
++  },
++  "scenario": {
++    "goal": "תרחיש הדגמה מתוזמן — סיור משרד ואפיית תמונת-מצב ציבורית",
++    "goalStatus": "done",
++    "progress": 1,
++    "tasksCreated": 3,
++    "reportsPublished": 3,
++    "decisionsAsked": 1,
++    "decisionsResolved": 1,
++    "feedItems": 12
++  },
++  "crew": [
++    {
++      "id": "aluf",
++      "name": {
++        "he": "אלוף",
++        "en": "Aluf"
++      },
++      "role": "lead",
++      "title": {
++        "he": "ראש-המטה",
++        "en": "Chief of staff"
++      },
++      "color": "#E0973F",
++      "specialty": {
++        "he": "מתכנן את העבודה, מחלק משימות וחותם סיכומים",
++        "en": "Plans the work, splits tasks, signs the summary"
++      },
++      "status": "thinking",
++      "statusHe": "חושב",
++      "activity": "מתכנן (דמו)…",
++      "station": "wall",
++      "stationHe": "לוח המשימות",
++      "capturedAt": "2026-10-11T19:23:47.945Z"
++    },
++    {
++      "id": "gal",
++      "name": {
++        "he": "גל",
++        "en": "Gal"
++      },
++      "role": "worker",
++      "title": {
++        "he": "מפעיל שוק",
++        "en": "Market operator"
++      },
++      "color": "#3BA08F",
++      "specialty": {
++        "he": "ספרי הדקס, המסחר וההגיון הפנימי",
++        "en": "Exchange, fills and internal markets"
++      },
++      "status": "idle",
++      "statusHe": "פנוי",
++      "activity": "",
++      "station": "desk",
++      "stationHe": "שולחן עבודה",
++      "capturedAt": "2026-10-11T19:23:47.945Z"
++    },
++    {
++      "id": "erez",
++      "name": {
++        "he": "ארז",
++        "en": "Erez"
++      },
++      "role": "worker",
++      "title": {
++        "he": "מבקר פנים",
++        "en": "Internal auditor"
++      },
++      "color": "#C9A227",
++      "specialty": {
++        "he": "ביקורות, טענות וחוזי יכולת",
++        "en": "Audits, claims and capability contracts"
++      },
++      "status": "walking",
++      "statusHe": "הולך",
++      "activity": "הולך לשולחן",
++      "station": "desk",
++      "stationHe": "שולחן עבודה",
++      "capturedAt": "2026-10-11T19:23:47.945Z"
++    },
++    {
++      "id": "tamar",
++      "name": {
++        "he": "תמר",
++        "en": "Tamar"
++      },
++      "role": "worker",
++      "title": {
++        "he": "כלכלנית הצי",
++        "en": "Fleet economist"
++      },
++      "color": "#7BA05B",
++      "specialty": {
++        "he": "כלכלה, ריבונות וספרי הון",
++        "en": "Economics, sovereignty and capital books"
++      },
++      "status": "idle",
++      "statusHe": "פנוי",
++      "activity": "",
++      "station": "desk",
++      "stationHe": "שולחן עבודה",
++      "capturedAt": "2026-10-11T19:23:47.945Z"
++    },
++    {
++      "id": "shachar",
++      "name": {
++        "he": "שחר",
++        "en": "Shachar"
++      },
++      "role": "worker",
++      "title": {
++        "he": "קצין מודיעין",
++        "en": "Intelligence officer"
++      },
++      "color": "#C76B4A",
++      "specialty": {
++        "he": "מדדים, מפקד ולמידה של הצי",
++        "en": "Indicators, census and fleet learning"
++      },
++      "status": "idle",
++      "statusHe": "פנוי",
++      "activity": "",
++      "station": "desk",
++      "stationHe": "שולחן עבודה",
++      "capturedAt": "2026-10-11T19:23:47.945Z"
++    },
++    {
++      "id": "yarden",
++      "name": {
++        "he": "ירדן",
++        "en": "Yarden"
++      },
++      "role": "worker",
++      "title": {
++        "he": "מהנדס תשתיות",
++        "en": "Infrastructure engineer"
++      },
++      "color": "#6E8FA8",
++      "specialty": {
++        "he": "רישום הסוכנים, תזמונים ואוטובוס התיאום",
++        "en": "Agent registry, schedulers and the coord bus"
++      },
++      "status": "idle",
++      "statusHe": "פנוי",
++      "activity": "",
++      "station": "desk",
++      "stationHe": "שולחן עבודה",
++      "capturedAt": "2026-10-11T19:23:47.945Z"
++    }
++  ],
++  "taskWall": {
++    "planned": 0,
++    "inWork": 0,
++    "inReview": 0,
++    "done": 3,
++    "blocked": 0,
++    "cancelled": 0,
++    "total": 3
++  },
++  "taskWallPeak": {
++    "planned": 2,
++    "inWork": 0,
++    "inReview": 1,
++    "done": 0,
++    "blocked": 0,
++    "cancelled": 0,
++    "total": 3
++  },
++  "tasks": [
++    {
++      "id": "t5",
++      "title": "קריאת ספר הדקס הדמו",
++      "status": "done",
++      "statusHe": "הושלם",
++      "assignee": "gal",
++      "assigneeName": {
++        "he": "גל",
++        "en": "Gal"
++      },
++      "summary": "דמו: ספר הדקס נקרא וסוכם מתוך הקובץ בפועל",
++      "durationMs": null
++    },
++    {
++      "id": "t7",
++      "title": "ביקורת טענות דמו",
++      "status": "done",
++      "statusHe": "הושלם",
++      "assignee": "erez",
++      "assigneeName": {
++        "he": "ארז",
++        "en": "Erez"
++      },
++      "summary": "דמו: ביקורת בוצעה על ספרי הדמו",
++      "durationMs": null
++    },
++    {
++      "id": "t9",
++      "title": "סיכום מדדי הצי הדמו",
++      "status": "done",
++      "statusHe": "הושלם",
++      "assignee": "shachar",
++      "assigneeName": {
++        "he": "שחר",
++        "en": "Shachar"
++      },
++      "summary": "דמו: מדדים סוכמו",
++      "durationMs": null
++    }
++  ],
++  "podium": [
++    {
++      "id": "d11",
++      "agent": "erez",
++      "agentName": {
++        "he": "ארז",
++        "en": "Erez"
++      },
++      "question": "דמו: לאשר את ממצאי הביקורת לפרסום בספרייה?",
++      "options": [
++        "לאשר פרסום",
++        "דרוש עידון"
++      ],
++      "status": "answered",
++      "answer": {
++        "option": "לאשר פרסום",
++        "text": "החלטת מפעיל אוטונומי באפייה — מדיניות: הנתיב הבטוח",
++        "ts": 1791746630845
++      },
++      "taskId": "t7"
++    }
++  ],
++  "library": [
++    {
++      "id": "r18",
++      "title": "סיכום מבצע — הדגמה של מפקדת הצי",
++      "body": "תרחיש הדגמה שהושלם על ידי הצוות המדומה. במצב החי, הצוות הוא סוכני מודל אמיתיים שקוראים את ספרי הצי האמיתיים.",
++      "author": "aluf",
++      "authorName": {
++        "he": "אלוף",
++        "en": "Aluf"
++      },
++      "ts": 1791746635898
++    },
++    {
++      "id": "r16",
++      "title": "סיכום מדדי הצי — הדגמה",
++      "body": "דוח הדגמה שנכתב מתוך ספר מדדי הדמו. כל המספרים סינתטיים ומסומנים בבירור.",
++      "author": "shachar",
++      "authorName": {
++        "he": "שחר",
++        "en": "Shachar"
++      },
++      "ts": 1791746633898
++    },
++    {
++      "id": "r14",
++      "title": "ממצאי ביקורת דמו — מאושר לספרייה",
++      "body": "דוח הדגמה: נכתב מתוך הספרים הדמו שנקראו בפועל בתרחיש זה. אין כאן נתוני צי אמיתיים.",
++      "author": "erez",
++      "authorName": {
++        "he": "ארז",
++        "en": "Erez"
++      },
++      "ts": 1791746631696
++    }
++  ],
++  "books": [
++    {
++      "id": "dex-book",
++      "title": {
++        "he": "ספר הדקס",
++        "en": "DEX book"
++      },
++      "category": {
++        "he": "שוק",
++        "en": "market"
++      },
++      "bytes": 761,
++      "ok": true,
++      "verdict": "DEMO-BOOK",
++      "owner": "gal",
++      "heartbeat": 1791374400000,
++      "ageHours": 103.4
++    },
++    {
++      "id": "fills-ledger",
++      "title": {
++        "he": "פנקס הביצועים",
++        "en": "Fills ledger"
++      },
++      "category": {
++        "he": "שוק",
++        "en": "market"
++      },
++      "bytes": 131,
++      "ok": true,
++      "verdict": null,
++      "owner": "gal",
++      "heartbeat": 1791374280000,
++      "ageHours": 103.43
++    },
++    {
++      "id": "market-grid",
++      "title": {
++        "he": "רשת השוק",
++        "en": "Market grid"
++      },
++      "category": {
++        "he": "שוק",
++        "en": "market"
++      },
++      "bytes": 167,
++      "ok": true,
++      "verdict": null,
++      "owner": "gal",
++      "heartbeat": 1791373200000,
++      "ageHours": 103.73
++    },
++    {
++      "id": "truth-history",
++      "title": {
++        "he": "היסטוריית שערי-אמת",
++        "en": "Truth gate history"
++      },
++      "category": {
++        "he": "אמת",
++        "en": "truth"
++      },
++      "bytes": 312,
++      "ok": true,
++      "verdict": null,
++      "owner": "gal",
++      "heartbeat": 1791374340000,
++      "ageHours": 103.41
++    },
++    {
++      "id": "claims-audit",
++      "title": {
++        "he": "ביקורת טענות",
++        "en": "Claims audit"
++      },
++      "category": {
++        "he": "ביקורת",
++        "en": "audit"
++      },
++      "bytes": 476,
++      "ok": true,
++      "verdict": "DEMO-CLAIMS",
++      "owner": "erez",
++      "heartbeat": 1791369000000,
++      "ageHours": 104.9
++    },
++    {
++      "id": "econ-book",
++      "title": {
++        "he": "ספר הכלכלה",
++        "en": "Econ book"
++      },
++      "category": {
++        "he": "כלכלה",
++        "en": "economy"
++      },
++      "bytes": 210,
++      "ok": true,
++      "verdict": null,
++      "owner": "tamar",
++      "heartbeat": 1791367200000,
++      "ageHours": 105.4
++    },
++    {
++      "id": "sovereign-state",
++      "title": {
++        "he": "מצב הריבונות",
++        "en": "Sovereign state"
++      },
++      "category": {
++        "he": "כלכלה",
++        "en": "economy"
++      },
++      "bytes": 144,
++      "ok": true,
++      "verdict": null,
++      "owner": "tamar",
++      "heartbeat": 1791356400000,
++      "ageHours": 108.4
++    },
++    {
++      "id": "fleet-indicators",
++      "title": {
++        "he": "מדדי הצי",
++        "en": "Fleet indicators"
++      },
++      "category": {
++        "he": "מודיעין",
++        "en": "intel"
++      },
++      "bytes": 386,
++      "ok": true,
++      "verdict": "DEMO-INDICATORS",
++      "owner": "shachar",
++      "heartbeat": 1791373500000,
++      "ageHours": 103.65
++    },
++    {
++      "id": "fleet-census",
++      "title": {
++        "he": "מפקד הצי",
++        "en": "Fleet census"
++      },
++      "category": {
++        "he": "מודיעין",
++        "en": "intel"
++      },
++      "bytes": 388,
++      "ok": true,
++      "verdict": null,
++      "owner": "shachar",
++      "heartbeat": 1791363600000,
++      "ageHours": 106.4
++    },
++    {
++      "id": "pulse-book",
++      "title": {
++        "he": "ספר הדופק",
++        "en": "Pulse book"
++      },
++      "category": {
++        "he": "מודיעין",
++        "en": "intel"
++      },
++      "bytes": 194,
++      "ok": true,
++      "verdict": null,
++      "owner": "shachar",
++      "heartbeat": 1791372600000,
++      "ageHours": 103.9
++    },
++    {
++      "id": "learning-summary",
++      "title": {
++        "he": "סיכום למידה",
++        "en": "Learning summary"
++      },
++      "category": {
++        "he": "מודיעין",
++        "en": "intel"
++      },
++      "bytes": 207,
++      "ok": true,
++      "verdict": null,
++      "owner": "shachar",
++      "heartbeat": 1791360000000,
++      "ageHours": 107.4
++    },
++    {
++      "id": "registry",
++      "title": {
++        "he": "רישום הסוכנים",
++        "en": "Agent registry"
++      },
++      "category": {
++        "he": "תשתיות",
++        "en": "infra"
++      },
++      "bytes": 378,
++      "ok": true,
++      "verdict": null,
++      "owner": "yarden",
++      "heartbeat": 1791370800000,
++      "ageHours": 104.4
++    },
++    {
++      "id": "coord-bus",
++      "title": {
++        "he": "אוטובוס תיאום",
++        "en": "Coordination bus"
++      },
++      "category": {
++        "he": "תשתיות",
++        "en": "infra"
++      },
++      "bytes": 318,
++      "ok": true,
++      "verdict": null,
++      "owner": "yarden",
++      "heartbeat": 1791373800000,
++      "ageHours": 103.56
++    },
++    {
++      "id": "status",
++      "title": {
++        "he": "מצב הרשת",
++        "en": "Network status"
++      },
++      "category": {
++        "he": "תשתיות",
++        "en": "infra"
++      },
++      "bytes": 154,
++      "ok": true,
++      "verdict": null,
++      "owner": "yarden",
++      "heartbeat": 1791374370000,
++      "ageHours": 103.4
++    },
++    {
++      "id": "mirror",
++      "title": {
++        "he": "ספר המראה",
++        "en": "Mirror book"
++      },
++      "category": {
++        "he": "תשתיות",
++        "en": "infra"
++      },
++      "bytes": 135,
++      "ok": true,
++      "verdict": null,
++      "owner": "yarden",
++      "heartbeat": 1791370800000,
++      "ageHours": 104.4
++    }
++  ],
++  "feed": [
++    {
++      "ts": 1791746623388,
++      "kind": "system",
++      "text": "אפיית תמונת-מצב מתוזמנת (tools/office-snapshot.mjs) — תרחיש הדגמה של המשרד עצמו",
++      "agentId": null
++    },
++    {
++      "ts": 1791746623389,
++      "kind": "user",
++      "text": "תרחיש הדגמה מתוזמן — סיור משרד ואפיית תמונת-מצב ציבורית",
++      "agentId": null
++    },
++    {
++      "ts": 1791746623389,
++      "kind": "system",
++      "text": "DEMO — צוות מדומה מבצע תרחיש הדגמה (לא סוכני מודל אמיתיים)",
++      "agentId": null
++    },
++    {
++      "ts": 1791746625090,
++      "kind": "task",
++      "text": "משימה חדשה: קריאת ספר הדקס הדמו",
++      "agentId": "gal"
++    },
++    {
++      "ts": 1791746625091,
++      "kind": "task",
++      "text": "משימה חדשה: ביקורת טענות דמו",
++      "agentId": "erez"
++    },
++    {
++      "ts": 1791746625091,
++      "kind": "task",
++      "text": "משימה חדשה: סיכום מדדי הצי הדמו",
++      "agentId": "shachar"
++    },
++    {
++      "ts": 1791746629945,
++      "kind": "decision",
++      "text": "שאלה למפעיל האוטונומי: דמו: לאשר את ממצאי הביקורת לפרסום בספרייה?",
++      "agentId": "erez"
++    },
++    {
++      "ts": 1791746630846,
++      "kind": "decision",
++      "text": "המפעיל האוטונומי הכריע: לאשר פרסום",
++      "agentId": "erez"
++    },
++    {
++      "ts": 1791746631696,
++      "kind": "report",
++      "text": "דוח חדש בספרייה: ממצאי ביקורת דמו — מאושר לספרייה",
++      "agentId": "erez"
++    },
++    {
++      "ts": 1791746633898,
++      "kind": "report",
++      "text": "דוח חדש בספרייה: סיכום מדדי הצי — הדגמה",
++      "agentId": "shachar"
++    },
++    {
++      "ts": 1791746635898,
++      "kind": "report",
++      "text": "דוח חדש בספרייה: סיכום מבצע — הדגמה של מפקדת הצי",
++      "agentId": "aluf"
++    },
++    {
++      "ts": 1791746639399,
++      "kind": "system",
++      "text": "DEMO — התרחיש המדומה הסתיים",
++      "agentId": null
++    }
++  ]
++}
+-- 
+2.47.3
+
