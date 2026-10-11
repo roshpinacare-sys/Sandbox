@@ -1,8 +1,12 @@
+# עורק-ההכרעה-הריבוני: הריבונות מכריעה בעצמה 24/7 — MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY.
+# keyless · fail-soft · אפס-זיופים [T14]
+# T16 cron-repair: top-level "description:" is not a valid workflow key — the scheduler
+# silently rejected the definition (0 schedule runs 21:34..23:04Z) while dispatch still
+# worked. Description moved into this comment; structure now mirrors the proven-firing
+# pattern (book-audit/cognition-beat, Domain).
 name: sovereign-decider
-description: "עורק-ההכרעה-הריבוני: הריבונות מכריעה בעצמה 24/7 — MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY. keyless · fail-soft · אפס-זיופים [T14]"
 on:
-  schedule:
-    - cron: "4,34 * * * *"
+  schedule: [{cron: '4,34 * * * *'}]
   workflow_dispatch: {}
 
 permissions:
