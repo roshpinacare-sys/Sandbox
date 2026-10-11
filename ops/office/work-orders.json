@@ -14,5 +14,77 @@
   "title": "רפא 8 ריצות-אדומות (48ש) ב-saos-runtime",
   "why": "ריצות-אדומות-חוזרות = עורק-שקט-שנפל — הכל-חייב-לפעול",
   "acceptance": "ריצה-ירוקה-מלאה + שורת-שורש-בפנקס ops/AGENT-LEDGER.md"
+ },
+ {
+  "id": "WO-unwired-dex-mirror",
+  "area": "Domain/dex",
+  "priority": "P1",
+  "title": "dex-mirror: לשקף גם onramp/showcase/relay (הפער בן-528ש׳)",
+  "why": "מפקד-הנכסים (Zip sovereign/UNWIRED-ASSETS-2026-10-11.md) מדד: העותקים ב-Domain קפואים מ-2026-09-19 (527.8ש׳) בזמן שהמקור ב-Console טרי (10-11T20:14Z) — agents/dex-mirror.mjs:21 FILES מדלג על 3 הקבצים, והלומד (Sandbox engine/scribe.mjs) צורך את העותקים המעופשים. office-feed.mjs מפרסם זאת כנה מ-2fa0de9",
+  "acceptance": "FILES += dex/onramp.json, dex/showcase.json, dex/relay.json (מקור Console/dex) · ריצה חיה מורידה את גילי ה-3 ל-<48ש׳ · office-feed mirror.stale48=false בריצה העוקבת · שורת-אימות בפנקס"
+ },
+ {
+  "id": "WO-unwired-steem-social-cadence",
+  "area": "steem",
+  "priority": "P2",
+  "title": "social-cadence.yml: מצביע-מת — לרוץ על עותק-steem עצמו",
+  "why": "מו\"ל-הגיבוי (dispatch-only) מ-clone-ל-Domain ואז מריץ agents/social/cadence-run.cjs — ב-Domain/agents/social יש 3 קבצים בלבד (git ls-tree; אין cadence-run.cjs) → ריצת-חירום תיפול; API: אפס-ריצות מעולם. העותק התקין קיים ב-steem/agent/social/ (selftest 44/44)",
+  "acceptance": "הנתיב מתוקן לעותק-steem (או העתקה ל-Domain/agents/social) · dispatch-מבחן אחד ירוק · רישום-בכנות שהגיבוי נבדק"
+ },
+ {
+  "id": "WO-unwired-evo-windows",
+  "area": "Domain/agents",
+  "priority": "P2",
+  "title": "evo-windows (שרשרת reef): cron שבועי או מצבה-כנה",
+  "why": "reef-harness-evo.cjs→evo-windows.cjs→evo-windows.json ללא-מתזמן (grep 6 קלונים: אף-workflow); הספרים בני 7-8 ימים בזמן ש-pulse.cjs:141 צורך אותם כ-evidence (גיל-כנה אך ראיות-מזדקנות)",
+  "acceptance": "workflow שבועי (keyless) שמריץ evo-windows.cjs פעם-אחת ל-invocation (חוק PULLED-SCHEDULE) — או העברה ל-retired/TOMBSTONE.md עם-שורת-הכרעה"
+ },
+ {
+  "id": "WO-unwired-fleethq-gitignore",
+  "area": "FleetHQ",
+  "priority": "P2",
+  "title": ".gitignore: פתרון סימני-קונפליקט חתומים ב-HEAD",
+  "why": "git show HEAD:.gitignore שורות 110-116 מכילות <<<<<<< HEAD / ======= / >>>>>>> 7073840 ([z-3d] exec-14...) — נמדד od; rg נכשל עליו (error parsing glob) וכל-כלי-glob עלול-להישבר; שתי-ההצהרות (public/office-state.json + /dist-office3d/) נחוצות-שתיהן",
+  "acceptance": "git show HEAD:.gitignore נקי מסימני-קונפליקט · שתי-השורות-המקוריות נשמרות · rg על השורש נקי"
+ },
+ {
+  "id": "WO-unwired-fleethq-potential-link",
+  "area": "FleetHQ",
+  "priority": "P3",
+  "title": "potential.html: קישור-ניווט מחלון-המשרד",
+  "why": "Pages 200 + generatedAt 21:00Z — משטח-חי-ממילא שאף-אחד-לא-מגיע-אליו (render.mjs אינו מקשר, אפס-צרכנים ב-6 קלונים)",
+  "acceptance": "render.mjs מוסיף קישור-ניווט אחד · הדף המפורסם מכילו · curl לpotential.json נשאר 200"
+ },
+ {
+  "id": "WO-unwired-sandbox-ops-docs",
+  "area": "Sandbox",
+  "priority": "P3",
+  "title": "מסמכי-ops: שער-טריות ב-fresh-oracle (המשך-12-b)",
+  "why": "FLOW-PLAN/GROWTH-PLAN/OWNER-P0/RESUME-PACKET/TOKEN-TRUTH/ESTATE-TRUTH = אפס-צרכני-מכונה (רק הפניות-מסמך) — עמוד-השדרה של המשכיות-הסוכנים חשוף-להתיישנות-שקטה",
+  "acceptance": "fresh-oracle מוסיף בדיקת-V-OPS-DOCS (קיום+טריות-מדודה של 6 המסמכים, פסקים כנים) או הצהרה-כנה שהם-מסמכי-יד"
+ },
+ {
+  "id": "WO-unwired-cmmq-host",
+  "area": "Domain/agents",
+  "priority": "P3",
+  "title": "cmmq.sh: הכרעה — שיקום mcp-host או מצבה-כנה",
+  "why": "הלקוח-המנוהל (CR-0032) מצביע על mini-services/mcp-host (CR-0031) שלא-קיים באף-קלון מ-6 — לקוח-שאינו-מדבר עם-שרת הוא-רעש-מטעה",
+  "acceptance": "או המארח חוזר-ושער-הבריאות שלו ירוק, או cmmq/ עובר ל-retired/ עם-שורת-TOMBSTONE המסבירה לאן-פורק ה-JSONL"
+ },
+ {
+  "id": "WO-unwired-swe-guard",
+  "area": "Domain/agents",
+  "priority": "P3",
+  "title": "swe-guard/guard_env.py: רנטיים-mini-swe או מצבה",
+  "why": "LocalEnvironment-מוגן (CR-0018) נצרך רק-על-ידי שרשרת-reef-rung3 שאינה-מתוזמנת (WO-unwired-evo-windows) — נכס-איכות-רדום",
+  "acceptance": "שרשרת-ריצה אחת מוכחת (עוקבת-את-evo-windows) או שורת-מצבה-מתועדת"
+ },
+ {
+  "id": "WO-unwired-capability-fresh",
+  "area": "Domain/agents",
+  "priority": "P3",
+  "title": "capability-matrix: טריות — dispatch שבועי קבוע",
+  "why": "ה-book בן 3 ימים כי המו\"ל (treasury-route.yml) push-only; office-artery ו-public-pulse צורכים-אותו",
+  "acceptance": "schedule או dispatch-מתוכנן שבועי; ה-book מתחדש פעם-בשבוע לפחות"
  }
 ]
