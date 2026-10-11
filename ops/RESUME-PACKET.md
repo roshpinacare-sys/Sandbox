@@ -18,6 +18,9 @@
 
 - **עודכן**: 2026-10-11 ~22:50 IST ע"י `zai-code-5` (session-8)
 - **האצלה-ריבונית בתוקף**: סמכות §1–§8 אצל-הריבונות, חוקי-מנוע G1–G10 → `ops/OWNER-DELEGATION-2026-10-11.md`
+- **TOKEN-TRUTH-חי-מפורסם**: `ops/TOKEN-TRUTH.md` — watchdog-משודרג-מודד-ומפרסם-לגיט-יומית; ECO_WALLET_TOKEN-וגם-SBX_FLEET_PAT = הערך-הישן-עדיין (61-ימים)
+- **נתיב-הפעלה-10-שניות-לטוקן-החדש** (הבעלים-אמר-שהזין-טוקנים-ב-steem — נמדד: לא-בשום-REST-גלוי): Sandbox→Secrets→`FLEET_TOKEN`→Actions→token-forge→secret_name=FLEET_TOKEN·mode=route → ניתוב-מלא+הצתת-עורקים+אימות-ירוק (runbook §6); token-forge-ב-steem-מושהה (CI-פרטי-מת-מאחורי-קיר-החיוב — נמדד)
+- **המשרד-מנהל-את-הריבונות**: office-growth (כל-6ש) → ops/office/{potential.json,work-orders.json,VALUE-MAP.md} — סריקת-פוטנציאל+work-orders-אמיתיים (2-P1-חיים-עכשיו); חדר-הצמיחה: Domain/office3d/growth; לצד-v2.5-מפקדת (zai-sec) ו-worlds (zai-worlds)
 - **§1 (רוטציית-PAT) = החסם-היחיד** — ממתין-ל-2-טוקנים. **פיזיקה, לא-בירוקרטיה**: GitHub-API אינו-מנפיק PATs (classic-וגם-fine-grained).
   - תפוגת-ה-PAT-הנוכחי **נמדדה-חיה**: **2026-12-12T13:08:14Z** (= 15:08 IST; מאשר-את-ספירת-ה-T של-הצי: T-62-ב-10-11 ✓)
   - הטוקן = **fine-grained** (אין-כותרת X-OAuth-Scopes), חי-ובריא (200-OK, 4938/5000-מכסה)
@@ -30,7 +33,7 @@
   - פרטיים (17): Zip · Saosmartwallet · Adsmarket · sanbox · Project-files · Sdk · Defi · roshpina · saos-sovereign-platform · saos-sovereign-foundry · SovereignConsole · saos-jummper · anchor-baseline · steem (ענף-ברירת-מחדל = **saos-cockpit**) · saos-control-center · saos-dex · vault-home
 - **אזורים-חמים** (G7 — קרא-פנקס-וקומיטים-אחרונים-לפני-כל-נגיעה): `steem@saos-cockpit` · `saos-runtime` · `Domain/agents/*` · `FleetHQ`
 - **קר/טריטוריית-zai-code-5**: Sandbox/ops-פרוטוקול · Console-סטטי · issues-בצי
-- **סוכנים-חיים-בשעת-עדכון**: zai-code-3 (office-ci/ספרים) · zai-sec-1a12af86 (FleetHQ-heartbeat/דף) · zai-10b (דף-Domain) — תמיד-אמת-מהפנקס-החי, לא-מה-snapshot
+- **סוכנים-חיים-בשעת-עדכון (21:35Z)**: zai-sec-1a12af86 (v2.5-מפקדת+heartbeat) · zai-worlds (worlds-room) · zai-code-3 (office-ci/ספרים/pulse) · zai-11c (פאנל-מחקר) · saos-human-cadence·saos-dex-router (קצב-אוטומטי): zai-code-3 (office-ci/ספרים) · zai-sec-1a12af86 (FleetHQ-heartbeat/דף) · zai-10b (דף-Domain) — תמיד-אמת-מהפנקס-החי, לא-מה-snapshot
 
 ## 2. פקודות-חזרה-מהירה (copy-paste)
 
