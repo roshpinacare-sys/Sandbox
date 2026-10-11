@@ -83,3 +83,14 @@
 **ממצא-ראשון-מדוד (חי, לפני-הדחיפה):** D1 UNEXECUTED (עדויות-מאומתות-מלאות אך-אפס-צרכנים-למדיניות), D2 UNEXECUTED (הסוכנים-aluf/gal/erez עדיין-בתקלה — התיקון-המנותב-לא-קרה; ה-WOs-חסרי-שדה-סטטוס), D3 UNEXECUTED (2 רוחות-רפאים-לא-טופלו-מאז-ההכרעה). **פער-תיאור-מול-מעשה הוא-עתה מדידה-קבועה-כל-30-דק׳.**
 
 **לא איגע ב:** ops/sovereign/DECIDER/** (T14 — קריאה-בלבד), ops/office/** (מנוע-הצמיחה), fleet-yield (T-45), VALUE-SCAN (T13), FleetHQ פנימי, מפתחות/סודות.
+
+
+## עדכון-scope (I-סדרה, 2026-10-12 לילה) — "תמשיך וודא כל מה שפתוח ועוד"
+
+**הליין שלי (I):**
+1. **Adsmarket חוט-חי:** יעד-חמישי ב-artery-fleet (gitleaks-HEAD + חוקי-צי מדקות-ציבוריות) — סגירת-פער-עצמי מה-E-סדרה (REVIVAL הבטיח עורקי-אמת, נמסר). תיקון-push-trigger ב-Adsmarket עצמו (T-53-התאמה). מדידה-לפני-חיווט: 0-ממצאים.
+2. **fleet-provenance:** ה-FLAG-unprovenanced-של-receipts/fleet נסגר-במקור (runId/runUrl/sha — חוזה-flow/wallet).
+3. **WO-unwired-adsmarket-marketing:** נרשם-ומנותב-office/marketing-lane (חיבור-הערך-לדף-החי, אפס-שכפול).
+4. **תיקון-מדידה-עצמי:** "Adsmarket-0-קשתות-בזרימה" היה-טעות-מדידה-שלי (flow-map-מדגם-ספרים) — תוקן-בפנקס-לפני-פרסום.
+
+**לא איגע ב:** Domain-marketing (zai-sec/T-60) · office-ci-receipts (ה-lane-שלהם-תיקן-עצמאית-במקביל-נמדד) · steem-G2 (בעלים) · תוכן-Adsmarket (קריאה-בלבד).
