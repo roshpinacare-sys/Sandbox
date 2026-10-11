@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-10-11T22:18:45Z",
- "durationMs": 1479,
+ "generatedAt": "2026-10-11T22:27:52Z",
+ "durationMs": 1805,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
   "generatedAt": "2026-10-11T21:37:07Z",
-  "stateAgeMin": 42,
+  "stateAgeMin": 51,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
    "lastRunAt": "2026-10-11T21:36:56Z",
-   "ageS": 2508,
+   "ageS": 3055,
    "stalled": false
   }
  },
  "measures": {
   "chain": {
-   "head": 110358462,
+   "head": 110358644,
    "treasuryNetSp": 2925.6,
-   "mult": 0.0006202057216918962
+   "mult": 0.0006202059882011772
   },
   "beaconPulse": {
    "treasuryNetSp": 2925.6
@@ -31,13 +31,22 @@
   ],
   "flowSummary": {
    "nodes": 34,
-   "edges": 110,
+   "edges": 111,
    "orphans": 0,
    "ghosts": null
   },
   "workOrderIds": [
    "WO-FleetHQ-reds",
-   "WO-saos-runtime-reds"
+   "WO-saos-runtime-reds",
+   "WO-unwired-dex-mirror",
+   "WO-unwired-steem-social-cadence",
+   "WO-unwired-evo-windows",
+   "WO-unwired-fleethq-gitignore",
+   "WO-unwired-fleethq-potential-link",
+   "WO-unwired-sandbox-ops-docs",
+   "WO-unwired-cmmq-host",
+   "WO-unwired-swe-guard",
+   "WO-unwired-capability-fresh"
   ]
  },
  "decisions": [
@@ -87,7 +96,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 42min (limit 120)"
+     "detail": "state age 51min (limit 120)"
     }
    ],
    "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
@@ -113,7 +122,7 @@
     {
      "law": "fleethq-reds-persist",
      "result": "ok",
-     "detail": "failure runs in last 48h: 10 - routed WO-FleetHQ-reds subject persists (work pending)"
+     "detail": "failure runs in last 48h: 9 - routed WO-FleetHQ-reds subject persists (work pending)"
     },
     {
      "law": "faulted-agents-fix",
@@ -123,7 +132,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 42min (limit 120)"
+     "detail": "state age 51min (limit 120)"
     }
    ],
    "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
@@ -134,7 +143,7 @@
    "status": "ENFORCED",
    "priority": "P2",
    "decidedAt": "2026-10-11T21:37:07Z",
-   "truth": "UNEXECUTED",
+   "truth": "STALE-TRUTH",
    "checks": [
     {
      "law": "orphans-fresh",
@@ -142,25 +151,25 @@
      "detail": "claimed=0 fresh=0"
     },
     {
-     "law": "ghost-handling-executed",
-     "result": "unexecuted",
-     "detail": "decision commands handling 2 ghosts; fresh=2 unchanged - the routed fix (digest repoint, office lane) has not landed yet"
+     "law": "ghosts-fresh",
+     "result": "mismatch",
+     "detail": "claimed=2 fresh=0 - world moved past the decision - RE-MEASURE should retire or re-decide"
     },
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 42min (limit 120)"
+     "detail": "state age 51min (limit 120)"
     }
    ],
-   "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
+   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   }
  ],
  "provenance": {
-  "runId": "38179899110",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38179899110",
-  "sha": "399276f324c1cbd201b1d6b266668ec6cc70b95c",
+  "runId": "38180507057",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38180507057",
+  "sha": "734cb1497527470ca800261b22f247e8ecccf991",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-10-11T22:18:45Z"
+  "generatedAt": "2026-10-11T22:27:52Z"
  },
  "selftest": {
   "vectors": 16,
