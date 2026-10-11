@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-11T16:48:14.115Z",
+  "slug": "roshpinacare-sys/Saosmartwallet",
+  "head": "87461c192017e31f3a103418f8563f281d2df50f",
+  "checks": {},
+  "laws": [
+    {
+      "id": "law-no-secrets-at-head",
+      "verdict": "flag",
+      "detail": "gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-TTwkWl/saos-wallet/tools/vault-zk-check.ts"
+    },
+    {
+      "id": "law-no-skipped-pass",
+      "verdict": "pass",
+      "detail": "workflows scanned: 3, theater patterns: 0"
+    },
+    {
+      "id": "law-gitleaks-push",
+      "verdict": "pass",
+      "detail": "gitleaks scans every push"
+    },
+    {
+      "id": "law-r11-head-absent",
+      "verdict": "pass",
+      "detail": "absent at HEAD"
+    },
+    {
+      "id": "law-unlock-ratelimit",
+      "verdict": "pass",
+      "detail": "unlock endpoint must gate online passphrase guessing"
+    },
+    {
+      "id": "law-no-skipped-pass",
+      "verdict": "pass",
+      "detail": "CI verdict law: skipped is never pass + push trigger present"
+    },
+    {
+      "id": "law-gitleaks-push",
+      "verdict": "pass",
+      "detail": "secret scan must run on every push, not only PRs"
+    },
+    {
+      "id": "law-r11-head-absent",
+      "verdict": "pass",
+      "detail": "R11 key-material metadata file must stay absent at HEAD"
+    },
+    {
+      "id": "law-pass-provenance",
+      "verdict": "flag",
+      "detail": "PASS receipt minted out-of-band — flagged; artery measurement is the authoritative verdict"
+    }
+  ],
+  "alerts": [
+    "law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-TTwkWl/saos-wallet/tools/vault-zk-check.ts",
+    "law-pass-provenance: PASS receipt minted out-of-band — flagged; artery measurement is the authoritative verdict"
+  ],
+  "overall": "PASS",
+  "reason": "all checks and fleet laws pass"
+}

@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-11T14:09:15.318Z",
+  "at": "2026-10-11T16:48:14.115Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "461ae5e800e1531ac22052b7b5e3410aa2246009",
+  "head": "c961f4a5c834cf2e6d1789a67420bf5d7c45a986",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -11,17 +11,17 @@
     {
       "id": "law-no-secrets-at-head",
       "verdict": "flag",
-      "detail": "gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA"
+      "detail": "gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/agent/vault/GEN-1-ERA-META.json, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/mini-services/saos-engine/probe-auth2-r255.mjs, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/mini-services/saos-engine/selftest.mjs, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/mini-services/saos-engine/state/r267-crosschain.json"
     },
     {
       "id": "law-no-skipped-pass",
       "verdict": "pass",
-      "detail": "workflows scanned: 2, theater patterns: 0"
+      "detail": "workflows scanned: 3, theater patterns: 0"
     },
     {
       "id": "law-gitleaks-push",
-      "verdict": "flag",
-      "detail": "no gitleaks.yml in repo — no in-repo secret scan"
+      "verdict": "pass",
+      "detail": "gitleaks scans every push"
     },
     {
       "id": "law-r11-head-absent",
@@ -30,8 +30,7 @@
     }
   ],
   "alerts": [
-    "law-no-secrets-at-head: gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA",
-    "law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
+    "law-no-secrets-at-head: gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/agent/vault/GEN-1-ERA-META.json, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/mini-services/saos-engine/probe-auth2-r255.mjs, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/mini-services/saos-engine/selftest.mjs, generic-api-key@/tmp/fleet-verify-TTwkWl/steem-cockpit/mini-services/saos-engine/state/r267-crosschain.json"
   ],
   "overall": "PASS",
   "reason": "all checks and fleet laws pass"
