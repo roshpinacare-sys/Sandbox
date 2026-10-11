@@ -35,6 +35,21 @@ const walletLine = (() => {
 })();
 observations.push(walletLine);
 
+// 1b) קבלות-הצי (fleet) — פס-24h
+try {
+  if (existsSync("receipts/fleet/log.jsonl")) {
+    const flines = readFileSync("receipts/fleet/log.jsonl", "utf8").trim().split("\n").slice(-30);
+    const fday = flines.map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean).filter((r) => Date.parse(r.at) >= since);
+    if (fday.length) {
+      const by = {};
+      let fa = 0;
+      for (const r of fday) { by[r.overall] = (by[r.overall] || 0) + 1; fa += (r.alerts || []).length; }
+      observations.push(`fleet 24h verdicts: ${JSON.stringify(by)} · alerts: ${fa}`);
+      if (fday.slice(-2).every((r) => r.overall !== "PASS")) proposals.push("fleet verify FAIL/BLOCKED streak ≥2 — a critical repo is regressing; measure before touching anything");
+    }
+  }
+} catch { observations.push("fleet log unreadable"); }
+
 // 2) ריצות-Actions של הצי — פס-24h
 try {
   const runs = await jf(`${API}/actions/runs?per_page=100`);

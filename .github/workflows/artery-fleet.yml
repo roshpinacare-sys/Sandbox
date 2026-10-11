@@ -50,7 +50,7 @@ jobs:
       - name: leak-scan (fail-closed)
         if: always()
         run: |
-          for f in receipts/fleet/verdict.json receipts/fleet/log.jsonl receipts/fleet/steem-cockpit.json receipts/fleet/saos-dex.json receipts/fleet/saos-agents.json; do
+          for f in receipts/fleet/verdict.json receipts/fleet/log.jsonl receipts/fleet/steem.json receipts/fleet/saos-dex.json receipts/fleet/saos-agents.json; do
             [ -f "$f" ] && node engine/leak-scan.mjs "$f"
           done
 

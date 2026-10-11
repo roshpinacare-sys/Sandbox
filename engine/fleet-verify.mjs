@@ -79,6 +79,37 @@ const overall = { at: new Date().toISOString(), repos: {}, alerts: [], overall: 
 const askpass = join(tmp, "askpass.sh");
 writeFileSync(askpass, "#!/bin/sh\ncase \"$1\" in Username*) echo x-access-token ;; Password*) echo \"$ECO_WALLET_TOKEN\" ;; esac\n", { mode: 0o700 });
 
+// סריקת-סודות על HEAD — הבינארי-המקובע (הקנון: Domain/Defi gitleaks.yml). מתה-אורג-wide מאז 09-20; חוזרת דרך דקות-חינם.
+let GLBIN = null;
+try {
+  const tgz = join(tmp, "gl.tgz");
+  const res = await fetch("https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz");
+  if (res.ok) {
+    writeFileSync(tgz, Buffer.from(await res.arrayBuffer()));
+    execFileSync("tar", ["-xzf", tgz, "-C", tmp, "gitleaks"]);
+    GLBIN = join(tmp, "gitleaks");
+    out("gitleaks binary ready (v8.24.3, HEAD-only scan)");
+  } else out(`gitleaks download skipped: http=${res.status} — scan law degrades to flag`);
+} catch (e) { out(`gitleaks download failed: ${String(e.message).slice(0, 120)} — scan law degrades to flag`); }
+
+function gitleaksHeadScan(wdir, repName) {
+  if (!GLBIN) return { id: "law-no-secrets-at-head", verdict: "flag", detail: "scanner unavailable this run (download failed) — no HEAD secret scan" };
+  const rep = join(tmp, `gl-${repName}.json`);
+  try {
+    execFileSync(GLBIN, ["detect", "--source", wdir, "--no-git", "--report-format", "json", "--report-path", rep, "--redact", "--no-banner", "--log-level", "error"], { timeout: 300000, stdio: ["ignore", "pipe", "pipe"] });
+    return { id: "law-no-secrets-at-head", verdict: "pass", detail: "gitleaks HEAD scan: 0 findings" };
+  } catch (e) {
+    // exit 1 = findings; פרס-מטא-דאטה בלבד (--redact — אפס-ערכים)
+    let count = 0; const top = [];
+    try {
+      const findings = JSON.parse(readFileSync(rep, "utf8"));
+      count = findings.length;
+      for (const f of findings.slice(0, 3)) top.push(`${f.RuleID}@${(f.File || "").slice(0, 60)}`);
+    } catch { /* report unreadable */ }
+    return { id: "law-no-secrets-at-head", verdict: count > 0 ? "flag" : "flag", detail: count > 0 ? `gitleaks HEAD scan: ${count} finding(s) — redacted metadata: ${top.join(", ")}` : "scan ran, report unreadable" };
+  }
+}
+
 for (const repo of FLEET) {
   const r = { at: overall.at, slug: repo.slug, head: null, checks: {}, laws: [], alerts: [], overall: "FAIL", reason: "" };
   const wdir = join(tmp, repo.name);
@@ -87,6 +118,9 @@ for (const repo of FLEET) {
       stdio: ["ignore", "pipe", "pipe"], env: { ...process.env, GIT_ASKPASS: askpass, GIT_TERMINAL_PROMPT: "0" }, timeout: 300000,
     });
     r.head = execFileSync("git", ["rev-parse", "HEAD"], { cwd: wdir }).toString().trim();
+    const scanLaw = gitleaksHeadScan(wdir, repo.name);
+    r.laws.push(scanLaw);
+    out(`${repo.name}/${scanLaw.id}: ${scanLaw.verdict} — ${scanLaw.detail}`);
     for (const c of repo.checks) {
       const cwdAbs = c.cwd ? join(wdir, c.cwd) : wdir;
       try {
