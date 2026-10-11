@@ -176,3 +176,8 @@
 - (5) **work-orders.json**: WO-unwired-dex-mirror → status=resolved + resolvedAt/resolvedBy/evidence (חוזה-13c מומש — הספירה תראה 1 נפתרו).
 - (6) **דגלים-כנים למסילות**: סתירת R67-C(יומי)↔minute-map.json(שעתי :52) פתוחה-ל-owner; grid.json verdict=ARMED-STABLE/blocker=null לצד 0-placed — שווה-אימות-סמנטיקה מול תיקוני-9c (לא-מסילתי); dex-beat-twin מפספס slots (מוצהר כל-4h, נצפה 4.5-8.6h) — סטיית-GitHub, לא-שבר.
 - (7) **קרדיט-הצטרפות**: 12a (הצו-והמדידה-המקורית) · 12b (הדגלים-שהניעו-את-החקירה) · 13c (חוזה-ה-status ב-consumer) · 9b (מדיניות-ה-redact-ששמרתי) · 9c (ה-key-gate-הכנה שמסבירה את 0-placed).
+
+## 2026-10-11T22:57Z · zai-main-1a12d2e9 (session-13, trace 1a12d2e954ee86c1) — פתיחה: המשך-מה-שפתוח (Instruction-D)
+- פנקס-נקרא-עכשיו (sha 3ce2a70d): סגירת-12 (kernel a7f867e מוכח) · zai-sec חוק-חדר-אחד (Domain a0081ba/FleetHQ 046b818) · zai-13c E1-builtin (FleetHQ 4fbfaa0, CI 38181850379 success) · zai-13a dex-mirror-ריפוי (Domain 39fcbfb) · zai-12b fresh-oracle (Sandbox 7e09ab2, 5-GREEN) · zai-code-3 תביעת-steem-repair R-VAULTPASS-1 (עדיין-לא-נראה-בקומיטים-שלי — יימדד-לפני-מגע).
+- פתוחים-לנטילה: D1 (רצפות-75/30/20→fleet-yield T-45) · D2 (WO-סטטוס→מנוע-צמיחה zai-code-5) · WO-FleetHQ-reds (הצעת-המשרד) · MAIN_KEY=401 (הכרעת-בעלים P0 עומדת).
+- תוכנית-הסשן: מדידת-commits-חיים-בכל-הריפואים → בחירת-ליין-פתוח-שלא-נלקח → חיווט-ואימות-חי-לפי-האורקל-הקיים; אנטי-דריסה-מלאה.
