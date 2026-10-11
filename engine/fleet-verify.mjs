@@ -45,6 +45,12 @@ const FLEET = [
       { id: "agentsSelftest", cmd: "bun", args: ["test/selftest.mjs"], timeout: 300000, expect: "SELFTEST" },
     ],
   },
+  {
+    name: "saos-wallet",
+    slug: `${ORG}/Saosmartwallet`,
+    checks: [], // הבנייה נמדדת שעתית ב-artery-wallet (T-52) — כאן רק חוקי-הארנק (חוזה-צי, מדידה-כפולה)
+    walletLaws: true,
+  },
 ];
 
 // חוקי-צי אחידים — כל-ריפו-קריטי נבדק מולם (החוזה של הסקירות, הופך-מכונה)
@@ -70,6 +76,34 @@ function fleetLaws(wdir) {
   // 3) R11 חייב להישאר מחוץ-לHEAD
   const r11 = existsSync(join(wdir, "agent/vault/recovery-meta-2026-09-12.json"));
   laws.push({ id: "law-r11-head-absent", verdict: r11 ? "fail" : "pass", detail: r11 ? "R11 key-material metadata REAPPEARED at HEAD" : "absent at HEAD" });
+  return laws;
+}
+
+/* חוקי-הארנק כחוזה-צי (T-64): חמשת-החוקים של wallet-verify נאכפים גם כאן —
+ * מדידה-כפולה בלתי-תלויה. אם מישהו יחליש את עורק-הארנק או את קוד-השער,
+ * העורק-הזה יצעק. severity זהה למקור (provenance = flag, השאר fail). */
+function walletFleetLaws(wdir) {
+  const laws = [];
+  const read = (p) => (existsSync(join(wdir, p)) ? readFileSync(join(wdir, p), "utf8") : null);
+  const push = (id, ok, detail, severity = "fail") => laws.push({ id, verdict: ok ? "pass" : severity, detail });
+  const unlock = read("src/app/api/gate/unlock/route.ts") || "";
+  push("law-unlock-ratelimit", unlock.includes("rateLimit("), "unlock endpoint must gate online passphrase guessing");
+  const wv = read(".github/workflows/wallet-verify.yml") || "";
+  push("law-no-skipped-pass", !wv.includes('!= "fail"') && wv.includes("push:"), "CI verdict law: skipped is never pass + push trigger present");
+  const gl = read(".github/workflows/gitleaks.yml") || "";
+  push("law-gitleaks-push", gl.includes("push:"), "secret scan must run on every push, not only PRs");
+  push("law-r11-head-absent", !existsSync(join(wdir, "agent/vault/recovery-meta-2026-09-12.json")), "R11 key-material metadata file must stay absent at HEAD");
+  const status = read("agent/status.json");
+  if (status) {
+    try {
+      const s = JSON.parse(status);
+      if (s.verdict === "PASS") {
+        const prov = s.provenance || {};
+        const ok = typeof prov.runUrl === "string" && prov.runUrl.includes("/actions/runs/");
+        push("law-pass-provenance", ok, ok ? `receipt provenance: ${prov.runUrl}` : "PASS receipt minted out-of-band — flagged; artery measurement is the authoritative verdict", "flag");
+      }
+    } catch { laws.push({ id: "law-pass-provenance", verdict: "flag", detail: "agent/status.json unparseable" }); }
+  }
   return laws;
 }
 
@@ -136,6 +170,7 @@ for (const repo of FLEET) {
       }
     }
     r.laws.push(...fleetLaws(wdir));
+    if (repo.walletLaws) r.laws.push(...walletFleetLaws(wdir));
     for (const l of r.laws) {
       if (l.verdict === "flag") r.alerts.push(`${l.id}: ${l.detail}`);
       out(`${repo.name}/${l.id}: ${l.verdict} — ${l.detail}`);
