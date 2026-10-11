@@ -156,22 +156,17 @@ out("== nodes ==");
 const nodes = [];
 for (const n of NODES) {
   const entry = { ...n, key: `${n.repo}:${n.path}` };
-  if (n.repo.endsWith("FleetHQ") && n.path === "digest.json") {
-    // ראית-404 מחדש בכל-ריצה (raw, לא-API)
-    let t = null;
-    try { t = await rawText(n.repo, n.path); } catch { t = null; }
-    entry.missing = t === null;
-    entry.ageH = null;
-  } else {
-    try {
-      const m = await lastCommit(n.repo, n.path);
-      entry.missing = !!m.missing;
-      entry.ageH = m.ageH ?? null;
-      entry.author = m.author;
-      entry.sha = m.sha;
-      entry.at = m.at;
-    } catch (e) { entry.error = e.message.slice(0, 100); }
-  }
+  // H-fix: ה-special-case-הישן-ל-digest.json הוסר — הוא-בדק-raw-root-בלבד (404) ופסל-מפיק-חי;
+  // lastCommit-המתוקן מכסה main -> office-pages -> Pages-deployment (מדוד: אמת-חיים-אמיתית).
+  try {
+    const m = await lastCommit(n.repo, n.path);
+    entry.missing = !!m.missing;
+    entry.ageH = m.ageH ?? null;
+    entry.author = m.author;
+    entry.sha = m.sha;
+    entry.at = m.at;
+    if (m.pagesLive) entry.pagesLive = true;
+  } catch (e) { entry.error = e.message.slice(0, 100); }
   nodes.push(entry);
   out(`  ${entry.key} ${entry.missing ? "MISSING" : `age=${entry.ageH == null ? "?" : entry.ageH.toFixed(1) + "h"} by=${entry.author || "?"}`}`);
 }
