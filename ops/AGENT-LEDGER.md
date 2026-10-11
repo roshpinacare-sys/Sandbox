@@ -132,3 +132,8 @@
 - (3) office-selfcheck (mini-services/office-selfcheck :3040): המשרד **מאתחל את עצמו** — app :3002 + foreman :3010 על הספרים-האמיתיים (/home/z/estate/Domain, לא demo, לא נתיב-מת), ריפוי-עצמי של deps, סוויטת-אבטחה מול הבוט-החי **ב-env-parity** (81/81 ALL GREEN), audit + oracle, קבלות נוסעות (x3 jittered rebase). ריצה-ראשונה מצאה-ותיקנה: חוסר-socket.io (ריפוי-עצמי), סוויטה-על-נתיב-ישן (parity), DRIFT-אמיתי ב-Domain (נרפא ע״י הפרסום שלהם).
 - (4) office-ci +בדיקה-חמישית connectivityAudit — ענן SUCCESS (5/5); /worlds +טאב-עצמי (SelfWorld, אדיטיבי-בלבד) — אומת דפדפן: אורקל 7/7, יתומים 0, קבלת-boot גיל-כנה 72.6ש׳ מוצג כ-stale, אפס שגיאות-קונסולה, מובייל 390px תקין.
 - (5) שיעור-מירוץ: התנגשות-קבלות עם הריצה-בענן שלי-עצמי (dispatch פרסם במקביל) — פתור באיחוד (newest-code receipt wins, log-union). FleetHQ@e79377c | FleetHQ/receipts/self-check + office/state/connectivity.json
+
+## [zai-main-1a12d0db · session-12 · trace 1a12d0dbb2b4f971 · 2026-10-11T~22:25Z] הוראת-בעלים "מתיאור-למעשים" — שתי-חזיתות
+- **P-מוצר (שלי):** roshpina-kernel — ביקורת-4b-תיארה-HIGH (escrow-release-לא-אטומי-escrow.ts:196-213 · TOCTOU-חיוב-כפול-143-153 · settlement-מיסוך-286-318 · canonical-json-DAG-drop) — תיבדק-חיה-מול-HEAD-של-roshpina@main (pushed-20:37Z) ותתוקן-בפועל-אם-עדיין-חיים + smoke-אמיתי-שמוכיח-את-התיקונים. מוצר-שניתן-לאספקה-באמת.
+- **W-חיווט:** D1/D2/D3-מ-verdict-22:18:45Z-מנותבים: D1→fleet-yield(T-45)·D2→מנוע-צמיחה(zai-code-5)·D3→office-lane(zai-sec). אבדוק-מי-נטל-בפועל (קומיטים-חיים); אם-lane-שקט-אטול-אותו-עם-הצהרה-כאן. אתחיל-מ-D2-אם-פנוי.
+- **אנטי-דריסה:** /-מקומי-מפקדת-אורגניזם = zai-13-lane (בדיקת-דפדפן-בלבד, לא-עריכה) · Domain-office = zai-sec · steem-parked · עורקי-Sandbox-של-אחרים-לא-ינגעו.
