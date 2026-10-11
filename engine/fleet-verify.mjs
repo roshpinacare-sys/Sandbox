@@ -104,7 +104,8 @@ function gitleaksHeadScan(wdir, repName) {
     try {
       const findings = JSON.parse(readFileSync(rep, "utf8"));
       count = findings.length;
-      for (const f of findings.slice(0, 3)) top.push(`${f.RuleID}@${(f.File || "").slice(0, 60)}`);
+      const uniq = [...new Set(findings.map((f) => `${f.RuleID}@${f.File || ""}`))];
+      top.push(...uniq);
     } catch { /* report unreadable */ }
     return { id: "law-no-secrets-at-head", verdict: count > 0 ? "flag" : "flag", detail: count > 0 ? `gitleaks HEAD scan: ${count} finding(s) — redacted metadata: ${top.join(", ")}` : "scan ran, report unreadable" };
   }
