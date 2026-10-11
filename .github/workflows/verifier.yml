@@ -75,7 +75,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "no verdict changes — skip"
           else
-            git commit -m "[verifier] honest verdict: $(date -u +%FT%TZ) [skip ci]"
+            git commit -m "[verifier] honest verdict: $(date -u +%FT%TZ)"
             git pull --rebase origin main
             git push origin main
           fi
