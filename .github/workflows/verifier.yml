@@ -70,7 +70,8 @@ jobs:
         run: |
           git config user.name "sandbox-verifier"
           git config user.email "sandbox-verifier@users.noreply.github.com"
-          git add ops/agents/zai-verifier state/verifier status/truth.html
+          git add ops/agents/zai-verifier state/verifier
+          [ -f status/truth.html ] && git add status/truth.html || true
           if git diff --cached --quiet; then
             echo "no verdict changes — skip"
           else

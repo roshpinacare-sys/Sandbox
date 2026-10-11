@@ -672,14 +672,20 @@ async function main() {
   const reportPath = path.join(ROOT, "ops/agents/zai-verifier/REPORT.md");
   const tasksPath = path.join(ROOT, "ops/agents/zai-verifier/TASKS.md");
 
-  /* מצערת: קבלה-טרייה → דיכוי-שקט (אפס-כתיבה, ticked=0) */
+  /* מצערת: קבלה-טרייה → דיכוי-שקט (אפס-כתיבת-פנקס; עמוד-האמת נאפה-מחדש-מהקבלה-הקיימת — אידמפוטנטי) */
   if (!FORCE && !LOCAL) {
     const last = readLastLine(ledgerPath);
     const at = last ? (() => { try { return JSON.parse(last)?.at; } catch { return null; } })() : null;
     if (at) {
       const ageMin = (Date.now() - Date.parse(at)) / 60000;
       if (ageMin >= 0 && ageMin < Number(opt("guard-minutes", 22))) {
-        console.log(JSON.stringify({ verdict: "VERIFIER-SUPPRESSED", ageMinutes: Math.round(ageMin), note: "receipt fresh — zero writes" }));
+        /* עמוד-האמת-צריך-להתקיים-תמיד — נאפה-מהקבלה-הקיימת; אפס-שינוי-אם-גם-התבנית-לא-זזה */
+        try {
+          const lastReceipt = JSON.parse(readFileSync(latestPath, "utf8"));
+          mkdirSync(path.join(ROOT, "status"), { recursive: true });
+          writeFileSync(path.join(ROOT, "status", "truth.html"), redact(renderTruthPage(lastReceipt, cfg)));
+        } catch {}
+        console.log(JSON.stringify({ verdict: "VERIFIER-SUPPRESSED", ageMinutes: Math.round(ageMin), note: "receipt fresh — ledger zero-writes; truth page re-baked idempotently" }));
         signalOutput("ticked=0\n");
         return;
       }
