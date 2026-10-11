@@ -1,0 +1,70 @@
+{
+  "protocol": "SAOS-WEEKLY-RETRO/1",
+  "at": "2026-10-11T13:53:02.351Z",
+  "window": {
+    "since": "2026-10-04T13:52:14.819Z",
+    "weeks": 1
+  },
+  "measured": {
+    "reposScanned": 26,
+    "totals": {
+      "runs": 1171,
+      "ok": 557,
+      "fail": 525,
+      "instantFail": 525
+    },
+    "redRepos": [
+      {
+        "repo": "saos-dex",
+        "fail": 100,
+        "instantFail": 100
+      },
+      {
+        "repo": "Zip",
+        "fail": 100,
+        "instantFail": 100
+      },
+      {
+        "repo": "sanbox",
+        "fail": 6,
+        "instantFail": 6
+      }
+    ],
+    "healthy": [
+      {
+        "repo": "sovereign-lighthouse",
+        "ok": 42
+      },
+      {
+        "repo": "TruthRail",
+        "ok": 1
+      }
+    ],
+    "silent": [
+      "FleetHQ",
+      "sovereign-beacon",
+      "saos-agents",
+      "SovereignConsole",
+      "vault-home"
+    ],
+    "billingSuspect": true,
+    "healLast": {
+      "at": "2026-10-11T13:02:58.764Z",
+      "summary": "{\"at\":\"2026-10-11T13:02:58.764Z\",\"verdict\":\"FLEET-RED\",\"chain\":\"24e238b91d8e3e6ff957dfdf\",\"counts\":{\"repos\":26,\"green\":0,\"blocked\":15,\"genuineRed\":2,\"healed\":0,\"probed\":0,\"other\":9},\"blocked\":[\"steem\",\"saos-control-center\",\"saos-dex\",\"Zip\","
+    },
+    "federationLast": {
+      "at": "2026-10-11T13:14:46.062Z",
+      "summary": "{\"schema\":\"federation/1\",\"at\":\"2026-10-11T13:14:46.062Z\",\"verdict\":\"FEDERATION-DRIFT\",\"owner\":\"roshpinacare-sys\",\"authMode\":\"token\",\"counts\":{\"manifest\":24,\"github\":26,\"records\":26,\"flags\":40,\"flagsTotal\":44},\"flags\":[{\"repo\":\"Adsmarket\",\"f"
+    },
+    "openProposals": [
+      "wallet carried 1 trust-flag(s)/24h (out-of-band PASS mints) — owner P0: make wallet CI the only minter",
+      "wallet law law-pass-provenance failed 1×/24h — regression or theater attempt; verify immediately"
+    ]
+  },
+  "directives": [
+    "billing-wall signature detected: 525 instant-fail runs (<5s) across the org this week — lift the Actions spending limit or migrate the affected engines' cadence to public homes; fleet-heal will re-probe within 24h of release",
+    "red engines (saos-dex, Zip, sanbox): zero success vs 206 failures — fix root cause before adding features; red CI is not a state, it is a debt",
+    "silent repos (5): FleetHQ, sovereign-beacon, saos-agents, SovereignConsole, vault-home ran nothing in 1 week(s) — either wire a real trigger or archive honestly; a repo that never runs is a claim, not a system",
+    "open scribe law-proposals: 2 — review, adopt or refute each with a measured verdict; a proposal older than 2 retro cycles with no verdict becomes a doctrine violation itself"
+  ]
+}
