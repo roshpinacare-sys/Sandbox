@@ -26,7 +26,9 @@ const walletLine = (() => {
   const day = lines.map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean).filter((r) => Date.parse(r.at) >= since);
   if (day.length === 0) return "wallet: 0 verdicts in 24h — artery suspect";
   const by = {}; const laws = {};
-  for (const r of day) { by[r.overall] = (by[r.overall] || 0) + 1; for (const a of r.asserts || []) if (a.verdict === "fail") laws[a.id] = (laws[a.id] || 0) + 1; }
+  let flags = 0;
+  for (const r of day) { by[r.overall] = (by[r.overall] || 0) + 1; flags += (r.alerts || []).length; for (const a of r.asserts || []) if (a.verdict === "fail") laws[a.id] = (laws[a.id] || 0) + 1; }
+  if (flags) proposals.push(`wallet carried ${flags} trust-flag(s)/24h (out-of-band PASS mints) — owner P0: make wallet CI the only minter`);
   if (day.slice(-3).every((r) => r.overall !== "PASS")) proposals.push("wallet FAIL/BLOCKED streak ≥3 — escalate to owner issue; do not mint green");
   for (const [id, n] of Object.entries(laws)) proposals.push(`wallet law ${id} failed ${n}×/24h — regression or theater attempt; verify immediately`);
   return `wallet 24h verdicts: ${JSON.stringify(by)} · failing laws: ${JSON.stringify(laws)}`;

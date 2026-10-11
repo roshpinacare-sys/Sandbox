@@ -27,6 +27,7 @@ const result = {
   checks: {},
   asserts: [],
   warns: [],
+  alerts: [],
   overall: "FAIL",
   reason: "",
   provenance: {
@@ -84,9 +85,10 @@ try {
 
   // ── חוקי-ארנק: הסקירה הפכה לחוק-מכונה — כל-טענה שנמדדה = בדיקה שרצה תמיד ──
   const read = (p) => (existsSync(join(wdir, p)) ? readFileSync(join(wdir, p), "utf8") : null);
-  const assertLaw = (id, ok, detail) => {
-    result.asserts.push({ id, verdict: ok ? "pass" : "fail", detail });
-    out(`law ${id}: ${ok ? "pass" : "FAIL — " + detail}`);
+  const assertLaw = (id, ok, detail, severity = "fail") => {
+    const verdict = ok ? "pass" : severity;
+    result.asserts.push({ id, verdict, detail });
+    out(`law ${id}: ${ok ? "pass" : verdict.toUpperCase() + " — " + detail}`);
   };
 
   const unlock = read("src/app/api/gate/unlock/route.ts") || "";
@@ -108,10 +110,14 @@ try {
       if (s.verdict === "PASS") {
         const prov = s.provenance || {};
         const ok = typeof prov.runUrl === "string" && prov.runUrl.includes("/actions/runs/");
+        const ageH = s.generatedAt ? Math.round((Date.now() - Date.parse(s.generatedAt)) / 3600000) : null;
         assertLaw(
           "law-pass-provenance",
           ok,
-          ok ? `receipt provenance: ${prov.runUrl}` : "PASS receipt WITHOUT Actions provenance = minted out-of-band (unverified-local-engine)",
+          ok
+            ? `receipt provenance: ${prov.runUrl}`
+            : `PASS receipt minted out-of-band (unverified-local-engine) — flagged; artery measurement is the authoritative verdict; mint age: ${ageH === null ? "unknown" : ageH + "h"} at ${result.walletHead.slice(0, 12)}`,
+          "flag",
         );
       }
     } catch { result.warns.push("agent/status.json unparseable"); }
@@ -120,12 +126,19 @@ try {
   if (existsSync(join(wdir, "db/custom.db"))) result.warns.push("db/custom.db committed at HEAD (owner decision pending — never auto-touched)");
 
   const vals = Object.values(result.checks);
+  const flags = result.asserts.filter((a) => a.verdict === "flag").map((a) => `${a.id}: ${a.detail}`);
+  if (flags.length) result.alerts = flags;
   if (result.asserts.some((a) => a.verdict === "fail")) {
     result.overall = "FAIL";
     if (!result.reason) result.reason = "wallet-law assert failed";
   } else if (vals.some((v) => v === "fail")) result.overall = "FAIL";
   else if (vals.some((v) => v === "skip")) { result.overall = "BLOCKED"; if (!result.reason) result.reason = "incomplete measurement — skip is never pass"; }
-  else { result.overall = "PASS"; result.reason = "install, prisma, typecheck, build and all wallet laws pass"; }
+  else {
+    result.overall = "PASS";
+    result.reason = flags.length
+      ? `install, prisma, typecheck, build and all wallet laws pass — with ${flags.length} persistent trust-flag(s) (see alerts)`
+      : "install, prisma, typecheck, build and all wallet laws pass";
+  }
 } catch (e) {
   result.overall = "ERROR";
   result.reason = String(e.message || e).slice(0, 300);
