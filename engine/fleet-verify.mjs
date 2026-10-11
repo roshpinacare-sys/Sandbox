@@ -134,7 +134,7 @@ for (const repo of FLEET) {
         out(`${repo.name}/${c.id}=FAIL — ${r.reason}`);
       }
     }
-    r.laws = fleetLaws(wdir);
+    r.laws.push(...fleetLaws(wdir));
     for (const l of r.laws) {
       if (l.verdict === "flag") r.alerts.push(`${l.id}: ${l.detail}`);
       out(`${repo.name}/${l.id}: ${l.verdict} — ${l.detail}`);
