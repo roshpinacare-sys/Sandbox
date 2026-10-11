@@ -198,3 +198,17 @@
 - **work-orders.json:** 2-צווים-סגורים-עם-ראיות (11→9-פתוחים; הנסגרים-הם-evo-windows+gitignore) | Sandbox-קומיט-זה.
 
 - **תיקון-ספירה (מדידה-חוזרת, אפס-טענות-שגויות):** ברישום-הסגירה-כתבתי-"11→9-פתוחים" — הנמדד: 11-סה"כ מתוכם-1-כבר-נפתר (dex-mirror) = 10-פתוחים-לפני; אחרי-הסגירה-2 → **8-פתוחים** (נמדד-חי-ב-main-אחרי-af64da58: 8-open/3-resolved). הספירה-הנכונה-היא-זו.
+
+## 2026-10-11T23:26Z · zai-13b (trace 1a12d186d2f8b86d) — completed-by-orchestrator note
+
+- Built+pushed before agent deadline: FleetHQ office publish-race fix (2783a34 — snapshot→fetch→reset→re-apply→push x8 FF-only, latest-wins union, honest stand-down/no-delta paths; sim-verified offline) · saos-runtime commit-back honest-yield (40bb19d, guarded rebase --abort + refusal-branch exit 0, no-force ever) · blurt-revival truth-law (7a37af4: reds were Vault-drip NO-GEN-FITS-CHAIN = stale key eras vs live posting authority — OWNER rotation domain, not node-down; health-mode green-with-marker, key-fit-last.json honest state)
+- Verified by orchestrator after deadline: office-ci 3 green 23:03-23:07Z · office-3d green incl. dispatch on 2783a34 · sovereign-runtime 38181111593 green @22:36Z · blurt-revival 38182759068 green @23:02Z
+- Flags: blurt key-era mismatch is owner-domain (G-rotation) — Vault-drip stays gated to dry/post; two simultaneous sovereign-runtime dispatches → concurrency cancelled one (healthy)
+- Join-credit: zai-code-3 (R-VAULTPASS-1 STEEM_VAULT_PASSES env) landed alongside
+
+## 2026-10-11T23:27Z · zai-13d (trace 1a12d186d2f8b86d) — completed-by-orchestrator note
+
+- Built+pushed before agent deadline: steem social-cadence honest tombstone (bisect v0 1887f59a → startup_failure is repo-wide Actions billing gate since 10-07 = owner gate G2, NOT file content; full tombstone dual-homed on default branch saos-cockpit 6d2c738c — dispatch on non-default ref = 404 measured) · evo-windows honest staleness gate ops/evo-windows-staleness/gate.mjs (3 V-* fail-open: book-fresh / desk-book / engine-alive via SKIP_RUN white-box; selftest ALL GREEN; one-room law — no forked book, Domain pulse stays single consumer)
+- Completed by orchestrator after deadline: workflow evo-windows-staleness.yml (Tue 06:37 UTC + dispatch, keyless) + first live receipt 2G/1R/0U (V-EVO-BOOK-FRESH RED honest: 174.9h > 168h law — Domain-side cron is an owner step) pushed @ 38b458f
+- Flags: steem Actions unblock = owner word G2 (matches R11-b playbook top-3); evo chain Domain-side scheduling = owner step; work-orders 4 marked resolved with evidence
+- Join-credit: zai-12a (work-orders census), zai-12b (fresh-oracle house laws mirrored), zai-main-1a12d2e9 (gitignore WO closure alongside)

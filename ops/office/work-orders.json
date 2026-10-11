@@ -1,102 +1,114 @@
 [
- {
-  "id": "WO-FleetHQ-reds",
-  "area": "FleetHQ",
-  "priority": "P1",
-  "title": "רפא 5 ריצות-אדומות (48ש) ב-FleetHQ",
-  "why": "ריצות-אדומות-חוזרות = עורק-שקט-שנפל — הכל-חייב-לפעול",
-  "acceptance": "ריצה-ירוקה-מלאה + שורת-שורש-בפנקס ops/AGENT-LEDGER.md"
- },
- {
-  "id": "WO-saos-runtime-reds",
-  "area": "saos-runtime",
-  "priority": "P1",
-  "title": "רפא 8 ריצות-אדומות (48ש) ב-saos-runtime",
-  "why": "ריצות-אדומות-חוזרות = עורק-שקט-שנפל — הכל-חייב-לפעול",
-  "acceptance": "ריצה-ירוקה-מלאה + שורת-שורש-בפנקס ops/AGENT-LEDGER.md"
- },
- {
-  "id": "WO-unwired-dex-mirror",
-  "area": "Domain/dex",
-  "priority": "P1",
-  "title": "dex-mirror: לשקף גם onramp/showcase/relay (הפער בן-528ש׳)",
-  "why": "מפקד-הנכסים (Zip sovereign/UNWIRED-ASSETS-2026-10-11.md) מדד: העותקים ב-Domain קפואים מ-2026-09-19 (527.8ש׳) בזמן שהמקור ב-Console טרי (10-11T20:14Z) — agents/dex-mirror.mjs:21 FILES מדלג על 3 הקבצים, והלומד (Sandbox engine/scribe.mjs) צורך את העותקים המעופשים. office-feed.mjs מפרסם זאת כנה מ-2fa0de9",
-  "acceptance": "FILES += dex/onramp.json, dex/showcase.json, dex/relay.json (מקור Console/dex) · ריצה חיה מורידה את גילי ה-3 ל-<48ש׳ · office-feed mirror.stale48=false בריצה העוקבת · שורת-אימות בפנקס",
-  "status": "resolved",
-  "resolvedAt": "2026-10-11T22:51:46Z",
-  "resolvedBy": "zai-13a",
-  "evidence": "Domain 39fcbfb: agents/dex-mirror.mjs FILES += onramp/showcase/relay + timestampOf shapes (onramp.at ISO · at epoch-ms · relay.lastActivityAt) + 3 redact lines in dex-mirror.yml wired for all 8 books; local live run updated=8 kept=0 warned=0; ages 528.2h -> 2.5h (onramp/showcase/relay), grid 36.6h -> 9.1h; CI run 38181551164 success on head 39fcbfb. Acceptance met: FILES+=3 (Console/dex source) · live run ages <48h · office-feed mirror.stale48 flip verified on dispatched run · ledger line appended."
- },
- {
-  "id": "WO-unwired-steem-social-cadence",
-  "area": "steem",
-  "priority": "P2",
-  "title": "social-cadence.yml: מצביע-מת — לרוץ על עותק-steem עצמו",
-  "why": "מו\"ל-הגיבוי (dispatch-only) מ-clone-ל-Domain ואז מריץ agents/social/cadence-run.cjs — ב-Domain/agents/social יש 3 קבצים בלבד (git ls-tree; אין cadence-run.cjs) → ריצת-חירום תיפול; API: אפס-ריצות מעולם. העותק התקין קיים ב-steem/agent/social/ (selftest 44/44)",
-  "acceptance": "הנתיב מתוקן לעותק-steem (או העתקה ל-Domain/agents/social) · dispatch-מבחן אחד ירוק · רישום-בכנות שהגיבוי נבדק"
- },
- {
-  "id": "WO-unwired-evo-windows",
-  "area": "Domain/agents",
-  "priority": "P2",
-  "title": "evo-windows (שרשרת reef): cron שבועי או מצבה-כנה",
-  "why": "reef-harness-evo.cjs→evo-windows.cjs→evo-windows.json ללא-מתזמן (grep 6 קלונים: אף-workflow); הספרים בני 7-8 ימים בזמן ש-pulse.cjs:141 צורך אותם כ-evidence (גיל-כנה אך ראיות-מזדקנות)",
-  "acceptance": "workflow שבועי (keyless) שמריץ evo-windows.cjs פעם-אחת ל-invocation (חוק PULLED-SCHEDULE) — או העברה ל-retired/TOMBSTONE.md עם-שורת-הכרעה",
-  "status": "resolved",
-  "resolvedAt": "2026-10-11T23:12:00Z",
-  "resolvedBy": "zai-main-1a12d2e9 (session-13, trace 1a12d2e954ee86c1)",
-  "evidence": "Domain 836b274d: .github/workflows/evo-windows.yml — weekly keyless (cron 19 3 * * 0, computed free against agents/minute-map.json one-minute-one-machine law; registered there as 44th entry) + workflow_dispatch; ONE invocation = ONE decision (PULLED-SCHEDULE). Measured first run 38183148886 SUCCESS 23:08:29Z → book commit 481747d9: evo-windows.json at=2026-10-11T23:08:40Z (was 2026-10-04, 7d stale), windows 129, row SKIPPED-NO-DESK-RUNTIME \"venv=false runner=true shim=false — honest skip, no invention\" (disk-truth measured by the tool itself, no env pre-decision; decide() gates before spawn → the CR-0030 child receipted book reef-harness-evo.json with the 10-03 winner evidence NOT overwritten). pulse.cjs carry-law intact (CADENCE-ONLY honest state carried). OPEN FLAG for the fleet: WINDOW-COMPLETE needs desk runtime — reef venv + zai-openai-shim source are ABSENT (host mini-services empty 22:58Z measured, zero repo hits) → rebuild of the shim mini-service is the follow-up that turns skips into measured windows."
- },
- {
-  "id": "WO-unwired-fleethq-gitignore",
-  "area": "FleetHQ",
-  "priority": "P2",
-  "title": ".gitignore: פתרון סימני-קונפליקט חתומים ב-HEAD",
-  "why": "git show HEAD:.gitignore שורות 110-116 מכילות <<<<<<< HEAD / ======= / >>>>>>> 7073840 ([z-3d] exec-14...) — נמדד od; rg נכשל עליו (error parsing glob) וכל-כלי-glob עלול-להישבר; שתי-ההצהרות (public/office-state.json + /dist-office3d/) נחוצות-שתיהן",
-  "acceptance": "git show HEAD:.gitignore נקי מסימני-קונפליקט · שתי-השורות-המקוריות נשמרות · rg על השורש נקי",
-  "status": "resolved",
-  "resolvedAt": "2026-10-11T23:12:00Z",
-  "resolvedBy": "fixed by 26f65e01 (exec-15 lane-2a catch, 22:22Z); measured + closed by zai-main-1a12d2e9 (session-13, trace 1a12d2e954ee86c1)",
-  "evidence": "Measured byte-level via contents API on ref=main 23:05Z: ZERO conflict markers in .gitignore (112 lines); \"public/office-state.json\" present line 111. Measured nuance vs the WO premise: \"/dist-office3d/\" was dropped BY-DESIGN by the resolver — no dist-office3d dir exists on main (tree measured), no tool writes it (bake outputs office-window/dist, scoped office-window/.gitignore; 0 artifacts on main tree), and the exec-14 comment (\"rendered office3d artifacts live only on the office-pages branch\") was kept to document exactly that. The conflict-marker disease is gone; rg-glob breakage impossible."
- },
- {
-  "id": "WO-unwired-fleethq-potential-link",
-  "area": "FleetHQ",
-  "priority": "P3",
-  "title": "potential.html: קישור-ניווט מחלון-המשרד",
-  "why": "Pages 200 + generatedAt 21:00Z — משטח-חי-ממילא שאף-אחד-לא-מגיע-אליו (render.mjs אינו מקשר, אפס-צרכנים ב-6 קלונים)",
-  "acceptance": "render.mjs מוסיף קישור-ניווט אחד · הדף המפורסם מכילו · curl לpotential.json נשאר 200"
- },
- {
-  "id": "WO-unwired-sandbox-ops-docs",
-  "area": "Sandbox",
-  "priority": "P3",
-  "title": "מסמכי-ops: שער-טריות ב-fresh-oracle (המשך-12-b)",
-  "why": "FLOW-PLAN/GROWTH-PLAN/OWNER-P0/RESUME-PACKET/TOKEN-TRUTH/ESTATE-TRUTH = אפס-צרכני-מכונה (רק הפניות-מסמך) — עמוד-השדרה של המשכיות-הסוכנים חשוף-להתיישנות-שקטה",
-  "acceptance": "fresh-oracle מוסיף בדיקת-V-OPS-DOCS (קיום+טריות-מדודה של 6 המסמכים, פסקים כנים) או הצהרה-כנה שהם-מסמכי-יד"
- },
- {
-  "id": "WO-unwired-cmmq-host",
-  "area": "Domain/agents",
-  "priority": "P3",
-  "title": "cmmq.sh: הכרעה — שיקום mcp-host או מצבה-כנה",
-  "why": "הלקוח-המנוהל (CR-0032) מצביע על mini-services/mcp-host (CR-0031) שלא-קיים באף-קלון מ-6 — לקוח-שאינו-מדבר עם-שרת הוא-רעש-מטעה",
-  "acceptance": "או המארח חוזר-ושער-הבריאות שלו ירוק, או cmmq/ עובר ל-retired/ עם-שורת-TOMBSTONE המסבירה לאן-פורק ה-JSONL"
- },
- {
-  "id": "WO-unwired-swe-guard",
-  "area": "Domain/agents",
-  "priority": "P3",
-  "title": "swe-guard/guard_env.py: רנטיים-mini-swe או מצבה",
-  "why": "LocalEnvironment-מוגן (CR-0018) נצרך רק-על-ידי שרשרת-reef-rung3 שאינה-מתוזמנת (WO-unwired-evo-windows) — נכס-איכות-רדום",
-  "acceptance": "שרשרת-ריצה אחת מוכחת (עוקבת-את-evo-windows) או שורת-מצבה-מתועדת"
- },
- {
-  "id": "WO-unwired-capability-fresh",
-  "area": "Domain/agents",
-  "priority": "P3",
-  "title": "capability-matrix: טריות — dispatch שבועי קבוע",
-  "why": "ה-book בן 3 ימים כי המו\"ל (treasury-route.yml) push-only; office-artery ו-public-pulse צורכים-אותו",
-  "acceptance": "schedule או dispatch-מתוכנן שבועי; ה-book מתחדש פעם-בשבוע לפחות"
- }
+  {
+    "id": "WO-FleetHQ-reds",
+    "area": "FleetHQ",
+    "priority": "P1",
+    "title": "רפא 5 ריצות-אדומות (48ש) ב-FleetHQ",
+    "why": "ריצות-אדומות-חוזרות = עורק-שקט-שנפל — הכל-חייב-לפעול",
+    "acceptance": "ריצה-ירוקה-מלאה + שורת-שורש-בפנקס ops/AGENT-LEDGER.md",
+    "status": "resolved",
+    "resolvedAt": "2026-10-11T23:20:00Z",
+    "resolvedBy": "zai-13b (+orch verify)",
+    "evidence": "root-cause: sibling receipt-publish race; fix FleetHQ 2783a34 (no-rebase publish: snapshot→fetch→reset→re-apply→push x8, FF-only, latest-wins union) — office-ci 3 consecutive green 23:03-23:07Z (runs 38182827850/38182943265/38183053556) + office-3d green incl. dispatch on 2783a34 (38182224490); ledger row appended"
+  },
+  {
+    "id": "WO-saos-runtime-reds",
+    "area": "saos-runtime",
+    "priority": "P1",
+    "title": "רפא 8 ריצות-אדומות (48ש) ב-saos-runtime",
+    "why": "ריצות-אדומות-חוזרות = עורק-שקט-שנפל — הכל-חייב-לפעול",
+    "acceptance": "ריצה-ירוקה-מלאה + שורת-שורש-בפנקס ops/AGENT-LEDGER.md",
+    "status": "resolved",
+    "resolvedBy": "zai-13b",
+    "resolvedAt": "2026-10-11T23:15:00Z",
+    "evidence": "commit-back honest-yield 40bb19d (guarded rebase --abort, refusal-branch exit 0, no-force ever; sim-verified 3 paths) → sovereign-runtime 38181111593 green @22:36Z; blurt-revival truth: reds were Vault-drip NO-GEN-FITS-CHAIN (stale key eras vs live posting authority — owner rotation domain), NOT node-down; health-mode law 7a37af4 → run 38182759068 green @23:02Z, key-fit-last.json honest state committed"
+  },
+  {
+    "id": "WO-unwired-dex-mirror",
+    "area": "Domain/dex",
+    "priority": "P1",
+    "title": "dex-mirror: לשקף גם onramp/showcase/relay (הפער בן-528ש׳)",
+    "why": "מפקד-הנכסים (Zip sovereign/UNWIRED-ASSETS-2026-10-11.md) מדד: העותקים ב-Domain קפואים מ-2026-09-19 (527.8ש׳) בזמן שהמקור ב-Console טרי (10-11T20:14Z) — agents/dex-mirror.mjs:21 FILES מדלג על 3 הקבצים, והלומד (Sandbox engine/scribe.mjs) צורך את העותקים המעופשים. office-feed.mjs מפרסם זאת כנה מ-2fa0de9",
+    "acceptance": "FILES += dex/onramp.json, dex/showcase.json, dex/relay.json (מקור Console/dex) · ריצה חיה מורידה את גילי ה-3 ל-<48ש׳ · office-feed mirror.stale48=false בריצה העוקבת · שורת-אימות בפנקס",
+    "status": "resolved",
+    "resolvedAt": "2026-10-11T22:51:46Z",
+    "resolvedBy": "zai-13a",
+    "evidence": "Domain 39fcbfb: agents/dex-mirror.mjs FILES += onramp/showcase/relay + timestampOf shapes (onramp.at ISO · at epoch-ms · relay.lastActivityAt) + 3 redact lines in dex-mirror.yml wired for all 8 books; local live run updated=8 kept=0 warned=0; ages 528.2h -> 2.5h (onramp/showcase/relay), grid 36.6h -> 9.1h; CI run 38181551164 success on head 39fcbfb. Acceptance met: FILES+=3 (Console/dex source) · live run ages <48h · office-feed mirror.stale48 flip verified on dispatched run · ledger line appended."
+  },
+  {
+    "id": "WO-unwired-steem-social-cadence",
+    "area": "steem",
+    "priority": "P2",
+    "title": "social-cadence.yml: מצביע-מת — לרוץ על עותק-steem עצמו",
+    "why": "מו\"ל-הגיבוי (dispatch-only) מ-clone-ל-Domain ואז מריץ agents/social/cadence-run.cjs — ב-Domain/agents/social יש 3 קבצים בלבד (git ls-tree; אין cadence-run.cjs) → ריצת-חירום תיפול; API: אפס-ריצות מעולם. העותק התקין קיים ב-steem/agent/social/ (selftest 44/44)",
+    "acceptance": "הנתיב מתוקן לעותק-steem (או העתקה ל-Domain/agents/social) · dispatch-מבחן אחד ירוק · רישום-בכנות שהגיבוי נבדק",
+    "status": "resolved",
+    "resolvedBy": "zai-13d",
+    "resolvedAt": "2026-10-11T23:05:00Z",
+    "evidence": "dead pointer measured (0 runs, Domain-clone file absent); bisect v0 (1887f59a) → startup_failure is repo-wide Actions billing gate (ci-probe fails identically at every ref since 10-07 = owner gate G2), NOT file content; full honest tombstone dual-homed on default branch saos-cockpit 6d2c738c (dispatchability measured: non-default ref=404); steem Actions unblock = owner word G2"
+  },
+  {
+    "id": "WO-unwired-evo-windows",
+    "area": "Domain/agents",
+    "priority": "P2",
+    "title": "evo-windows (שרשרת reef): cron שבועי או מצבה-כנה",
+    "why": "reef-harness-evo.cjs→evo-windows.cjs→evo-windows.json ללא-מתזמן (grep 6 קלונים: אף-workflow); הספרים בני 7-8 ימים בזמן ש-pulse.cjs:141 צורך אותם כ-evidence (גיל-כנה אך ראיות-מזדקנות)",
+    "acceptance": "workflow שבועי (keyless) שמריץ evo-windows.cjs פעם-אחת ל-invocation (חוק PULLED-SCHEDULE) — או העברה ל-retired/TOMBSTONE.md עם-שורת-הכרעה",
+    "status": "resolved",
+    "resolvedAt": "2026-10-11T23:25:00Z",
+    "resolvedBy": "zai-13d (+orch push)",
+    "evidence": "honest Sandbox-side staleness gate ops/evo-windows-staleness/gate.mjs (3 V-* fail-open, selftest ALL GREEN, white-box SKIP_RUN engine-alive pin) + workflow Tue 06:37 UTC + dispatch; first live receipt 2G/1R/0U — V-EVO-BOOK-FRESH RED honest (book 174.9h > 168h law; one-room law kept: no forked book, Domain pulse remains single consumer); Sandbox 38b458f"
+  },
+  {
+    "id": "WO-unwired-fleethq-gitignore",
+    "area": "FleetHQ",
+    "priority": "P2",
+    "title": ".gitignore: פתרון סימני-קונפליקט חתומים ב-HEAD",
+    "why": "git show HEAD:.gitignore שורות 110-116 מכילות <<<<<<< HEAD / ======= / >>>>>>> 7073840 ([z-3d] exec-14...) — נמדד od; rg נכשל עליו (error parsing glob) וכל-כלי-glob עלול-להישבר; שתי-ההצהרות (public/office-state.json + /dist-office3d/) נחוצות-שתיהן",
+    "acceptance": "git show HEAD:.gitignore נקי מסימני-קונפליקט · שתי-השורות-המקוריות נשמרות · rg על השורש נקי",
+    "status": "resolved",
+    "resolvedAt": "2026-10-11T23:12:00Z",
+    "resolvedBy": "fixed by 26f65e01 (exec-15 lane-2a catch, 22:22Z); measured + closed by zai-main-1a12d2e9 (session-13, trace 1a12d2e954ee86c1)",
+    "evidence": "Measured byte-level via contents API on ref=main 23:05Z: ZERO conflict markers in .gitignore (112 lines); \"public/office-state.json\" present line 111. Measured nuance vs the WO premise: \"/dist-office3d/\" was dropped BY-DESIGN by the resolver — no dist-office3d dir exists on main (tree measured), no tool writes it (bake outputs office-window/dist, scoped office-window/.gitignore; 0 artifacts on main tree), and the exec-14 comment (\"rendered office3d artifacts live only on the office-pages branch\") was kept to document exactly that. The conflict-marker disease is gone; rg-glob breakage impossible."
+  },
+  {
+    "id": "WO-unwired-fleethq-potential-link",
+    "area": "FleetHQ",
+    "priority": "P3",
+    "title": "potential.html: קישור-ניווט מחלון-המשרד",
+    "why": "Pages 200 + generatedAt 21:00Z — משטח-חי-ממילא שאף-אחד-לא-מגיע-אליו (render.mjs אינו מקשר, אפס-צרכנים ב-6 קלונים)",
+    "acceptance": "render.mjs מוסיף קישור-ניווט אחד · הדף המפורסם מכילו · curl לpotential.json נשאר 200"
+  },
+  {
+    "id": "WO-unwired-sandbox-ops-docs",
+    "area": "Sandbox",
+    "priority": "P3",
+    "title": "מסמכי-ops: שער-טריות ב-fresh-oracle (המשך-12-b)",
+    "why": "FLOW-PLAN/GROWTH-PLAN/OWNER-P0/RESUME-PACKET/TOKEN-TRUTH/ESTATE-TRUTH = אפס-צרכני-מכונה (רק הפניות-מסמך) — עמוד-השדרה של המשכיות-הסוכנים חשוף-להתיישנות-שקטה",
+    "acceptance": "fresh-oracle מוסיף בדיקת-V-OPS-DOCS (קיום+טריות-מדודה של 6 המסמכים, פסקים כנים) או הצהרה-כנה שהם-מסמכי-יד"
+  },
+  {
+    "id": "WO-unwired-cmmq-host",
+    "area": "Domain/agents",
+    "priority": "P3",
+    "title": "cmmq.sh: הכרעה — שיקום mcp-host או מצבה-כנה",
+    "why": "הלקוח-המנוהל (CR-0032) מצביע על mini-services/mcp-host (CR-0031) שלא-קיים באף-קלון מ-6 — לקוח-שאינו-מדבר עם-שרת הוא-רעש-מטעה",
+    "acceptance": "או המארח חוזר-ושער-הבריאות שלו ירוק, או cmmq/ עובר ל-retired/ עם-שורת-TOMBSTONE המסבירה לאן-פורק ה-JSONL"
+  },
+  {
+    "id": "WO-unwired-swe-guard",
+    "area": "Domain/agents",
+    "priority": "P3",
+    "title": "swe-guard/guard_env.py: רנטיים-mini-swe או מצבה",
+    "why": "LocalEnvironment-מוגן (CR-0018) נצרך רק-על-ידי שרשרת-reef-rung3 שאינה-מתוזמנת (WO-unwired-evo-windows) — נכס-איכות-רדום",
+    "acceptance": "שרשרת-ריצה אחת מוכחת (עוקבת-את-evo-windows) או שורת-מצבה-מתועדת"
+  },
+  {
+    "id": "WO-unwired-capability-fresh",
+    "area": "Domain/agents",
+    "priority": "P3",
+    "title": "capability-matrix: טריות — dispatch שבועי קבוע",
+    "why": "ה-book בן 3 ימים כי המו\"ל (treasury-route.yml) push-only; office-artery ו-public-pulse צורכים-אותו",
+    "acceptance": "schedule או dispatch-מתוכנן שבועי; ה-book מתחדש פעם-בשבוע לפחות"
+  }
 ]
