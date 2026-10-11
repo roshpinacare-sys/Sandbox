@@ -201,6 +201,16 @@ for (const repo of FLEET) {
 overall.overall = results.every((r) => r.overall === "PASS") ? "PASS" : "FAIL";
 overall.reason = results.map((r) => `${r.slug.split("/")[1]}=${r.overall}`).join(" · ");
 
+// provenance (G-series law, closes the unprovenanced FLAG on receipts/fleet): the receipt
+// carries its own Actions run identity - the integrity guard verifies it against the API.
+overall.provenance = {
+  runId: process.env.GITHUB_RUN_ID || null,
+  runUrl: process.env.GITHUB_SERVER_URL && process.env.GITHUB_RUN_ID
+    ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+    : null,
+  sha: process.env.GITHUB_SHA || null,
+};
+
 // קבלות-כנות תמיד (כולל FAIL)
 try {
   mkdirSync("receipts/fleet", { recursive: true });
