@@ -20,6 +20,8 @@
  *   state/verifier/history.jsonl            — פנקס-מרקל append-only (tail-512; דפוס-federation)
  *   ops/agents/zai-verifier/REPORT.md       — דוח-אמת-מלא בעברית + דלתא-מול-הריצה-הקודמת
  *   ops/agents/zai-verifier/TASKS.md        — מאגר-משימות-חי (append-only; OPEN/CLOSED לפי-מצב-הכללים)
+ *   status/truth.html                       — עמוד-האמת-הציבורי (8: נאפה-מהמדידה בכל-ריצה; אפס-JS;
+ *                                             Pages מעלה-אותו-אוטומטית — שכבה-3 של-התוכנית)
  *
  * מצערת: --guard-minutes (ברירת-מחדל 22) — קבלה-טרייה-מדי → VERIFIER-SUPPRESSED, אפס-כתיבה,
  * אות ticked=0 (הרצה-מדולגת-אינה-מולידה-יורשת; דפוס-T-42). --force עוקף (אימות-בלבד).
@@ -490,8 +492,148 @@ function renderReport(v, cfg, prev) {
     `- RPC ציבורי keyless: ${cfg.steem.rpc[0]}${blurt?.reachable ? ` · ${blurt.host}` : ""}`,
     `- פנקס: state/verifier/history.jsonl (מרקל) · אימות-עצמי: node engine/verifier.mjs --verify-ledger`,
     `- קוד-הבדיקה: engine/verifier.mjs · כללים: ops/agents/zai-verifier/config.json`,
+    `- עמוד-האמת-הציבורי: status/truth.html (נאפה-בכל-ריצה; Pages-מעלה-אותו ל-roshpinacare-sys.github.io/Sandbox/status/truth.html)`,
     ``,
   ].join("\n");
+}
+
+/* ── עמוד-האמת-הציבורי (8): HTML-סטטי-מהנתונים-שנמדדו-ממש-בריצה-זו. אפס-JS, אפס-fetch, אפס-סודות. ── */
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const VERDICT_COLOR = { OK: "#3fb972", NOTICE: "#d29922", DEGRADED: "#e3811f", FAIL: "#e5534b" };
+function renderTruthPage(v, cfg) {
+  const { checks, overall, dev, steem, blurt, rot, at, tookMs, authMode, chain } = v;
+  const lvlColor = (l) => VERDICT_COLOR[l] ?? "#8b98a5";
+  const badge = (l) => `<span class="badge" style="color:${lvlColor(l)};border-color:${lvlColor(l)}">${esc(l)}</span>`;
+  const arteryRows = checks.filter((c) => c.id.startsWith("sbx.")).map((c) =>
+    `<tr><td class="mono">${esc(c.id)}</td><td>${badge(c.level)}</td><td class="why">${esc(c.why)}</td></tr>`).join("\n");
+  const repos = [...(dev?.repos ?? [])].sort((a, b) => (b.commits24h ?? 0) - (a.commits24h ?? 0)).slice(0, 8);
+  const devRows = repos.map((r) =>
+    `<tr><td>${esc(r.name)}</td><td class="mono">${r.commits24h === 100 ? "100+" : esc(r.commits24h ?? 0)}</td><td>${esc(typeof r.codeShare === "number" ? r.codeShare + "%" : (r.codeShare ?? "—"))}</td><td class="why">${esc(r.status ?? "ok")}</td></tr>`).join("\n");
+  const codePct = dev?.codeRatePercent ?? 0;
+  const fleetRows = (steem?.fleet ?? []).filter((f) => f.exists).slice(0, 12).map((f) =>
+    `<tr><td>@${esc(f.account)}</td><td class="mono">${esc(f.sp)}</td><td class="mono">${esc(f.vpPercent ?? "—")}%</td><td class="mono">${f.lastPostAgeHours == null ? "מעולם-לא" : esc(f.lastPostAgeHours) + "h"}</td></tr>`).join("\n");
+  const taskRows = checks.filter((c) => LEVELS[c.level] >= LEVELS.DEGRADED && ruleToTask(c.id)).map((c) => {
+    const t = ruleToTask(c.id);
+    return `<li><span class="mono task-id">${esc(t.tid)}</span> ${esc(t.action)} <span class="why">· ראיה: ${esc(c.why)}</span></li>`;
+  }).join("\n");
+  return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="עורק-האמת הציבורי — נאפה מהמדידה בענן, שחזורי, אפס-טענות. כל-ערך כאן נמדד בריצת-verifier אמתית.">
+<title>עורק-האמת · אמת-מדודה-ציבורית</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+body{background:#0b0f14;color:#e6edf3;font:15px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;padding:24px 16px 48px}
+.wrap{max-width:960px;margin:0 auto}
+.hero{border:1px solid #1f2933;background:#12181f;border-radius:14px;padding:24px;margin-bottom:16px}
+.hero h1{font-size:24px;font-weight:700;letter-spacing:-.02em}
+.tagline{color:#8b98a5;margin-top:6px}
+.overall-line{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.verdict{font-size:18px;font-weight:800;padding:4px 14px;border-radius:999px;border:2px solid}
+.chip{color:#8b98a5;font-size:13px}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;direction:ltr;unicode-bidi:embed}
+section{border:1px solid #1f2933;background:#12181f;border-radius:14px;padding:20px;margin-bottom:16px}
+h2{font-size:16px;font-weight:700;margin-bottom:12px;color:#e6edf3}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:#8b98a5;text-align:right;font-weight:600;padding:6px 8px;border-bottom:1px solid #1f2933;font-size:12px}
+td{padding:7px 8px;border-bottom:1px solid #182028;vertical-align:top}
+tr:last-child td{border-bottom:none}
+.why{color:#8b98a5;font-size:12.5px}
+.badge{font-size:11px;font-weight:800;border:1px solid;border-radius:999px;padding:1px 9px;white-space:nowrap}
+.bar{height:10px;background:#182028;border-radius:999px;overflow:hidden;margin-top:8px}
+.bar>span{display:block;height:100%;background:#3fb972;border-radius:999px}
+.task-id{color:#d29922;font-weight:700}
+ul.tasks{list-style:none;padding:0}
+ul.tasks li{padding:7px 0;border-bottom:1px solid #182028}
+ul.tasks li:last-child{border-bottom:none}
+.code{background:#0d1319;border:1px solid #1f2933;border-radius:8px;padding:10px 12px;margin:8px 0;overflow-x:auto}
+footer{color:#8b98a5;font-size:12.5px;text-align:center;margin-top:24px;line-height:2}
+a{color:#3fb972;text-decoration:none}
+a:hover{text-decoration:underline}
+.tbl-scroll{overflow-x:auto}
+@media(max-width:640px){body{padding:14px 10px 32px}.hero{padding:18px}.hero h1{font-size:20px}section{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <h1>עורק-האמת · אמת-מדודה-ציבורית</h1>
+  <p class="tagline">העמוד-הזה נאפה אוטומטית בענן מהמדידה-של-ריצת-verifier אמתית. אין-JS, אין-fetch, אין-טענות — רק-מה-שנמדד. שחזורי-ע"י-כל-צד-שלישי.</p>
+  <div class="overall-line">
+    <span class="verdict" style="color:${lvlColor(overall)};border-color:${lvlColor(overall)}">${esc(overall)}</span>
+    <span class="chip">נמדד: <span class="mono">${esc(at)}</span></span>
+    <span class="chip">משך-מדידה: <span class="mono">${esc(tookMs)}ms</span></span>
+    <span class="chip">auth: <span class="mono">${esc(authMode)}</span></span>
+    <span class="chip">ראש-פנקס-מרקל: <span class="mono">${esc(chain?.cur?.slice(0, 16) ?? "—")}…</span></span>
+  </div>
+</header>
+
+<section>
+  <h2>קצב-בנייה-אמת · 24h</h2>
+  <div class="overall-line"><span class="chip">codeShare = <strong style="color:#3fb972">${esc(dev?.codeRatePercent ?? "UNMEASURED")}%</strong> · ${esc(dev?.classified ?? 0)}-קומיטים-מסווגים-מתוך-${esc(dev?.totalCommits ?? 0)}</span></div>
+  <div class="bar"><span style="width:${Math.min(100, Number(codePct) || 0)}%"></span></div>
+  <div class="tbl-scroll" style="margin-top:14px">
+  <table><thead><tr><th>ריפו</th><th>commits-24h</th><th>code-חלק</th><th>הערה</th></tr></thead><tbody>
+  ${devRows || `<tr><td colspan="4" class="why">אין-נתונים-בריצה-זו</td></tr>`}
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2>בריאות-עורקי-הסנדבוקס</h2>
+  <div class="tbl-scroll">
+  <table><thead><tr><th>בדיקה</th><th>דרגה</th><th>ראיה</th></tr></thead><tbody>
+  ${arteryRows || `<tr><td colspan="3" class="why">אין-בדיקות-עורק-בריצה-זו</td></tr>`}
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2>אמת-על-השרשרת · Steem (${esc(steem?.host ?? "UNREACHABLE")})</h2>
+  <p class="why" style="margin-bottom:10px">RPC ציבורי keyless · אוצר: ${steem?.treasury ? `@${esc(steem.treasury.account)} · ${esc(steem.treasury.sp)}-SP` : "—"} · פוסן-צי-החדש-ביותר: ${steem?.fleetNewestPostHours == null ? "מעולם-לא" : esc(steem.fleetNewestPostHours) + "h"}</p>
+  <div class="tbl-scroll">
+  <table><thead><tr><th>חשבון</th><th>SP-אפקטיבי</th><th>VP%</th><th>פוסט-אחרון</th></tr></thead><tbody>
+  ${fleetRows || `<tr><td colspan="4" class="why">RPC לא-הגיב-בריצה-זו</td></tr>`}
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2>Blurt</h2>
+  ${blurt?.reachable
+    ? `<p>RPC: <span class="mono">${esc(blurt.host)}</span> · פוסן-הצי-החדש-ביותר: <span class="mono">${blurt.fleetNewestPostHours == null ? "מעולם-לא" : esc(blurt.fleetNewestPostHours) + "h"}</span></p>`
+    : `<p class="why">RPC בלתי-נגיש-מהרץ: ${esc((blurt?.errors ?? []).join(" · "))}</p>`}
+</section>
+
+<section>
+  <h2>משימות-פתוחות (נפתחות-ונסגרות-אוטומטית-לפי-כללים)</h2>
+  ${taskRows ? `<ul class="tasks">\n${taskRows}\n</ul>` : `<p class="why">אף-כלל-לא-נצרת-בריצה-זו</p>`}
+  <p class="why" style="margin-top:10px">ריקבון-מצבות: נסרקו ${esc(rot?.scanned ?? 0)}-קבצים · פגומים: ${esc(rot?.hits?.length ?? 0)}</p>
+</section>
+
+<section>
+  <h2>אימות-עצמאי — אל-תאמינו-לעמוד-הזה. בדקו-אותו:</h2>
+  <div class="code mono"># הדוח-המלא (נוצר-באותה-ריצה):
+curl -s https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/ops/agents/zai-verifier/REPORT.md
+
+# פנקס-המרקל — שלמות-צ'יין-עצמית:
+curl -s https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/state/verifier/history.jsonl | tail -3
+
+# קוד-המדידה-עצמו (פתוח, אפס-מפתחות-חתימה):
+curl -s https://raw.githubusercontent.com/roshpinacare-sys/Sandbox/main/engine/verifier.mjs</div>
+  <p class="why">הפנקס: append-only + חיבור-מרקל (כל-רשומה חותמת את קודמתה). אימות: <span class="mono">node engine/verifier.mjs --verify-ledger</span></p>
+</section>
+
+<footer>
+  נוצר-אוטומטית בידי <a href="https://github.com/roshpinacare-sys/Sandbox/blob/main/engine/verifier.mjs">engine/verifier.mjs</a> · ריצה-זו: <span class="mono">${esc(at)}</span> · ${esc(tookMs)}ms · auth ${esc(authMode)}
+  <br>כל-ערך-כאן-נמדד. מה-שלא-נמדד — לא-מוצג. כל-טענה-מפורכת-בריצה-הבאה.
+</footer>
+</div>
+</body>
+</html>\n`;
 }
 
 /* ── אות-ל-workflow ── */
@@ -594,6 +736,11 @@ async function main() {
 
   writeFileSync(latestPath, redact(JSON.stringify(receipt, null, 1)) + "\n");
   writeFileSync(reportPath, redact(renderReport(receipt, cfg, prev)));
+  /* עמוד-האמת-הציבורי — נאפה-מאותם-נתונים-מדודים (8) */
+  try {
+    mkdirSync(path.join(ROOT, "status"), { recursive: true });
+    writeFileSync(path.join(ROOT, "status", "truth.html"), redact(renderTruthPage(receipt, cfg)));
+  } catch (e) { soft.push("truth-page emit failed: " + String(e?.message ?? e).slice(0, 80)); }
 
   /* משימות-חי (append-only) */
   let taskLines = [];
