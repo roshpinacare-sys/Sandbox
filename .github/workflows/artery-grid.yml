@@ -1,0 +1,81 @@
+name: artery-grid
+# ═══════════════════════════════════════════════════════════════════════════
+# ARTERY-GRID · artery-7 — השעון של טיק-ה-hyper-grid (T-63, 2026-10-11).
+# ───────────────────────────────────────────────────────────────────────────
+# נמדד: טיק-ה-grid מת בשקט עם ה-substrate שלו (lastTickAt קפוא 22 שעות+ כש-enabled=true).
+# החייאה: T-62 חיבר burst תחום לדופק של saos-runtime. העורק-הזה = המדידה-הבלתי-תלויה:
+# כל 30 דקות hyper-grid.json נמדד מ-HEAD (contents API). אדום = הטיק עומד. כנות-קודמת-לנוחות.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - grid-watch-tick
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-grid
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: setup-bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: measure grid state HEAD (never trust, always verify)
+        env:
+          ECO_WALLET_TOKEN: ${{ secrets.ECO_WALLET_TOKEN }}
+        run: node engine/grid-watch.mjs
+
+      - name: leak-scan (fail-closed)
+        if: always()
+        run: |
+          [ -f receipts/grid/verdict.json ] && node engine/leak-scan.mjs receipts/grid/verdict.json
+          [ -f receipts/grid/log.jsonl ] && node engine/leak-scan.mjs receipts/grid/log.jsonl
+
+      # קומיט-ממושפע: רק receipts/grid (אף-פעם לא -A) · rebase ×3 · כשל = יציאה 1
+      - name: commit receipt (honest verdicts always land, FAIL included)
+        if: always()
+        run: |
+          git config user.name "grid-watch"
+          git config user.email "grid-watch@users.noreply.github.com"
+          git add receipts/grid
+          if git diff --cached --quiet; then
+            echo "receipt unchanged - nothing to commit"
+            exit 0
+          fi
+          git commit -m "grid-watch receipt: $(date -u +%FT%TZ)"
+          OK=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+            git rebase --abort 2>/dev/null || true
+            git status --short
+            sleep 5
+          done
+          [ "$OK" = "1" ] || { echo "receipt push failed after 3 attempts — honest failure"; exit 1; }
+
+      - name: verdict law (red unless PASS — after the receipt landed)
+        if: always()
+        run: |
+          V="$(node -e 'try{console.log(JSON.parse(require("fs").readFileSync("receipts/grid/verdict.json","utf8")).overall)}catch{console.log("ERROR")}')"
+          echo "grid verdict: $V"
+          [ "$V" = "PASS" ] || { echo "grid tick is stalled or state unreadable — run stays red (honesty over comfort)"; exit 1; }

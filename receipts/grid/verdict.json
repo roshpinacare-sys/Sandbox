@@ -1,0 +1,45 @@
+{
+  "artery": "grid-watch",
+  "measuredAt": "2026-10-11T14:52:50.205Z",
+  "sources": [
+    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
+  ],
+  "asserts": [
+    {
+      "id": "law-grid-state-present",
+      "ok": true,
+      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-fresh",
+      "ok": false,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 1323min)",
+      "severity": "fail",
+      "verdict": "fail"
+    },
+    {
+      "id": "law-grid-revival-wired",
+      "ok": true,
+      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
+      "severity": "flag",
+      "verdict": "pass"
+    }
+  ],
+  "alerts": [],
+  "overall": "FAIL",
+  "reason": "grid-law failed: law-grid-fresh",
+  "provenance": {
+    "stateBlobSha": "e5f90af2141d81267d5d43807c653568ba223045",
+    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit"
+  },
+  "measured": {
+    "enabled": true,
+    "lastTickAt": "2026-10-10T16:49:38.903Z",
+    "ageMin": 1323,
+    "ticks": 35470,
+    "lastVerdict": "CYCLE-IN-FLIGHT"
+  }
+}
