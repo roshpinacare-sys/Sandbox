@@ -1,12 +1,12 @@
 {
  "schema": "verifier/1",
- "at": "2026-10-11T13:08:39.648Z",
- "overall": "DEGRADED",
- "authMode": "token(fed)",
+ "at": "2026-10-11T13:14:11.915Z",
+ "overall": "FAIL",
+ "authMode": "token(gh)",
  "counts": {
   "checks": 11,
   "degraded": 2,
-  "fail": 0
+  "fail": 1
  },
  "levels": {
   "sbx.wf-sovereign-tick": "OK",
@@ -18,7 +18,7 @@
   "dev.rate": "DEGRADED",
   "steem.fleet": "OK",
   "steem.treasury": "OK",
-  "blurt.alive": "NOTICE",
+  "blurt.alive": "FAIL",
   "rot.hygiene": "DEGRADED"
  },
  "checks": [
@@ -79,7 +79,7 @@
   {
    "id": "dev.rate",
    "level": "DEGRADED",
-   "why": "heartbeat-without-building: codeShare 5% < 10% over 313 commits/24h",
+   "why": "heartbeat-without-building: codeShare 5% < 10% over 464 commits/24h",
    "evidence": {
     "windowHours": 24
    }
@@ -87,9 +87,9 @@
   {
    "id": "steem.fleet",
    "level": "OK",
-   "why": "fleet posted 19.3h ago",
+   "why": "fleet posted 0.1h ago",
    "evidence": {
-    "newestPostHours": 19.3
+    "newestPostHours": 0.1
    }
   },
   {
@@ -99,35 +99,34 @@
   },
   {
    "id": "blurt.alive",
-   "level": "NOTICE",
-   "why": "blurt RPC unreachable from runner (2 hosts tried) — UNREACHABLE, לא \"מת\" עד-שיימד",
+   "level": "FAIL",
+   "why": "blurt fleet silent 186h > 168d — loop dead until proven otherwise",
    "evidence": {
-    "hosts": [
-     "https://rpc.beblurt.com",
-     "https://rpc.blurt.world"
-    ]
+    "newestPostHours": 186.2
    }
   },
   {
    "id": "rot.hygiene",
    "level": "DEGRADED",
-   "why": "tombstone rot: 1 file(s) with corrupted sha256 pointers",
+   "why": "tombstone rot: 3 file(s) with corrupted sha256 pointers",
    "evidence": {
     "sample": [
-     "ops/agents/zai-verifier/README.md"
+     "ops/agents/zai-verifier/README.md",
+     "ops/agents/zai-verifier/REPORT.md",
+     "ops/agents/zai-verifier/TASKS.md"
     ]
    }
   }
  ],
  "dev": {
-  "totalCommits": 313,
+  "totalCommits": 464,
   "codeRatePercent": 5,
   "classified": 42,
   "repos": [
    {
     "name": "Sandbox",
     "visibility": "public",
-    "pushedAt": "2026-10-11T13:08:27Z",
+    "pushedAt": "2026-10-11T13:08:58Z",
     "commits24h": 100,
     "redWorkflowEcho": null,
     "codeShare": 8,
@@ -136,8 +135,8 @@
    {
     "name": "Console",
     "visibility": "public",
-    "pushedAt": "2026-10-11T13:04:25Z",
-    "commits24h": 47,
+    "pushedAt": "2026-10-11T13:12:14Z",
+    "commits24h": 48,
     "redWorkflowEcho": null,
     "codeShare": 8,
     "sampleSize": 12
@@ -155,18 +154,26 @@
     "name": "TruthRail",
     "visibility": "public",
     "pushedAt": "2026-10-11T13:02:49Z",
-    "commits24h": 20,
+    "commits24h": 19,
     "redWorkflowEcho": null,
     "codeShare": 0,
     "sampleSize": 6
    },
    {
     "name": "saos-dex",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
+    "visibility": "private",
+    "pushedAt": "2026-10-11T13:02:57Z",
+    "commits24h": 26,
+    "redWorkflowEcho": null,
+    "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "saos-control-center",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
+    "visibility": "private",
+    "pushedAt": "2026-10-11T13:03:02Z",
+    "commits24h": 26,
+    "redWorkflowEcho": null,
+    "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "saos-agents",
@@ -196,17 +203,25 @@
     "name": "sovereign-lighthouse",
     "visibility": "public",
     "pushedAt": "2026-10-10T17:55:51Z",
-    "commits24h": 87,
+    "commits24h": 86,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "saos-sovereign-foundry",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
+    "visibility": "private",
+    "pushedAt": "2026-10-08T03:18:10Z",
+    "commits24h": 0,
+    "redWorkflowEcho": null,
+    "codeShare": null
    },
    {
     "name": "steem",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
+    "visibility": "private",
+    "pushedAt": "2026-10-11T13:03:06Z",
+    "commits24h": 100,
+    "redWorkflowEcho": null,
+    "codeShare": "UNMEASURED (budget)"
    }
   ]
  },
@@ -217,66 +232,66 @@
    "exists": true,
    "sp": 3676,
    "vpPercent": 66,
-   "lastPostAgeHours": 19.3,
-   "lastVoteAgeHours": 0.7
+   "lastPostAgeHours": 19.4,
+   "lastVoteAgeHours": 0.8
   },
-  "fleetNewestPostHours": 19.3,
+  "fleetNewestPostHours": 0.1,
   "fleet": [
    {
     "account": "headcorner",
     "exists": true,
     "sp": 3676,
     "vpPercent": 66,
-    "lastPostAgeHours": 19.3,
-    "lastVoteAgeHours": 0.7
+    "lastPostAgeHours": 19.4,
+    "lastVoteAgeHours": 0.8
    },
    {
     "account": "haran",
     "exists": true,
     "sp": 78,
     "vpPercent": 73,
-    "lastPostAgeHours": 71.6,
-    "lastVoteAgeHours": 1.9
+    "lastPostAgeHours": 0.1,
+    "lastVoteAgeHours": 2
    },
    {
     "account": "cashmachine",
     "exists": true,
     "sp": 75,
     "vpPercent": 74,
-    "lastPostAgeHours": 45.4,
-    "lastVoteAgeHours": 1.8
+    "lastPostAgeHours": 45.5,
+    "lastVoteAgeHours": 1.9
    },
    {
     "account": "wic",
     "exists": true,
     "sp": 33,
     "vpPercent": 75,
-    "lastPostAgeHours": 20.5,
-    "lastVoteAgeHours": 1.6
+    "lastPostAgeHours": 20.6,
+    "lastVoteAgeHours": 1.7
    },
    {
     "account": "woq",
     "exists": true,
     "sp": 34,
     "vpPercent": 72,
-    "lastPostAgeHours": 20.7,
-    "lastVoteAgeHours": 1.6
+    "lastPostAgeHours": 20.8,
+    "lastVoteAgeHours": 1.7
    },
    {
     "account": "tov",
     "exists": true,
     "sp": 31,
     "vpPercent": 77,
-    "lastPostAgeHours": 20.5,
-    "lastVoteAgeHours": 1.8
+    "lastPostAgeHours": 20.6,
+    "lastVoteAgeHours": 1.9
    },
    {
     "account": "spaminator",
     "exists": true,
     "sp": 69,
     "vpPercent": 0,
-    "lastPostAgeHours": 57491.1,
-    "lastVoteAgeHours": 12892.9
+    "lastPostAgeHours": 57491.2,
+    "lastVoteAgeHours": 12893
    },
    {
     "account": "saos",
@@ -292,23 +307,23 @@
     "sp": 0,
     "vpPercent": 0,
     "lastPostAgeHours": null,
-    "lastVoteAgeHours": 876.8
+    "lastVoteAgeHours": 876.9
    },
    {
     "account": "ynet",
     "exists": true,
     "sp": 0,
     "vpPercent": 0,
-    "lastPostAgeHours": 25156.6,
-    "lastVoteAgeHours": 756.7
+    "lastPostAgeHours": 25156.7,
+    "lastVoteAgeHours": 756.8
    },
    {
     "account": "hcsoldier4",
     "exists": true,
     "sp": 3,
     "vpPercent": 99,
-    "lastPostAgeHours": 89.5,
-    "lastVoteAgeHours": 19.8
+    "lastPostAgeHours": 89.6,
+    "lastVoteAgeHours": 19.9
    },
    {
     "account": "hcsoldier6",
@@ -316,30 +331,29 @@
     "sp": 3,
     "vpPercent": 99,
     "lastPostAgeHours": null,
-    "lastVoteAgeHours": 1.7
+    "lastVoteAgeHours": 1.8
    }
   ]
  },
  "blurt": {
-  "reachable": false,
-  "host": null,
-  "fleetNewestPostHours": null,
-  "errors": [
-   "https://rpc.beblurt.com: rpc https://rpc.beblurt.com unreachable: HTTP 406",
-   "https://rpc.blurt.world: rpc https://rpc.blurt.world unreachable: fetch failed"
-  ]
+  "reachable": true,
+  "host": "https://rpc.blurt.blog",
+  "fleetNewestPostHours": 186.2,
+  "errors": []
  },
  "rot": {
-  "scanned": 68,
+  "scanned": 70,
   "hits": [
-   "ops/agents/zai-verifier/README.md"
+   "ops/agents/zai-verifier/README.md",
+   "ops/agents/zai-verifier/REPORT.md",
+   "ops/agents/zai-verifier/TASKS.md"
   ]
  },
  "soft": [],
- "tookMs": 17645,
- "prevChain": null,
+ "tookMs": 32830,
+ "prevChain": "9e38a1a3c33d2ee3be88d788bd825f3c2794d080d9e1832044c362a88f6475a3",
  "chain": {
-  "prev": null,
-  "cur": "9e38a1a3c33d2ee3be88d788bd825f3c2794d080d9e1832044c362a88f6475a3"
+  "prev": "9e38a1a3c33d2ee3be88d788bd825f3c2794d080d9e1832044c362a88f6475a3",
+  "cur": "20db01c8f29ad0181fa68f3cc48a88bd318d194ddd02ab713f0122db2d2f05fa"
  }
 }

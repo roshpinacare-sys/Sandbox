@@ -222,16 +222,38 @@ export async function probeSteem(cfg) {
   return { host, fleet, treasury, fleetNewestPostHours: postAges.length ? Math.min(...postAges) : null, probedAt: new Date(now).toISOString() };
 }
 
+/* ── RPC-יחיד (אובייקט-בודד — לקח-חי: blurt.blog דוחה batch ב-"Not a valid json request"; beblurt מפנה-308 אליו) ── */
+export async function rpcSingle(host, method, params = []) {
+  const doOnce = async () => {
+    const r = await fetch(host, {
+      method: "POST",
+      headers: { "content-type": "application/json", "user-agent": "sandbox-verifier/1" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+  };
+  let lastErr;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const j = await doOnce();
+      if (j?.error) throw new Error(String(j.error.message ?? "rpc error").slice(0, 80));
+      return j?.result ?? null;
+    } catch (e) { lastErr = e; }
+  }
+  throw new Error(`rpc ${host} unreachable: ${String(lastErr?.message ?? lastErr).slice(0, 80)}`);
+}
+
 /* ── D. Blurt — חי/מת/בלתי-נגיש (כנות-מלאה לכל-מצב) ── */
 export async function probeBlurt(cfg) {
   const errs = [];
   for (const host of cfg.blurt.rpc) {
     try {
-      const res = await rpcBatch(host, [{ method: "condenser_api.get_accounts", params: [cfg.blurt.accounts] }]);
-      const accounts = res?.[0]?.result;
+      const accounts = await rpcSingle(host, "condenser_api.get_accounts", [cfg.blurt.accounts]);
       if (!Array.isArray(accounts) || accounts.length === 0) { errs.push(`${host}: empty`); continue; }
       const now = Date.now();
-      const fleet = accounts.map((a) => ({ account: a.name, lastPostAgeHours: ageHours(a.last_post_time, now), lastVoteAgeHours: ageHours(a.last_vote_time, now) }));
+      const fleet = accounts.map((a) => ({ account: a.name, lastPostAgeHours: ageHours(a.last_root_post ?? a.last_post ?? a.last_post_time ?? null, now), lastVoteAgeHours: ageHours(a.last_vote_time, now) }));
       const postAges = fleet.filter((f) => f.lastPostAgeHours != null).map((f) => f.lastPostAgeHours);
       return { host, reachable: true, fleet, fleetNewestPostHours: postAges.length ? Math.min(...postAges) : null, probedAt: new Date(now).toISOString() };
     } catch (e) { errs.push(`${host}: ${String(e.message).slice(0, 60)}`); }
@@ -293,7 +315,7 @@ function applyRules(cfg, { sbx, dev, steem, blurt, rot }) {
   else {
     const bNewest = blurt.fleetNewestPostHours;
     if (bNewest == null) checks.push({ id: "blurt.alive", level: "FAIL", why: "blurt fleet never posted" });
-    else if (bNewest > (r.blurtDeadDays ?? 7) * 24) checks.push({ id: "blurt.alive", level: "FAIL", why: `blurt fleet silent ${Math.round(bNewest)}h > ${(r.blurtDeadDays ?? 7) * 24}d — loop dead until proven otherwise`, evidence: { newestPostHours: bNewest } });
+    else if (bNewest > (r.blurtDeadDays ?? 7) * 24) checks.push({ id: "blurt.alive", level: "FAIL", why: `blurt fleet silent ${Math.round(bNewest)}h > ${(r.blurtDeadDays ?? 7) * 24}h — loop dead until proven otherwise`, evidence: { newestPostHours: bNewest } });
     else if (bNewest > 48) checks.push({ id: "blurt.alive", level: "DEGRADED", why: `blurt fleet silent ${bNewest}h`, evidence: { newestPostHours: bNewest } });
     else checks.push({ id: "blurt.alive", level: "OK", why: `blurt fleet posted ${bNewest}h ago`, evidence: { newestPostHours: bNewest } });
   }
@@ -522,7 +544,7 @@ async function main() {
     checks,
     dev: { totalCommits: dev.totalCommits, codeRatePercent: dev.codeRatePercent, classified: dev.classified, repos: dev.repos },
     steem: { host: steem.host, treasury: steem.treasury, fleetNewestPostHours: steem.fleetNewestPostHours, fleet: steem.fleet },
-    blurt: { reachable: blurt.reachable, host: blurt.host ?? null, fleetNewestPostHours: blurt.fleetNewestPostHours ?? null, errors: blurt.errors ?? [] },
+    blurt: { reachable: blurt.reachable, host: blurt.host ?? null, fleetNewestPostHours: blurt.fleetNewestPostHours ?? null, errors: blurt.errors ?? [], probedAt: blurt.probedAt ?? null },
     rot: { scanned: rot.scanned, hits: rot.hits },
     soft,
     tookMs,
