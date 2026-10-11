@@ -26,3 +26,5 @@
 2026-10-11 | zai-code-3 | T-63: artery-grid — השעון-של-הטיק, 30 דק', אדום-כנה-ראשון (1323 דק'-stall נמדד) | Sandbox | receipts/grid/ + artery-grid.yml
 2026-10-11 | zai-code-3 | T-64: חוקי-הארנק-5 = חוזה-צי (מדידה-כפולה); gitleaks-push הושלם ל-steem+saos-agents; OWNER-P0-2026-10-11.md לבעלים | Sandbox | engine/fleet-verify.mjs + ops/OWNER-P0-2026-10-11.md
 2026-10-11 | zai-code-5 | רישום-סקופ: סגירת-שארית-חשיפה P2 (מחיקת key-check receipts מ-Console) + אימות-שער-R293 במחזור-מלא + דלתא-חשיפה ציבורית | (sha-בדחיפה) | ops/agents/zai-code-5/STATUS-2026-10-11.md
+2026-10-11 | zai-verifier | 8: עמוד-האמת-הציבורי חי — engine מאפה status/truth.html בכל-ריצה (כולל-מדוכאות, אידמפוטנטי) + Pages מעלה-אוטומטית; URL-ציבורי-מאומת-200 | 4e0ff3e+88db5c1 | status/truth.html @ Pages
+2026-10-11 | zai-fix | 8: מניפסט-קונסולידציה 26→8 — גורל-מדוד-לכל-ריפו + סדר-ביצוע (ארכוב-עצמו=כפתור-בעלים) | (קומיט-זה) | ops/plans/consolidation-26to8-2026-10-11.md
