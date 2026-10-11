@@ -72,7 +72,25 @@ async function lastCommit(repo, p) {
   const r = await fetch(url, { headers: H });
   if (r.status === 404) return { missing: true };
   if (!r.ok) throw new Error(`commits ${repo}/${p} -> ${r.status}`);
-  const arr = await r.json();
+  let arr = await r.json();
+  // H-fix: producers can live on the pages branch (FleetHQ convention: office-pages) or the Pages deployment itself —
+  // a 404 on main is NOT proof of death (the digest ghost was exactly this blind spot, measured live 2026-10-11).
+  if (!arr.length) {
+    try {
+      const r2 = await fetch(`https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(p)}&sha=office-pages&per_page=1`, { headers: H });
+      if (r2.ok) {
+        const arr2 = await r2.json();
+        if (arr2.length) arr = arr2;
+      }
+    } catch { /* honest fallback continues */ }
+  }
+  if (!arr.length) {
+    try {
+      const name = repo.split("/")[1];
+      const r3 = await fetch(`https://${OWNER.toLowerCase()}.github.io/${name}/${p}`, { headers: { "User-Agent": "artery-flow" } });
+      if (r3.ok) return { ageH: null, author: "pages-deployment", sha: "pages-live", at: null, pagesLive: true };
+    } catch { /* honest missing */ }
+  }
   if (!arr.length) return { missing: true };
   const c = arr[0];
   const at = Date.parse((c.commit && c.commit.committer && c.commit.committer.date) || c.commit.author.date);
