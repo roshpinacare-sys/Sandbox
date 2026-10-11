@@ -1,6 +1,6 @@
 name: token-watchdog
 
-# מערך-נגד-מוות-שקט של-הטוקן-הריבוני (OWNER-P0 §1) · משודרג session-10:
+# מערך-נגד-מוות-שקט של-הטוקן-הריבוני (OWNER-P0 §1) · משודרג session-10 · session-11: +MAIN_KEY+ZIP_PAT (טוקני-קבע-של-הבעלים, מנותבים-מ-Domain — B-①):
 # 1. בודק-יומית: תפוגה · מכסה · סוג — לכל-טוקן-צי בסודות-Sandbox
 # 2. מפרסם-אמת-מדודה-לגיט: ops/TOKEN-TRUTH.md (מטא-דאטה-בלבד, אפס-ערכים — G9)
 #    למה: סיכומי-UI אינם-קריאים-מכונה; אמת-שלא-בגיט = פוטנציאל-זיוף (הוראת-בעלים: "אין זיופים")
@@ -24,6 +24,8 @@ jobs:
         env:
           PAT_MAIN: ${{ secrets.ECO_WALLET_TOKEN }}
           PAT_FLEET: ${{ secrets.SBX_FLEET_PAT }}
+          PAT_PERM_MAIN: ${{ secrets.MAIN_KEY }}
+          PAT_PERM_ZIP: ${{ secrets.ZIP_PAT }}
         run: |
           set -euo pipefail
           : > /tmp/truth.tsv
@@ -59,6 +61,8 @@ jobs:
           }
           measure ECO_WALLET_TOKEN "${PAT_MAIN}"
           measure SBX_FLEET_PAT "${PAT_FLEET}"
+          measure MAIN_KEY "${PAT_PERM_MAIN}"
+          measure ZIP_PAT "${PAT_PERM_ZIP}"
           min_days=$(awk -F'\t' '$2=="ALIVE"{print $5}' /tmp/truth.tsv | sort -n | head -1)
           [ -n "${min_days}" ] || min_days=9999
           echo "DAYS_LEFT=${min_days}" >> "$GITHUB_ENV"
