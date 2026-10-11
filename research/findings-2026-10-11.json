@@ -1,0 +1,107 @@
+{
+  "schema": "saos.research.findings/1",
+  "at": "2026-10-11T20:12:38.902Z",
+  "lane": "research-and-discovery (10-d)",
+  "laws": "read-only · no keys · no broadcast · honest failures recorded",
+  "experiments": [
+    {
+      "id": "E1",
+      "name": "spread-regime",
+      "hypothesis": "פיזורי-השוק-הפנימי הם ר'זימה נמדדת — מעקב שבועי מגלה אם הגריד שלנו מצר אותם",
+      "baseline": {
+        "steemBps": 93.5,
+        "hiveBps": 10.6,
+        "at": "2026-10-11T19:55Z (ECONOMIC-PLAN §2.2)"
+      },
+      "measured": {
+        "steem": {
+          "bid": 0.10105092966855295,
+          "ask": 0.102,
+          "spreadBps": 93.48
+        },
+        "hive": {
+          "bid": 0.0559405316870354,
+          "ask": 0.05600003551603294,
+          "spreadBps": 10.63
+        }
+      },
+      "verdict": "spread tightened (93.48 < 93.5 bps) — grid-side liquidity improving",
+      "ok": true,
+      "next": "track weekly; correlate with grid-beat placements (saos-dex ledger) before claiming causality"
+    },
+    {
+      "id": "E2",
+      "name": "feed-divergence",
+      "hypothesis": "סטיית-פיד-העדים מהשוק-הפנימי היא מדד-לחץ-יתר על הפג — מעקב שבועי מקדים-הזהרה",
+      "baseline": {
+        "feedMedian": 0.10409,
+        "marketMid": 0.10153,
+        "divergenceBps": 251,
+        "at": "2026-10-11T19:55Z"
+      },
+      "measured": {
+        "feedMedian": 0.10409,
+        "marketMid": 0.10153,
+        "divergenceBps": 252.14,
+        "direction": "feed_above_market"
+      },
+      "verdict": "healthy band: divergence 252.14 bps ≤ 300 (feed_above_market)",
+      "ok": true,
+      "next": "if >300 bps repeats 2× consecutively, escalate to operator brief (peg-door policy ref)"
+    },
+    {
+      "id": "E3",
+      "name": "rc-census",
+      "hypothesis": "חשבונות-מורעבי-RC (<40%) מדכאים-פעילות-צי — סקר-שבועי מנבא חנק לפני-שהוא נראה בפועל",
+      "baseline": {
+        "starved": [
+          "hcsoldier4 8.05%",
+          "wog 25.9%",
+          "hcsoldier6 31.0%",
+          "hcsoldier5 35.4%"
+        ],
+        "at": "2026-10-11T19:56Z"
+      },
+      "measured": {
+        "rcPct": {
+          "headcorner": 97.97,
+          "cashmachine": 91.37,
+          "haran": 87.98,
+          "israelnews": 89.68,
+          "lsa": 87.46,
+          "macrame": 87.82,
+          "siq": 95.88,
+          "tov": 72.88,
+          "wic": 68.28,
+          "wog": 25.94,
+          "woq": 86.14,
+          "hcsoldier4": 8.05,
+          "hcsoldier5": 28.55,
+          "hcsoldier6": 21.63
+        },
+        "starved": [
+          "wog 25.94%",
+          "hcsoldier4 8.05%",
+          "hcsoldier5 28.55%",
+          "hcsoldier6 21.63%"
+        ]
+      },
+      "verdict": "4 RC-starved accounts (<40%): wog 25.94%, hcsoldier4 8.05%, hcsoldier5 28.55%, hcsoldier6 21.63% — propose SP delegation top-up or activity cap (owner word for delegation lane)",
+      "ok": true,
+      "next": "if starved persists 2× weekly, draft a delegation delta into grids/delegate-plan (owner word gate)"
+    }
+  ],
+  "probeDigestJoin": {
+    "hive": {
+      "file": "probes/hive/2026-10-11.json",
+      "ok": true,
+      "at": "2026-10-11T15:18:18.342Z"
+    },
+    "blurt": {
+      "file": "probes/blurt/2026-10-11.json",
+      "ok": true,
+      "at": "2026-10-11T15:18:18.996Z"
+    }
+  },
+  "allConclusive": true
+}
