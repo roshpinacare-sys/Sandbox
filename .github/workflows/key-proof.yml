@@ -1,0 +1,83 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# KEY-PROOF — הוכחה-עומדת של מתים (R11 · task 11-a) · weekly refresh
+# ═══════════════════════════════════════════════════════════════════════════
+# קריאה-בלבד בשרשרת ובהיסטוריית-git. אפס-שידורים. אפס-כתיבות-שרשרת. אפס-כספת.
+# המנוע סורק בעצמו את 5 ריפואי-הדליפה הציבוריים (אין צורך ב-fetch-depth: 0 —
+# ה-checkout כאן הוא רק לקבלת proof/key-proof.mjs; הסריקה מקלננת מטרות משלה).
+#
+# חוק-הצנזורה (ברזל, בקוד): לארטיפקט נכתבים רק sha256-16hex של החומר + מפתחות-
+# ציבוריים + מטא-דאטה של מקום. אף חומר-פרטי, אף סיסמה, אף תוכן-קובץ. ה-auditor
+# רץ לפני-כתיבה — הפרה = כשל-קשה, כלום לא נכתב.
+#
+# GITHUB_TOKEN (repo-scoped) מוזרם כ-env — המנוע קורא GITHUB_TOKEN/KP_TOKEN,
+# לעולם לא מדפיס אותו, ומשתמש בו רק לקלונים של ריפואים ציבוריים.
+#
+# ALIVE-ALERT = אזעקה: החומר הדלוף מאשר רשות-חיה → הארטיפקן צורח
+# (summary.incident=true) — אין-טיפול-אוטומטי; החלטת-owner+orchestrator בלבד.
+#
+# דחיפה מחזורית: rebase-before-push (עד 5 ניסיונות) — פעילות-בוט-מקבילה בריפו
+# זה עזה-במתכונת (heartbeat כל-~2 דק'); ה-rebase מסדר את זה, אף כוח-בעולם.
+# ═══════════════════════════════════════════════════════════════════════════
+name: key-proof
+
+on:
+  schedule:
+    - cron: "23 4 * * 3" # שבועי · יום-ד' 04:23 UTC — דקה-אי-זוגית (חוק-הדקות-האי-זוגיות)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: key-proof
+  cancel-in-progress: false
+
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Selftest gate (zero network, zero scan — must be 26/26)
+        run: node proof/key-proof.mjs --selftest
+
+      - name: Live proof (scan 5 leak-repos → derive → chain read-only → verdicts)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node proof/key-proof.mjs
+
+      - name: Commit refreshed proof/out (receipt = commit; rebase loop ×5)
+        run: |
+          set -u
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add proof/out
+          if git diff --cached --quiet; then
+            echo "no artifact change — clean exit"
+          else
+            git commit -m "[key-proof] standing proof refreshed: $(date -u +%FT%TZ) [skip ci]"
+            ok=0
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push origin HEAD:main && ok=1 && break
+              echo "push attempt $i failed — re-pull --rebase and retry"
+              sleep $((i * 10))
+            done
+            test "$ok" = "1" || { echo "push failed after 5 rebase attempts"; exit 1; }
+          fi
+
+      - name: Honest exit (incident verdict must stay loud)
+        run: |
+          python3 - <<'EOF'
+          import json
+          d = json.load(open("proof/out/KEY-PROOF-LATEST.json"))
+          s = d["summary"]
+          print(f"verdicts: DEAD={s['DEAD']} ALIVE-ALERT={s['ALIVE-ALERT']} UNKNOWN={s['UNKNOWN']} UNKNOWN-NOT-CHAIN-TESTABLE={s['UNKNOWN-NOT-CHAIN-TESTABLE']} incident={s['incident']}")
+          if s["incident"]:
+              print("🚨 ALIVE-ALERT present — see verdicts in artifact; owner+orchestrator decision required")
+          EOF
