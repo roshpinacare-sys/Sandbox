@@ -1,8 +1,8 @@
 {
-  "at": "2026-10-11T23:06:05.524Z",
+  "at": "2026-10-11T23:44:58.572Z",
   "repos": {
     "steem-cockpit": {
-      "head": "6d2c738cdedf22aaaca0658e8c46fa5fa266b11d",
+      "head": "16636a6624f9faae76df9af74e94ddecf9d380a8",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -12,7 +12,7 @@
       "reason": "all checks and fleet laws pass"
     },
     "saos-dex": {
-      "head": "de69330a609b852732d16fe76ec905db2613851e",
+      "head": "eb9ae1f298f4b889e221d1cfbc061655ee4a3089",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -33,19 +33,25 @@
       "overall": "PASS",
       "checks": {},
       "reason": "all checks and fleet laws pass"
+    },
+    "adsmarket": {
+      "head": "5d528d039f9165c7c3107a74d805897a5b4f17fc",
+      "overall": "PASS",
+      "checks": {},
+      "reason": "all checks and fleet laws pass"
     }
   },
   "alerts": [
-    "saos-wallet: law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-VsFhbO/saos-wallet/tools/vault-zk-check.ts",
+    "saos-wallet: law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-vDIjLL/saos-wallet/tools/vault-zk-check.ts",
     "saos-wallet: law-pass-provenance: PASS receipt minted out-of-band — flagged; artery measurement is the authoritative verdict"
   ],
   "overall": "PASS",
-  "reason": "steem=PASS · saos-dex=PASS · saos-agents=PASS · Saosmartwallet=PASS",
+  "reason": "steem=PASS · saos-dex=PASS · saos-agents=PASS · Saosmartwallet=PASS · Adsmarket=PASS",
   "details": [
     {
-      "at": "2026-10-11T23:06:05.524Z",
+      "at": "2026-10-11T23:44:58.572Z",
       "slug": "roshpinacare-sys/steem",
-      "head": "6d2c738cdedf22aaaca0658e8c46fa5fa266b11d",
+      "head": "16636a6624f9faae76df9af74e94ddecf9d380a8",
       "checks": {
         "install": "pass",
         "engineInstall": "pass",
@@ -78,9 +84,9 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-11T23:06:05.524Z",
+      "at": "2026-10-11T23:44:58.572Z",
       "slug": "roshpinacare-sys/saos-dex",
-      "head": "de69330a609b852732d16fe76ec905db2613851e",
+      "head": "eb9ae1f298f4b889e221d1cfbc061655ee4a3089",
       "checks": {
         "install": "pass",
         "typecheck": "pass"
@@ -112,7 +118,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-11T23:06:05.524Z",
+      "at": "2026-10-11T23:44:58.572Z",
       "slug": "roshpinacare-sys/saos-agents",
       "head": "f830d86dc0bcdc0416f5d214b67a14c4f4ee9216",
       "checks": {
@@ -145,7 +151,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-11T23:06:05.524Z",
+      "at": "2026-10-11T23:44:58.572Z",
       "slug": "roshpinacare-sys/Saosmartwallet",
       "head": "55b132dbade796021e06342d38b7471836556895",
       "checks": {},
@@ -153,7 +159,7 @@
         {
           "id": "law-no-secrets-at-head",
           "verdict": "flag",
-          "detail": "gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-VsFhbO/saos-wallet/tools/vault-zk-check.ts"
+          "detail": "gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-vDIjLL/saos-wallet/tools/vault-zk-check.ts"
         },
         {
           "id": "law-no-skipped-pass",
@@ -197,9 +203,40 @@
         }
       ],
       "alerts": [
-        "law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-VsFhbO/saos-wallet/tools/vault-zk-check.ts",
+        "law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-vDIjLL/saos-wallet/tools/vault-zk-check.ts",
         "law-pass-provenance: PASS receipt minted out-of-band — flagged; artery measurement is the authoritative verdict"
       ],
+      "overall": "PASS",
+      "reason": "all checks and fleet laws pass"
+    },
+    {
+      "at": "2026-10-11T23:44:58.572Z",
+      "slug": "roshpinacare-sys/Adsmarket",
+      "head": "5d528d039f9165c7c3107a74d805897a5b4f17fc",
+      "checks": {},
+      "laws": [
+        {
+          "id": "law-no-secrets-at-head",
+          "verdict": "pass",
+          "detail": "gitleaks HEAD scan: 0 findings"
+        },
+        {
+          "id": "law-no-skipped-pass",
+          "verdict": "pass",
+          "detail": "workflows scanned: 3, theater patterns: 0"
+        },
+        {
+          "id": "law-gitleaks-push",
+          "verdict": "pass",
+          "detail": "gitleaks scans every push"
+        },
+        {
+          "id": "law-r11-head-absent",
+          "verdict": "pass",
+          "detail": "absent at HEAD"
+        }
+      ],
+      "alerts": [],
       "overall": "PASS",
       "reason": "all checks and fleet laws pass"
     }
