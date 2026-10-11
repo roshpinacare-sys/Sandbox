@@ -177,6 +177,22 @@ try {
   if (okN >= 6) observations.push(`dex books: ${okN}/7 carry live Console-truth (escrow/fleet/relay/onramp) - the business organs are publicly mirrored; wired to the learning loop this run`);
 } catch (e) { observations.push(`dex census: ${String(e.message).slice(0, 100)}`); }
 
+// ── section 11 (H-series, zai-code-3): decision-truth census — does the sovereignty's word become deeds?
+try {
+  if (existsSync("ops/decision-truth/verdict.json")) {
+    const dt = JSON.parse(readFileSync("ops/decision-truth/verdict.json", "utf8"));
+    const decs = Array.isArray(dt.decisions) ? dt.decisions : [];
+    const byTruth = {};
+    for (const x of decs) byTruth[x.truth] = (byTruth[x.truth] || 0) + 1;
+    observations.push(`decision-truth: overall=${dt.overall} decisions=${decs.length} truth=${JSON.stringify(byTruth)} decider-stalled=${dt.decider && dt.decider.heartbeat ? dt.decider.heartbeat.stalled : "?"}`);
+    for (const x of decs) {
+      if (x.truth === "UNEXECUTED") proposals.push(`decision ${x.id} is ENFORCED but UNEXECUTED (no measured consumer / commanded fix absent) - wire a consumer or re-decide; the description-vs-action gap is now machine-measured`);
+      if (x.truth === "STALE-TRUTH") proposals.push(`decision ${x.id} evidence is STALE-TRUTH (world moved past published evidence) - T14 RE-MEASURE must re-decide per charter`);
+    }
+    if (dt.decider && dt.decider.heartbeat && dt.decider.heartbeat.stalled === true) proposals.push("sovereign decider heartbeat stalled (>90min) - the sovereignty must keep deciding per its own charter");
+  } else observations.push("decision-truth: no verdict yet (artery-decision-truth first run pending)");
+} catch (e) { observations.push(`decision-truth read: ${String(e.message).slice(0, 100)}`); }
+
 const at = new Date().toISOString();
 const n = (() => { try { return readFileSync("ops/lessons/ledger.md", "utf8").split("## ").length - 1 + 1; } catch { return 1; } })();
 

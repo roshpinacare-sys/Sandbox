@@ -1,0 +1,169 @@
+{
+ "schema": "sandbox/decision-truth/1",
+ "generatedAt": "2026-10-11T22:13:02Z",
+ "durationMs": 1222,
+ "overall": "PASS_WITH_ALERTS",
+ "charter": "ops/sovereign/DECIDER/CHARTER.md",
+ "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
+ "decider": {
+  "generatedAt": "2026-10-11T21:37:07Z",
+  "stateAgeMin": 36,
+  "heartbeat": {
+   "workflow": "sovereign-decider.yml",
+   "lastRunAt": null,
+   "ageS": null,
+   "stalled": null
+  }
+ },
+ "measures": {
+  "chain": {
+   "head": 110358349,
+   "treasuryNetSp": 2925.6,
+   "mult": 0.0006202055562109153
+  },
+  "beaconPulse": {
+   "treasuryNetSp": 2925.6
+  },
+  "faultedAgentsNow": [
+   "aluf",
+   "gal",
+   "erez"
+  ],
+  "flowSummary": {
+   "nodes": 34,
+   "edges": 110,
+   "orphans": 0,
+   "ghosts": null
+  },
+  "workOrderIds": [
+   "WO-FleetHQ-reds",
+   "WO-saos-runtime-reds"
+  ]
+ },
+ "decisions": [
+  {
+   "id": "D1-econ-treasury-floor",
+   "area": "כלכלה",
+   "status": "ENFORCED",
+   "priority": "P1",
+   "decidedAt": "2026-10-11T21:37:07Z",
+   "truth": "UNEXECUTED",
+   "checks": [
+    {
+     "law": "policy-internal-consistency",
+     "result": "ok",
+     "detail": "interimFloors=13/13 tier-mapping=ok"
+    },
+    {
+     "law": "treasury-basis-fresh-measure",
+     "result": "ok",
+     "detail": "claimed=2925.6 fresh=2925.6 tol=1"
+    },
+    {
+     "law": "beacon-vs-fresh",
+     "result": "ok",
+     "detail": "beacon=2925.6"
+    },
+    {
+     "law": "operators-basis",
+     "result": "ok",
+     "detail": "all 13 operators within ±2SP"
+    },
+    {
+     "law": "below-floor-list",
+     "result": "ok",
+     "detail": "fresh-below=[\"woq\",\"hcsoldier4\",\"hcsoldier5\",\"hcsoldier6\",\"wog\"] declared=[\"woq\",\"hcsoldier4\",\"hcsoldier5\",\"hcsoldier6\",\"wog\"]"
+    },
+    {
+     "law": "execution-existence",
+     "result": "unexecuted",
+     "detail": "ENFORCED policy with zero measured consumers in the estate corpus - description, not action (route: fleet-yield T-45 curation floors + owner P0 for keyed top-ups)"
+    },
+    {
+     "law": "yield-engines-declared",
+     "result": "ok",
+     "detail": "dex=continue-armed (keyless engine, כבר-חי) curation=continue"
+    },
+    {
+     "law": "decider-state-age",
+     "result": "ok",
+     "detail": "state age 36min (limit 120)"
+    }
+   ],
+   "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
+  },
+  {
+   "id": "D2-eng-errors",
+   "area": "הנדסה",
+   "status": "ENFORCED",
+   "priority": "P0",
+   "decidedAt": "2026-10-11T21:37:07Z",
+   "truth": "UNEXECUTED",
+   "checks": [
+    {
+     "law": "routed-orders-exist",
+     "result": "ok",
+     "detail": "routed=[\"WO-FleetHQ-reds\",\"WO-saos-runtime-reds\"] missing=[]"
+    },
+    {
+     "law": "orders-status-tracking",
+     "result": "unverifiable",
+     "detail": "orders without status field (done-ness unverifiable): [\"WO-FleetHQ-reds\",\"WO-saos-runtime-reds\"] - route: growth engine add status lifecycle"
+    },
+    {
+     "law": "fleethq-reds-persist",
+     "result": "unverifiable",
+     "detail": "fleet runs http ?"
+    },
+    {
+     "law": "faulted-agents-fix",
+     "result": "unexecuted",
+     "detail": "all claimed faulted agents still faulted NOW ([\"aluf\",\"gal\",\"erez\"]) - the routed fix has not happened - route: engineering lanes"
+    },
+    {
+     "law": "decider-state-age",
+     "result": "ok",
+     "detail": "state age 36min (limit 120)"
+    }
+   ],
+   "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
+  },
+  {
+   "id": "D3-flow-weave",
+   "area": "רשת",
+   "status": "ENFORCED",
+   "priority": "P2",
+   "decidedAt": "2026-10-11T21:37:07Z",
+   "truth": "UNEXECUTED",
+   "checks": [
+    {
+     "law": "orphans-fresh",
+     "result": "ok",
+     "detail": "claimed=0 fresh=0"
+    },
+    {
+     "law": "ghost-handling-executed",
+     "result": "unexecuted",
+     "detail": "decision commands handling 2 ghosts; fresh=2 unchanged - the routed fix (digest repoint, office lane) has not landed yet"
+    },
+    {
+     "law": "decider-state-age",
+     "result": "ok",
+     "detail": "state age 36min (limit 120)"
+    }
+   ],
+   "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
+  }
+ ],
+ "provenance": {
+  "runId": null,
+  "runUrl": null,
+  "sha": null,
+  "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
+  "generatedAt": "2026-10-11T22:13:02Z"
+ },
+ "selftest": {
+  "vectors": 16,
+  "ok": true
+ }
+}
