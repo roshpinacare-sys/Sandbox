@@ -5,3 +5,4 @@
 - [OPEN] V-GRID-REVIVE (DEGRADED @ 2026-10-11T12:59:18.843Z): החייאת-מסלול-פרסום-הצי לפי-מדיניות §4 (2-3 פוסטים/שבוע/חשבון, ייחודיות, גילוי-נאות) | ראיה: no fleet post timestamp measurable (all never-posted or rpc partial)
 - [CLOSED 2026-10-11T13:02:45.732Z] V-LOOP-FLEET-HEAL — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
 - [CLOSED 2026-10-11T13:02:45.732Z] V-GRID-REVIVE — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
+- [OPEN] V-ROT-HYGIENE (DEGRADED @ 2026-10-11T13:08:39.648Z): ניקוי-מצבות-מקולקלות (sha256: undefined) + תיקון-מנוע-הדידופליקציה שיוצר-אותן | ראיה: tombstone rot: 1 file(s) with corrupted sha256 pointers
