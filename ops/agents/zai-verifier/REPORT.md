@@ -1,6 +1,6 @@
-# דוח-אמת (verifier) · 2026-10-11T13:14:11.915Z
+# דוח-אמת (verifier) · 2026-10-11T13:48:44.565Z
 
-**overall: FAIL** · auth: token(gh) · took: 32830ms · כללים: config.json (אפס-דעה-אישית)
+**overall: FAIL** · auth: token(fed) · took: 15399ms · כללים: config.json (אפס-דעה-אישית)
 
 > יש-דברים-שבורים-ממש — זה הדוח-הכן, בלי-קישוטים.
 
@@ -17,53 +17,52 @@
 ## 2. קצב-בנייה-אמת (24h · code = infra/engine/src/scripts, churn = state/receipts/ops)
 | ריפו | נראות | commits-24h | code-חלק | הערה |
 |---|---|---|---|---|
-| Sandbox | public | 100+ | 8% | ok |
-| Console | public | 48 | 8% | ok |
-| Domain | public | 50 | 0% | ok |
-| TruthRail | public | 19 | 0% | ok |
-| saos-dex | private | 26 | UNMEASURED (budget) | ok |
-| saos-control-center | private | 26 | UNMEASURED (budget) | ok |
+| Sandbox | public | 100+ | 25% | ok |
+| Console | public | 51 | 8% | ok |
+| Domain | public | 55 | 25% | ok |
+| TruthRail | public | 20 | 17% | ok |
+| saos-dex | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
+| saos-control-center | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | saos-agents | public | 0 | — | ok |
 | FleetHQ | public | 7 | UNMEASURED (budget) | ok |
-| saos-runtime | public | 2 | UNMEASURED (budget) | ok |
-| sovereign-lighthouse | public | 86 | UNMEASURED (budget) | ok |
-| saos-sovereign-foundry | private | 0 | — | ok |
-| steem | private | 100+ | UNMEASURED (budget) | ok |
+| saos-runtime | public | 5 | UNMEASURED (budget) | ok |
+| sovereign-lighthouse | public | 78 | UNMEASURED (budget) | ok |
+| saos-sovereign-foundry | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
+| steem | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 
-**מדד-מסכם:** codeShare = 5% (42 commits מסווגים מתוך 464)
-> שיפוט: `dev.rate` = **DEGRADED** — heartbeat-without-building: codeShare 5% < 10% over 464 commits/24h
+**מדד-מסכם:** codeShare = 19% (42 commits מסווגים מתוך 316)
+> שיפוט: `dev.rate` = **NOTICE** — mixed activity: codeShare 19%
 
 ## 3. אמת-על-השרשרת · Steem (https://api.steemit.com)
 | חשבון | SP אפקטיבי | VP% | פוסט-אחרון | הצבעה-אחרונה |
 |---|---|---|---|---|
-| @headcorner | 3676 | 66% | 19.4h | 0.8h |
-| @haran | 78 | 73% | 0.1h | 2h |
-| @cashmachine | 75 | 74% | 45.5h | 1.9h |
-| @wic | 33 | 75% | 20.6h | 1.7h |
-| @woq | 34 | 72% | 20.8h | 1.7h |
-| @tov | 31 | 77% | 20.6h | 1.9h |
-| @spaminator | 69 | 0% | 57491.2h | 12893h |
+| @headcorner | 3676 | 64% | 0.2h | 0.2h |
+| @haran | 78 | 75% | 0.2h | 0h |
+| @cashmachine | 75 | 75% | 0.2h | 0.3h |
+| @wic | 33 | 75% | 21.2h | 2.2h |
+| @woq | 34 | 72% | 21.4h | 2.2h |
+| @tov | 31 | 77% | 21.2h | 2.4h |
+| @spaminator | 69 | 0% | 57491.8h | 12893.5h |
 | @saos | 5 | 0% | מעולם-לא | — |
-| @powerspan | 0 | 0% | מעולם-לא | 876.9h |
-| @ynet | 0 | 0% | 25156.7h | 756.8h |
-| @hcsoldier4 | 3 | 99% | 89.6h | 19.9h |
-| @hcsoldier6 | 3 | 99% | מעולם-לא | 1.8h |
+| @powerspan | 0 | 0% | מעולם-לא | 877.5h |
+| @ynet | 0 | 0% | 25157.3h | 757.4h |
+| @hcsoldier4 | 3 | 99% | 90.1h | 20.4h |
+| @hcsoldier6 | 3 | 99% | מעולם-לא | 2.4h |
 
-> `steem.fleet` = **OK** — fleet posted 0.1h ago
+> `steem.fleet` = **OK** — fleet posted 0.2h ago
 > `steem.treasury` = **OK** — treasury headcorner at 3676 SP
 
 ## 4. Blurt (https://rpc.blurt.blog)
-פוסט-צי-הכי-חדש: 186.2h · נמדד undefined
-> `blurt.alive` = **FAIL** — blurt fleet silent 186h > 168d — loop dead until proven otherwise
+פוסט-צי-הכי-חדש: 186.8h · נמדד 2026-10-11T13:48:59.915Z
+> `blurt.alive` = **FAIL** — blurt fleet silent 187h > 168h — loop dead until proven otherwise
 
 ## 5. שלמות-עץ (ריקבון-מצבות)
-נסרקו 70 קבצים; פגומים: 3 · דוגמאות: ops/agents/zai-verifier/README.md, ops/agents/zai-verifier/REPORT.md, ops/agents/zai-verifier/TASKS.md
+נסרקו 76 קבצים; פגומים: 3 · דוגמאות: ops/agents/zai-verifier/README.md, ops/agents/zai-verifier/REPORT.md, ops/agents/zai-verifier/TASKS.md
 
 ## 6. דלתא-מול-הריצה-הקודמת
-- ↘ התדרדר: `blurt.alive` NOTICE → **FAIL**
+- ↗ השתפר: `dev.rate` DEGRADED → **NOTICE**
 
 ## 7. משימות-שנצרתו-עכשיו
-- **V-DEV-FOCUS** — דופק-בלי-בנייה: להפנות-משאב-סוכנים מטביעות-מצב לבניית-מוצר/תיקונים אמתיים
 - **V-BLURT-REVIVE** — החייאת-לופ-בלורט דרך gated blurt-connector (תנאי: P0 מפתחות-חדשים; workflow_dispatch בלבד + reviewer)
 - **V-ROT-HYGIENE** — ניקוי-מצבות-מקולקלות (sha256: undefined) + תיקון-מנוע-הדידופליקציה שיוצר-אותן
 
