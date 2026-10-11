@@ -173,3 +173,32 @@
 - FleetHQ: 8-מחיקות-ב-2-קומיטים (cd255f321e + רסיב-consoletest) ⇒ עץ-HEAD 592→366, אפס-פגיעות-רגישות. Domain: CR-0072 נמחק (e859d407ef), עץ-נקי.
 - **אימות-R293:** המחזור-הכושל (13:34:04) קדם-בשנייה-למיזוג (13:34:05) ⇒ **התיקון-טרם-נבדק-במחזור-מלא**; שער: daily-report חדש עם execute != BROADCAST-FAIL. מילא-אמיתי 13:02 (4.994-STEEM), health=ok.
 - lighthouse "484-אדומים" = cancelled pages-builds (churn), לא-כישלון. פירוט מלא: ops/agents/zai-code-4/STATUS-2026-10-11.md
+## 12. zai-code-3 · חייאת-ה-tick מהגיט + חוזה-הארנק + השעון (2026-10-11, T-62/T-63/T-64)
+
+**נמדד**: טיק-ה-hyper-grid מת בשקט עם ה-substrate שלו — lastTickAt קפוא
+2026-10-10T16:49:38Z כש-conf.enabled=true (22 שעות+ stall שאף-גורם-בגיט לא
+שם-לב). זו-בדיוק-המחלה שהבעלים הורה-לרפא: שקר-שקט.
+
+**הריפא (3 שכבות, כולן מהגיט, אפס-סנדבוקס-חיצוני)**:
+1. T-62 — hypergrid-burst.mjs (steem@saos-cockpit c69c38d): burst תחום
+   (ברירת-מחדל 90 שניות, הגבלה 5..300 שניות) על ה-API-הציבורי של המנוע
+   (startHyperGrid + עצירת-טיימרים-מ-globalThis — אפס-שינויים-במנוע).
+   מדד-לפני-דחיפה: שתי-ריצות-מקומיות — 35470→35476→35482 (+6 ticks/15 שניות
+   כל-אחת), verdict כנה CREDENTIAL-MISSING (fail-closed, אפס-סודות-אצל-הסוכן),
+   חוק-יציאה: לא-התקדם ⇒ exit 1.
+   חובר לדופק של saos-runtime (fa6a6f7): שלב אחד בין-חימוש-הפרסום ל-push-back
+   המצב, חימוש fail-closed דרך סוד CI_EXEC_ARMED (בלי-הסוד: דופק-חי-כנה-לא-חמוש).
+2. T-63 — artery-grid (Sandbox, כל-30 דקות + grid-watch-tick בשרשרת-השעון):
+   מדידת hyper-grid.json מ-HEAD דרך contents API (קל, בלי-clone), חוקים:
+   state-present (fail) · fresh ≤ 90 דק' כש-enabled (fail) · revival-wired
+   (flag). הריצה-הראשונה: אדום-כנה (stall-של-1323 דקות-נמדד) — עד-שהדופק
+   ינחית-state-חדש, ואז-ירוק-מעצמו. השקר-השקט קיבל-שעון.
+3. T-64 — חוזה-הארנק: חמשת-חוקי-הארנק הצטרפו לחוקי-הצי האחידים (Saosmartwallet
+   נמדד-חוקים-בלבד כל-שעתיים, מדידה-כפולה-מול-העורק-השעתי). נמדד-חי: 4/4 PASS.
+   תוצר-לוואי: ממצא-סריקה-חדש ב-wallet (generic-api-key ב-tools/vault-zk-check.ts,
+   flag) — נרשם ב-OWNER-P0.
+
+**ציות-חוק**: steem + saos-agents קיבלו gitleaks.yml-עם-push (87e622c, dfaf128)
+— שני-החוקים-האחרונים של-חוזה-הצי שהיו-פתוחים.
+
+**ל-owner**: ops/OWNER-P0-2026-10-11.md — כל-ההחלטות-שרק-הוא-יכול, מקובץ-אחד.

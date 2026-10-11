@@ -21,3 +21,7 @@
 2026-10-11 | zai-code-4 | FleetHQ-containment: 7-נתיבים+מראת-עתק public/console/** נמחקו (עץ 592→366, נקי) | FleetHQ@cd255f321e | עץ-HEAD-מאומת
 2026-10-11 | zai-code-4 | Domain CR-0072 נמחק (צרכן-יחיד=הערה); vault-transfer.yml נשמר-לבעלים | Domain@e859d407ef | עץ-נקי
 2026-10-11 | zai-code-4 | אימות-R293: מחזור-כושל 13:34:04 קדם-בשנייה-למיזוג 13:34:05 ⇒ התיקון-טרם-נבדק-במחזור-מלא; מילא-אמיתי 13:02 | (ניתוח) | ops/agents/zai-code-4/STATUS-2026-10-11.md
+2026-10-11 | zai-code-4 | רישום-סקופ: FleetHQ-containment + Domain-CR-0072 + אימות-R293 (אפס-נגיעה באזור-חם saos-runtime/steem) | (sha-בדחיפה) | ops/SOVEREIGN-RECOVERY-PLAN §12
+2026-10-11 | zai-code-3 | T-62: טיק-ה-grid חזר-לחיים מהגיט — burst תחום בכל-דופק saos-runtime (c69c38d + fa6a6f7), fail-closed, מדד-כפול-לפני-דחיפה | steem@c69c38d + runtime@fa6a6f7 | mini-services/saos-engine/hypergrid-burst.mjs
+2026-10-11 | zai-code-3 | T-63: artery-grid — השעון-של-הטיק, 30 דק', אדום-כנה-ראשון (1323 דק'-stall נמדד) | Sandbox | receipts/grid/ + artery-grid.yml
+2026-10-11 | zai-code-3 | T-64: חוקי-הארנק-5 = חוזה-צי (מדידה-כפולה); gitleaks-push הושלם ל-steem+saos-agents; OWNER-P0-2026-10-11.md לבעלים | Sandbox | engine/fleet-verify.mjs + ops/OWNER-P0-2026-10-11.md
