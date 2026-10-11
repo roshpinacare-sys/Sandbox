@@ -112,8 +112,11 @@ export async function checkSandboxWorkflows(cfg, _runs) {
     let done = [], tried = 0;
     try {
       const j = await gh(cfg, `/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.sandboxRepo ?? "Sandbox")}/actions/workflows/${encodeURIComponent(wf.file)}/runs?per_page=8`);
-      done = (j?.workflow_runs ?? []).filter((r) => r.conclusion);
-      tried = (j?.workflow_runs ?? []).length;
+      // ריצת-cancelled = מיזוג-עיצוב (concurrency "אפס-סערת-הרצות") — ניטרלית: לא-הצלחה,
+      // לא-כישלון, ולכן-לא-צורכת-מחלון-החיות. בלי-זה, דופק-push-כפול-מנפח-את-החלון
+      // ומדרג-עורק-חי-ככוזב-FAIL (נמדד-חי 15:14 2026-10-11; הצלחה-אמתית-עמדה-במקום).
+      done = (j?.workflow_runs ?? []).filter((r) => r.conclusion && r.conclusion !== "cancelled");
+      tried = done.length;
     } catch (e) {
       checks.push({ id: `sbx.wf-${wf.name}`, level: "NOTICE", why: "runs unreadable: " + String(e.message).slice(0, 100), evidence: null });
       continue;
