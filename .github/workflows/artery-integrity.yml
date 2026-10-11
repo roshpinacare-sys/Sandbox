@@ -1,0 +1,83 @@
+name: artery-integrity
+# ═══════════════════════════════════════════════════════════════════════════
+# ARTERY-INTEGRITY · שומר-השלמות — החוק הקבוע של "אין זיופים" (G-series, 2026-10-11).
+# ───────────────────────────────────────────────────────────────────────────
+# דרישת-בעלים מילה-במילה: "חייב לוודא שאין זיופים... לא לסמוך יותר מדי על כלום —
+# גם לא על עצמנו". כל-קבלה/ספר ב-Sandbox+FleetHQ+Domain נבדק מול Actions API:
+# גוסט-ראנים (404 מוכח), סתירות-PASS/FAIL, אי-התאמות-sha, חלונות-זמן, זהויות-
+# כותבים, קבלות-ללא-provenance. 403/429 = "לא-ניתן-לאימות" — לעולם לא "זיוף".
+# גם-הקבלה-הקודמת-של-השומר-עצמו נבדקת ראשונה (L0). FAIL = אדום, תמיד כן.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "25 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - integrity-tick
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-integrity
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # שער-עצמי: המנוע מוכיח את-עצמו על וקטורים דטרמיניסטיים לפני כל-ריצה-חיה
+      - name: selftest (fail-closed)
+        run: node engine/integrity-guard.mjs --selftest
+
+      - name: measure receipts provenance (never trust, always verify)
+        env:
+          ECO_WALLET_TOKEN: ${{ secrets.ECO_WALLET_TOKEN }}
+        run: node engine/integrity-guard.mjs
+
+      - name: leak-scan (fail-closed)
+        if: always()
+        run: |
+          [ -f ops/integrity/verdict.json ] && node engine/leak-scan.mjs ops/integrity/verdict.json
+          [ -f ops/integrity/log.jsonl ] && node engine/leak-scan.mjs ops/integrity/log.jsonl
+          [ -f ops/integrity/REPORT.md ] && node engine/leak-scan.mjs ops/integrity/REPORT.md
+
+      # קומיט-ממושפע: רק ops/integrity (אף-פעם לא -A) · rebase ×3 · כשל = יציאה 1
+      - name: commit verdict (honest verdicts always land, FAIL included)
+        if: always()
+        run: |
+          git config user.name "integrity-guard"
+          git config user.email "integrity-guard@users.noreply.github.com"
+          git add ops/integrity
+          if git diff --cached --quiet; then
+            echo "verdict unchanged - nothing to commit"
+            exit 0
+          fi
+          git commit -m "integrity-guard verdict: $(date -u +%FT%TZ)"
+          OK=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+            git rebase --abort 2>/dev/null || true
+            git status --short
+            sleep 5
+          done
+          [ "$OK" = "1" ] || { echo "verdict push failed after 3 attempts — honest failure"; exit 1; }
+
+      - name: verdict law (red unless PASS/PASS_WITH_ALERTS — after the verdict landed)
+        if: always()
+        run: |
+          V="$(node -e 'try{console.log(JSON.parse(require("fs").readFileSync("ops/integrity/verdict.json","utf8")).overall)}catch{console.log("ERROR")}')"
+          echo "integrity verdict: $V"
+          [ "$V" = "PASS" ] || [ "$V" = "PASS_WITH_ALERTS" ] || { echo "integrity guard found CRITICAL/HIGH evidence — run stays red (honesty over comfort)"; exit 1; }

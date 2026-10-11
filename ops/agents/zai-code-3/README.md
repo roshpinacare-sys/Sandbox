@@ -54,3 +54,17 @@
 5. **ops/FLOW-PLAN-2026-10-11.md:** תפקיד-חי ל-SovereignConsole (מישור-חישוב? החלטה-מדודה), Project-files/anchor-baseline (מדידה-ציבורית), חוק-אי-שריפת-דקות-פרטיות.
 
 **לא איגע ב:** index.html מחוץ-לשני-הפאנלים-החדשים, FleetHQ פנימי (zai-code-4/zai-sec), office-artery/office-feed (zai-code-5/zai-10b), blurt/cockpit, מפתחות/סודות.
+
+## עדכון-scope (G-סדרה, 2026-10-11 לילה) — שומר-השלמות: החוק הקבוע של "אין זיופים"
+
+**דרישת-בעלים (מילה-במילה):** "חייב לוודא שאין זיופים... לא לסמוך יותר מדי על כלום — גם לא על עצמנו".
+
+**הליין שלי (G):**
+1. **engine/integrity-guard.mjs (Sandbox):** כל-קבלה/ספר ב-Sandbox+FleetHQ+Domain נבדקת מול Actions API — גוסט-ראנים (404 מוכח=CRITICAL), סתירות-PASS/FAIL (CRITICAL), sha-מנותב-לפי-אובייקט (HIGH), חלונות-זמן (MEDIUM), זהויות-כותבים (רק-קבצים-הטוענים-Actions), unprovenanced (FLAG+ניתוב). 403/429 = "לא-ניתן-לאימות" — לעולם לא "זיוף". L0: הקבלה-הקודמת-של-השומר-עצמו נבדקת ראשונה. selftest 13 וקטורים fail-closed. גילוי-דינמי מעץ-הגיט: עורק-חדש נבדק אוטומטית.
+2. **artery-integrity.yml:** שעתי :25 + dispatch + integrity-tick + רישום ב-artery-watch (maxAge 5400). קבלות ops/integrity, verdict law: אדום על FAIL.
+3. **ביקורת-ידנית ראשונה (פורסמה בתוך הקבלה-החיה):** אפס-זיופים בשרשרת-ה-provenance חוצה-3-ריפואים. ה-v1-שלי-עצמו ייצר אזעקות-שקר — תוקן ל-v2 לפני-דחיפה (החוק תקף גם-אותי).
+4. **שדרוגי-provenance בליינים-שלי:** flow-map receipt + wallet-verify provenance.sha. scribe.mjs סעיף-9: הלמידה קוראת את פסק-דין-השלמות.
+
+**לא איגע ב:** עולמות/סריקת-ערך (T13), משרד-חי ב-FleetHQ+דומיין (zai-sec), office-3D-v2, verifier.mjs (zai-verifier — אני משלים אותו, לא מחליף: הוא בודק-חיות, אני בודק-זיופים), כלכלה (הכרעת-בעלים).
+
+**ניתוב-ממצאים לבעלים-הרלוונטיים (unprovenanced → שדרוג-provenance):** receipts/fleet (artery-fleet lane) · receipts/grid (grid-watch lane) · receipts/latest.json (sovereign-state lane) · state/verifier/verdict-latest.json (zai-verifier) · Domain agents/office-live.json (office lane). ops/flow/receipt.json שלי — תוקן-כבר-במקור, יתנקה-בריצה-הבאה.

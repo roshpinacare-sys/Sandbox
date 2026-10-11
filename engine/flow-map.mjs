@@ -289,7 +289,19 @@ const md = [
 ].join("\n");
 writeFileSync("ops/flow/flow-map.md", md);
 
-const receipt = { at: new Date().toISOString(), overall: "PASS", alerts, summary: map.summary };
+const receipt = {
+  at: new Date().toISOString(),
+  overall: "PASS",
+  alerts,
+  summary: map.summary,
+  provenance: {
+    runId: process.env.GITHUB_RUN_ID || null,
+    runUrl: process.env.GITHUB_SERVER_URL && process.env.GITHUB_RUN_ID
+      ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+      : null,
+    sha: process.env.GITHUB_SHA || null,
+  },
+};
 writeFileSync("ops/flow/receipt.json", JSON.stringify(receipt, null, 2) + "\n");
 appendFileSync("ops/flow/log.jsonl", JSON.stringify({ at: receipt.at, overall: receipt.overall, summary: map.summary, alerts: alerts.length }) + "\n");
 

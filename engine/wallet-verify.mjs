@@ -35,6 +35,7 @@ const result = {
     runUrl: process.env.GITHUB_SERVER_URL && process.env.GITHUB_RUN_ID
       ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
       : null,
+    sha: process.env.GITHUB_SHA || null,
   },
 };
 

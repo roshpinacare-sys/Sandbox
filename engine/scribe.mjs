@@ -132,6 +132,17 @@ try {
   } else observations.push("flow map: not yet generated (artery-flow first run pending)");
 } catch (e) { observations.push(`flow map read: ${String(e.message).slice(0, 100)}`); }
 
+// 9) INTEGRITY GUARD: the anti-forgery verdict (owner law: "verify there are no forgeries")
+try {
+  if (existsSync("ops/integrity/verdict.json")) {
+    const ig = JSON.parse(readFileSync("ops/integrity/verdict.json", "utf8"));
+    const s = ig.summary || {};
+    observations.push(`integrity guard: overall=${ig.overall} sources=${s.sources} claims-verified=${s.verified} findings=${s.findings} (receipts provenance cross-checked vs Actions API)`);
+    if (ig.overall === "FAIL") proposals.push(`integrity guard FAIL (${JSON.stringify(s.counts)}) - suspected forged receipts; freeze trust in flagged receipts and investigate before further lane work`);
+    if (s.counts && s.counts.MEDIUM) proposals.push(`integrity guard ${s.counts.MEDIUM} MEDIUM alerts (unverifiable/unprovenanced receipts) - upgrade those producers to full provenance (fix-dont-lock)`);
+  } else observations.push("integrity guard: no verdict yet (artery-integrity first run pending)");
+} catch (e) { observations.push(`integrity read: ${String(e.message).slice(0, 100)}`); }
+
 const at = new Date().toISOString();
 const n = (() => { try { return readFileSync("ops/lessons/ledger.md", "utf8").split("## ").length - 1 + 1; } catch { return 1; } })();
 
