@@ -1,0 +1,193 @@
+name: office-growth
+
+# מנוע-הצמיחה-של-המשרד (session-10 · הוראת-בעלים: "ינהל...יגייס עובדים...שכל הזמן ישאלו
+# מה הפוטנציאל ומה פתוח ומה יכול לתת לנו עוד ערך...ולא לסמוך יותר מדי על כלום גם לא על עצמם")
+# סריקה-חיה-מדודה של-האחוזה → VALUE-MAP + work-orders אמיתיים (עם-קריטריוני-קבלה)
+# המשרד-החי (FleetHQ/Domain) והעולם-התלת-ממדי-קוראים-את-הפלטים-מה-raw-הציבורי
+# אפס-נתונים-מדומים: מה-שלא-נמדד = UNKNOWN-מפורסם-כך (G6 · "אין זיופים")
+# G3: ~17-קריאות-API-לסריקה · cron-כל-6-שעות + dispatch
+
+on:
+  schedule:
+    - cron: "10 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  growth:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan estate — measured only (public 9 + PAT-readable 4)
+        env:
+          PAT: ${{ secrets.ECO_WALLET_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTH=()
+          [ -n "${PAT}" ] && AUTH=(-H "Authorization: token ${PAT}")
+          for R in FleetHQ Domain Sandbox TruthRail sovereign-beacon sovereign-lighthouse saos-agents saos-runtime Console steem saos-dex Saosmartwallet; do
+            curl -s "${AUTH[@]}" "https://api.github.com/repos/roshpinacare-sys/$R" \
+              | jq -c '{repo:"'$R'",pushed_at,archived,open_issues_count}' >> /tmp/repos.ndjson 2>/dev/null || true
+          done
+          for R in FleetHQ Sandbox Domain saos-runtime; do
+            curl -s "${AUTH[@]}" "https://api.github.com/repos/roshpinacare-sys/$R/actions/runs?per_page=30" \
+              | jq -c '{repo:"'$R'",reds:[.workflow_runs[]? | select(.conclusion=="failure" and (.created_at > (now - 172800) | todateiso8601)) | {name,at:.created_at}]}' >> /tmp/runs.ndjson 2>/dev/null || true
+          done
+          : > /tmp/feeds.ndjson
+          probe_feed() {
+            local url="$1" tag="$2" code body
+            code=$(curl -s -o /tmp/feed.json -w '%{http_code}' --max-time 15 "$url") || code=000
+            body=""
+            [ "$code" = "200" ] && body=$(head -c 400 /tmp/feed.json | tr -d '\n')
+            jq -cn --arg tag "$tag" --arg code "$code" --arg body "$body" \
+              '{feed:$tag,http:$code,head:$body}' >> /tmp/feeds.ndjson
+          }
+          probe_feed "https://roshpinacare-sys.github.io/FleetHQ/office-state.json" "FleetHQ/office-state.json"
+          probe_feed "https://roshpinacare-sys.github.io/FleetHQ/digest.json" "FleetHQ/digest.json"
+          probe_feed "https://roshpinacare-sys.github.io/Domain/office/data.json" "Domain/office/data.json"
+          probe_feed "https://roshpinacare-sys.github.io/Domain/agents/office-live.json" "Domain/agents/office-live.json"
+
+      - name: Compute VALUE-MAP + work-orders + potential (with delta vs previous)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, json, os, urllib.request
+          from datetime import datetime, timezone
+          token = os.environ["GH_TOKEN"]; repo = os.environ["GITHUB_REPOSITORY"]
+          now = datetime.now(timezone.utc)
+
+          def api(method, url, tok, payload=None):
+              data = json.dumps(payload).encode() if payload is not None else None
+              r = urllib.request.Request(url, data=data, method=method)
+              r.add_header("Authorization", f"Bearer {tok}")
+              r.add_header("Accept", "application/vnd.github+json")
+              if data: r.add_header("Content-Type", "application/json")
+              try:
+                  with urllib.request.urlopen(r) as resp:
+                      body = resp.read()
+                  return resp.status, (json.loads(body) if body else {})
+              except urllib.error.HTTPError as e:
+                  return e.code, {}
+              except Exception:
+                  return 0, {}
+
+          repos = [json.loads(l) for l in open("/tmp/repos.ndjson") if l.strip()]
+          runs = [json.loads(l) for l in open("/tmp/runs.ndjson") if l.strip()]
+          feeds = [json.loads(l) for l in open("/tmp/feeds.ndjson") if l.strip()]
+
+          def age_hours(iso):
+              try:
+                  t = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+                  return round((now - t).total_seconds() / 3600, 1)
+              except Exception:
+                  return None
+
+          def status(h):
+              if h is None: return "UNKNOWN"
+              if h < 6: return "FRESH"
+              if h < 24: return "AGING"
+              if h < 168: return "STALE"
+              return "SILENT"
+
+          reds = {r.get("repo"): r.get("reds", []) for r in runs}
+          rows, wos = [], []
+          for r in repos:
+              name = r.get("repo", "?")
+              ah = age_hours(r.get("pushed_at", ""))
+              st = status(ah)
+              red = len(reds.get(name, []))
+              archived = r.get("archived", False)
+              rows.append({"repo": name, "status": st, "push_age_h": ah, "reds_48h": red,
+                           "open_issues": r.get("open_issues_count"), "archived": archived})
+              if red >= 2:
+                  wos.append({"id": f"WO-{name}-reds", "area": name, "priority": "P1",
+                              "title": f"רפא {red} ריצות-אדומות (48ש) ב-{name}",
+                              "why": "ריצות-אדומות-חוזרות = עורק-שקט-שנפל — הכל-חייב-לפעול",
+                              "acceptance": "ריצה-ירוקה-מלאה + שורת-שורש-בפנקס ops/AGENT-LEDGER.md"})
+              if st in ("STALE", "SILENT") and not archived:
+                  wos.append({"id": f"WO-{name}-revive", "area": name, "priority": "P2",
+                              "title": f"החייאה או tombstone ל-{name} (דחיפה-אחרונה {ah}ש)",
+                              "why": "ריבונות-חיה: מאגר-שקט = ערך-אבוד או ארכיון-מוכרז",
+                              "acceptance": "push-טרי עם ערך מדיד או tombstone+verifier"})
+          feed_unknown = []
+          for f in feeds:
+              if f.get("http") != "200":
+                  feed_unknown.append(f.get("feed"))
+                  wos.append({"id": f"WO-feed-{f.get('feed','x').replace('/','-')}", "area": "feeds",
+                              "priority": "P1", "title": f"פיד מת/404: {f.get('feed')} (HTTP {f.get('http')})",
+                              "why": "המשרד-והעולם-התלת-ממדי-ניזונים-ממנו — פיד-מת = עולם-מזויף",
+                              "acceptance": "HTTP 200 + חותמת-זמן-טרייה"})
+          # שער-טוקן (מ-TOKEN-TRUTH-אם-קיים):
+          st, tt = api("GET", f"https://api.github.com/repos/{repo}/contents/ops/TOKEN-TRUTH.md", token)
+          token_days = None
+          if st == 200:
+              try:
+                  txt = base64.b64decode(tt["content"]).decode()
+                  for l in txt.splitlines():
+                      if "ECO_WALLET_TOKEN" in l and "ALIVE" in l and "|" in l:
+                          try: token_days = int(l.split("|")[6].strip())
+                          except Exception: pass
+              except Exception: pass
+          if token_days is not None and token_days <= 21:
+              wos.append({"id": "WO-token-cliff", "area": "tokens", "priority": "P0",
+                          "title": f"מצוק-טוקן-בעוד {token_days} ימים — נתיב token-forge/ROTATION-RUNBOOK",
+                          "why": "כל-העורקים-ימותו-יחד-בשקט-אם-לא-ירוטט",
+                          "acceptance": "TOKEN-TRUTH מציג תפוגה חדשה אחרי route ירוק"})
+          wos.sort(key=lambda w: {"P0": 0, "P1": 1, "P2": 2}.get(w["priority"], 3))
+
+          # דלתא-מול-המפה-הקודמת (המערך-מדייק-את-עצמו):
+          prev = {}
+          st, pf = api("GET", f"https://api.github.com/repos/{repo}/contents/ops/office/potential.json", token)
+          if st == 200:
+              try: prev = json.loads(base64.b64decode(pf["content"]).decode())
+              except Exception: prev = {}
+          prev_rows = {r.get("repo"): r.get("status") for r in prev.get("estate", {}).get("rows", [])}
+          changes = []
+          for r in rows:
+              was = prev_rows.get(r["repo"])
+              if was and was != r["status"]:
+                  changes.append(f"{r['repo']}: {was} → {r['status']}")
+          if prev.get("work_orders_open") is not None and prev["work_orders_open"] != len(wos):
+              changes.append(f"work-orders: {prev['work_orders_open']} → {len(wos)}")
+
+          potential = {
+              "measured_at": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "source": "GitHub API + Pages live fetch — אפס-נתונים-מדומים",
+              "not_scanned": "13-מאגרים-פרטיים-מעבר-to-PAT-מינימלי — UNKNOWN-ולא-מדומה",
+              "estate": {"rows": rows, "scanned": len(rows)},
+              "feeds": feeds,
+              "token_days_left": token_days,
+              "work_orders_open": len(wos),
+              "delta_since_last": changes,
+              "top_actions": [w["title"] for w in wos[:5]],
+          }
+          def md(p):
+              out = ["# VALUE-MAP · סריקת-פוטנציאל-חיה (office-growth)",
+                     f"## נמדד: {potential['measured_at']} · אפס-נתונים-מדומים (UNKNOWN=לא-נמדד)", "",
+                     "| שטח | מצב | גיל-דחיפה(ש) | אדומות-48ש | פתוחים | ארכיון |", "|---|---|---|---|---|---|"]
+              for r in rows:
+                  out.append(f"| {r['repo']} | {r['status']} | {r['push_age_h']} | {r['reds_48h']} | {r['open_issues']} | {r['archived']} |")
+              out += ["", "## פידים חיים", ""]
+              for f in feeds:
+                  out.append(f"- {f['feed']}: HTTP {f['http']}")
+              out += ["", f"## דלתא-מאז-המפה-הקודמת: {changes or ['(ראשונה)']}", "",
+                      "## work-orders פתוחים (תובעים-בשורת-פנקס עם מזהה-ה-WO)", ""]
+              for w in wos:
+                  out.append(f"- **[{w['priority']}] {w['id']}** — {w['title']} · קבלה: {w['acceptance']}")
+              return "\n".join(out) + "\n"
+
+          def put(path, content, msg):
+              stc, cur = api("GET", f"https://api.github.com/repos/{repo}/contents/{path}", token)
+              data = {"message": msg, "content": base64.b64encode(content.encode()).decode()}
+              if stc == 200 and isinstance(cur, dict) and "sha" in cur: data["sha"] = cur["sha"]
+              stp, res = api("PUT", f"https://api.github.com/repos/{repo}/contents/{path}", token, data)
+              print(f"{path}: PUT {stp}")
+
+          put("ops/office/potential.json", json.dumps(potential, ensure_ascii=False, indent=1), "office-growth: potential.json measured [ci]")
+          put("ops/office/work-orders.json", json.dumps(wos, ensure_ascii=False, indent=1), "office-growth: work-orders measured [ci]")
+          put("ops/office/VALUE-MAP.md", md(rows), "office-growth: VALUE-MAP measured [ci]")
+          print("work orders:", len(wos), "| delta:", changes)
+          PY
