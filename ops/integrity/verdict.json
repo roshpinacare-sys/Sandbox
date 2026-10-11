@@ -1,26 +1,25 @@
 {
   "schema": "integrity-guard/2",
-  "at": "2026-10-11T23:46:37.496Z",
-  "overall": "FAIL",
+  "at": "2026-10-11T23:53:11.931Z",
+  "overall": "PASS",
   "summary": {
     "sources": 11,
-    "verified": 7,
-    "findings": 6,
+    "verified": 9,
+    "findings": 4,
     "counts": {
-      "FLAG": 5,
-      "CRITICAL": 1
+      "FLAG": 4
     }
   },
   "provenance": {
-    "runId": "38185532451",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38185532451",
-    "sha": "ce745bfe1e1fe5469a22f9951ee524c258fa707d"
+    "runId": "38185922815",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38185922815",
+    "sha": "49dcf9fa69c7e42579a4f8cc3b32361263a87f8b"
   },
   "verified": [
     {
       "where": "self:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=38182531587 conc=success repo=Sandbox"
+      "detail": "run=38185532451 conc=failure repo=Sandbox"
     },
     {
       "where": "Sandbox:receipts/wallet/verdict.json",
@@ -28,9 +27,19 @@
       "detail": "run=38180404704 conc=success repo=Sandbox"
     },
     {
+      "where": "Sandbox:receipts/fleet/verdict.json",
+      "law": "verified",
+      "detail": "run=38185874949 conc=success repo=Sandbox"
+    },
+    {
       "where": "Sandbox:ops/flow/receipt.json",
       "law": "verified",
-      "detail": "run=38180410722 conc=success repo=Sandbox"
+      "detail": "run=38185530741 conc=success repo=Sandbox"
+    },
+    {
+      "where": "FleetHQ:receipts/office-ci/verdict.json",
+      "law": "verified",
+      "detail": "run=38185835022 conc=success repo=FleetHQ"
     },
     {
       "where": "Domain:office/data.json",
@@ -50,16 +59,10 @@
     {
       "where": "Sandbox:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=38182531587 conc=success repo=Sandbox"
+      "detail": "run=38185532451 conc=failure repo=Sandbox"
     }
   ],
   "findings": [
-    {
-      "level": "FLAG",
-      "where": "Sandbox:receipts/fleet/verdict.json",
-      "law": "unprovenanced",
-      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: artery-fleet"
-    },
     {
       "level": "FLAG",
       "where": "Sandbox:receipts/grid/verdict.json",
@@ -77,12 +80,6 @@
       "where": "Sandbox:state/verifier/verdict-latest.json",
       "law": "unprovenanced",
       "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: verifier.yml"
-    },
-    {
-      "level": "CRITICAL",
-      "where": "FleetHQ:receipts/office-ci/verdict.json",
-      "law": "conclusion-contradiction",
-      "detail": "receipt=PASS run=null"
     },
     {
       "level": "FLAG",
