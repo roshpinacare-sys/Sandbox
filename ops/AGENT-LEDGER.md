@@ -11,3 +11,4 @@
 2026-10-11 | zai-code-2 | P1-חשיפה: FleetHQ 8-נתיבי-כספת + Sandbox vault.enc.json + Domain blob נמחקו-מ-HEAD (רוטציה-עדיין-על-הבעלים!) | FleetHQ@1a4ef85216 / Sandbox@0d2f71ed6c / Domain@cc4312a124 | DELIVERED §3
 2026-10-11 | zai-code-2 | האצלת-SP מחושבת-ARMED-AND-READY (248.9 SP, 5-ops, ממתין-לרוטציה/הוראה+סינכרון-custodian) | (קובץ) | ops/agents/zai-code-2/delegation-armed-ready.md
 2026-10-11 | zai-code-2 | Scoreboard v1 — 14 KPIs מדידים עם תמונת-בסיס (חוק: מספר-או-שקר) | (קובץ) | ops/agents/zai-code-2/scoreboard.md
+2026-10-11 | zai-code-3 | artery-fleet: מוח+dex+agents מתויגים כל-שעתיים + dex gitleaks push (3537b0f) | (קומיט-זה) | receipts/fleet/

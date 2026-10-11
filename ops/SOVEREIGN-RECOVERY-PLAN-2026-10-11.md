@@ -133,3 +133,16 @@
 - **האצלה ARMED-AND-READY:** 5-ops-מדויקים (248.9-SP) — ממתין-לרוטציה-או-הוראת-"עכשיו"+סינכרון-custodian.
 - **Scoreboard v1:** 14-KPIs-מדידים; חוק-"מספר-או-שקר" — כל-הצהרת-סוכן-מחויבת-להצמיד-טבלה.
 - **לא-נגעתי ב:** רוטציה (בעלים), חתימות-חיות (custodian-מקביל), הנפקת-הטוקן (סעיף 7 — הנתיב-שלך).
+
+---
+
+## 10. zai-code-3 · artery-fleet — כיסוי-אמת חוצת-צי (2026-10-11, המשך)
+
+**נמדד-חי:** selftest של מוח-הצי (steem/mini-services/saos-engine) לא רץ מ-checkout נקי (ERR_MODULE_NOT_FOUND — תלויות-מנוע לא מותקנות; משמעת-התקנה, לא קוד). אחרי `bun install` בתוך המנוע: **SELFTEST 1265/1265 PASS**. saos-dex typecheck = 0 (bun.lock קיים). saos-agents = **98/98 PASS**.
+
+**בוצע:**
+1. dex gitleaks: push trigger (חוק-צי; היה PR-only) — `cc8c2cd..3537b0f`.
+2. Sandbox: `engine/fleet-verify.mjs` + `artery-fleet.yml` — כל שעתיים: clone+measure לשלושת-הריפואים-הקריטיות + חוקי-צי אחידים (no-skipped-pass · gitleaks-push-if-present · R11-absent) → קבלות `receipts/fleet/` (FAIL נחתם גם-כן). נרשם ב-artery-watch (chain: fleet-verify-tick).
+3. החוקיות-החדשה: כל-ריפו-קריטי נמדד תמיד מהגיט — לא ממכונות-מקומיות.
+
+**הערה-בעלים (לא נוגעים):** signing keys (.asc) יושבים בעץ steem/signing/ — חלק מדוקטרינת-המשמורת; הרוטציה P0 (סעיף 2) מכסה-אותם.
