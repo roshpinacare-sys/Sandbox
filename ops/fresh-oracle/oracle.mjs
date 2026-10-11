@@ -26,12 +26,18 @@
  *                     מקורות-רישם: clone שכן → raw פרטי עם token (מעולם לא נכתב/מודפס)
  *                     → אין גישה = BUS-UNKNOWN כנה ("private registry — validator runs in-lane").
  *   V-DOMAIN-LIVE     Pages 200 + <title> מכיל "מפקדת הצי" + פאנל #p-research קיים → GREEN
+ *   V-FLEET-HEARTBEAT (zai-14c) מניפסט-עורקים: 8 מפיקי-workflow של הצי נמדדים מול Actions API
+ *                     (הריצה-המוצלחת האחרונה מול maxAgeH לכל-עורק) → GREEN/AMBER/RED/UNKNOWN כנים
+ *                     לכל-עורק. --heal: עורק שנמדד-מיושן (AMBER/RED) ו-healable:true →
+ *                     workflow_dispatch {"ref":"main"} (ריפוי-מפיקים מדווחים/מראות בלבד — לעולם
+ *                     לא-חתימה/שידור). --heal אינו רץ ב-workflow השבועי — כלי-ידני/סוכן בלבד.
  *
  * פסקים: GREEN / AMBER / RED / UNKNOWN — כנים. אפס סודות בפלט (scanner לפני-כתיבה, הפרה = אבוט).
  *
  * שימוש:
- *   node ops/fresh-oracle/oracle.mjs --selftest   # וקטורי-אפס-רשת (חייב 12/12)
+ *   node ops/fresh-oracle/oracle.mjs --selftest   # וקטורי-אפס-רשת (12 בסיס + 5 heartbeat = 17)
  *   node ops/fresh-oracle/oracle.mjs              # ריצה-חיה: כותב receipts/fresh-oracle-latest.json + verdict.md
+ *   node ops/fresh-oracle/oracle.mjs --heal       # ריצה-חיה + ריפוי-עורקים מיושנים (dispatch + יומן בקבלה)
  *
  * אפס-תלות. node >= 18. ESM טהור.
  */
@@ -54,6 +60,8 @@ export const LAWS = {
   FETCH_TIMEOUT_MS: 10_000,
   TITLE_MUST_CONTAIN: "מפקדת הצי",
   RESEARCH_PANEL_ID: 'id="p-research"',
+  HEARTBEAT_RED_FACTOR: 2,      // מעל maxAgeH×2 = לפחות-שני-מחזורים הוחמצו → RED (בין לבין = AMBER)
+  HEARTBEAT_DISPATCH_RETRIES: 1, // --heal: ניסיון-שליחה אחד + ריטרי-אחד על-כשל-חולף
 };
 
 /* מקורות הבתים-committed — raw.githubusercontent ב-ref הנכון (אומת אמפירית 2026-10-11:
@@ -432,6 +440,148 @@ export async function checkBus({ sandboxRoot, fetcher, nowMs = Date.now() }) {
   };
 }
 
+/* ══════════════════ V-FLEET-HEARTBEAT — liveness+heal (zai-14c · trace 1a12d502a99b7021) ══════════════════
+ * COORDINATION.md [zai-14] lane 14-c: מניפסט-מפיקי-העורקים של הצי (workflows שמפרסמים/משקפים ספרים).
+ * כל-(repo, workflow) אומת פעמיים לפני-כניסה למניפסט: (1) קו-cron נקרא מה-clone המקומי,
+ * (2) probe API אחד — שניהם 2026-10-12; maxAgeH אומת מול ה-cron המוצהר (ראו הערות-שורה).
+ * סיווג-בטיחות ל-heal: דווח/מראה בלבד (dex-mirror/dex-beat/office-feed/digest = מראות;
+ * value-scan/verifier/fleet-heal = קוראי-Sandbox). לא-בטוח ב-100% בסיווג → healable:false
+ * (console-trigger-mesh — הוא עצמו מנוע-הטריגרים: שליחה-אליו עלולה להקפיץ את מה שהוא מצית). */
+export const ARTERIES = [
+  { id: "domain-dex-mirror", repo: "Domain", workflow: "dex-mirror.yml", maxAgeH: 30, healable: true },      // cron daily 12:50 UTC → 30h = 24h+6h חסד
+  { id: "domain-dex-beat", repo: "Domain", workflow: "dex-beat.yml", maxAgeH: 9, healable: true },           // cron כל-4h (12 */4) → 9h ≈ שני-מחזורים+1h
+  { id: "domain-office-feed", repo: "Domain", workflow: "office-feed.yml", maxAgeH: 30, healable: true },    // cron daily 03:41 UTC → 30h
+  { id: "fleethq-digest", repo: "FleetHQ", workflow: "office-window.yml", maxAgeH: 30, healable: true },     // cron daily 06:17 UTC → 30h
+  { id: "sandbox-value-scan", repo: "Sandbox", workflow: "value-scan.yml", maxAgeH: 2, healable: true },     // cron כל-30דק' (17,47) → 2h = 4 מחזורים
+  { id: "sandbox-verifier", repo: "Sandbox", workflow: "verifier.yml", maxAgeH: 2, healable: true },         // cron 4×/שעה (7,37+23,53) → 2h
+  { id: "sandbox-fleet-heal", repo: "Sandbox", workflow: "fleet-heal.yml", maxAgeH: 2, healable: true },     // cron כל-30דק' (5,35) → 2h
+  { id: "console-trigger-mesh", repo: "Console", workflow: "trigger-mesh.yml", maxAgeH: 3, healable: false }, // cron כל-3h (44 */3) → 3h = מחזור-אחד (קפדן-בכוונה); report-only — לעולם לא נשלח
+];
+
+export function heartbeatRunsUrl(repo, workflow) {
+  return `https://api.github.com/repos/roshpinacare-sys/${repo}/actions/workflows/${workflow}/runs?per_page=1&status=success`;
+}
+
+function ghApiHeaders(token) {
+  const h = { accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" };
+  if (token) h.authorization = `token ${token}`; // מעולם לא נכתב/מודפס/נכנס ל-URL
+  return h;
+}
+
+/** סיווג-חיות טהור — וקטורי-גבולות נבדקים ב-selftest. כשל-API = UNKNOWN כנה (R5). */
+export function classifyHeartbeat({ ageH, maxAgeH, apiError = null, noSuccessEver = false }) {
+  if (apiError) return { verdict: "UNKNOWN", note: `API לא-נמדד: ${apiError} — כשל-רשת שלנו, לא פסק על המפיק` };
+  if (ageH == null) {
+    return noSuccessEver
+      ? { verdict: "RED", note: "אין אף ריצה-מוצלחת בהיסטוריה — העורק לא ידוע כחי אף-פעם" }
+      : { verdict: "UNKNOWN", note: "ריצה-אחרונה בלי חותמת-זמן קריאה — לא מנחשים" };
+  }
+  if (ageH <= maxAgeH) return { verdict: "GREEN", note: `ריצה-מוצלחת לפני ${ageH.toFixed(1)}h ≤ ${maxAgeH}h` };
+  if (ageH <= maxAgeH * LAWS.HEARTBEAT_RED_FACTOR) {
+    return { verdict: "AMBER", note: `מיושן: ${ageH.toFixed(1)}h > ${maxAgeH}h (≤${maxAgeH * LAWS.HEARTBEAT_RED_FACTOR}h) — מחזור-הפקה הוחמץ` };
+  }
+  return { verdict: "RED", note: `ישן מדי: ${ageH.toFixed(1)}h > ${maxAgeH * LAWS.HEARTBEAT_RED_FACTOR}h — לפחות-שני-מחזורים הוחמצו` };
+}
+
+/** החלטת-ריפוי טהורה: stale(AMBER/RED) + healable → dispatch · GREEN/UNKNOWN/non-healable → לעולם לא. */
+export function healDecision(artery, verdict) {
+  if (verdict === "GREEN") return { dispatch: false, reason: "טרי — אין מה לרפא" };
+  if (verdict === "UNKNOWN") return { dispatch: false, reason: "לא-נמדד — אין בסיס לשלוח ריפוי" };
+  if (!artery.healable) return { dispatch: false, reason: "non-healable — דווח-בלבד (לעולם לא נשלח)" };
+  return { dispatch: true, reason: `stale(${verdict}) + healable → dispatch` };
+}
+
+/** שולח-workflow (POST dispatches {"ref":"main"}) — ניסיון אחד + ריטרי-אחד על-כשל-חולף בלבד. */
+export async function dispatchWorkflow({ repo, workflow, token, poster, retries = LAWS.HEARTBEAT_DISPATCH_RETRIES }) {
+  const url = `https://api.github.com/repos/roshpinacare-sys/${repo}/actions/workflows/${workflow}/dispatches`;
+  const attempts = [];
+  for (let i = 0; i <= retries; i++) {
+    const res = await poster(url, { ref: "main" }, token);
+    attempts.push(res.status);
+    if (res.status === 204) return { dispatched: true, attempts, ok: true }; // 204 = queued
+    if (res.status === 0 || res.status === 429 || res.status >= 500) continue; // חולף → ריטרי-אחד
+    break; // 4xx אחר (403/404…) — לא-חולף, כנות בלי-ניחושים
+  }
+  return { dispatched: false, attempts, ok: false };
+}
+
+/** מנוע-POST נתין (injectable): 204/סטטוס בלבד — אף token לא נכתב/מודפס. */
+export function defaultPoster(url, bodyObj, token) {
+  return fetch(url, {
+    method: "POST",
+    redirect: "follow",
+    headers: {
+      "user-agent": "roshpinacare-fresh-oracle/1 (heartbeat heal; report/mirror-class only)",
+      ...ghApiHeaders(token),
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(bodyObj),
+    signal: AbortSignal.timeout(LAWS.FETCH_TIMEOUT_MS),
+  })
+    .then((res) => ({ status: res.status }))
+    .catch((e) => ({ status: 0, error: String((e && e.message) || e).slice(0, 120) }));
+}
+
+/** הבדיקה-השישית: מדוד את כל-העורקים (עכשיו), ואם heal=true — שלח ריפוי למיושנים-הניתנים-לריפוי. */
+export async function checkFleetHeartbeat({
+  fetcher = defaultFetcher, poster = defaultPoster, nowMs = Date.now(),
+  token = process.env.BUS_TOKEN || process.env.GH_TOKEN || "", heal = false,
+} = {}) {
+  const measuredAt = isoNow();
+  const arteries = [];
+  const dispatchLog = [];
+  for (const a of ARTERIES) {
+    let ageH = null, lastSuccessAt = null, lastRunId = null, apiError = null, noSuccessEver = false;
+    let res = null;
+    try { res = await fetcher(heartbeatRunsUrl(a.repo, a.workflow), { headers: ghApiHeaders(token) }); }
+    catch (e) { res = { status: 0, error: String((e && e.message) || e).slice(0, 120) }; }
+    if (!res || res.status !== 200 || res.error) {
+      apiError = `http ${res ? res.status : "no-response"}${res && res.error ? ` (${res.error})` : ""}`;
+    } else {
+      try {
+        const doc = JSON.parse(res.body);
+        const run = Array.isArray(doc.workflow_runs) ? doc.workflow_runs[0] : null;
+        if (!run) noSuccessEver = true;
+        else {
+          const t = run.run_started_at || run.created_at || run.updated_at || null;
+          lastRunId = run.id ?? null;
+          if (t && Number.isFinite(Date.parse(t))) {
+            lastSuccessAt = t;
+            ageH = Math.max(0, (nowMs - Date.parse(t)) / 3600e3);
+          } else apiError = "הריצה-האחרונה בלי חותמת-זמן קריאה";
+        }
+      } catch { apiError = "JSON תקול מה-API"; }
+    }
+    const cls = classifyHeartbeat({ ageH, maxAgeH: a.maxAgeH, apiError, noSuccessEver });
+    const decision = healDecision(a, cls.verdict);
+    let dispatch = { dispatched: false, reason: heal ? decision.reason : "--heal לא הופעל בריצה זו (כלי-ידני)" };
+    if (heal && decision.dispatch) {
+      const d = await dispatchWorkflow({ repo: a.repo, workflow: a.workflow, token, poster });
+      dispatch = { dispatched: d.dispatched, attempts: d.attempts, reason: decision.reason };
+      dispatchLog.push({ id: a.id, repo: a.repo, workflow: a.workflow, verdict: cls.verdict, dispatched: d.dispatched, attempts: d.attempts });
+    }
+    arteries.push({
+      id: a.id, repo: a.repo, workflow: a.workflow, maxAgeH: a.maxAgeH, healable: a.healable,
+      verdict: cls.verdict, ageH: ageH == null ? null : Number(ageH.toFixed(2)),
+      lastSuccessAt, lastRunId, dispatch, note: cls.note,
+    });
+  }
+  const counts = { GREEN: 0, AMBER: 0, RED: 0, UNKNOWN: 0 };
+  for (const r of arteries) counts[r.verdict] = (counts[r.verdict] || 0) + 1;
+  const verdict = counts.RED > 0 ? "RED" : counts.UNKNOWN > 0 ? "UNKNOWN" : counts.AMBER > 0 ? "AMBER" : "GREEN";
+  const dispatchedN = dispatchLog.filter((d) => d.dispatched).length;
+  const note =
+    verdict === "RED" ? `🔴 עורק(ים) מתים/מוזנחים: ${counts.RED}/${arteries.length} RED — המפיקים שלהם דורשים-עין${heal ? ` · heal: ${dispatchedN}/${dispatchLog.length} dispatch נשלחו` : ""}`
+    : verdict === "UNKNOWN" ? `לא-כל-העורקים נמדדו (${counts.UNKNOWN} UNKNOWN) — לא מנחשים ירוק`
+    : verdict === "AMBER" ? `עורקים מיושנים: ${counts.AMBER}/${arteries.length} AMBER — חיים-אבל-מפספסים-מחזורים${heal ? ` · heal: ${dispatchedN}/${dispatchLog.length} dispatch נשלחו` : ""}`
+    : `🟢 כל-העורקים חיים: ${arteries.length}/${arteries.length} GREEN בתוך maxAgeH`;
+  return {
+    id: "V-FLEET-HEARTBEAT", verdict, measuredAt,
+    evidence: { arteries, counts, dispatchLog, healMode: !!heal },
+    note,
+  };
+}
+
 /* ══════════════════ פנקס-מאוחד (union receipt) — append-bounded ══════════════════ */
 export function summarize(checks) {
   const summary = { GREEN: 0, AMBER: 0, RED: 0, UNKNOWN: 0 };
@@ -485,6 +635,11 @@ export function renderVerdictMd(run) {
     else if (c.id === "V-RESEARCH-FRESH") ev = c.evidence.file ? `${c.evidence.file} · ${c.evidence.ageDays ?? "—"}d` : "אין קובץ";
     else if (c.id === "V-BUS-HEALTH") ev = c.evidence.feedCount != null ? `${c.evidence.measured}/${c.evidence.feedCount} הזנות · ${c.evidence.counts.GREEN}G/${c.evidence.counts.AMBER}A/${c.evidence.counts.RED}R/${c.evidence.counts.GREY}Gr` : "אין גישה לרישם";
     else if (c.id === "V-DOMAIN-LIVE") ev = c.evidence.http ? `http ${c.evidence.http} · title=${c.evidence.titleOk} · #p-research=${c.evidence.researchPanelPresent}` : "לא נמדד";
+    else if (c.id === "V-FLEET-HEARTBEAT") {
+      const k = c.evidence.counts || {};
+      const dl = c.evidence.dispatchLog || [];
+      ev = `${k.GREEN ?? 0}G/${k.AMBER ?? 0}A/${k.RED ?? 0}R/${k.UNKNOWN ?? 0}U מתוך ${c.evidence.arteries ? c.evidence.arteries.length : "?"} עורקים` + (dl.length ? ` · heal: ${dl.filter((d) => d.dispatched).length}/${dl.length} dispatched` : "");
+    }
     return `| ${badge[c.verdict] || "—"} ${c.id} | ${c.verdict} | ${short(ev)} | ${short(c.note)} |`;
   });
   return [
@@ -506,13 +661,14 @@ export function renderVerdictMd(run) {
 }
 
 /* ══════════════════ ריצה-מלאה ══════════════════ */
-export async function runAll({ nowMs = Date.now(), fetcher = defaultFetcher, trigger = "local", sandboxRoot }) {
+export async function runAll({ nowMs = Date.now(), fetcher = defaultFetcher, trigger = "local", sandboxRoot, heal = false, poster = defaultPoster }) {
   const checks = [];
   checks.push(await checkFleethq({ fetcher }));
   checks.push(checkKeyproof({ sandboxRoot, nowMs, readFile: (f) => fs.readFileSync(f, "utf8") }));
   checks.push(checkResearch({ sandboxRoot, nowMs, readFile: (f) => fs.readFileSync(f, "utf8") }));
   checks.push(await checkBus({ sandboxRoot, fetcher, nowMs }));
   checks.push(await checkDomainLive({ fetcher }));
+  checks.push(await checkFleetHeartbeat({ fetcher, poster, nowMs, heal })); // zai-14c — הבדיקה-השישית
   return {
     at: new Date(nowMs).toISOString(),
     trigger,
@@ -614,6 +770,61 @@ export async function selftest() {
     kinds.has("WIF-like-51char-base58") && kinds.has("github-token-pattern") && kinds.has("secret-field-name") && cleanFound.length === 0,
     `poisonedKinds=${[...kinds].join(",")} cleanFindings=${cleanFound.length}`);
 
+  /* ── 13..18: V-FLEET-HEARTBEAT (zai-14c) — גבולות-גיל, החלטת-ריפוי, מנוע-שליחה מוזרק ── */
+  c = classifyHeartbeat({ ageH: 2.9, maxAgeH: 3, apiError: null, noSuccessEver: false });
+  vec("heartbeat age 2.9h ≤ max 3h → GREEN", c.verdict === "GREEN", c.note);
+  c = classifyHeartbeat({ ageH: 3.5, maxAgeH: 3, apiError: null, noSuccessEver: false });
+  vec("heartbeat age 3.5h > 3h (≤2×3h) → AMBER", c.verdict === "AMBER", c.note);
+  c = classifyHeartbeat({ ageH: 7.0, maxAgeH: 3, apiError: null, noSuccessEver: false });
+  vec("heartbeat age 7h > 2×3h → RED · API-fail → UNKNOWN כנה",
+    c.verdict === "RED"
+    && classifyHeartbeat({ ageH: null, maxAgeH: 2, apiError: "http 0 (ECONNREFUSED-mock)", noSuccessEver: false }).verdict === "UNKNOWN"
+    && /ECONNREFUSED-mock/.test(classifyHeartbeat({ ageH: null, maxAgeH: 2, apiError: "http 0 (ECONNREFUSED-mock)", noSuccessEver: false }).note)
+    && classifyHeartbeat({ ageH: null, maxAgeH: 2, apiError: null, noSuccessEver: true }).verdict === "RED",
+    c.note);
+
+  const hbA = { id: "t", repo: "R", workflow: "w.yml", maxAgeH: 2, healable: true };
+  const hbN = { ...hbA, healable: false };
+  const dG = healDecision(hbA, "GREEN"), dAm = healDecision(hbA, "AMBER"), dR = healDecision(hbA, "RED");
+  const dU = healDecision(hbA, "UNKNOWN"), dN = healDecision(hbN, "AMBER");
+  vec("heal decision: stale+healable(AMBER/RED) → dispatch · GREEN/UNKNOWN/non-healable → never",
+    dAm.dispatch && dR.dispatch && !dG.dispatch && !dU.dispatch && !dN.dispatch && /לעולם לא נשלח/.test(dN.reason),
+    JSON.stringify({ G: dG.dispatch, A: dAm.dispatch, R: dR.dispatch, U: dU.dispatch, N: dN.dispatch }));
+
+  /* drill מלא על checkFleetHeartbeat עם fetcher+poster מוזרקים: רק stale+healable נשלח;
+     non-healable stale לעולם לא; API-fail → UNKNOWN ולא-נשלח; ריטרי-אחד על-500. */
+  const hbNow = Date.parse("2026-10-12T12:00:00Z");
+  const isoAgo = (h) => new Date(hbNow - h * 3600e3).toISOString();
+  const hbFixture = (h) => ({ status: 200, body: JSON.stringify({ total_count: 1, workflow_runs: [{ id: 42, run_started_at: isoAgo(h), created_at: isoAgo(h), conclusion: "success" }] }) });
+  const hbFetcher = async (url) => {
+    if (url.includes("/Domain/actions/workflows/dex-beat.yml/")) return hbFixture(20);      // RED (>18h) → dispatch + retry
+    if (url.includes("/FleetHQ/actions/workflows/office-window.yml/")) return hbFixture(40); // AMBER (>30h) → dispatch
+    if (url.includes("/Console/actions/workflows/trigger-mesh.yml/")) return hbFixture(5);  // AMBER אך non-healable → לעולם לא
+    if (url.includes("/Domain/actions/workflows/dex-mirror.yml/")) return { status: 0, error: "ECONNREFUSED-mock" }; // UNKNOWN
+    return hbFixture(0.5); // כל-השאר טריים
+  };
+  const posted = [];
+  const hbPoster = async (url, body) => {
+    posted.push({ url, body });
+    if (url.includes("dex-beat.yml") && posted.filter((p) => p.url.includes("dex-beat.yml")).length === 1) return { status: 500 }; // חולף → ריטרי-אחד
+    return { status: 204 };
+  };
+  const hb = await checkFleetHeartbeat({ fetcher: hbFetcher, poster: hbPoster, nowMs: hbNow, token: "", heal: true });
+  const dispatchedIds = hb.evidence.dispatchLog.filter((d) => d.dispatched).map((d) => d.id);
+  const beatLog = hb.evidence.dispatchLog.find((d) => d.id === "domain-dex-beat");
+  const meshRow = hb.evidence.arteries.find((r) => r.id === "console-trigger-mesh");
+  const mirrorRow = hb.evidence.arteries.find((r) => r.id === "domain-dex-mirror");
+  vec("heartbeat executor: only stale+healable dispatched (correct URL+ref, retry 500→204); non-healable never posted; API-fail → UNKNOWN + no dispatch",
+    hb.verdict === "RED"
+    && JSON.stringify(dispatchedIds.sort()) === JSON.stringify(["domain-dex-beat", "fleethq-digest"])
+    && beatLog.attempts.join(",") === "500,204"
+    && posted.every((p) => /\/actions\/workflows\/[\w.-]+\.yml\/dispatches$/.test(p.url) && p.body && p.body.ref === "main")
+    && !posted.some((p) => p.url.includes("trigger-mesh.yml"))
+    && meshRow.verdict === "AMBER" && meshRow.dispatch.dispatched === false && /לעולם לא נשלח/.test(meshRow.dispatch.reason)
+    && mirrorRow.verdict === "UNKNOWN" && mirrorRow.dispatch.dispatched === false
+    && hb.evidence.arteries.find((r) => r.id === "sandbox-verifier").ageH === 0.5,
+    `verdict=${hb.verdict} dispatched=[${dispatchedIds}] beatAttempts=${beatLog.attempts} posted=${posted.length} mesh=${meshRow.verdict}/${meshRow.dispatch.dispatched} mirror=${mirrorRow.verdict}`);
+
   /* ── דיווח ── */
   const passed = vectors.filter((v) => v.pass).length;
   console.log(`selftest: ${passed}/${vectors.length} vectors green`);
@@ -634,9 +845,10 @@ async function main() {
     process.exit(r.ok ? 0 : 1);
   }
 
+  const heal = process.argv.includes("--heal");
   const root = repoRoot();
-  const trigger = process.env.GITHUB_EVENT_NAME || "local";
-  const run = await runAll({ trigger, sandboxRoot: root });
+  const trigger = process.env.GITHUB_EVENT_NAME || (heal ? "local-heal" : "local");
+  const run = await runAll({ trigger, sandboxRoot: root, heal });
 
   /* קריאת-הפנקס-הקיים + prior של zai-13 (מילה-במילה, פעם-אחת, נשמר לנצח) */
   const latestPath = path.join(root, "receipts", "fresh-oracle-latest.json");
@@ -682,6 +894,13 @@ async function main() {
   const s = run.summary;
   console.log(`fresh-oracle run ${run.at} (${trigger}): ${s.GREEN} GREEN · ${s.AMBER} AMBER · ${s.RED} RED · ${s.UNKNOWN} UNKNOWN`);
   for (const c of run.checks) console.log(`  ${c.verdict.padEnd(7)} ${c.id} — ${c.note}`);
+  if (heal) {
+    const hb = run.checks.find((c) => c.id === "V-FLEET-HEARTBEAT");
+    const dl = (hb && hb.evidence.dispatchLog) || [];
+    console.log(`heal-log: ${dl.length} dispatch attempt(s), ${dl.filter((d) => d.dispatched).length} queued`);
+    for (const d of dl) console.log(`  ${d.dispatched ? "QUEUED" : "FAILED"} ${d.id} (${d.repo}/${d.workflow}, was ${d.verdict}) — http [${d.attempts.join(", ")}]`);
+    console.log("honest note: dispatch ≠ heal — הריצה-הבאה היא שתודד את העורקים מחדש (204 = queued, לא = טופל)");
+  }
   console.log("written: receipts/fresh-oracle-latest.json + ops/fresh-oracle/verdict.md");
   /* פרסום-פסק-כנה (כולל RED) הוא הצלחת-השער; השער לא נכשל כשהעולם אדום — הוא צורח. */
 }
