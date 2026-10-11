@@ -1,6 +1,6 @@
 {
  "schema": "roshpina.value-scan/1",
- "generatedAt": "2026-10-11T20:50:27Z",
+ "generatedAt": "2026-10-11T23:45:19Z",
  "publisher": "value-scan.yml (GitHub Actions, keyless, T13)",
  "degraded": [],
  "sources": {
@@ -18,25 +18,25 @@
   "minOperatorSp": 11.9,
   "operatorFloor": 100.0,
   "operatorGapSp": 88.1,
-  "steemHead": 110356704,
+  "steemHead": 110360189,
   "chainTreasurySp": 2925.6,
   "beaconChainMatch": true,
   "arteriesFresh": 7,
   "arteriesTotal": 7,
   "blockedTasks": 1,
-  "errorAgents": 3,
+  "errorAgents": 0,
   "flowNodes": 34,
-  "flowOrphans": 7,
-  "flowGhosts": 2,
-  "flowStale": 1,
+  "flowOrphans": 0,
+  "flowGhosts": 0,
+  "flowStale": 26,
   "dexVerdict": "ARMED-STABLE",
-  "dexOpenOrders": 15
+  "dexOpenOrders": 12
  },
- "verdictHe": "1 משימות חסומות — שחרור-צוות · 3 סוכנים בתקלה · פער-רצפת-אוצרה 74.4 SP",
+ "verdictHe": "1 משימות חסומות — שחרור-צוות · פער-רצפת-אוצרה 74.4 SP · פער-רצפת-מפעילים 88.1 SP",
  "topIds": [
   "eng-unblock",
-  "eng-error-agents",
-  "econ-treasury-floor"
+  "econ-treasury-floor",
+  "econ-operator-floor"
  ],
  "opportunities": [
   {
@@ -67,29 +67,11 @@
    "effort": "S"
   },
   {
-   "id": "eng-error-agents",
-   "area": "הנדסה",
-   "titleHe": "3 סוכנים בתקלה",
-   "valueHe": "סוכן-תקוע = ידיים-חסרות לאורגניזם",
-   "evidence": "aluf, gal, erez",
-   "source": "FleetHQ office-state.json",
-   "effort": "S"
-  },
-  {
-   "id": "net-weave",
-   "area": "רשת",
-   "titleHe": "7 יתומים + 2 רוחות-רפאים במפת-הזרימה",
-   "valueHe": "חיבור-יתומים = everything-uses-everything מלא; כל-חיבור מגדיל-ערך-הדדי",
-   "evidence": "flow-map: 34 צמתים · stale=1",
-   "source": "Sandbox ops/flow/flow-map.json",
-   "effort": "M"
-  },
-  {
    "id": "biz-dex-scale",
    "area": "עסקים",
-   "titleHe": "DEX חי (ARMED-STABLE) · 15 פקודות פתוחות",
+   "titleHe": "DEX חי (ARMED-STABLE) · 12 פקודות פתוחות",
    "valueHe": "הרחבת-עומק-ספר-הפקודות = הכנסה-מיקרו-מסחרית מתמשכת (ראה 1,480 order-ops ביום-שעבר)",
-   "evidence": "verdict=ARMED-STABLE · publishedAt=2026-10-10T10:08:36.132Z",
+   "evidence": "verdict=ARMED-STABLE · publishedAt=2026-10-11T13:40:06.612Z",
    "source": "Domain dex/grid.json",
    "effort": "M"
   },
