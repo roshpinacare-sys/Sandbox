@@ -1,6 +1,6 @@
-# דוח-אמת (verifier) · 2026-10-11T15:47:03.723Z
+# דוח-אמת (verifier) · 2026-10-11T16:29:43.814Z
 
-**overall: FAIL** · auth: token(fed) · took: 16719ms · כללים: config.json (אפס-דעה-אישית)
+**overall: FAIL** · auth: token(fed) · took: 18758ms · כללים: config.json (אפס-דעה-אישית)
 
 > יש-דברים-שבורים-ממש — זה הדוח-הכן, בלי-קישוטים.
 
@@ -17,54 +17,54 @@
 ## 2. קצב-בנייה-אמת (24h · code = infra/engine/src/scripts, churn = state/receipts/ops)
 | ריפו | נראות | commits-24h | code-חלק | הערה |
 |---|---|---|---|---|
-| Sandbox | public | 100+ | 0% | ok |
-| Console | public | 55 | 8% | ok |
-| Domain | public | 92 | 58% | ok |
-| TruthRail | public | 16 | 17% | ok |
+| Sandbox | public | 100+ | 8% | ok |
+| Console | public | 60 | 33% | ok |
+| Domain | public | 96 | 50% | ok |
+| TruthRail | public | 13 | 17% | ok |
 | saos-dex | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | saos-control-center | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
-| saos-agents | public | 1 | UNMEASURED (budget) | ok |
-| FleetHQ | public | 6 | UNMEASURED (budget) | ok |
-| saos-runtime | public | 30 | UNMEASURED (budget) | ok |
-| sovereign-lighthouse | public | 40 | UNMEASURED (budget) | ok |
+| saos-agents | public | 2 | UNMEASURED (budget) | ok |
+| FleetHQ | public | 4 | UNMEASURED (budget) | ok |
+| saos-runtime | public | 32 | UNMEASURED (budget) | ok |
+| sovereign-lighthouse | public | 26 | UNMEASURED (budget) | ok |
 | saos-sovereign-foundry | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | steem | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 
-**מדד-מסכם:** codeShare = 21% (42 commits מסווגים מתוך 340)
-> שיפוט: `dev.rate` = **NOTICE** — mixed activity: codeShare 21%
+**מדד-מסכם:** codeShare = 29% (42 commits מסווגים מתוך 333)
+> שיפוט: `dev.rate` = **OK** — building: codeShare 29% over 333 commits/24h
 
 ## 3. אמת-על-השרשרת · Steem (https://api.steemit.com)
 | חשבון | SP אפקטיבי | VP% | פוסט-אחרון | הצבעה-אחרונה |
 |---|---|---|---|---|
-| @headcorner | 3166 | 56% | 0.6h | 0.2h |
-| @haran | 78 | 75% | 2.2h | 2h |
-| @cashmachine | 75 | 75% | 2.2h | 2.3h |
-| @wic | 33 | 76% | 0.1h | 4.2h |
-| @woq | 34 | 72% | 0.1h | 4.2h |
-| @tov | 31 | 78% | 23.2h | 4.4h |
-| @spaminator | 69 | 0% | 57493.7h | 12895.5h |
+| @headcorner | 2926 | 52% | 1.4h | 0.4h |
+| @haran | 78 | 75% | 2.9h | 2.7h |
+| @cashmachine | 75 | 75% | 2.9h | 3h |
+| @wic | 33 | 76% | 0.8h | 4.9h |
+| @woq | 70 | 85% | 0.8h | 4.9h |
+| @tov | 31 | 78% | 23.9h | 5.1h |
+| @spaminator | 69 | 0% | 57494.4h | 12896.2h |
 | @saos | 5 | 0% | מעולם-לא | — |
-| @powerspan | 0 | 0% | מעולם-לא | 879.4h |
-| @ynet | 0 | 0% | 25159.3h | 759.3h |
-| @hcsoldier4 | 17 | 82% | 0.5h | 22.4h |
-| @hcsoldier6 | 17 | 97% | מעולם-לא | 4.4h |
+| @powerspan | 0 | 0% | מעולם-לא | 880.1h |
+| @ynet | 0 | 0% | 25160h | 760.1h |
+| @hcsoldier4 | 17 | 82% | 0.7h | 23.1h |
+| @hcsoldier6 | 17 | 97% | מעולם-לא | 5.1h |
 
-> `steem.fleet` = **OK** — fleet posted 0.1h ago
-> `steem.treasury` = **OK** — treasury headcorner at 3166 SP
+> `steem.fleet` = **OK** — fleet posted 0.7h ago
+> `steem.treasury` = **DEGRADED** — treasury headcorner at 2926 SP < 3000 (recovery-plan §3)
 
 ## 4. Blurt (https://rpc.blurt.blog)
-פוסט-צי-הכי-חדש: 188.8h · נמדד 2026-10-11T15:47:20.400Z
-> `blurt.alive` = **FAIL** — blurt fleet silent 189h > 168h — loop dead until proven otherwise
+פוסט-צי-הכי-חדש: 189.5h · נמדד 2026-10-11T16:30:02.521Z
+> `blurt.alive` = **FAIL** — blurt fleet silent 190h > 168h — loop dead until proven otherwise
 
 ## 5. שלמות-עץ (ריקבון-מצבות)
-נסרקו 90 קבצים; פגומים: 0
+נסרקו 94 קבצים; פגומים: 0
 
 ## 6. דלתא-מול-הריצה-הקודמת
-- ↗ השתפר: `sbx.wf-sovereign-tick` FAIL → **OK**
-- ↗ השתפר: `sbx.wf-fleet-yield` DEGRADED → **OK**
-- ↘ התדרדר: `dev.rate` OK → **NOTICE**
+- ↗ השתפר: `dev.rate` NOTICE → **OK**
+- ↘ התדרדר: `steem.treasury` OK → **DEGRADED**
 
 ## 7. משימות-שנצרתו-עכשיו
+- **V-TREASURY-BALANCE** — איזון-אוצר לפי §3: לשמר ≥3,000 SP אצל-האוצר; top-up חשבונות-פעילים ל-100 SP
 - **V-BLURT-REVIVE** — החייאת-לופ-בלורט דרך gated blurt-connector (תנאי: P0 מפתחות-חדשים; workflow_dispatch בלבד + reviewer)
 
 ## 8. שיטה-וראיות

@@ -13,3 +13,4 @@
 - [OPEN] V-LOOP-FLEET-YIELD (DEGRADED @ 2026-10-11T15:14:32.301Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: last success 154min ago > slot
 - [CLOSED 2026-10-11T15:47:03.723Z] V-LOOP-SOVEREIGN-TICK — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
 - [CLOSED 2026-10-11T15:47:03.723Z] V-LOOP-FLEET-YIELD — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
+- [OPEN] V-TREASURY-BALANCE (DEGRADED @ 2026-10-11T16:29:43.814Z): איזון-אוצר לפי §3: לשמר ≥3,000 SP אצל-האוצר; top-up חשבונות-פעילים ל-100 SP | ראיה: treasury headcorner at 2926 SP < 3000 (recovery-plan §3)

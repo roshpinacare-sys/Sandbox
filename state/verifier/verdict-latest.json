@@ -1,11 +1,11 @@
 {
  "schema": "verifier/1",
- "at": "2026-10-11T15:47:03.723Z",
+ "at": "2026-10-11T16:29:43.814Z",
  "overall": "FAIL",
  "authMode": "token(fed)",
  "counts": {
   "checks": 11,
-  "degraded": 0,
+  "degraded": 1,
   "fail": 1
  },
  "levels": {
@@ -15,9 +15,9 @@
   "sbx.wf-federation": "OK",
   "sbx.wf-fleet-yield": "OK",
   "sbx.wf-fleet-heal": "OK",
-  "dev.rate": "NOTICE",
+  "dev.rate": "OK",
   "steem.fleet": "OK",
-  "steem.treasury": "OK",
+  "steem.treasury": "DEGRADED",
   "blurt.alive": "FAIL",
   "rot.hygiene": "OK"
  },
@@ -27,8 +27,8 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-11T15:18:13Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38150710445"
+    "at": "2026-10-11T15:53:28Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38153167971"
    }
   },
   {
@@ -36,8 +36,8 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-11T15:27:06Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38151319910"
+    "at": "2026-10-11T16:09:48Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38154294882"
    }
   },
   {
@@ -45,8 +45,8 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-11T15:28:15Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38151398262"
+    "at": "2026-10-11T16:08:01Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38154175198"
    }
   },
   {
@@ -72,14 +72,14 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-11T15:32:40Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38151716377"
+    "at": "2026-10-11T16:19:10Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38154954019"
    }
   },
   {
    "id": "dev.rate",
-   "level": "NOTICE",
-   "why": "mixed activity: codeShare 21%",
+   "level": "OK",
+   "why": "building: codeShare 29% over 333 commits/24h",
    "evidence": {
     "windowHours": 24
    }
@@ -87,67 +87,70 @@
   {
    "id": "steem.fleet",
    "level": "OK",
-   "why": "fleet posted 0.1h ago",
+   "why": "fleet posted 0.7h ago",
    "evidence": {
-    "newestPostHours": 0.1
+    "newestPostHours": 0.7
    }
   },
   {
    "id": "steem.treasury",
-   "level": "OK",
-   "why": "treasury headcorner at 3166 SP"
+   "level": "DEGRADED",
+   "why": "treasury headcorner at 2926 SP < 3000 (recovery-plan §3)",
+   "evidence": {
+    "sp": 2926
+   }
   },
   {
    "id": "blurt.alive",
    "level": "FAIL",
-   "why": "blurt fleet silent 189h > 168h — loop dead until proven otherwise",
+   "why": "blurt fleet silent 190h > 168h — loop dead until proven otherwise",
    "evidence": {
-    "newestPostHours": 188.8
+    "newestPostHours": 189.5
    }
   },
   {
    "id": "rot.hygiene",
    "level": "OK",
-   "why": "no tombstone rot in 90 files scanned"
+   "why": "no tombstone rot in 94 files scanned"
   }
  ],
  "dev": {
-  "totalCommits": 340,
-  "codeRatePercent": 21,
+  "totalCommits": 333,
+  "codeRatePercent": 29,
   "classified": 42,
   "repos": [
    {
     "name": "Sandbox",
     "visibility": "public",
-    "pushedAt": "2026-10-11T15:42:00Z",
+    "pushedAt": "2026-10-11T16:29:33Z",
     "commits24h": 100,
-    "redWorkflowEcho": null,
-    "codeShare": 0,
-    "sampleSize": 12
-   },
-   {
-    "name": "Console",
-    "visibility": "public",
-    "pushedAt": "2026-10-11T15:17:37Z",
-    "commits24h": 55,
     "redWorkflowEcho": null,
     "codeShare": 8,
     "sampleSize": 12
    },
    {
+    "name": "Console",
+    "visibility": "public",
+    "pushedAt": "2026-10-11T16:12:40Z",
+    "commits24h": 60,
+    "redWorkflowEcho": null,
+    "codeShare": 33,
+    "sampleSize": 12
+   },
+   {
     "name": "Domain",
     "visibility": "public",
-    "pushedAt": "2026-10-11T15:45:53Z",
-    "commits24h": 92,
+    "pushedAt": "2026-10-11T16:26:17Z",
+    "commits24h": 96,
     "redWorkflowEcho": null,
-    "codeShare": 58,
+    "codeShare": 50,
     "sampleSize": 12
    },
    {
     "name": "TruthRail",
     "visibility": "public",
     "pushedAt": "2026-10-11T14:43:04Z",
-    "commits24h": 16,
+    "commits24h": 13,
     "redWorkflowEcho": null,
     "codeShare": 17,
     "sampleSize": 6
@@ -163,8 +166,8 @@
    {
     "name": "saos-agents",
     "visibility": "public",
-    "pushedAt": "2026-10-11T14:45:44Z",
-    "commits24h": 1,
+    "pushedAt": "2026-10-11T16:26:41Z",
+    "commits24h": 2,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
@@ -172,23 +175,23 @@
     "name": "FleetHQ",
     "visibility": "public",
     "pushedAt": "2026-10-11T14:57:52Z",
-    "commits24h": 6,
+    "commits24h": 4,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "saos-runtime",
     "visibility": "public",
-    "pushedAt": "2026-10-11T15:16:04Z",
-    "commits24h": 30,
+    "pushedAt": "2026-10-11T16:01:26Z",
+    "commits24h": 32,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "sovereign-lighthouse",
     "visibility": "public",
-    "pushedAt": "2026-10-11T13:31:30Z",
-    "commits24h": 40,
+    "pushedAt": "2026-10-11T16:26:47Z",
+    "commits24h": 26,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
@@ -207,68 +210,68 @@
   "treasury": {
    "account": "headcorner",
    "exists": true,
-   "sp": 3166,
-   "vpPercent": 56,
-   "lastPostAgeHours": 0.6,
-   "lastVoteAgeHours": 0.2
+   "sp": 2926,
+   "vpPercent": 52,
+   "lastPostAgeHours": 1.4,
+   "lastVoteAgeHours": 0.4
   },
-  "fleetNewestPostHours": 0.1,
+  "fleetNewestPostHours": 0.7,
   "fleet": [
    {
     "account": "headcorner",
     "exists": true,
-    "sp": 3166,
-    "vpPercent": 56,
-    "lastPostAgeHours": 0.6,
-    "lastVoteAgeHours": 0.2
+    "sp": 2926,
+    "vpPercent": 52,
+    "lastPostAgeHours": 1.4,
+    "lastVoteAgeHours": 0.4
    },
    {
     "account": "haran",
     "exists": true,
     "sp": 78,
     "vpPercent": 75,
-    "lastPostAgeHours": 2.2,
-    "lastVoteAgeHours": 2
+    "lastPostAgeHours": 2.9,
+    "lastVoteAgeHours": 2.7
    },
    {
     "account": "cashmachine",
     "exists": true,
     "sp": 75,
     "vpPercent": 75,
-    "lastPostAgeHours": 2.2,
-    "lastVoteAgeHours": 2.3
+    "lastPostAgeHours": 2.9,
+    "lastVoteAgeHours": 3
    },
    {
     "account": "wic",
     "exists": true,
     "sp": 33,
     "vpPercent": 76,
-    "lastPostAgeHours": 0.1,
-    "lastVoteAgeHours": 4.2
+    "lastPostAgeHours": 0.8,
+    "lastVoteAgeHours": 4.9
    },
    {
     "account": "woq",
     "exists": true,
-    "sp": 34,
-    "vpPercent": 72,
-    "lastPostAgeHours": 0.1,
-    "lastVoteAgeHours": 4.2
+    "sp": 70,
+    "vpPercent": 85,
+    "lastPostAgeHours": 0.8,
+    "lastVoteAgeHours": 4.9
    },
    {
     "account": "tov",
     "exists": true,
     "sp": 31,
     "vpPercent": 78,
-    "lastPostAgeHours": 23.2,
-    "lastVoteAgeHours": 4.4
+    "lastPostAgeHours": 23.9,
+    "lastVoteAgeHours": 5.1
    },
    {
     "account": "spaminator",
     "exists": true,
     "sp": 69,
     "vpPercent": 0,
-    "lastPostAgeHours": 57493.7,
-    "lastVoteAgeHours": 12895.5
+    "lastPostAgeHours": 57494.4,
+    "lastVoteAgeHours": 12896.2
    },
    {
     "account": "saos",
@@ -284,23 +287,23 @@
     "sp": 0,
     "vpPercent": 0,
     "lastPostAgeHours": null,
-    "lastVoteAgeHours": 879.4
+    "lastVoteAgeHours": 880.1
    },
    {
     "account": "ynet",
     "exists": true,
     "sp": 0,
     "vpPercent": 0,
-    "lastPostAgeHours": 25159.3,
-    "lastVoteAgeHours": 759.3
+    "lastPostAgeHours": 25160,
+    "lastVoteAgeHours": 760.1
    },
    {
     "account": "hcsoldier4",
     "exists": true,
     "sp": 17,
     "vpPercent": 82,
-    "lastPostAgeHours": 0.5,
-    "lastVoteAgeHours": 22.4
+    "lastPostAgeHours": 0.7,
+    "lastVoteAgeHours": 23.1
    },
    {
     "account": "hcsoldier6",
@@ -308,26 +311,26 @@
     "sp": 17,
     "vpPercent": 97,
     "lastPostAgeHours": null,
-    "lastVoteAgeHours": 4.4
+    "lastVoteAgeHours": 5.1
    }
   ]
  },
  "blurt": {
   "reachable": true,
   "host": "https://rpc.blurt.blog",
-  "fleetNewestPostHours": 188.8,
+  "fleetNewestPostHours": 189.5,
   "errors": [],
-  "probedAt": "2026-10-11T15:47:20.400Z"
+  "probedAt": "2026-10-11T16:30:02.521Z"
  },
  "rot": {
-  "scanned": 90,
+  "scanned": 94,
   "hits": []
  },
  "soft": [],
- "tookMs": 16719,
- "prevChain": "edc845fcfd5c199a01f4ff907725d5b5834f60dfe45771b388909e2406eee56e",
+ "tookMs": 18758,
+ "prevChain": "0032c99be77eeb4ca73c534a47c4eaed9bd9daed3a1667d7e0ce479526a32e25",
  "chain": {
-  "prev": "edc845fcfd5c199a01f4ff907725d5b5834f60dfe45771b388909e2406eee56e",
-  "cur": "0032c99be77eeb4ca73c534a47c4eaed9bd9daed3a1667d7e0ce479526a32e25"
+  "prev": "0032c99be77eeb4ca73c534a47c4eaed9bd9daed3a1667d7e0ce479526a32e25",
+  "cur": "32aa77e578b6181299f00d4ac594dff95d30f5eb3cbd3be23321ec682d2aa6c8"
  }
 }
