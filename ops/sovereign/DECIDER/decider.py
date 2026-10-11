@@ -265,6 +265,45 @@ def decide_flow(flow, degraded):
             "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
 
 
+
+def decide_verify(av, tg, degraded):
+    """D4 [T15] — רשת-האמת: ההכרעה רואה את הבדיקה-העצמית של הגוף (המאמת-העצמאי
+    של הקונסולה 51-טענות + שער-האמת-הציבורי). כשל → הכרעה-מנותבת (P0/P1) מיד —
+    אין-המתנה-להוראות; אפס-כשל → OBSERVING עם המדידה-המפורסמת."""
+    if not av and not tg:
+        degraded.append("console-verify")
+        return {"id": "D4-truth-network", "area": "אימות-עצמי", "status": "OBSERVING",
+                "titleHe": "רשת-האמת", "verdictHe": "מקורות-הביקורת-העצמית לא נמדדו בריצה-זו — ממשיכים-למדוד",
+                "evidence": ["agent/verify/results.json + truth/latest.json לא זמינים"], "decidedAt": now(),
+                "decidedBy": "sovereign-decider-v1 (CHARTER)"}
+    ev = []
+    failed = []
+    if av:
+        s = av.get("summary") or {}
+        total = s.get("total"); passed = s.get("passed")
+        verdict = s.get("verdict")
+        ev.append(f"מאמת-הרשת: {passed}/{total} {verdict} ({av.get('generatedAt', '?')})")
+        if verdict != "ALL_PASS":
+            failed += [f"{r.get('id')}: {r.get('details', '')[:80]}"
+                       for r in (av.get("results") or []) if not r.get("ok")]
+    if tg:
+        ev.append(f"שער-האמת: {tg.get('verdict')} (pass={((tg.get('counts') or {}).get('pass'))} fail={((tg.get('counts') or {}).get('fail'))})")
+        for g in (tg.get("results") or []):
+            if g.get("status") == "FAIL":
+                failed.append(f"{g.get('gate')}: {g.get('note') or g.get('measured', '')[:80]}")
+    if not failed:
+        return {"id": "D4-truth-network", "area": "אימות-עצמי", "status": "OBSERVING",
+                "titleHe": "רשת-האמת", "verdictHe": "הגוף מאמת-את-עצמו ירוק בפומבי (51/51 + שער-ירוק) — ממשיכים-למדוד",
+                "evidence": ev, "decidedAt": now(),
+                "decidedBy": "sovereign-decider-v1 (CHARTER)"}
+    return {"id": "D4-truth-network", "area": "אימות-עצמי", "status": "ENFORCED", "priority": "P1",
+            "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
+            "verdictHe": (f"הריבונות מכריעה: {len(failed)} כשלי-אימות-עצמי מנותבים למסילת-התיקון "
+                          f"מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות."),
+            "evidence": ev + failed, "decidedAt": now(),
+            "decidedBy": "sovereign-decider-v1 (CHARTER)"}
+
+
 # ------------------------------------------------------------ פרסום ---
 def main():
     degraded = []
@@ -287,6 +326,13 @@ def main():
         if not isinstance(wos, list):
             wos = None  # כנה: מנוע-הצמיחה עשוי לפרסם מבנה-אחר — לא מנחשים
     hc_scan = scan_outgoing_delegations(max_ops=3000, degraded=degraded)
+    # [T15] רשת-האמת — המאמת-העצמאי + שער-האמת של הקונסולה
+    av = read_json(f"{RAW}/Console/main/agent/verify/results.json")
+    if not av:
+        degraded.append("console-agent-verify")
+    tg = read_json(f"{RAW}/Console/main/truth/latest.json")
+    if not tg:
+        degraded.append("console-truth-gate")
 
     # ביקורת-אמת: מדוד מול מפורסם
     match = None
@@ -299,6 +345,7 @@ def main():
         decide_econ(chain, beacon, hc_scan, degraded),
         decide_eng(foreman, wos, degraded),
         decide_flow(flow, degraded),
+        decide_verify(av, tg, degraded),  # [T15] רשת-האמת — בדיקה-עצמית נראית-ומוכרעת
     ]
 
     state = {
