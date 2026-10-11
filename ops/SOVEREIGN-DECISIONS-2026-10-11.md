@@ -27,9 +27,15 @@
 
 ## D-3 · blurt — חייאה-דרך-רוטציה, דיווח-כנה-בינתיים
 
-- `blurt-revival.yml` (saos-runtime): `CHAIN-JUDGED` ידווח **DEGRADED-עם-נימוק** — לא-אדום-כוזב.
-  הסירוב-של-הוולט = המודל-הביטחוני-עובד, ולא-תקלה.
-- `V-BLURT-REVIVE` ייסגר-אוטומטית-בפוסט-אמת-אחד-אחרי-הרוטציה (המדידה-כבר-חיה-על-ה-RPC-הציבורי).
+- **תיקון-כנות (אורקל-בייטים, 16:3xZ):** `blurt-revival.yml` **אינו-קיים** ב-saos-runtime (רק
+  `sovereign-runtime.yml` על-הדיסק) — ההפניה-ב-OWNER-P0 §5 הייתה-מיושנת. הפסיות-האמתיות:
+  `steem/mini-services/saos-engine/blurt-rotate.mjs` (רכבת-blurt: op-enum 6, chain-id cd8d90f2…) ·
+  `vault-revival.mjs` · `blurt-custody-judge.mjs` — הכל-ב-steem, לא-ב-saos-runtime.
+- המשמעות-בפועל: אין-workflow-אדום-על-blurt; ה-FAIL-מגיע-מהמדידה-על-ה-RPC-הציבורי (188h-שקט) —
+  והוא-כנה. הסרוב-`CHAIN-JUDGED`-של-הוולט נשאר; **הפתיחה = רוטציית-מפתחות-blurt, ואז פוסט-אמת ראשון
+  שסוגר-את-V-BLURT-REVIVE-אוטומטית** (המדידה-כבר-חיה).
+- הכלי-נולד: `vault-home/tools/r11-rotation/` (Task 9-b, selftest 40/40, AES-256-GCM staging,
+  שער-שידור-דו-שלבי, חוק-rollback) — סדר-canary מתחיל-ב-@saos.
 
 ## D-4 · ארכוב-ה-11 — הכפתור-אצלי, אבל-הכלל-של-המניפסט-קודם
 
