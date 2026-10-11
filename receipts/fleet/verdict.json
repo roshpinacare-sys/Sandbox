@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-11T14:07:47.379Z",
+  "at": "2026-10-11T14:09:15.318Z",
   "repos": {
     "steem-cockpit": {
       "head": "461ae5e800e1531ac22052b7b5e3410aa2246009",
@@ -30,6 +30,7 @@
     }
   },
   "alerts": [
+    "steem-cockpit: law-no-secrets-at-head: gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA",
     "steem-cockpit: law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan",
     "saos-agents: law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
   ],
@@ -37,7 +38,7 @@
   "reason": "steem=PASS · saos-dex=PASS · saos-agents=PASS",
   "details": [
     {
-      "at": "2026-10-11T14:07:47.379Z",
+      "at": "2026-10-11T14:09:15.318Z",
       "slug": "roshpinacare-sys/steem",
       "head": "461ae5e800e1531ac22052b7b5e3410aa2246009",
       "checks": {
@@ -46,6 +47,11 @@
         "engineSelftest": "pass"
       },
       "laws": [
+        {
+          "id": "law-no-secrets-at-head",
+          "verdict": "flag",
+          "detail": "gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA"
+        },
         {
           "id": "law-no-skipped-pass",
           "verdict": "pass",
@@ -63,13 +69,14 @@
         }
       ],
       "alerts": [
+        "law-no-secrets-at-head: gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA, generic-api-key@/tmp/fleet-verify-lw2s1v/steem-cockpit/agent/vault/GEN-1-ERA",
         "law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
       ],
       "overall": "PASS",
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-11T14:07:47.379Z",
+      "at": "2026-10-11T14:09:15.318Z",
       "slug": "roshpinacare-sys/saos-dex",
       "head": "3537b0ff69a48448b10c44de0ac227d77ac77b87",
       "checks": {
@@ -77,6 +84,11 @@
         "typecheck": "pass"
       },
       "laws": [
+        {
+          "id": "law-no-secrets-at-head",
+          "verdict": "pass",
+          "detail": "gitleaks HEAD scan: 0 findings"
+        },
         {
           "id": "law-no-skipped-pass",
           "verdict": "pass",
@@ -98,13 +110,18 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-11T14:07:47.379Z",
+      "at": "2026-10-11T14:09:15.318Z",
       "slug": "roshpinacare-sys/saos-agents",
       "head": "2450a7b92edcd0be8cb0cea41219033a8707d3ec",
       "checks": {
         "agentsSelftest": "pass"
       },
       "laws": [
+        {
+          "id": "law-no-secrets-at-head",
+          "verdict": "pass",
+          "detail": "gitleaks HEAD scan: 0 findings"
+        },
         {
           "id": "law-no-skipped-pass",
           "verdict": "pass",
