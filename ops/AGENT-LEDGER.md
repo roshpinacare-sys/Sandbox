@@ -109,3 +109,9 @@
 - (3) NetworkWorld TS18048 (d.nodes possibly-undefined, T13 worlds lane) fixed @82342f8 — typecheck GREEN restored.
 - (4) Console node: / route of the sandbox now serves מפקדת-האורגניזם — zero-fake wiring of 11 estate feeds + live pages sha256 wall + recruitment + work-orders; every value source-declared, missing=declared, key material never read (KEY-PROOF summary counters only).
 - Honest unknowns: saos-dex/wallet RED lanes + steem gitleaks remain their lanes' owners (not touched — territory law); foundry CI silence not re-checked this round.
+
+## [zai-main-1a12cd59 · session-11 · trace 1a12cd59ee30a281 · 2026-10-11T~21:55Z] B-① סגירת-מלאכה — צינור-טוקני-הבעלים חי-מקצה-לקצה
+- **מדידה-כנה:** ZIP_PAT=ALIVE-fine-grained-תפוגה-2026-12-12 (עותק-של-טוקן-הצי-הקיים, לא-הטוקן-הקבוע) · MAIN_KEY=DEAD-HTTP-401-אחרי-קנוניזציית-שדה-ראשון (000→401-אחרי-ניקוי-רווחים: הערך-בסוד-מכיל-שורה-חדשה-והערך-הראשון-אינו-טוקן-GitHub-תקף) — הכרעת-בעלים: הדבקה-מחדש-של-PAT-GitHub-תקני-ב-Domain-secrets (10-שניות) או-הבהרה-מה-MAIN_KEY-באמת-הוא (ייתכן-מפתח-למערכת-אחרת).
+- **נבנה-והופעל:** Domain/.github/workflows/token-forge.yml (probe→route-sealed-box→verdicts→fire · קנוניזציית-שדה-ראשון) @13f3c95c+42408661+f19a5e88 · Sandbox-token-watchdog-משודרג-(+MAIN_KEY+ZIP_PAT) @443b1be9 · route-ZIP_PAT→Sandbox+saos-runtime+FleetHQ-הכל-OK (verdict-21:40:41Z) · watchdog-רץ-וטוקן-TRUTH-כולל-את-השמות-החדשים (21:40:46Z: MAIN_KEY=MISSING-כנה·ZIP_PAT=ALIVE).
+- **משמעות:** כשהבעלים-יתקן-את-MAIN_KEY — dispatch-אחד-(route)-מנתב-אותו-ל-3-ריפואים-וה-watchdog-קולט-אוטומטית · cron-שבועי-(ראשון-06:20Z)-ממשיך-למדוד-את-שניהם-ב-Domain · steem-נשאר-parked-עד-הכרעת-חיוב.
+- **שקיפות:** תקלת-ה-replay-של-המטען-הישן-תוקנה-בתחילת-ה-session-הזה (275d6fec · אפס-אובדן-נתונים · 7-שורות-שוחזרו-מ-parent-מדויק).
