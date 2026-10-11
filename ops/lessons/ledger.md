@@ -32,3 +32,12 @@
 - DIRECTIVE(2): red engines (saos-dex, Zip, sanbox): zero success vs 206 failures — fix root cause before adding features; red CI is not a state, it is a debt
 - DIRECTIVE(3): silent repos (5): FleetHQ, sovereign-beacon, saos-agents, SovereignConsole, vault-home ran nothing in 1 week(s) — either wire a real trigger or archive honestly; a repo that never runs is a claim, not a system
 - DIRECTIVE(4): open scribe law-proposals: 2 — review, adopt or refute each with a measured verdict; a proposal older than 2 retro cycles with no verdict becomes a doctrine violation itself
+
+## weekly-retro 2026-W41 · 2026-10-11T13:54:18.924Z
+- org runs 1w: 1171 · ok=554 · fail=525 · instant-fail(billing-signature)=525
+- red engines: saos-dex(×100), Zip(×100), sanbox(×6) · healthy: 2 · silent: 5
+- open law-proposals: 2
+- DIRECTIVE(1): billing-wall signature detected: 525 instant-fail runs (<5s) across the org this week — lift the Actions spending limit or migrate the affected engines' cadence to public homes; fleet-heal will re-probe within 24h of release
+- DIRECTIVE(2): red engines (saos-dex, Zip, sanbox): zero success vs 206 failures — fix root cause before adding features; red CI is not a state, it is a debt
+- DIRECTIVE(3): silent repos (5): FleetHQ, sovereign-beacon, saos-agents, SovereignConsole, vault-home ran nothing in 1 week(s) — either wire a real trigger or archive honestly; a repo that never runs is a claim, not a system
+- DIRECTIVE(4): open scribe law-proposals: 2 — review, adopt or refute each with a measured verdict; a proposal older than 2 retro cycles with no verdict becomes a doctrine violation itself
