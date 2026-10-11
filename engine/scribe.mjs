@@ -56,15 +56,16 @@ try {
   }
 } catch { observations.push("receipts/latest.json unreadable"); }
 
-// 4) היסטוריית-הגיט של הצי — פס-24h
+// 4) היסטוריית-הגיט של הצי — פס-24h (דרך-API — לא-תלויה בעומק-checkout; לקח truth-gate)
 try {
-  const log = sh("git", ["log", "--since=24.hours", "--pretty=%an|%s"]).trim();
-  const rows = log ? log.split("\n") : [];
+  const sinceISO = new Date(since).toISOString();
+  const commits = await jf(`${API}/commits?since=${sinceISO}&per_page=100`);
+  const rows = Array.isArray(commits) ? commits : [];
   const authors = {};
-  for (const r of rows) { const a = r.split("|")[0]; authors[a] = (authors[a] || 0) + 1; }
-  observations.push(`sandbox commits 24h: ${rows.length} · authors: ${JSON.stringify(authors)}`);
+  for (const r of rows) { const a = (r.commit && r.commit.author && r.commit.author.name) || "unknown"; authors[a] = (authors[a] || 0) + 1; }
+  observations.push(`sandbox commits 24h: ${rows.length}${rows.length >= 100 ? "+ (page cap)" : ""} · authors: ${JSON.stringify(authors)}`);
   if (rows.length === 0) proposals.push("0 commits in 24h — silence is a symptom, not peace");
-} catch { observations.push("git log unavailable"); }
+} catch { observations.push("commits API unavailable"); }
 
 // 5) קבלות-האיכות של הארנק — סטייה מהחוק
 try {
