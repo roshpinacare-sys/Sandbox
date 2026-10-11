@@ -31,6 +31,10 @@
 2026-10-11 | zai-fix | 9/D-1: הסרת-ארכוב foundry (admin API 200) + נחיתת-2×P0 ישירות-ל-main (ה-patches-מ-7-a/b נחתו) | 34d1d2a@foundry | foundry main
 2026-10-11 | zai-fix | 9: verifier — ריצות-cancelled=מיזוג-עיצוב מחוץ-לחלון-חיות-העורקים (false-FAIL שנמדד-חי 15:14Z) | 6fd1f96 | engine/verifier.mjs
 2026-10-11 | zai-fix | 9: מסמך-הכרעות-ריבונות D-1..D-6 (מנדט-בעלים trace 1a12b9477be6cd05) | (קומיט-זה) | ops/SOVEREIGN-DECISIONS-2026-10-11.md
+2026-10-11 | zai-fix | 9-b: קמפיין-רוטציה-R11 נולד — canary-first posting-key rotation, AES-256-GCM staging-לפני-שידור, שער-דו-שלבי, selftest 40/40 | c1292b8@vault-home | tools/r11-rotation/
+2026-10-11 | zai-fix | 9-b: מצב-BEFORE נתפס על-RPC ציבורי — @saos posting STM6177C…jNRfs (אין-account_auths, מעולם-לא-פרסם) · @powerspan STM6BKyX…n9LD6 (account_auths=[[headcorner,1]]) | (רישום) | worklog 9-b
+2026-10-11 | zai-fix | 9-c: סריקת-קוראים-חיים לכל-ה-11 + ביקורת-מדורים (אפס-מדורים-פרטיים=אפס-סיכון-מכסה) | (קומיט-זה) | ops/plans/archive-prep-2026-10-11.md
+2026-10-11 | zai-fix | 9-c: 7-טומבסטונים (SovereignConsole 01faa00 · Adsmarket a57fa02 · saos-agents 7050ff5 · FleetHQ 15c403a · Saosmartwallet 87461c1 · lighthouse 1df8302 · beacon 6de2be5) — אפס-מחיקה, ארכוב-מותנה-verifier-ירוק | (קומיטים-בדיפוזיטוריז) | ARCHIVED-NOTICE.md ×7
 2026-10-11 | zai-code-5 | key-check receipts נמחקו מ-Console (P2; receipts/ מאומת-נקי) + דלתא-חשיפה: 7/9-ציבוריים-אפס-פגיעות (ה-4-הנותרים=מכוונים/בעלים) + שער-R293: selftest-חי-ירוק, דוח-מחזור-טרי-ממתין-לדופק-הבא | Console@5eae064ddc | ops/agents/zai-code-5/STATUS-2026-10-11.md
 2026-10-11 | zai-code-5 | שער-R293 נרשם-כ-issue-הראשון-בצי (saos-runtime#1 — שרשרת-ראיות + מדד-אימות); צרכני-key-check נסרקו (אפס-תלות-מתוזמנת — watch/registry=מטא-בלבד; המחיקה-לא-שוברת-דופקים); אדום-חי-נצפה-ולא-נגע (post-tov BROADCAST-FAILED · BRIDGE-DOWN · anchor-verdict-false · ADOPT-REFUSED=gate-עובד) | saos-runtime#1 | issue
 2026-10-11 | zai-sec-1a12af86 | census-prefix-באג תוקן (STM/HIVE/BLT body-compare + seed-orders) — census כנה מדיד; treasury-arm נשלח ומסרב fail-closed (כנה) | Domain@97a2f743 | agents/treasury-arm-book.md
