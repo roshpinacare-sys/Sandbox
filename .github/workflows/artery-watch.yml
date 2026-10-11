@@ -66,6 +66,8 @@ jobs:
             { wf: "fleet-heal.yml",      maxAge: 2700 },                                  // cron 30 דק׳
             { wf: "federation.yml",      maxAge: 2700 },                                  // cron 30 דק׳
             { wf: "fleet-yield.yml",     maxAge: 9900 },                                  // cron 120 דק׳
+            { wf: "artery-wallet.yml",   maxAge: 5400, chain: "wallet-verify-tick" },   // ארנק — מדידה שעתית (T-52)
+            { wf: "artery-scribe.yml",   maxAge: 90000, chain: "scribe-tick" },        // רישומת-למידה — יומית (T-52)
           ];
           for (const a of ARTERIES) {
             try {

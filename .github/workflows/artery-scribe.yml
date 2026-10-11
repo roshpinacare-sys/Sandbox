@@ -1,0 +1,66 @@
+name: artery-scribe
+# ═══════════════════════════════════════════════════════════════════════════
+# ARTERY-SCRIBE · רישומת-הלמידה (T-52, 2026-10-11) — יומית.
+# ───────────────────────────────────────────────────────────────────────────
+# בחינת-היסטוריה לשיפור-עתידי: קוראת את קבלות-ה-24h השעון, מפיקה מספרים
+# ודפוסים, ומציעה חוקים — לתוך ops/lessons/ledger.md (append-only).
+# deterministic לחלוטין: אפס-LLM, אפס-סודות, מדידה-בלבד, כנות-מלאה.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "5 3 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - scribe-tick
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-scribe
+  cancel-in-progress: false
+
+jobs:
+  scribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: distill measured history into lessons
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node engine/scribe.mjs
+
+      - name: leak-scan (fail-closed)
+        if: always()
+        run: |
+          [ -f ops/lessons/ledger.md ] && node engine/leak-scan.mjs ops/lessons/ledger.md
+
+      - name: commit ledger (rebase-safe ×3)
+        if: always()
+        run: |
+          git config user.name "sovereign-scribe"
+          git config user.email "sovereign-scribe@users.noreply.github.com"
+          git add ops/lessons
+          if git diff --cached --quiet; then
+            echo "ledger unchanged - nothing to commit"
+            exit 0
+          fi
+          git commit -m "[scribe] lessons ledger: $(date -u +%FT%TZ)"
+          OK=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+            git rebase --abort 2>/dev/null || true
+            sleep 5
+          done
+          [ "$OK" = "1" ] || { echo "ledger push failed after 3 attempts — honest failure"; exit 1; }

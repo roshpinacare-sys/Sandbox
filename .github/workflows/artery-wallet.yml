@@ -1,0 +1,83 @@
+name: artery-wallet
+# ═══════════════════════════════════════════════════════════════════════════
+# ARTERY-WALLET · מכונת-האמת של הארנק — האימות עובר לגיט (T-52, 2026-10-11).
+# ───────────────────────────────────────────────────────────────────────────
+# עד-היום: קבלות PASS של Saosmartwallet הוטבעו ממנוע-מקומי מחוץ-לגיט (unverifiable).
+# מהיום: HEAD הארנק נמדד כאן, ב-Actions ציבורי (דקות-חינם, רץ-גם-כשהבעלים ישן
+# וגם-כשכל-סנדבוקס-חיצוני מת). ארבעה-גורמי-הצתה כמו השרשרת-הראשית (T-42):
+# schedule (נפילה-לאחור בלבד) + workflow_dispatch + repository_dispatch-מהשרשרת
+# + הצתת-חייאה מ-artery-watch. הקבלה כנה תמיד: FAIL נחתם ואז הריצה מאדימה.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "40 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - wallet-verify-tick
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-wallet
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: setup-bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: measure wallet HEAD (never trust, always verify)
+        env:
+          ECO_WALLET_TOKEN: ${{ secrets.ECO_WALLET_TOKEN }}
+        run: node engine/wallet-verify.mjs
+
+      - name: leak-scan (fail-closed)
+        if: always()
+        run: |
+          [ -f receipts/wallet/verdict.json ] && node engine/leak-scan.mjs receipts/wallet/verdict.json
+          [ -f receipts/wallet/log.jsonl ] && node engine/leak-scan.mjs receipts/wallet/log.jsonl
+
+      # קומיט-ממושפע: רק receipts/wallet (אף-פעם לא -A) · rebase ×3 · כשל = יציאה 1
+      - name: commit receipt (honest verdicts always land, FAIL included)
+        if: always()
+        run: |
+          git config user.name "wallet-artery"
+          git config user.email "wallet-artery@users.noreply.github.com"
+          git add receipts/wallet
+          if git diff --cached --quiet; then
+            echo "receipt unchanged - nothing to commit"
+            exit 0
+          fi
+          git commit -m "wallet-artery receipt: $(date -u +%FT%TZ)"
+          OK=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+            git rebase --abort 2>/dev/null || true
+            git status --short
+            sleep 5
+          done
+          [ "$OK" = "1" ] || { echo "receipt push failed after 3 attempts — honest failure"; exit 1; }
+
+      - name: verdict law (red unless PASS — after the receipt landed)
+        if: always()
+        run: |
+          V="$(node -e 'try{console.log(JSON.parse(require("fs").readFileSync("receipts/wallet/verdict.json","utf8")).overall)}catch{console.log("ERROR")}')"
+          echo "wallet verdict: $V"
+          [ "$V" = "PASS" ] || { echo "wallet is NOT verified — run stays red (honesty over comfort)"; exit 1; }
