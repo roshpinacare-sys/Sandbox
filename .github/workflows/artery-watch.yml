@@ -69,7 +69,8 @@ jobs:
             { wf: "artery-wallet.yml",   maxAge: 5400, chain: "wallet-verify-tick" },   // ארנק — מדידה שעתית (T-52)
             { wf: "artery-scribe.yml",   maxAge: 90000, chain: "scribe-tick" },        // רישומת-למידה — יומית (T-52)
             { wf: "artery-fleet.yml",    maxAge: 9000, chain: "fleet-verify-tick" },
-            { wf: "artery-grid.yml",    maxAge: 2700, chain: "grid-watch-tick" },     // שעון-ה-grid — כל 30 דק׳ (T-63)    // מוח+dex+ספרייה — כל שעתיים (T-53)
+            { wf: "artery-grid.yml",    maxAge: 2700, chain: "grid-watch-tick" },
+            { wf: "artery-flow.yml",    maxAge: 12600, chain: "flow-map-tick" },   // flow map - every 3h (F-series)     // שעון-ה-grid — כל 30 דק׳ (T-63)    // מוח+dex+ספרייה — כל שעתיים (T-53)
           ];
           for (const a of ARTERIES) {
             try {

@@ -90,6 +90,48 @@ try {
   }
 } catch { /* non-fatal */ }
 
+// 6) CROSS-REPO: FleetHQ office receipts (raw, public, zero secrets) - the learning loop spans the whole organism
+try {
+  const r = await fetch("https://raw.githubusercontent.com/roshpinacare-sys/FleetHQ/main/receipts/office-ci/verdict.json");
+  if (r.ok) {
+    const v = await r.json();
+    const ageMin = Math.round((Date.now() - Date.parse(v.at || v.generatedAt)) / 60000);
+    observations.push(`office-ci (FleetHQ) verdict: ${v.overall || "?"} · ${ageMin}min ago`);
+    if (v.overall && v.overall !== "PASS") proposals.push(`office-ci (FleetHQ) is ${v.overall} — the office build artery is red; measure before touching the office`);
+  } else observations.push("office-ci (FleetHQ) verdict unreadable (raw 404)");
+} catch (e) { observations.push(`office-ci cross-repo: ${String(e.message).slice(0, 100)}`); }
+
+// 7) CROSS-REPO: Domain office books freshness (the page the world sees)
+try {
+  const books = [
+    ["office/data.json", 60],
+    ["agents/office-live.json", 180],
+    ["dex/office-feed.json", 1560],
+  ];
+  for (const [p, maxMin] of books) {
+    const r = await fetch(`https://raw.githubusercontent.com/roshpinacare-sys/Domain/main/${p}`);
+    if (!r.ok) { observations.push(`Domain book ${p}: MISSING (raw ${r.status})`); proposals.push(`Domain book ${p} is 404 - a page feed is dead; fix the producer, do not silence the panel`); continue; }
+    const j = await r.json();
+    const ts = j.generatedAt || j.capturedAt || j.publishedAt;
+    if (!ts) { observations.push(`Domain book ${p}: no timestamp field`); continue; }
+    const ageMin = Math.round((Date.now() - Date.parse(ts)) / 60000);
+    observations.push(`Domain book ${p}: ${ageMin}min old (law <=${maxMin}min)`);
+    if (ageMin > maxMin) proposals.push(`Domain book ${p} stale (${ageMin}min > ${maxMin}min) - its producer workflow may be stalled`);
+  }
+} catch (e) { observations.push(`Domain books cross-repo: ${String(e.message).slice(0, 100)}`); }
+
+// 8) FLOW MAP: the everything-uses-everything census (F-series)
+try {
+  if (existsSync("ops/flow/flow-map.json")) {
+    const fm = JSON.parse(readFileSync("ops/flow/flow-map.json", "utf8"));
+    const s = fm.summary || {};
+    observations.push(`flow map: nodes=${s.nodes} edges=${s.edges} page-integrated=${s.integrated} plane-internal=${s.planeInternal} orphans=${s.orphans} ghosts=${s.ghosts} density=${s.flowDensity}`);
+    if (s.orphans > 0) proposals.push(`${s.orphans} orphan producers (nobody consumes) - refinement targets: wire a consumer or honestly retire with documentation (fix-don-lock)`);
+    if (s.ghosts > 0) proposals.push(`${s.ghosts} ghost consumers (page reads a dead producer) - the marketing page shows a fallback where live data should be`);
+    if (s.stale > 0) proposals.push(`${s.stale} feed(s) past their freshness law while being read by live code`);
+  } else observations.push("flow map: not yet generated (artery-flow first run pending)");
+} catch (e) { observations.push(`flow map read: ${String(e.message).slice(0, 100)}`); }
+
 const at = new Date().toISOString();
 const n = (() => { try { return readFileSync("ops/lessons/ledger.md", "utf8").split("## ").length - 1 + 1; } catch { return 1; } })();
 

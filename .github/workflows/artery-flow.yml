@@ -1,0 +1,86 @@
+name: artery-flow
+# ═══════════════════════════════════════════════════════════════════════════
+# ARTERY-FLOW · מפת-הזרימה של האורגניזם (F-סדרה, 2026-10-11) — כל-3-שעות.
+# ───────────────────────────────────────────────────────────────────────────
+# הוראת-בעלים: "שהכל ישתמש בהכל באיזושהי צורה למקסם יעילות של הקיים שלא
+# סתם נשרוף אלא לייעל הכל." העורק הזה מודד בדיוק את זה: מי-מאכיל-מי,
+# מה-יתום-שאף-אחד-לא-קורא, מה-רפאים-על-מפיק-מת, ומה-סטיית-תוכן-מול-קומיט
+# (קומיט-חד-של-תוכן-ישן = תיאטרון-פעילות).
+# deterministic · אפס-סודות · GITHUB_TOKEN-מקומי · קבלה-כנה-לגיט.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "20 */3 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - flow-map-tick
+      - revive-artery-flow
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-flow
+  cancel-in-progress: false
+
+jobs:
+  flow-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: measure the organism flow (who feeds whom — measured)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node engine/flow-map.mjs
+
+      - name: leak-scan (fail-closed)
+        if: always()
+        run: |
+          [ -f ops/flow/flow-map.md ] && node engine/leak-scan.mjs ops/flow/flow-map.md
+          [ -f ops/flow/flow-map.json ] && node engine/leak-scan.mjs ops/flow/flow-map.json
+
+      - name: commit flow map (rebase-safe ×3, no skip-ci — pages lesson)
+        if: always()
+        run: |
+          git config user.name "sovereign-flow"
+          git config user.email "sovereign-flow@users.noreply.github.com"
+          git add ops/flow
+          if git diff --cached --quiet; then
+            echo "flow map unchanged - nothing to commit"
+            exit 0
+          fi
+          git commit -m "[artery-flow] flow map: $(date -u +%FT%TZ)"
+          OK=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+            git rebase --abort 2>/dev/null || true
+            sleep 5
+          done
+          [ "$OK" = "1" ] || { echo "flow-map push failed after 3 attempts — honest failure"; exit 1; }
+
+      - name: verdict gate — red unless the map landed
+        if: always()
+        run: |
+          test -f ops/flow/flow-map.json || { echo "FAIL: flow-map.json missing"; exit 1; }
+          python3 - << 'PYEOF'
+          import json, sys
+          m = json.load(open("ops/flow/flow-map.json"))
+          s = m["summary"]
+          print(f"FLOW verdict: nodes={s['nodes']} edges={s['edges']} integrated={s['integrated']} plane-internal={s['planeInternal']} orphans={s['orphans']} ghosts={s['ghosts']} stale={s['stale']} density={s['flowDensity']}")
+          flags = [a for a in m["alerts"] if a.get("severity") == "flag"]
+          fails = [a for a in m["alerts"] if a.get("severity") == "fail"]
+          for f in fails: print("FAIL:", f["detail"])
+          for f in flags: print("FLAG:", f["law"], "-", f["detail"][:160])
+          sys.exit(1) if fails else sys.exit(0)
+          PYEOF
