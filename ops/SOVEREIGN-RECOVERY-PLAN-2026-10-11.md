@@ -202,3 +202,25 @@
 — שני-החוקים-האחרונים של-חוזה-הצי שהיו-פתוחים.
 
 **ל-owner**: ops/OWNER-P0-2026-10-11.md — כל-ההחלטות-שרק-הוא-יכול, מקובץ-אחד.
+
+---
+
+## RE-CORRECTION-2 (zai-sec-1a12af86 · 2026-10-11T16:45Z · trace 1a12bb6394835585)
+
+**התיקון-שלי-עצמו היה הרוח-הרפאים.** התיקון שהוספתי למעלה ("הצי = 6.5 SP, תוכנית-4,001 = פנטום") היה שגוי: חילקתי vests ב-1e6 במקום להכפיל ב-k. המרת-SP האמיתית נמדדה חיה: **k = 0.0006202 SP/vest (1 SP = 1,612.4 vests)** — Steem ו-Hive שתיהן נמדדו ואומתו בחישוב-בלתי-תלוי (python נגד node).
+
+**המצב-האמיתי הנמדד (grid-doctor v2.2, RPC חי, 2026-10-11T16:36Z, commit 538528f ב-Domain):**
+- **צי-Steem: 4,469.97 SP אפקטיביים** (22 חשבונות-חיים) — טענת-ה-4,001 של-התוכנית הייתה נכונה-בקירוב; היא-גדלה-בחימוש.
+- headcorner: עצמי 4,025.98 · אפקטיבי 2,925.57 (אחרי-גלי-ההאצלה) · מואצל-החוצה 1,344.6 · מואצל-פנימה 244.2.
+- cornerstone: 839.89 SP.
+- **העובדים חומשו באמת** (גלי-15:18Z+15:48Z, מנהיג-custodian-מקביל): israelnews 94 · lsa 80 · haran 78 · cashmachine 75 · macrame 75 · woq 70 · spaminator 69 · wic 33 · tov 31 · siq 31 · hcsoldier4/5/6 17-כ"א · wog 12.
+- **Hive הוא-לווייתן**: cornerstone **102,432.5 HP** (עצמי=אפקטיבי) + 13,036.489 HIVE נזילים. ספר-v1 אמר "164 HP" — פנטום-622x. headcorner-hive: 25.4 HP.
+- Blurt: cornerstone 233.94 BLURT נזילים · BP≈0 · headcorner 0.08 BLURT.
+
+**ממצאים-מבצעיים-חדשים:**
+1. **SP-UNDERFLOOR**: headcorner אפקטיבי 2,925.57 — 74 SP **מתחת-לרצפת-3,000** שהתוכנית-עצמה קבעה. גלי-ההאצלה חרגו-ב-~75 SP. דורש-החזר-או-אישור.
+2. **BANNED-CAPITAL-INFLOW**: headcorner מחזיק **244.2 SP מואצלים-פנימה** למרות-bannedCapital (אסור-להזרים-אליו-הון). דורש-reclaim-או-הצדקה.
+3. **DEX חי**: headcorner מכר ~91 STEEM → ~9.3 SBD דרך-fills מאומתים-פר-אופ; שוק-הפנימי עובד. שטף-STEEM-זמין 47.77 (מתחת-לרצפת-90).
+4. **treasury-arm + blurt-connect נבנו-ונבדקו-קצה-לקצה — נדחו fail-closed**: הסודות-ב-Domain מיושנים (census bit-compare מול-רשות-חיה: אפס-התאמות). החתימות-החיות-קיימות-אי-שם-באחוזה (גלי-ההאצלה הוכיחו) — אבל-לא-במועמדי-Domain. **דרוש-מ-provisioning-בעלים**: STEEM_ACTIVE_WIF-חי-ל-headcorner · HIVE_ACTIVE_WIF-חי-ל-cornerstone · מפתח-blurt-תואם-ל-cornerstone (או-מימון-עמלת-account_update-ל-headcorner).
+
+**המכונה**: grid-doctor v2.2 ב-Domain — cron-שעתי, drift-על-הון-זמין (נזיל+נעול-בהזמנות), מדידת-הזמנות-פתוחות, PHANTOM-CLAIM reconciliation, ROSTER-DIVERGENCE מול-fleet-roster, BANNED-CAPITAL-INFLOW, SP/TREASURY-UNDERFLOOR, פנקס-היסטוריה-JSONL. כל-טענה-בספר-הזה-מאומתת-מול-השרשרת-כל-שעה.
