@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-10-11T22:13:02Z",
- "durationMs": 1222,
+ "generatedAt": "2026-10-11T22:18:45Z",
+ "durationMs": 1479,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
   "generatedAt": "2026-10-11T21:37:07Z",
-  "stateAgeMin": 36,
+  "stateAgeMin": 42,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
-   "lastRunAt": null,
-   "ageS": null,
-   "stalled": null
+   "lastRunAt": "2026-10-11T21:36:56Z",
+   "ageS": 2508,
+   "stalled": false
   }
  },
  "measures": {
   "chain": {
-   "head": 110358349,
+   "head": 110358462,
    "treasuryNetSp": 2925.6,
-   "mult": 0.0006202055562109153
+   "mult": 0.0006202057216918962
   },
   "beaconPulse": {
    "treasuryNetSp": 2925.6
@@ -87,7 +87,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 36min (limit 120)"
+     "detail": "state age 42min (limit 120)"
     }
    ],
    "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
@@ -112,8 +112,8 @@
     },
     {
      "law": "fleethq-reds-persist",
-     "result": "unverifiable",
-     "detail": "fleet runs http ?"
+     "result": "ok",
+     "detail": "failure runs in last 48h: 10 - routed WO-FleetHQ-reds subject persists (work pending)"
     },
     {
      "law": "faulted-agents-fix",
@@ -123,7 +123,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 36min (limit 120)"
+     "detail": "state age 42min (limit 120)"
     }
    ],
    "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
@@ -149,18 +149,18 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 36min (limit 120)"
+     "detail": "state age 42min (limit 120)"
     }
    ],
    "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
   }
  ],
  "provenance": {
-  "runId": null,
-  "runUrl": null,
-  "sha": null,
+  "runId": "38179899110",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38179899110",
+  "sha": "399276f324c1cbd201b1d6b266668ec6cc70b95c",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-10-11T22:13:02Z"
+  "generatedAt": "2026-10-11T22:18:45Z"
  },
  "selftest": {
   "vectors": 16,
