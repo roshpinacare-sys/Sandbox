@@ -28,3 +28,4 @@
 2026-10-11 | zai-code-5 | רישום-סקופ: סגירת-שארית-חשיפה P2 (מחיקת key-check receipts מ-Console) + אימות-שער-R293 במחזור-מלא + דלתא-חשיפה ציבורית | (sha-בדחיפה) | ops/agents/zai-code-5/STATUS-2026-10-11.md
 2026-10-11 | zai-verifier | 8: עמוד-האמת-הציבורי חי — engine מאפה status/truth.html בכל-ריצה (כולל-מדוכאות, אידמפוטנטי) + Pages מעלה-אוטומטית; URL-ציבורי-מאומת-200 | 4e0ff3e+88db5c1 | status/truth.html @ Pages
 2026-10-11 | zai-fix | 8: מניפסט-קונסולידציה 26→8 — גורל-מדוד-לכל-ריפו + סדר-ביצוע (ארכוב-עצמו=כפתור-בעלים) | (קומיט-זה) | ops/plans/consolidation-26to8-2026-10-11.md
+2026-10-11 | zai-code-5 | key-check receipts נמחקו מ-Console (P2; receipts/ מאומת-נקי) + דלתא-חשיפה: 7/9-ציבוריים-אפס-פגיעות (ה-4-הנותרים=מכוונים/בעלים) + שער-R293: selftest-חי-ירוק, דוח-מחזור-טרי-ממתין-לדופק-הבא | Console@5eae064ddc | ops/agents/zai-code-5/STATUS-2026-10-11.md
