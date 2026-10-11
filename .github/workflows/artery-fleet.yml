@@ -1,0 +1,82 @@
+name: artery-fleet
+# ═══════════════════════════════════════════════════════════════════════════
+# ARTERY-FLEET · מכונת-אמת חוצת-צי (T-53, 2026-10-11) — כל שעתיים.
+# ───────────────────────────────────────────────────────────────────────────
+# הריפואים-הפרטיות-הקריטיות (מוח: steem engine · saos-dex · saos-agents) אינן
+# מאומתות מהגיט מאז-חומת-המכסה (10-05). מהיום: מדידה-קבועה מכאן — Actions
+# ציבוריים, דקות-חינם, רץ-גם-כשהבעלים ישן. חוקי-צי אחידים (no-skipped-pass,
+# gitleaks-push, R11-absent) + selftest/typecheck אמיתי. קבלה-כנה תמיד.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "25 */2 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - fleet-verify-tick
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-fleet
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: setup-bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: measure fleet HEADs (never trust, always verify)
+        env:
+          ECO_WALLET_TOKEN: ${{ secrets.ECO_WALLET_TOKEN }}
+        run: node engine/fleet-verify.mjs
+
+      - name: leak-scan (fail-closed)
+        if: always()
+        run: |
+          for f in receipts/fleet/verdict.json receipts/fleet/log.jsonl receipts/fleet/steem-cockpit.json receipts/fleet/saos-dex.json receipts/fleet/saos-agents.json; do
+            [ -f "$f" ] && node engine/leak-scan.mjs "$f"
+          done
+
+      # קומיט-ממושפע: רק receipts/fleet (אף-פעם לא -A) · rebase ×3 · כשל = יציאה 1
+      - name: commit receipts (honest verdicts always land, FAIL included)
+        if: always()
+        run: |
+          git config user.name "fleet-artery"
+          git config user.email "fleet-artery@users.noreply.github.com"
+          git add receipts/fleet
+          if git diff --cached --quiet; then
+            echo "receipts unchanged - nothing to commit"
+            exit 0
+          fi
+          git commit -m "fleet-artery receipts: $(date -u +%FT%TZ)"
+          OK=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+            git rebase --abort 2>/dev/null || true
+            sleep 5
+          done
+          [ "$OK" = "1" ] || { echo "receipt push failed after 3 attempts — honest failure"; exit 1; }
+
+      - name: verdict law (red unless PASS — after the receipts landed)
+        if: always()
+        run: |
+          V="$(node -e 'try{console.log(JSON.parse(require("fs").readFileSync("receipts/fleet/verdict.json","utf8")).overall)}catch{console.log("ERROR")}')"
+          echo "fleet verdict: $V"
+          [ "$V" = "PASS" ] || { echo "fleet is NOT verified — run stays red (honesty over comfort)"; exit 1; }
