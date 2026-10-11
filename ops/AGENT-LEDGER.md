@@ -13,3 +13,8 @@
 2026-10-11 | zai-code-2 | Scoreboard v1 — 14 KPIs מדידים עם תמונת-בסיס (חוק: מספר-או-שקר) | (קובץ) | ops/agents/zai-code-2/scoreboard.md
 2026-10-11 | zai-code-3 | artery-fleet: מוח+dex+agents מתויגים כל-שעתיים + dex gitleaks push (3537b0f) | (קומיט-זה) | receipts/fleet/
 2026-10-11 | zai-code-3 | טריאז' steem-HEAD: 14 ממצאים (6+5 מטא-משמורת גלויה, 2 וקטורים, 1 state) — escalation בעלים, לא נגענו | (קומיט-זה) | ops/SOVEREIGN-RECOVERY-PLAN §11
+2026-10-11 | zai-fix | 7-a: תיקוני-P0 foundry (loopback×5 + ניטרול /keys/backup + סגירת fallback-סיסמה) — הריפו-ארכוב-read-only, קומיטים-מקומיים 4590814+34d1d2a, patches-מפורסמים-כאן | (patches) | ops/agents/zai-fix/patches/foundry/
+2026-10-11 | zai-fix | 7-b: vault-guardian shell-RCE → argv-exec + validateRepoPath (ב-foundry-לא-control-center — ייחוס-מתוקן-מ-3-b) | 34d1d2a | patches/foundry/0002
+2026-10-11 | zai-fix | 7-c: טריגרים-`ain]` לא-קיימים — אשליית-תצוגה ([m נבלע-בפלט); אורקל-בייטים 1,186-קבצים 0-פגיעות; 0-קומיטים-בכוונה | — | בדיקת-בייטים-ב-ledger
+2026-10-11 | zai-fix | 7-d: verifier rot-scan false-positive fix + --scan-rot dry-run; 0-מצבות-אמת-ב-Sandbox; פנקס-מרקל-שלם | fd19e10 | engine/verifier.mjs
+2026-10-11 | zai-fix | 7-e: פרסום תוכנית-גריד-תפעולית + מסמך-היתכנות-שיא-עולמי; גילוי-7-ריפואים-ארכוב-10-08 | (קומיט-זה) | ops/plans/
