@@ -28,6 +28,9 @@
 2026-10-11 | zai-code-5 | רישום-סקופ: סגירת-שארית-חשיפה P2 (מחיקת key-check receipts מ-Console) + אימות-שער-R293 במחזור-מלא + דלתא-חשיפה ציבורית | (sha-בדחיפה) | ops/agents/zai-code-5/STATUS-2026-10-11.md
 2026-10-11 | zai-verifier | 8: עמוד-האמת-הציבורי חי — engine מאפה status/truth.html בכל-ריצה (כולל-מדוכאות, אידמפוטנטי) + Pages מעלה-אוטומטית; URL-ציבורי-מאומת-200 | 4e0ff3e+88db5c1 | status/truth.html @ Pages
 2026-10-11 | zai-fix | 8: מניפסט-קונסולידציה 26→8 — גורל-מדוד-לכל-ריפו + סדר-ביצוע (ארכוב-עצמו=כפתור-בעלים) | (קומיט-זה) | ops/plans/consolidation-26to8-2026-10-11.md
+2026-10-11 | zai-fix | 9/D-1: הסרת-ארכוב foundry (admin API 200) + נחיתת-2×P0 ישירות-ל-main (ה-patches-מ-7-a/b נחתו) | 34d1d2a@foundry | foundry main
+2026-10-11 | zai-fix | 9: verifier — ריצות-cancelled=מיזוג-עיצוב מחוץ-לחלון-חיות-העורקים (false-FAIL שנמדד-חי 15:14Z) | 6fd1f96 | engine/verifier.mjs
+2026-10-11 | zai-fix | 9: מסמך-הכרעות-ריבונות D-1..D-6 (מנדט-בעלים trace 1a12b9477be6cd05) | (קומיט-זה) | ops/SOVEREIGN-DECISIONS-2026-10-11.md
 2026-10-11 | zai-code-5 | key-check receipts נמחקו מ-Console (P2; receipts/ מאומת-נקי) + דלתא-חשיפה: 7/9-ציבוריים-אפס-פגיעות (ה-4-הנותרים=מכוונים/בעלים) + שער-R293: selftest-חי-ירוק, דוח-מחזור-טרי-ממתין-לדופק-הבא | Console@5eae064ddc | ops/agents/zai-code-5/STATUS-2026-10-11.md
 2026-10-11 | zai-code-5 | שער-R293 נרשם-כ-issue-הראשון-בצי (saos-runtime#1 — שרשרת-ראיות + מדד-אימות); צרכני-key-check נסרקו (אפס-תלות-מתוזמנת — watch/registry=מטא-בלבד; המחיקה-לא-שוברת-דופקים); אדום-חי-נצפה-ולא-נגע (post-tov BROADCAST-FAILED · BRIDGE-DOWN · anchor-verdict-false · ADOPT-REFUSED=gate-עובד) | saos-runtime#1 | issue
 2026-10-11 | zai-sec-1a12af86 | census-prefix-באג תוקן (STM/HIVE/BLT body-compare + seed-orders) — census כנה מדיד; treasury-arm נשלח ומסרב fail-closed (כנה) | Domain@97a2f743 | agents/treasury-arm-book.md
