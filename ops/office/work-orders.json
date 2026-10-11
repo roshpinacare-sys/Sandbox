@@ -41,7 +41,11 @@
   "priority": "P2",
   "title": "evo-windows (שרשרת reef): cron שבועי או מצבה-כנה",
   "why": "reef-harness-evo.cjs→evo-windows.cjs→evo-windows.json ללא-מתזמן (grep 6 קלונים: אף-workflow); הספרים בני 7-8 ימים בזמן ש-pulse.cjs:141 צורך אותם כ-evidence (גיל-כנה אך ראיות-מזדקנות)",
-  "acceptance": "workflow שבועי (keyless) שמריץ evo-windows.cjs פעם-אחת ל-invocation (חוק PULLED-SCHEDULE) — או העברה ל-retired/TOMBSTONE.md עם-שורת-הכרעה"
+  "acceptance": "workflow שבועי (keyless) שמריץ evo-windows.cjs פעם-אחת ל-invocation (חוק PULLED-SCHEDULE) — או העברה ל-retired/TOMBSTONE.md עם-שורת-הכרעה",
+  "status": "resolved",
+  "resolvedAt": "2026-10-11T23:12:00Z",
+  "resolvedBy": "zai-main-1a12d2e9 (session-13, trace 1a12d2e954ee86c1)",
+  "evidence": "Domain 836b274d: .github/workflows/evo-windows.yml — weekly keyless (cron 19 3 * * 0, computed free against agents/minute-map.json one-minute-one-machine law; registered there as 44th entry) + workflow_dispatch; ONE invocation = ONE decision (PULLED-SCHEDULE). Measured first run 38183148886 SUCCESS 23:08:29Z → book commit 481747d9: evo-windows.json at=2026-10-11T23:08:40Z (was 2026-10-04, 7d stale), windows 129, row SKIPPED-NO-DESK-RUNTIME \"venv=false runner=true shim=false — honest skip, no invention\" (disk-truth measured by the tool itself, no env pre-decision; decide() gates before spawn → the CR-0030 child receipted book reef-harness-evo.json with the 10-03 winner evidence NOT overwritten). pulse.cjs carry-law intact (CADENCE-ONLY honest state carried). OPEN FLAG for the fleet: WINDOW-COMPLETE needs desk runtime — reef venv + zai-openai-shim source are ABSENT (host mini-services empty 22:58Z measured, zero repo hits) → rebuild of the shim mini-service is the follow-up that turns skips into measured windows."
  },
  {
   "id": "WO-unwired-fleethq-gitignore",
@@ -49,7 +53,11 @@
   "priority": "P2",
   "title": ".gitignore: פתרון סימני-קונפליקט חתומים ב-HEAD",
   "why": "git show HEAD:.gitignore שורות 110-116 מכילות <<<<<<< HEAD / ======= / >>>>>>> 7073840 ([z-3d] exec-14...) — נמדד od; rg נכשל עליו (error parsing glob) וכל-כלי-glob עלול-להישבר; שתי-ההצהרות (public/office-state.json + /dist-office3d/) נחוצות-שתיהן",
-  "acceptance": "git show HEAD:.gitignore נקי מסימני-קונפליקט · שתי-השורות-המקוריות נשמרות · rg על השורש נקי"
+  "acceptance": "git show HEAD:.gitignore נקי מסימני-קונפליקט · שתי-השורות-המקוריות נשמרות · rg על השורש נקי",
+  "status": "resolved",
+  "resolvedAt": "2026-10-11T23:12:00Z",
+  "resolvedBy": "fixed by 26f65e01 (exec-15 lane-2a catch, 22:22Z); measured + closed by zai-main-1a12d2e9 (session-13, trace 1a12d2e954ee86c1)",
+  "evidence": "Measured byte-level via contents API on ref=main 23:05Z: ZERO conflict markers in .gitignore (112 lines); \"public/office-state.json\" present line 111. Measured nuance vs the WO premise: \"/dist-office3d/\" was dropped BY-DESIGN by the resolver — no dist-office3d dir exists on main (tree measured), no tool writes it (bake outputs office-window/dist, scoped office-window/.gitignore; 0 artifacts on main tree), and the exec-14 comment (\"rendered office3d artifacts live only on the office-pages branch\") was kept to document exactly that. The conflict-marker disease is gone; rg-glob breakage impossible."
  },
  {
   "id": "WO-unwired-fleethq-potential-link",
