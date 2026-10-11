@@ -1,0 +1,77 @@
+name: token-watchdog
+
+# מערך-נגד-מוות-שקט של-הטוקן-הריבוני (OWNER-P0 §1)
+# בודק-יומית: תפוגה · מכסה · סוג. T-14 ימים → issue-אוטומטי-אידמפוטנטי.
+# ראה: ops/TOKEN-ROTATION-RUNBOOK.md · G4 (ריפו-ציבורי) · G3 (קריאה-אחת-ביום) · G9 (אפס-סודות-בפלט)
+
+on:
+  schedule:
+    - cron: "40 5 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check fleet token health (expiry / quota / type)
+        env:
+          PAT: ${{ secrets.ECO_WALLET_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PAT}" ]; then
+            echo "::error::ECO_WALLET_TOKEN secret missing in Sandbox"
+            exit 1
+          fi
+          code=$(curl -s -o /tmp/user.json -D /tmp/h.txt -w '%{http_code}' \
+            -H "Authorization: token ${PAT}" https://api.github.com/user)
+          if [ "${code}" != "200" ]; then
+            echo "::error::fleet token dead or unauthorized (HTTP ${code})"
+            exit 1
+          fi
+          login=$(python3 -c "import json;print(json.load(open('/tmp/user.json')).get('login',''))")
+          exp=$(grep -i '^github-authentication-token-expiration:' /tmp/h.txt | cut -d' ' -f2- | tr -d '\r' || true)
+          scopes=$(grep -i '^x-oauth-scopes:' /tmp/h.txt | cut -d' ' -f2- | tr -d '\r' || true)
+          rem=$(grep -i '^x-ratelimit-remaining:' /tmp/h.txt | cut -d' ' -f2- | tr -d '\r')
+          if [ -z "${exp}" ]; then
+            echo "::warning::no expiration header (non-expiring or unexpected token type)"
+            days=9999
+          else
+            days=$(( ( $(date -u -d "${exp}" +%s) - $(date -u +%s) ) / 86400 ))
+          fi
+          echo "### Fleet token health" >> "$GITHUB_STEP_SUMMARY"
+          echo "- login: \`${login}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ -z "${scopes}" ]; then
+            echo "- type: fine-grained (no X-OAuth-Scopes)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- type: classic (scopes: ${scopes})" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "- expires: \`${exp:-non-expiring}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- days left: \`${days}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- rate remaining: \`${rem}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "DAYS_LEFT=${days}" >> "$GITHUB_ENV"
+
+      - name: Ensure deadline label exists
+        if: env.DAYS_LEFT != '9999'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh label create token-expiry --color E99695 --force || true
+
+      - name: Open deadline issue at T-14 (idempotent)
+        if: env.DAYS_LEFT != '9999' && env.DAYS_LEFT <= 14
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          existing=$(gh issue list -R "$GITHUB_REPOSITORY" --label token-expiry --state open --json number --jq 'length')
+          if [ "${existing}" -eq 0 ]; then
+            gh issue create -R "$GITHUB_REPOSITORY" \
+              --title "PAT expires in ${DAYS_LEFT} days — run ops/TOKEN-ROTATION-RUNBOOK.md" \
+              --label token-expiry \
+              --body "Watchdog measured days_left=${DAYS_LEFT}. The human part is ~3 minutes: follow **ops/TOKEN-ROTATION-RUNBOOK.md** §3 (mint 2 minimal tokens, paste into Sandbox/saos-runtime secrets). Everything after that is automated."
+          else
+            echo "deadline issue already open — not duplicating"
+          fi
