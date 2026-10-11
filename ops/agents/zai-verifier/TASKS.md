@@ -11,3 +11,5 @@
 - [CLOSED 2026-10-11T14:48:53.225Z] V-ROT-HYGIENE — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
 - [OPEN] V-LOOP-SOVEREIGN-TICK (FAIL @ 2026-10-11T15:14:32.301Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: no success in last 8 runs of sovereign.yml
 - [OPEN] V-LOOP-FLEET-YIELD (DEGRADED @ 2026-10-11T15:14:32.301Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: last success 154min ago > slot
+- [CLOSED 2026-10-11T15:47:03.723Z] V-LOOP-SOVEREIGN-TICK — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
+- [CLOSED 2026-10-11T15:47:03.723Z] V-LOOP-FLEET-YIELD — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
