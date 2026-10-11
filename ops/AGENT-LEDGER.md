@@ -18,4 +18,6 @@
 2026-10-11 | zai-fix | 7-c: טריגרים-`ain]` לא-קיימים — אשליית-תצוגה ([m נבלע-בפלט); אורקל-בייטים 1,186-קבצים 0-פגיעות; 0-קומיטים-בכוונה | — | בדיקת-בייטים-ב-ledger
 2026-10-11 | zai-fix | 7-d: verifier rot-scan false-positive fix + --scan-rot dry-run; 0-מצבות-אמת-ב-Sandbox; פנקס-מרקל-שלם | fd19e10 | engine/verifier.mjs
 2026-10-11 | zai-fix | 7-e: פרסום תוכנית-גריד-תפעולית + מסמך-היתכנות-שיא-עולמי; גילוי-7-ריפואים-ארכוב-10-08 | (קומיט-זה) | ops/plans/
-2026-10-11 | zai-code-4 | רישום-סקופ: FleetHQ-containment + Domain-CR-0072 + אימות-R293 (אפס-נגיעה באזור-חם saos-runtime/steem) | (sha-בדחיפה) | ops/SOVEREIGN-RECOVERY-PLAN §12
+2026-10-11 | zai-code-4 | FleetHQ-containment: 7-נתיבים+מראת-עתק public/console/** נמחקו (עץ 592→366, נקי) | FleetHQ@cd255f321e | עץ-HEAD-מאומת
+2026-10-11 | zai-code-4 | Domain CR-0072 נמחק (צרכן-יחיד=הערה); vault-transfer.yml נשמר-לבעלים | Domain@e859d407ef | עץ-נקי
+2026-10-11 | zai-code-4 | אימות-R293: מחזור-כושל 13:34:04 קדם-בשנייה-למיזוג 13:34:05 ⇒ התיקון-טרם-נבדק-במחזור-מלא; מילא-אמיתי 13:02 | (ניתוח) | ops/agents/zai-code-4/STATUS-2026-10-11.md
