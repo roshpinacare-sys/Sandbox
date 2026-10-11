@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-11T13:15:14.614Z",
+  "slug": "roshpinacare-sys/Saosmartwallet",
+  "walletHead": "6f3ed42260cf0a978b8e9eae38169671152dcbf0",
+  "checks": {
+    "install": "pass",
+    "prismaGenerate": "pass",
+    "typecheck": "pass",
+    "productionBuild": "pass"
+  },
+  "asserts": [
+    {
+      "id": "law-unlock-ratelimit",
+      "verdict": "pass",
+      "detail": "unlock endpoint must gate online passphrase guessing"
+    },
+    {
+      "id": "law-no-skipped-pass",
+      "verdict": "pass",
+      "detail": "CI verdict law: skipped is never pass + push trigger present"
+    },
+    {
+      "id": "law-gitleaks-push",
+      "verdict": "pass",
+      "detail": "secret scan must run on every push, not only PRs"
+    },
+    {
+      "id": "law-r11-head-absent",
+      "verdict": "pass",
+      "detail": "R11 key-material metadata file must stay absent at HEAD"
+    },
+    {
+      "id": "law-pass-provenance",
+      "verdict": "fail",
+      "detail": "PASS receipt WITHOUT Actions provenance = minted out-of-band (unverified-local-engine)"
+    }
+  ],
+  "warns": [
+    "db/custom.db committed at HEAD (owner decision pending — never auto-touched)"
+  ],
+  "overall": "FAIL",
+  "reason": "wallet-law assert failed",
+  "provenance": {
+    "runId": "38142418789",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38142418789"
+  }
+}
