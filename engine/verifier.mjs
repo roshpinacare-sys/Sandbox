@@ -12,7 +12,8 @@
  *                        (דופק-בלי-בנייה = DEGRADED; זו-השאלה של-הבעלים: "אין התפתחות אמיתית").
  *   C. steem.fleet     — אמת-על-השרשרת: SP/VP/פוסט-אחרון/הצבעה-אחרונה לכל-הצי (RPC ציבורי, keyless).
  *   D. blurt.alive     — האם-לופ-הבלורט חי (נמדד: מת-מ-2026-10-04) או RPC בלתי-נגיש מהרץ.
- *   E. rot.hygiene     — ריקבון-מצבות: `sha256: undefined` / `[object Object]` בקבצי-עץ-מקומיים.
+ *   E. rot.hygiene     — ריקבון-מצבות: שורת-מצבה-פגומה (תא `undefined`/`[object Object]` במקום-hash)
+ *                        — תיעוד-עצמי אינו מצבה (חוק-הזיהוי-המדויק ב-scanRot למטה).
  *
  * פלטים (כולם בטריטוריה-שלי בלבד — אף-קובץ-של-אחר אינו-נכתב):
  *   state/verifier/verdict-latest.json      — קבלת-הראש (מנוע/פאנל קוראים)
@@ -261,25 +262,50 @@ export async function probeBlurt(cfg) {
   return { reachable: false, errors: errs, probedAt: new Date().toISOString() };
 }
 
-/* ── E. ריקבון-מצבות — סריקת-עץ-מקומית (אפס-קריאות-רשת) ── */
-export function scanRot(cfg) {
+/* ── E. ריקבון-מצבות — סריקת-עץ-מקומית (אפס-קריאות-רשת) ──
+ * חוק-הזיהוי-המדויק (תיקון-דיופליקציה 7-d): מצבה-רקובה = שורת-טבלה שמכילה את סימון-המצבה
+ * `sha256 העותק שהיה כאן` ושאחד-מהתאים שלה הוא הליטרל `undefined` / `[object Object]`
+ * (ג'נרטור-המצבות כתב ליטרל במקום-hash של-64-hex).
+ * מה-שאינו-מספיק-עוד: הופעת-המחרוזת "sha256: undefined" אי-שם-בקובץ. ה-README/REPORT/TASKS
+ * של-המאמת עצמו מתעדים-את-הבעיה בטקסט-שלהם, והכלל-הישן (regex על כל-הקובץ) הדליק את
+ * בית-הסורק על-עצמו בכל-ריצה — דיופליקציה-עצמית-קבועה. לכן:
+ *   (א) בדיקה שורה-בשורה ולא הקובץ-כולו כטקסט-אחד;
+ *   (ב) שורות-בתוך-גדר-קוד (```/~~~) = תיעוד-לדוגמה — נמדלות;
+ *   (ג) טריטוריית-המאמת ops/agents/zai-verifier — נשמטת-כולה: בית-הסורק דן-במצבות מטבע-הדבר.
+ * אימות: --scan-rot (הרצה-יבשה, אפס-רשת ואפס-כתיבה) · opts.root להזרקת-fixture בבדיקות.
+ */
+const ROT_SKIP_PREFIXES = ["ops/agents/zai-verifier/"];
+const ROT_FENCE = /^\s*(```|~~~)/;
+function isCorruptedTombstoneLine(line) {
+  const t = line.trim();
+  if (!t.startsWith("|") || !t.endsWith("|")) return false; // מצבות: שורות-טבלה בלבד — פרוזה/ראיות-אינן-מצבה
+  if (!line.includes("sha256") || !line.includes("העותק שהיה כאן")) return false; // סימון-המצבה הקנוני
+  const cells = t.slice(1, -1).split("|").map((c) => c.trim());
+  return cells.some((c) => c === "undefined" || c === "[object Object]"); // התא-הפגום: ליטרל במקום-hash
+}
+export function scanRot(cfg, opts = {}) {
   const roots = ["ops", "federation", "state", "receipts", "docs", "console", "network", "status"];
-  const pat = /sha256:\s*(undefined|\[object Object\])|\bsha256\b.*\bundefined\b/i;
+  const baseDir = opts.root ?? ROOT;
   const hits = [];
   let scanned = 0;
   for (const dir of roots) {
-    const base = path.join(ROOT, dir);
+    const base = path.join(baseDir, dir);
     if (!existsSync(base)) continue;
     let files = [];
-    try { files = execSync(`git ls-files -- '${dir}'`, { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).split("\n").filter(Boolean); } catch { continue; }
+    try { files = execSync(`git ls-files -- '${dir}'`, { cwd: baseDir, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).split("\n").filter(Boolean); } catch { continue; }
     for (const rel of files) {
-      const p = path.join(ROOT, rel);
+      if (ROT_SKIP_PREFIXES.some((pre) => rel === pre || rel.startsWith(pre))) continue;
+      const p = path.join(baseDir, rel);
       try {
         const sz = statSync(p).size;
         if (sz > 900000) continue;
         const txt = readFileSync(p, "utf8");
         scanned++;
-        if (pat.test(txt)) hits.push(rel);
+        let inFence = false;
+        for (const line of txt.split("\n")) {
+          if (ROT_FENCE.test(line)) { inFence = !inFence; continue; }
+          if (!inFence && isCorruptedTombstoneLine(line)) { hits.push(rel); break; }
+        }
       } catch { /* בינארי/לא-קיים */ }
       if (hits.length >= 25) break;
     }
@@ -485,6 +511,14 @@ async function main() {
     const res = verifyLedger(lines);
     console.log(JSON.stringify({ ledger: p, ...res }));
     process.exit(res.unbroken ? 0 : 1);
+  }
+
+  /* הרצה-יבשה לסריקת-הריקבון-בלבד — אפס-רשת, אפס-כתיבה (7-d: אימות-אנטי-דיופליקציה) */
+  if (argv.includes("--scan-rot")) {
+    const dryCfg = loadConfig(readFileSync(path.join(ROOT, "ops/agents/zai-verifier/config.json"), "utf8"));
+    const res = scanRot(dryCfg);
+    console.log(JSON.stringify({ dryRun: true, zeroWrites: true, zeroNetwork: true, ...res }));
+    return;
   }
 
   const cfg = loadConfig(readFileSync(path.join(ROOT, "ops/agents/zai-verifier/config.json"), "utf8"));
