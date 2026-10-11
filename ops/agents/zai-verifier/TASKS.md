@@ -8,3 +8,4 @@
 - [OPEN] V-ROT-HYGIENE (DEGRADED @ 2026-10-11T13:08:39.648Z): ניקוי-מצבות-מקולקלות (sha256: undefined) + תיקון-מנוע-הדידופליקציה שיוצר-אותן | ראיה: tombstone rot: 1 file(s) with corrupted sha256 pointers
 - [OPEN] V-BLURT-REVIVE (FAIL @ 2026-10-11T13:14:11.915Z): החייאת-לופ-בלורט דרך gated blurt-connector (תנאי: P0 מפתחות-חדשים; workflow_dispatch בלבד + reviewer) | ראיה: blurt fleet silent 186h > 168d — loop dead until proven otherwise
 - [CLOSED 2026-10-11T13:48:44.565Z] V-DEV-FOCUS — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
+- [CLOSED 2026-10-11T14:48:53.225Z] V-ROT-HYGIENE — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
