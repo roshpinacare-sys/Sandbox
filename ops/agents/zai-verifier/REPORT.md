@@ -50,7 +50,7 @@
 | @hcsoldier6 | 17 | 99% | 4.1h | 1.6h |
 
 > `steem.fleet` = **OK** — fleet posted 2.5h ago
-> `steem.treasury` = **DEGRADED** — treasury headcorner at 2926 SP < 3000 (recovery-plan §3)
+> `steem.treasury` = **DEGRADED** — treasury owner-treasury at 2926 SP < 3000 (recovery-plan §3)
 
 ## 4. Blurt (https://rpc.blurt.blog)
 פוסט-צי-הכי-חדש: 205.7h · נמדד 2026-10-12T08:42:43.033Z

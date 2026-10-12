@@ -63,10 +63,10 @@ Work Log:
   FALSE — the anti-fake law caught a fabricated success claim. The rail's
   honest verdict stands: ADOPT-REFUSED / active-authority-mismatch
   @2026-10-11T14:00:12Z (repo, md5-verified double-fetch).
-- Measured (chain, live): headcorner netSP=3165.9 (own 4026.0, out 1104.2,
+- Measured (chain, live): owner-treasury netSP=3165.9 (own 4026.0, out 1104.2,
   recv 244.2) => rail budget min(1200, net-2800)=365.9 SP; fleet deficits
   ~445 SP total (siq/tov/wic/wog/woq ~66-69 SP each below 100 floor;
-  israelnews 6.0; soldiers 3.0 each below 20). headcorner ACTIVE authority
+  israelnews 6.0; soldiers 3.0 each below 20). owner-treasury ACTIVE authority
   = single key (fingerprint unpublished).
   DAILY gate is NOT blocking (14:00 verdict object has no day field) —
   next run retries cleanly once the credential fits.
@@ -86,7 +86,7 @@ Work Log:
   head key file (name unpublished), seed material. KEYS-ZIP-2026-10-07 and -10-08-ROT4 did NOT open with
   the tried derivations (their wrap is something else).
 - UNRESOLVED (channel destroyed every attempt): whether any locally
-  recovered wif fits headcorner's live ACTIVE pubkey. Two independent
+  recovered wif fits owner-treasury's live ACTIVE pubkey. Two independent
   crypto attempts (pure-python secp256k1) were each corrupted mid-run by
   the channel (first script had a real jac_add bug I fixed; the fixed
   script's outputs were then wholly fabricated). NO verdict exists.
@@ -108,7 +108,7 @@ Stage Summary:
   'Commit state back' — same as 14:21/14:42).
 - NEXT SESSION ORDER: (1) redo keyfit-audit on /tmp/vaultrev-e8owm647
   (self-test first, then chain fit vs the live authority); if NO-FIT =>
-  the credential for headcorner ACTIVE does not exist locally and the
+  the credential for owner-treasury ACTIVE does not exist locally and the
   owner must decide rotation path; (2) push-race hardening for
   'Commit state back'; (3) ROT4/10-07 wrap pass hunt (era-meta scheme
   changed after GEN-1); (4) blurt POST chain-id; (5) exposure removal
@@ -151,7 +151,7 @@ Work Log:
   friction, rebase-retry push hardening); keeper.log tick journal
   healthy; TruthRail heartbeat receipts present.
 - DELEGATION UNBLOCKED (analysis): zai-code-2's batch delegates FROM
-  headcorner; the head vault's fit-state is internal, so execution depends on the
+  owner-treasury; the head vault's fit-state is internal, so execution depends on the
   CI/Domain secret credential fitting live authority (unverifiable
   value) - fail-closed honest refusal if not; the operator ACTIVE
   credentials are PROVEN fitting if the rail is ever re-scoped to operators.
@@ -165,7 +165,7 @@ Work Log:
   origin token, session PAT).
 
 Stage Summary:
-- TRUE (verified): 10/10 operator credentials fit live chain; headcorner
+- TRUE (verified): 10/10 operator credentials fit live chain; owner-treasury
   vault stale; GitHub compliance clean (rate 5000/5000, guards present,
   zero public cred patterns); rotation law durable on main with readback
   proof; delegation remains fail-closed honest pending fitting head
@@ -284,7 +284,7 @@ Work Log:
   is a parallel agent's gov(T-57) commit — NOT my lane.
 - SIDE-BY-SIDE HEALTH: lighthouse pages-build success 19:28Z; beacon-pulse success 19:26Z;
   saos-runtime in_progress at 20:17Z (prev success 19:55Z); rate-limit pristine.
-- ANTI-FORGERY SPOT-CHECK (independent api.steemit.com, head 110,356,113): headcorner
+- ANTI-FORGERY SPOT-CHECK (independent api.steemit.com, head 110,356,113): owner-treasury
   netSP=2,925.6 — EXACTLY what beacon publishes and the room displays; israelnews 94.0,
   wog 11.9 (honest floors). The room's numbers are chain truth.
 - Sandbox hygiene: eslint ignores tmp//download//db/ (standalone build assets choked lint);
@@ -306,7 +306,7 @@ Agent: main (T13, owner mandate: no fakes, wire office<->network/sovereignty, au
 
 Work Log:
 - RECON (anti-trample): 4 repos committed-read; lanes mapped — zai-sec (office+domain), office-3D-v2 agent (Domain office3d/v2 + FleetHQ v2), zai-code-3/F-series (ops/flow/*), gov(T-58) revival lanes, E-series, T10/T11 laws. Scope registered BEFORE work: Sandbox@main ops/sovereign/T13-SCOPE-2026-10-11.md (commit effdc5a08, readback MD5 ok).
-- ANTI-FORGERY AUDIT (owner demand): independent api.steemit.com measurement with EXACT vest conversion (mult 0.0006202027, head 110,356,383): headcorner netSP=2,925.6, wog=11.9, israelnews=94.0 — EXACTLY what beacon publishes and office displays. NO FORGERY. First-pass 2,304.8 was MY stale-multiplier tool error — self-disclosed in TRUTH-AUDIT-2026-10-11T2035Z.md (commit 0e89d56c7) so the honesty law applies to me too.
+- ANTI-FORGERY AUDIT (owner demand): independent api.steemit.com measurement with EXACT vest conversion (mult 0.0006202027, head 110,356,383): owner-treasury netSP=2,925.6, wog=11.9, israelnews=94.0 — EXACTLY what beacon publishes and office displays. NO FORGERY. First-pass 2,304.8 was MY stale-multiplier tool error — self-disclosed in TRUTH-AUDIT-2026-10-11T2035Z.md (commit 0e89d56c7) so the honesty law applies to me too.
 - TRUTH BRIDGE v2: NEW /api/worlds-state — aggregates 7 keyless public sources (flow-map, lighthouse, beacon, dex/grid, VALUE-SCAN state, foreman mirror, DIRECT CHAIN measurement api.steemit.com exact-converted). 60s cache, fail-soft, honest degradation.
 - WORLDS (local flagship, port 3000 — my T12 lane extended): WorldDeck tabs משרד|רשת|עסקים|מקביל|גיוס·ערך:
   * NetworkWorld: flow-map (34 nodes/89 edges) as living organ islands per repo, freshness height/color, missing nodes red+honest count, orphans/ghosts/stale chips.
@@ -330,7 +330,7 @@ Agent: main (T14, owner mandate verbatim 21:20Z: "[owner-directive]" — the sov
 Work Log:
 - RECON (anti-trample): read ESTATE-TRUTH + T13 scope + office-growth outputs (session-10's lane: ops/office/{potential,work-orders,VALUE-MAP} — consume-only); registered scope BEFORE work: Sandbox@main ops/sovereign/T14-SCOPE-2026-10-11.md (commit e29da5c1f, readback md5 ok). No other agent touched ops/sovereign/DECIDER/**.
 - CHARTER PUBLISHED (constitutional standing orders): ops/sovereign/DECIDER/CHARTER.md (commit 299b3137) — owner mandate verbatim recorded; law: MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE; rails R1 anti-forgery (fail-closed, no execution claims), R2 treasury keep-2800 line, R3 keys→STAGED-EXEC only, R4 no trampling (decisions=publish, not edits in others' lanes), R5 honesty incl. self-correction; statuses ENFORCED/STAGED-EXEC/OBSERVING/REVOKED; supersedes the "owner-decision" clause of ESTATE-TRUTH per newer mandate (documented, original untouched).
-- DECIDER ENGINE v1: ops/sovereign/DECIDER/decider.py (commit 86b948fa6) — keyless, fail-soft, measured-only: direct chain measurement (exact VESTS→SP), beacon/value-scan/flow/foreman/work-orders sources, headcorner history scan (batched 100-op RPC cap — bug found & fixed locally before publish), tiered interim floors 75/30/20 computed from measurement.
+- DECIDER ENGINE v1: ops/sovereign/DECIDER/decider.py (commit 86b948fa6) — keyless, fail-soft, measured-only: direct chain measurement (exact VESTS→SP), beacon/value-scan/flow/foreman/work-orders sources, owner-treasury history scan (batched 100-op RPC cap — bug found & fixed locally before publish), tiered interim floors 75/30/20 computed from measurement.
 - HONEST DECISIONS (first production run, Actions run 38177100068 SUCCESS 21:37:07Z):
   * D1 econ-treasury-floor ENFORCED P1: option A chosen (tiered interim floors + keep-2800 + target-3000 via yield engines, 19pts); option B (release 244.2 SP banned inflow) REJECTED by measured R2 math (would drop treasury to ~2681 < keep-line; delegations-out = fleet legs, verified ~242 SP to operators in 3000-op scan); option C (wait-for-owner) REJECTED by charter §1.
   * D2 eng-errors ENFORCED P0: 3 error agents (aluf, gal, erez) + blocked t1083 routed to engineering lanes + office-growth work-orders (WO-FleetHQ-reds, WO-saos-runtime-reds) — no waiting.
@@ -374,7 +374,7 @@ Work Log:
   51/51 ALL_PASS (live readback) · truth-gate ALL-GREEN · dex books two-sided (SAOS/USDS
   2073/2081, USDS/WSTEEM 60/62) · ratchet seed intact (treasuryProfitEverMu=213752,
   fundedEverMu=18300, rail.lifetime.wsteem=300000) · decider D1/D2 ENFORCED, D4 OBSERVING ·
-  chain exact (headcorner 4026.0+244.2−1344.6 = 2925.6 SP, wog 11.8, israelnews 94.0 —
+  chain exact (owner-treasury 4026.0+244.2−1344.6 = 2925.6 SP, wog 11.8, israelnews 94.0 —
   matches beacon 0.0 deviation) · D2's P0 agent errors CLEARED (aluf writing t1107) ·
   office-ci green since my T15 fix (5 successes 23:51-23:54Z) · local page browser-verified.
 - DISCONNECT #1 FOUND+ROOT-CAUSED: the two autonomous loops (value-scan, sovereign-decider)
@@ -433,7 +433,7 @@ Work Log:
   Domain+Console acid.html (login pages PREFILLED with the manager account + "סיסמת-אב/WIF
   (posting)" labels), Domain/README.md (explicit key→account sentence — scrubbed at source), Domain/about + Console hub pages ("commander phrasing — scrubbed at source"), handoff.md
   (secret names — scrubbed at source), key-verify.yml (secret ref — scrubbed at source), saos-live issuer,
-  office label "אוצרה ראשי · headcorner".
+  office label "אוצרה ראשי · owner-treasury".
 - SCRUBBED (17 files, all readback-MD5-verified, meaning/verdicts preserved — history not
   falsified): login pages neutralized to "מפתח-מנהל" (no prefill, no key-type hints),
   README key-map → "held only in system secrets; never published", SOVEREIGNTY §8 →

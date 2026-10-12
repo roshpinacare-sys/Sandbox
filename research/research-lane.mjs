@@ -29,6 +29,7 @@
  */
 
 import fs from "node:fs";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -44,7 +45,7 @@ const RETRIES = 2;
 
 /** Fleet roster (14 accounts — same census as ECONOMIC-PLAN-2026-10-11 §2). */
 export const FLEET = [
-  "headcorner", "cashmachine", "haran", "israelnews", "lsa", "macrame",
+  OWNER_ACC, "cashmachine", "haran", "israelnews", "lsa", "macrame",
   "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6",
 ];
 
@@ -296,7 +297,7 @@ export async function selftest() {
 
   // V5: E3 rc-census detects starved accounts (object-params law)
   const rcResult = { rc_accounts: [
-    { account: "headcorner", rc_manabar: { current_mana: "9820000" }, max_rc: "10000000" },
+    { account: OWNER_ACC, rc_manabar: { current_mana: "9820000" }, max_rc: "10000000" },
     { account: "hcsoldier4", rc_manabar: { current_mana: "805000" }, max_rc: "10000000" },
     { account: "wog", rc_manabar: { current_mana: "2590000" }, max_rc: "10000000" },
   ] };

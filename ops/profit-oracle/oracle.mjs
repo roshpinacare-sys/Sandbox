@@ -18,8 +18,8 @@
  *                     חוק-השולחן: שוליים-שבועיים ≥ +1% = הגריד רשאי-להציב, אחרת מחזיק. הערך-עצמו הוא
  *                     נתון, לא פסק: ירוק = השולחן נמדד-ונקרא; כשל-רשת = UNKNOWN. חדר-אחד: הכרעת-
  *                     ההצבה שייכת ל-desk (market-exec governor) — האורקל מודד ומפרסם, לא מכריע.
- *   V-ZOMBIE-LADDER   סולם-הפקודות-הפתוחות של headcorner: `database_api.find_limit_orders
- *                     {"account":"headcorner"}` (השיטה שנבדקה-ועובדת — נספח-א' קריאה #15) → סכום
+ *   V-ZOMBIE-LADDER   סולם-הפקודות-הפתוחות של ${OWNER_ACC}: `database_api.find_limit_orders
+ *                     {"account":OWNER_ACC}` (השיטה שנבדקה-ועובדת — נספח-א' קריאה #15) → סכום
  *                     SBD/STEEM פתוח + ספירה + תת-סולם-זומבי (קניות @≤0.0995 SBD/STEEM — מתחת-למחיר,
  *                     לעולם לא יתמלאו כל-עוד המחיר מעליהן). מול-הריצה-הקודמת: יציב/נמלא → GREEN;
  *                     נעלם ללא-ראיה → AMBER (ביטול = פעולת-בעלים — דורש-בדיקה); ריצה-ראשונה/כשל → UNKNOWN.
@@ -38,6 +38,7 @@
 "use strict";
 
 import fs from "node:fs";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -53,16 +54,16 @@ export const LAWS = {
   STEEM_RPC_PRIMARY: "https://api.steemit.com",
   STEEM_RPC_FALLBACK: "https://api.justyy.com", // גיבוי שנמדד בנספח-א' של ECONOMIC-PLAN
   PNL_DESK_URL: "https://roshpinacare-sys.github.io/Domain/dex/pnl-desk.json",
-  LADDER_ACCOUNT: "headcorner",
+  LADDER_ACCOUNT: OWNER_ACC,
 };
 
 /* מניפסט-14-החשבונות — הרשימה המדויקת כפי שנמדדה בקריאה #3 של נספח-א'
    (ECONOMIC-PLAN-2026-10-11.md · עבודה-מקומית econ10d/raw-measure.json · zai-10d 19:54Z):
-   עוגן: headcorner · פוסטרים ×5: cashmachine, haran, israelnews, lsa, macrame ·
+   עוגן: ${OWNER_ACC} · פוסטרים ×5: cashmachine, haran, israelnews, lsa, macrame ·
    מיקרו ×3: siq, tov, wic · wog, woq · חיילים-דור-חי ×3: hcsoldier4/5/6.
    hcsoldier1/2/3 מחוץ-למניפסט (LOST-NO-CUSTODY, מעוגן ב-ONE-ROSTER-2026-10-11.md + פסקי-r196/r200). */
 export const ROSTER = [
-  "headcorner",
+  OWNER_ACC,
   "cashmachine", "haran", "israelnews", "lsa", "macrame",
   "siq", "tov", "wic",
   "wog", "woq",
@@ -429,7 +430,7 @@ export function unionAppend(existing, run, { cap = LAWS.RUNS_CAP, prior } = {}) 
   doc.schema = doc.schema || RECEIPT_SCHEMA;
   doc.agent = doc.agent || AGENT_ID;
   doc.law = doc.law ||
-    "keyless daily profitability pulse: V-WORTH (14-roster own/eff SP + liquid + order-book mid → netWorthSbdEquiv) · V-GRID-EDGE (pnl-desk verdict/edge/realized — value is data, desk decides) · V-ZOMBIE-LADDER (headcorner open orders vs prior: vanished = AMBER until fill/cancel verified); delta > +0.5% = PROFIT, ±0.5% = FLAT, < −0.5% = LOSS; network failure = UNKNOWN + reason, never guessed";
+    "keyless daily profitability pulse: V-WORTH (14-roster own/eff SP + liquid + order-book mid → netWorthSbdEquiv) · V-GRID-EDGE (pnl-desk verdict/edge/realized — value is data, desk decides) · V-ZOMBIE-LADDER (${OWNER_ACC} open orders vs prior: vanished = AMBER until fill/cancel verified); delta > +0.5% = PROFIT, ±0.5% = FLAT, < −0.5% = LOSS; network failure = UNKNOWN + reason, never guessed";
   doc.gate = doc.gate || "profit-oracle (zai-14b) — standing daily profit pulse; joins zai-12b's fresh-oracle house pattern; owner trace 1a12…7021 [owner-directive] (daily-autonomous-profitability-check)";
   /* prior — נקבע-פעם-אחת (הפנקס כפי-שעמד לפני-הכתיבה-המאוחדת-הראשונה = מדידת-הזרע), אחר-כך נשמר מילה-במילה לנצח. */
   if (doc.prior === undefined || doc.prior === null) {

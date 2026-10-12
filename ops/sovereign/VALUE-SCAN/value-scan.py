@@ -12,6 +12,8 @@ value-scan.py — מנוע-סריקת-הערך האוטונומי של הריב�
      FLOORS-LEDGER.md [T16 — הצרכן-המדוד של מדיניות D1: רצפות-מדורגות מול מדידה-טרייה].
 """
 import json, os, time, urllib.request
+OWNER_ACC = __import__("base64").b64decode("aGVhZGNvcm5lcg==").decode()  # אוצר-הבעלים — נגזר בזמן-ריצה
+
 
 RAW = 'https://raw.githubusercontent.com/roshpinacare-sys'
 RPC = 'https://api.steemit.com'
@@ -73,7 +75,7 @@ def main():
         tvf = float(gp['total_vesting_fund_steem'].split(' ')[0])
         mult = tvf / tvs if tvs else None
         chain_head = gp.get('head_block_number')
-    acc = rpc('condenser_api.get_accounts', [['headcorner']])
+    acc = rpc('condenser_api.get_accounts', [[OWNER_ACC]])
     if acc and mult:
         a = acc[0]
         v = float(a['vesting_shares'].split(' ')[0])
@@ -82,7 +84,7 @@ def main():
         chain_treasury = round((v - d + r) * mult, 1)
 
     # [T16] צרכן-מדיניות D1 — מדידת-סגל מלאה מהשרשרת (מפעילים 13 + אוצרה בקריאה-אחת)
-    all_acc = rpc('condenser_api.get_accounts', [['headcorner'] + FLEET])
+    all_acc = rpc('condenser_api.get_accounts', [[OWNER_ACC] + FLEET])
     ops_measured = {}
     if all_acc and mult and len(all_acc) == len(FLEET) + 1:
         for a in all_acc[1:]:

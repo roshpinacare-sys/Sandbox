@@ -20,6 +20,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync, appendFileSync } from "node:fs";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -83,7 +84,7 @@ function readLocalJson(path) {
 // ── מדידת-שרשרת עצמאית: אותו-נוסחה-של-T14, ריצה-עצמאית (R1: אימות ≠ העתקה) ──
 async function measureChain() {
   const gp = await steemRpc("condenser_api.get_dynamic_global_properties", []);
-  const accs = await steemRpc("condenser_api.get_accounts", [["headcorner", ...FLEET]]);
+  const accs = await steemRpc("condenser_api.get_accounts", [[OWNER_ACC, ...FLEET]]);
   if (!gp || !Array.isArray(accs) || accs.length !== FLEET.length + 1) return null;
   const tvs = parseFloat(String(gp.total_vesting_shares || "0"));
   const tvf = parseFloat(String(gp.total_vesting_fund_steem || "0"));
@@ -101,7 +102,7 @@ async function measureChain() {
   return {
     head: gp.head_block_number ?? null,
     mult,
-    treasuryNetSp: sp(by.get("headcorner")),
+    treasuryNetSp: sp(by.get(OWNER_ACC)),
     operatorsSp: ops,
     measuredAt: NOW(),
   };

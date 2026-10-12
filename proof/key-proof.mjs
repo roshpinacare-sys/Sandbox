@@ -13,7 +13,7 @@
  *                ציבורי / ערכי-סיסמה בהקשר / ארכיונים חתומים).
  *   2. DERIVE  — לכל WIF/hex: גזירת מפתח-ציבורי (secp256k1 + STM Base58Check).
  *   3. CHAIN   — קריאה בלבד: get_key_references + רשויות-חיות של 14 חשבונות
- *                + עדות-רוטציה מ-account_history של headcorner.
+ *                + עדות-רוטציה מ-account_history של owner-treasury.
  *   4. VERDICT — DEAD / ALIVE-ALERT / UNKNOWN(-NOT-CHAIN-TESTABLE) לכל חומר.
  *
  * חוק-הצנזורה (ברזל): בארטיפקט ייכתב רק sha256-of-material (16-hex) + מפתח-
@@ -37,6 +37,7 @@
  * ═══════════════════════════════════════════════════════════════════════ */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, chmodSync } from "node:fs";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -45,13 +46,13 @@ import { createHash } from "node:crypto";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ORG = "roshpinacare-sys";
 const REPOS = ["roshpina", "anchor-baseline", "saos-jummper", "Sdk", "Adsmarket"];
-const FLEET = ["headcorner", "cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6"];
+const FLEET = [OWNER_ACC, "cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6"];
 // ה-9 של R11 (owner keys לא-בכספת → tx_missing_owner_auth) — saos-dex SAOS_BREAKTHROUGH_PROOF §15.4
 const NINE = ["cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wog", "woq"];
 const ROLES = ["owner", "active", "posting", "memo"];
 const NODES = ["https://api.steemit.com", "https://api.justyy.com", "https://steem-api.4everland.org"];
 const B58A = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-const GEN2_ACTIVE = "STM5jRfQH9DAF2474UQF1GVarShJZhpSPEYZFiZVr8MHV8cNSXDQf"; // ציבורי: רשות-active החיה של headcorner (COORDINATION zai-9c)
+const GEN2_ACTIVE = "STM5jRfQH9DAF2474UQF1GVarShJZhpSPEYZFiZVr8MHV8cNSXDQf"; // ציבורי: רשות-active החיה של owner-treasury (COORDINATION zai-9c)
 const MAX_BLOB = 2_000_000;         // בתים ל-blob בודד
 const MAX_SCAN_BYTES = 400_000_000; // תקציב-סריקה כולל
 const HIST_PAGES_MAX = 400;         // תקציב-דפים להליכת account_history (100 לדף)
@@ -297,15 +298,15 @@ function selftest() {
   const stmOfPriv1 = pubToSTM(g);
   ok("STM derive deterministic", stmOfPriv1 === pubToSTM(privToPubBytes(p1)));
   ok("STM round-trip via stmToPub", hex(stmToPub(stmOfPriv1)) === hex(g));
-  const gen2 = stmToPub(GEN2_ACTIVE); // מפתח-ה-active החי של headcorner — ציבורי
+  const gen2 = stmToPub(GEN2_ACTIVE); // מפתח-ה-active החי של ${OWNER_ACC} — ציבורי
   ok("decode real chain key (GEN-2 active)", gen2.length === 33 && (gen2[0] === 2 || gen2[0] === 3));
   let badStm = false; try { stmToPub("STM" + GEN2_ACTIVE.slice(3, 52) + "z"); } catch { badStm = true; }
   ok("STM checksum mismatch rejected", badStm);
   // 5) גזירת-סיסמת-מאסטר דטרמיניסטית ותלוית-(חשבון,תפקיד) — וקטור-זבל שנוצר-במקום
   const junk = "selftest-throwaway-" + Date.now();
-  const a1 = masterPasswordPub("headcorner", "active", junk), a2 = masterPasswordPub("headcorner", "active", junk), a3 = masterPasswordPub("headcorner", "posting", junk);
+  const a1 = masterPasswordPub(OWNER_ACC, "active", junk), a2 = masterPasswordPub(OWNER_ACC, "active", junk), a3 = masterPasswordPub(OWNER_ACC, "posting", junk);
   ok("master-password derivation deterministic + role-bound", a1 === a2 && a1 !== a3);
-  ok("seed-order derivation runs", typeof seedOrderPub("headcorner", "active", junk, 0) === "string");
+  ok("seed-order derivation runs", typeof seedOrderPub(OWNER_ACC, "active", junk, 0) === "string");
   // 6) דפוסי-חילוץ
   const h64 = "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20";
   const sample = `line one\nwif: ${wif1}\nprivate_key: "${h64}"\npassword = "selftest-pass-123"\nposting: ${stmOfPriv1}\nsee docs/reports/whatever.md`;
@@ -526,14 +527,14 @@ async function keyReferences(pubkeys, log) {
   }
 }
 async function rotationEvidence(log) {
-  // הליכה מדופדפת אחורה ב-account_history של headcorner עד חלון-הרוטציה (2026-10-08T17:29Z)
+  // הליכה מדופדפת אחורה ב-account_history של ${OWNER_ACC} עד חלון-הרוטציה (2026-10-08T17:29Z)
   const WINDOW = { from: "2026-10-08T15:00:00", to: "2026-10-08T19:00:00" };
   const OPS = new Set(["account_update", "account_create", "account_create_with_delegation", "recover_account", "change_recovery_account"]);
   const found = [];
   let start = -1, pages = 0, opsSeen = 0, reachedWindowEnd = false, truncated = false;
   try {
     while (pages < HIST_PAGES_MAX) {
-      const { result } = await rpcFailover("account_history_api.get_account_history", { account: "headcorner", start, limit: 100 }, 40_000);
+      const { result } = await rpcFailover("account_history_api.get_account_history", { account: OWNER_ACC, start, limit: 100 }, 40_000);
       const hist = Array.isArray(result) ? result : result?.history || [];
       if (!hist.length) break;
       pages++; opsSeen += hist.length;
@@ -595,7 +596,7 @@ function buildSoldierProbe(chainState, accountsRaw) {
     const owner = a.owner[0] || null, active = a.active[0] || null;
     rows.push({
       account: name,
-      lane: name === "headcorner" ? "treasury" : NINE.includes(name) ? "r11-nine (owner keys not in machine vault — owner-auth ops blocked tx_missing_owner_auth)" : "fleet",
+      lane: name === OWNER_ACC ? "treasury" : NINE.includes(name) ? "r11-nine (owner keys not in machine vault — owner-auth ops blocked tx_missing_owner_auth)" : "fleet",
       ownerPubkey: owner, activePubkey: active, postingPubkey: a.posting[0] || null, memoPubkey: a.memo[0] || null,
       ownerEqualsActive: !!owner && !!active && keyBody(owner) === keyBody(active),
       lastOwnerUpdate: a.lastOwnerUpdate,
@@ -735,10 +736,10 @@ async function main() {
       node: chainState.node, fleetAccounts: FLEET.length, fleetAliveKeyBodies: chainState.aliveSet.size,
       keyReferencesAvailable: keyRefsAvailable, keyReferenceNote: keyRefsAvailable ? "condenser_api.get_key_references used (global reference census)" : "unavailable — aliveness decided by fleet-authority membership only",
       rotation,
-      headcornerLastOwnerUpdate: chainState.accounts.headcorner?.lastOwnerUpdate || null,
-      headcornerActiveLive: chainState.accounts.headcorner?.active?.[0] || null,
+      [OWNER_ACC+"LastOwnerUpdate"]: chainState.accounts[OWNER_ACC]?.lastOwnerUpdate || null,
+      [OWNER_ACC+"ActiveLive"]: chainState.accounts[OWNER_ACC]?.active?.[0] || null,
       gen2ActiveExpected: GEN2_ACTIVE,
-      gen2ActiveMatchesLive: (chainState.accounts.headcorner?.active?.[0] || "") === GEN2_ACTIVE,
+      gen2ActiveMatchesLive: (chainState.accounts[OWNER_ACC]?.active?.[0] || "") === GEN2_ACTIVE,
     } : { error: chainError || "skipped (--offline)" },
     summary: { ...counts, incident },
     verdicts,

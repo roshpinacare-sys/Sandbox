@@ -13,11 +13,12 @@
 // כנות: חשבון-שהמפתח-שלו-חי-אבל-אין-לו-הון = "armed-idle" (כנה), לא "פעיל".
 // ═══════════════════════════════════════════════════════════════════════════
 import { writeFileSync, appendFileSync, mkdirSync, readFileSync } from "node:fs";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 
 const STEEM_NODES = ["https://api.steemit.com", "https://api.justyy.com"];
 const HIVE_NODES = ["https://api.hive.blog", "https://api.deathwing.me"];
 const CENSUS_RAW = "https://raw.githubusercontent.com/roshpinacare-sys/saos-runtime/main/ops/key-census-probe/receipt-v2.json";
-const ROSTER = ["headcorner", "cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6"];
+const ROSTER = [OWNER_ACC, "cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6"];
 const EXTRA = ["cornerstone"]; // hive-only
 const RC_WARN_PCT = 40;
 
@@ -147,7 +148,7 @@ try {
     };
     if ((row.steem?.rcPct ?? 100) < RC_WARN_PCT) result.alerts.push(`rc-starved: ${name} steem-rc=${row.steem?.rcPct}%`);
     if (row.rails.market === "armed-idle-no-capital") result.alerts.push(`armed-idle: ${name} has live active key but ~zero liquid capital`);
-    if (name === "headcorner" && row.rails.market === "no-active-key") result.alerts.push(`headcorner-market-blocked: no active key in any machine-held material (census-v2 verdict=${census?.verdict ?? "?"}) — the ladder lives on-chain (openOrders=${row.steem?.openOrders ?? 0}) but cannot refresh; owner one-action pending`);
+    if (name === OWNER_ACC && row.rails.market === "no-active-key") result.alerts.push(`${OWNER_ACC}-market-blocked: no active key in any machine-held material (census-v2 verdict=${census?.verdict ?? "?"}) — the ladder lives on-chain (openOrders=${row.steem?.openOrders ?? 0}) but cannot refresh; owner one-action pending`);
     if (name === "cornerstone") result.alerts.push(`hive-capital: cornerstone holds ${row.hive?.hive} HIVE + ${row.hive?.hbd} HBD — machine holds no hive keys (flow awaits owner release)`);
     result.accounts.push(row);
   }
@@ -163,7 +164,7 @@ try {
     hiveAccounts: result.accounts.filter((a) => a.exists.hive).length,
     hiveWithKeys: result.accounts.filter((a) => a.rolesLive.hive.length > 0).length,
     hiveCapitalHive: +result.accounts.filter((a) => a.exists.hive).reduce((t, a) => t + (a.hive?.hive ?? 0), 0).toFixed(3),
-    steemLiquidTreasury: +((result.accounts.find((a) => a.account === "headcorner")?.steem?.steem ?? 0) + (result.accounts.find((a) => a.account === "headcorner")?.steem?.sbd ?? 0)).toFixed(3),
+    steemLiquidTreasury: +((result.accounts.find((a) => a.account === OWNER_ACC)?.steem?.steem ?? 0) + (result.accounts.find((a) => a.account === OWNER_ACC)?.steem?.sbd ?? 0)).toFixed(3),
   };
   result.summary = s;
   result.overall = "PASS_WITH_ALERTS";

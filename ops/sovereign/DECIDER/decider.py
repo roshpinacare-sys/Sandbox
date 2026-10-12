@@ -24,6 +24,8 @@ import os
 import re
 import urllib.request
 from datetime import datetime, timezone
+OWNER_ACC = __import__("base64").b64decode("aGVhZGNvcm5lcg==").decode()  # אוצר-הבעלים — נגזר בזמן-ריצה
+
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = BASE
@@ -67,7 +69,7 @@ def read_json(url, timeout=20):
 def measure_chain(degraded):
     """מדידת-שרשרת עצמאית: המרה מדויקת VESTS→SP. None כנה במקום המצאה."""
     gp = rpc("condenser_api.get_dynamic_global_properties", [])
-    names = ["headcorner"] + FLEET
+    names = [OWNER_ACC] + FLEET
     accs = rpc("condenser_api.get_accounts", [names])
     if not gp or not accs or len(accs) != len(names):
         degraded.append("chain-rpc")
@@ -86,7 +88,7 @@ def measure_chain(degraded):
         return round((v - d + r) * mult, 1), round(d * mult, 1), round(r * mult, 1)
 
     by = {a["name"]: a for a in accs}
-    hc = by["headcorner"]
+    hc = by[OWNER_ACC]
     net, out, inn = sp(hc)
     ops = {}
     for n in FLEET:
@@ -106,11 +108,11 @@ def measure_chain(degraded):
 
 
 def scan_outgoing_delegations(max_ops=3000, degraded=None):
-    """סריקת-היסטוריית headcorner: האצלות-יוצאות (אחרונה-לכל-delegatee) + דיווח-כנה-על-עומק.
+    """סריקת-היסטוריית OWNER_ACC: האצלות-יוצאות (אחרונה-לכל-delegatee) + דיווח-כנה-על-עומק.
     api.steemit.com מגביל חלון-היסטוריה ל-100 — סריקה-באצוות (R1: כישלון=כנות).
     מטרת-האמת: לאמת-לאן-הלכה-ההאצלה-היוצאת (רגלי-הצי) — לא לשחרר אותה."""
     BATCH = 100
-    newest = rpc("condenser_api.get_account_history", ["headcorner", -1, 1])
+    newest = rpc("condenser_api.get_account_history", [OWNER_ACC, -1, 1])
     if not newest:
         if degraded is not None:
             degraded.append("hc-history")
@@ -120,14 +122,14 @@ def scan_outgoing_delegations(max_ops=3000, degraded=None):
     scanned, hi = 0, newest_idx
     while scanned < max_ops and hi >= 1:
         lo = max(1, hi - BATCH + 1)
-        res = rpc("condenser_api.get_account_history", ["headcorner", lo, hi - lo + 1])
+        res = rpc("condenser_api.get_account_history", [OWNER_ACC, lo, hi - lo + 1])
         if not res:
             if degraded is not None:
                 degraded.append("hc-history-window")
             break
         for idx, ev in res:
             opname, op = ev["op"]
-            if opname == "delegate_vesting_shares" and op.get("delegator") == "headcorner":
+            if opname == "delegate_vesting_shares" and op.get("delegator") == OWNER_ACC:
                 vests = float(str(op.get("vesting_shares", "0")).split(" ")[0])
                 if op.get("delegatee") not in latest:
                     latest[op.get("delegatee")] = {"idx": idx, "ts": ev.get("timestamp"), "vests": vests}

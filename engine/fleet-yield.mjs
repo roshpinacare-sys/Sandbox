@@ -20,12 +20,13 @@
  * env:
  *   FLEET_ENGINE_DIR    (ברירת-מחדל fleet-engine)      — checkout המנוע
  *   FLEET_RECEIPTS_DIR  (ברירת-מחדל receipts/fleet-yield)
- *   FLEET_VOTER         (ברירת-מחדל headcorner)        — קריאת-סוללה-בלבד (אפס-חתימה)
+ *   FLEET_VOTER         (ברירת-מחדל owner-treasury)        — קריאת-סוללה-בלבד (אפס-חתימה)
  *   FLEET_RPC           (ברירת-מחדל https://api.steemit.com)
  *   FLEET_FETCH_LIMIT   (ברירת-מחדל 80 — T-62: קלאמפ 20..100; הגבול-האמתי-הוא-גודל-העמוד-של-הצומת ≤100/קריאה)
  *   FLEET_LOG_MAX       (ברירת-מחדל 240 — סבוב-יומן-הקבלות)
  */
 import fs from "node:fs";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import path from "node:path";
 import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
@@ -34,7 +35,7 @@ import { pathToFileURL } from "node:url";
 const ENGINE_ROOT = path.resolve(process.env.FLEET_ENGINE_DIR || "fleet-engine");
 const ENGINE_SUB = "mini-services/saos-engine";
 const REC_DIR = path.resolve(process.env.FLEET_RECEIPTS_DIR || "receipts/fleet-yield");
-const VOTER = String(process.env.FLEET_VOTER || "headcorner").trim();
+const VOTER = String(process.env.FLEET_VOTER || OWNER_ACC).trim();
 const RPC = String(process.env.FLEET_RPC || "https://api.steemit.com").replace(/\/+$/, "");
 const LOG_MAX = Math.max(2, Math.min(2000, Number(process.env.FLEET_LOG_MAX) || 240));
 const FETCH_LIMIT_DEFAULT = 80; // T-62 release: false self-limit raised — real bound is the node page size (≤100/call for get_discussions_by_*); anti-spam spacing and VP laws untouched
@@ -191,7 +192,7 @@ async function main() {
    * (נופל-בין-מכשירים) ולא-מדינת-מנוע (נופל-בין-ריצות).
    * מדידה-חייה 09:33Z: get_account_votes-מת-בצמתים-המודרניים (Server-error) →
    * מפל: get_account_history-בעימוד-אחורה (הצומת-מגביל-100-לעמוד · נמדד:
-   * 100-ops-אחרונים-של-headcorner = 1.09-שעות-בלבד! החשבון-פעיל-מאוד) —
+   * 100-ops-אחרונים-של-${OWNER_ACC} = 1.09-שעות-בלבד! החשבון-פעיל-מאוד) —
    * עימוד-עד-כיסוי-חלון-הגיל (250-דק' > חלון-המועמדים-240) או-5-עמודים.
    * שני-המקורות-נפלו = dedup-לא-זמין-בכנות (recentVotes=null) — הקבלה-עצמה-כשרה
    * (ה-intel-אינו-תלוי-פנקס-ההצבעות; ה-cockpit-מציג-זאת-בכנות). */

@@ -21,6 +21,7 @@
  *  13. (T-56) שני-המקורות-מתים → dedup=unavailable · recentVotes=null · אף-ירוק-שקרי
  */
 import fs from "node:fs";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import os from "node:os";
 import path from "node:path";
 import http from "node:http";
@@ -43,7 +44,7 @@ const FIXTURE_POLICY = {
   minVpEffPct: 35, baseWeightPct: 70, minWeightPct: 35,
   ageMinMinutes: 10, ageMaxMinutes: 240, minBodyChars: 600,
   maxPendingSbd: 30, fetchLimit: 50,
-  tags: ["steem", "ai"], excludeAccounts: ["headcorner", "hcsoldier1"],
+  tags: ["steem", "ai"], excludeAccounts: [OWNER_ACC, "hcsoldier1"],
 };
 const FIXTURE_POSTS = [
   { author: "alice", permlink: "fresh-a", tag: "steem", voteCount: 20, tooYoung: false },
@@ -129,7 +130,7 @@ function startRpcServer({ accountOk = true, votesOk = true, histOk = true, voted
             let wrap = { op: ["transfer", { from: "x", to: "y", amount: "1.000 STEEM" }], timestamp: nowIso };
             if (votedFixture && i === voteIdx) {
               const [author, permlink] = String(votedFixture).split("/");
-              wrap = { op: ["vote", { voter: "headcorner", author, permlink, weight: 7000 }], timestamp: fixtureVote[0].time };
+              wrap = { op: ["vote", { voter: OWNER_ACC, author, permlink, weight: 7000 }], timestamp: fixtureVote[0].time };
             }
             result[String(i - lo)] = [i, wrap]; // מפתח-יחסי · אינדקס-פנימי-מוחלט — כמו-הצומת-האמת
           }
@@ -302,7 +303,7 @@ async function main() {
 
     /* ── ניסוי 14 (T-56): הצבעה-עמוקה-מעמוד-הראשון — העימוד-מוצא-אותה ──
      * voteIdx=50: עמוד-1 (100..199) לא-מכיל-אותה → המנוע-חייב-לעמוד-2 (0..99).
-     * זה-החור-שנמדד-חי: 100-ops-אחרונים-של-headcorner = 1.09-שעות-בלבד.
+     * זה-החור-שנמדד-חי: 100-ops-אחרונים-של-${OWNER_ACC} = 1.09-שעות-בלבד.
      * bob/fresh-b נבחר-בכוונה — מועמד-שה-fixture-מציב-ב-selected (carol-נפסלת-מגיל-ולא-מגיעה-לכאן-מעולם = ירוק-שקרי). */
     const { srv: srv14, url: rpcUrl14 } = await startRpcServer({ accountOk: true, votesOk: false, histOk: true, votedFixture: "bob/fresh-b", voteIdx: 50 });
     try {

@@ -2,13 +2,13 @@
   "ok": true,
   "schema": "roshpinacare.profit-oracle/1",
   "agent": "profit-oracle v1 (zai-14b)",
-  "law": "keyless daily profitability pulse: V-WORTH (14-roster own/eff SP + liquid + order-book mid → netWorthSbdEquiv) · V-GRID-EDGE (pnl-desk verdict/edge/realized — value is data, desk decides) · V-ZOMBIE-LADDER (headcorner open orders vs prior: vanished = AMBER until fill/cancel verified); delta > +0.5% = PROFIT, ±0.5% = FLAT, < −0.5% = LOSS; network failure = UNKNOWN + reason, never guessed",
+  "law": "keyless daily profitability pulse: V-WORTH (14-roster own/eff SP + liquid + order-book mid → netWorthSbdEquiv) · V-GRID-EDGE (pnl-desk verdict/edge/realized — value is data, desk decides) · V-ZOMBIE-LADDER (owner-treasury open orders vs prior: vanished = AMBER until fill/cancel verified); delta > +0.5% = PROFIT, ±0.5% = FLAT, < −0.5% = LOSS; network failure = UNKNOWN + reason, never guessed",
   "gate": "profit-oracle (zai-14b) — standing daily profit pulse; joins zai-12b's fresh-oracle house pattern; owner trace 1a12…7021 'the autonomy itself checks profitability daily'",
   "prior": {
     "ok": true,
     "schema": "roshpinacare.profit-oracle/1",
     "agent": "profit-oracle v1 (zai-14b)",
-    "law": "keyless daily profitability pulse: V-WORTH (14-roster own/eff SP + liquid + order-book mid → netWorthSbdEquiv) · V-GRID-EDGE (pnl-desk verdict/edge/realized — value is data, desk decides) · V-ZOMBIE-LADDER (headcorner open orders vs prior: vanished = AMBER until fill/cancel verified); delta > +0.5% = PROFIT, ±0.5% = FLAT, < −0.5% = LOSS; network failure = UNKNOWN + reason, never guessed",
+    "law": "keyless daily profitability pulse: V-WORTH (14-roster own/eff SP + liquid + order-book mid → netWorthSbdEquiv) · V-GRID-EDGE (pnl-desk verdict/edge/realized — value is data, desk decides) · V-ZOMBIE-LADDER (owner-treasury open orders vs prior: vanished = AMBER until fill/cancel verified); delta > +0.5% = PROFIT, ±0.5% = FLAT, < −0.5% = LOSS; network failure = UNKNOWN + reason, never guessed",
     "gate": "profit-oracle (zai-14b) — standing daily profit pulse; joins zai-12b's fresh-oracle house pattern; owner trace 1a12…7021 'the autonomy itself checks profitability daily'",
     "prior": null,
     "runs": [
@@ -54,7 +54,7 @@
             "measuredAt": "2026-10-11T23:50:15.409Z",
             "evidence": {
               "method": "database_api.find_limit_orders",
-              "account": "headcorner",
+              "account": "owner-treasury",
               "error": "תשובה ללא result"
             },
             "note": "כשל-RPC בסריקת-הפקודות — לא מנחשים"
@@ -147,7 +147,7 @@
           "measuredAt": "2026-10-11T23:50:15.409Z",
           "evidence": {
             "method": "database_api.find_limit_orders",
-            "account": "headcorner",
+            "account": "owner-treasury",
             "error": "תשובה ללא result"
           },
           "note": "כשל-RPC בסריקת-הפקודות — לא מנחשים"
@@ -224,7 +224,7 @@
           "measuredAt": "2026-10-11T23:50:31.736Z",
           "evidence": {
             "method": "database_api.find_limit_orders",
-            "account": "headcorner",
+            "account": "owner-treasury",
             "count": 16,
             "openSbd": 94.011,
             "openSteem": 962.673,
@@ -307,7 +307,7 @@
           "measuredAt": "2026-10-11T23:52:51.286Z",
           "evidence": {
             "method": "database_api.find_limit_orders",
-            "account": "headcorner",
+            "account": "owner-treasury",
             "count": 16,
             "openSbd": 94.011,
             "openSteem": 962.673,

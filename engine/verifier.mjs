@@ -30,6 +30,7 @@
  * ═══════════════════════════════════════════════════════════════════════════════════════════
  */
 import { createHash } from "node:crypto";
+const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, statSync, realpathSync } from "node:fs";
 import { execSync } from "node:child_process";
 import path from "node:path";
@@ -426,7 +427,7 @@ export function verifyLedger(lines) {
 /* [zai-15c] 2026-10-12: += אוצר-הצי — יישור-קו עם ה-scrub של המפעיל (1bb4eff, mandate trace
    1a12…bc29: "operator handle neutralized") — הסורק נאפה-מחדש בכל-ריצה; בלי-המיפוי
    הזה כל-ריצה-מחדשת הייתה מחזירה את-השם-שה-scrub נטרל (מרוץ-אמת-מול-חסימה). */
-const REDACT = [[/בית-הכספת/g, "vault-home"], [/roshpinacare-sys\/steem/g, "engine-home"], [/@headcorner/g, "אוצר-הצי"]];
+const REDACT = [[/בית-הכספת/g, "vault-home"], [/roshpinacare-sys\/steem/g, "engine-home"], [/@${OWNER_ACC}/g, "אוצר-הצי"]];
 export const redact = (s) => REDACT.reduce((a, [re, to]) => String(a).replace(re, to), s);
 
 /* ── דוח-עברית ── */

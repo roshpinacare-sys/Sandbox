@@ -36,7 +36,7 @@ steem@saos-cockpit — אפס-שכפול-חוקים), מריץ את-ה-selftest-
 
 - selftest שלי: **33/33 PASS** (אופליין, דטרמיניסטי).
 - selftest של-המנוע: **1218/1218 PASS** (c7cc9af87d6d).
-- ריצה-חיה ×2: `INTEL-OK` · vestsPerSP=1612.580 · headcorner vpEff=75.3% ·
+- ריצה-חיה ×2: `INTEL-OK` · vestsPerSP=1612.580 · owner-treasury vpEff=75.3% ·
   נסרקו 300 מועמדים · נבחרו 3 · crowded-pool תפס 2 · שרשרת
   `1081abba… → 992f1867…` (קיפול-אמת-בין-שתי-ריצות).
 

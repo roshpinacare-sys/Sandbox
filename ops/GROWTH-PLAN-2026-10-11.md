@@ -12,7 +12,7 @@
 |---|---|---|
 | קורצ'ינג (curation) | fleet-yield מודד מועמדים כל-~2h (read-only); חתימה-הוכחה-פעם-אחת-מקצה-לקצה (T-58, txid 3bad...) | החיבור מועמדים→חתימה לא רץ-בקצב; דורש מסלול-חתימה-קיים בקוקפיט |
 | צי-תוכן (11 חשבונות, 10 חיילים) | 8/11 מפרסמים; blurt חודש (R294, 9/9 מאומתים); cadence-law מוצע ≤1/6h | רוטציית מפתחות R11 (בעלים) חוסמת-הרחבה-בטוחה |
-| SP-אוצר | headcorner 2,926 SP (<3,000 רצפה — V-TREASURY-BALANCE פתוח); 10-חיילים 31-94 SP | איזון-האצלה-חוזר; ההאצלה של zai-code-2 ARMED-AND-READY (248.9 SP, ממתין-רוטציה+סנכרון-custodian) |
+| SP-אוצר | owner-treasury 2,926 SP (<3,000 רצפה — V-TREASURY-BALANCE פתוח); 10-חיילים 31-94 SP | איזון-האצלה-חוזר; ההאצלה של zai-code-2 ARMED-AND-READY (248.9 SP, ממתין-רוטציה+סנכרון-custodian) |
 | DEX/מסחר | קוד אמיתי 28K-LOC, ספר-סימולציה; דופק-חי ב-runtime; grid-doctor v2.2 מודד drift/פנטום | **דרישת-בעלים אחת לחימוש** (סוד אחד); post-arming baselines כבר-rebased |
 | אמון/שיווק | חלון-המשרד חי בדף (E3); Adsmarket=קיט-כנה-עם-claims-guard; truth.html; TruthRail עד-חוץ | קישור-הדדי (footer) ועדכניות-מתמשכת — בוצע חלקית היום |
 | מוצר-ארנק | Saosmartwallet: P0-תיקונים, artery-wallet PASS-עם-provenance שעה-שעה | פריסה-אמיתית (77-נתיבי-API לא-פרוסים מעולם); הכרעת db/custom.db (בעלים) |
