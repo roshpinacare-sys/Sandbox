@@ -352,22 +352,5 @@
 - NOT touching: probe*.cjs internals (zai-16a territory), gen2 era, owner-treasury posting (live lanes), treasury-ladder, sovereign-runtime heartbeat. Zero overlap with zai-16a files.
 - Zero broadcasts from the sandbox itself; all chain writes happen inside the CI lane with dual verification.
 
----
-Task ID: 6 (lead, audit)
-Agent: Z.ai Code (zai-main-1a12fce5, trace 1a12…79b9)
-Task: תביעת-בעלים "[owner-directive]" + מפתחות-לא-מתחברים + חשיפה-מפלילה + מקצועיות + מידע-מיושן.
-
-Work Log:
-- מדידת-מפתח-בעלים ([key-file], לא-הודפס): 52-תווים (WIF=51), checksum-WIF-נכשל, תיקון-תו-יחיד (מחיקה/החלפה ×~3000) = 0-פתרונות → המחרוזת-פגומה-2+שגיאות.
-- שרשרת-המפתחות-מדודה: (1) Console/gate.html מאמת-מול-שרשרת-חיה — נכון-עיקרון, אבל-מפתח-פגום=נדחה. (2) FleetHQ operator.html-חי-ב-Pages: PBKDF2-310k GATE_HASHES=2-האשים-שנאפו-ע"י-סוכן; מפתח-בעלים-נבדק-מולם=REJECTED. (3) FleetHQ /api/operator/unlock=404-בייצור (Pages-סטטי). (4) [host]/.operator/config.json לא-נוצר-מעולם.
-- גילוי-שרשרת: owner-treasury last_owner_update=2026-10-12T11:12:33Z — posting+active-סובבו-בחלון-זה (STM7Rq…→STM8m3r…); gen2-rotation-run-11:14=failure; הצי-ממשיך-בפועל-הצבעות-10:58-11:06-והזמנות-limit_order (ACTIVE-חי) — ה-"park"-לא-מדויק.
-- keys-access.json (Sandbox): מפתחות-cashmachine-posting+active-חשופים-בהיסטוריה-ציבורית-של-roshpina-מ-09-12 — רוטציה-בביצוע-ע"י-מסילה-אחרת (phase-A) — לא-נוגעים.
-- key-proof.mjs WIF=וקטור-privkey=1-ציבורי — לא-דליפה (נבדק-בגזירה).
-- סריקת-חשיפה-עצמאית ×9-ריפו: אפס-סודות-גולמיים; הסיכון-מטא-מנגנונים. סוכן-7-a (מקביל): 40-ממצאים — ~150-טענות-קול-בעלים-בציבור (requests.json ×2-כ-API-ציבורי! worklogs-על-בעלים, CR-quotes, ESTATE-INDEX, RUNBOOK), 14-מיושנים (readiness-09-17, beacon-ירוק-על-נתון-2-ימים-ושבור-מ-P0-1), sovereign-anchor-מבקש-WIF-בעמוד-ציבורי.
-- סוכן-7-b: refero.design-נגיש-חי; דוקטרינת-13-עקרונות + roast-gate.html (זהב-×16, CTA-שקוף, זוהרים, כרטיסים-מרחפים, סגול-כאקסנט-שני, חצאי-פיקסלים) + tokens-מוכנים.
-- נדחף Sandbox@main 97868d3c: ops/PUBLISHING-POLICY.json (PUBLISH/PRIVATE/SANITIZE/FORBIDDEN + חוק-חיות 24h/72h + חוק-שער-אחד).
-
-Stage Summary:
-- מסקנת-הבעלים-צודקת: הכניסות-לא-תואמות-את-מפתחו (מדוד-מקצה-לקצה), הציבור-רואה-קול-צ'אט-ומנגנוני-כניסה, יש-מיושנים-בכמויות, והתוכן-הציבורי-מתחת-לסטנדרט.
-- נדרש-מהבעלים: מחרוזת-מפתח-תקינה-או-סיסמה-שתבחר → רישום-לכל-השערים; הכרעה-על-גל-מחיקות-לפי-PUBLISHING-POLICY; אישור-רוטציית-cashmachine (כבר-בביצוע-מסילה-אחרת).
-- אין-דריסה: לא-נגעתי-ב-phase-A-rotation, gen2, office3d, steem-repair, FleetHQ-office-reds, fresh-oracle.
+2026-10-12 | zai-main-1a12fce5 | ביקורת-אמת-מלאה-על-הכניסות: מפתח-הבעלים-שהודבק=פגום(52תו,checksum-נכשל,תיקון-תו-יחיד=0) · שלושת-השערים-דוחים-מפתח-בעלים(נמדד-מקצה-לקצה) · /api/operator/unlock=404-בייצור · headcorner-סובב-11:12:33Z(gen2) · הצי-ממשיך-הצבעות/מסחר — ה-park-לא-מדויק | Sandbox@97868d3c | ops/PUBLISHING-POLICY.json
+2026-10-12 | zai-main-1a12fce5 | הדחיפה-הראשונה-שלי-לפנקס-הפרה-את-פורמט-שורה-אחת (blob-מרובה-פסקאות) — תוקן-בשורות-אלו; לקח: פורמט-הפנקס=שורה-לפעולה | (תיקון-זה) | ops/AGENT-LEDGER.md
