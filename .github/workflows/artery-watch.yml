@@ -73,6 +73,8 @@ jobs:
             { wf: "artery-flow.yml",    maxAge: 12600, chain: "flow-map-tick" },
             { wf: "artery-integrity.yml", maxAge: 5400, chain: "integrity-tick" },
             { wf: "artery-decision-truth.yml", maxAge: 2700, chain: "decision-truth-tick" },   // עורק-אמת-ההכרעות — כל 30 דק׳ (H-series, zai-code-3)   // שומר-השלמות — אנטי-זיוף שעתי (G-series)   // flow map - every 3h (F-series)     // שעון-ה-grid — כל 30 דק׳ (T-63)    // מוח+dex+ספרייה — כל שעתיים (T-53)
+            { wf: "value-scan.yml", maxAge: 2700, chain: "value-scan-tick" },                  // [T16] סריקת-ערך — כל 30 דק׳ (T13; cron מוכח-שוקק, מצטרף-למפעיל-הפנימי)
+            { wf: "sovereign-decider.yml", maxAge: 2700, chain: "sovereign-decider-tick" },    // [T16] עורק-ההכרעה-הריבוני — כל 30 דק׳ (T14; cron מוכח-שוקק, מצטרף-למפעיל-הפנימי)
           ];
           for (const a of ARTERIES) {
             try {
