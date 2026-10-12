@@ -75,12 +75,24 @@ result.provenance.sha = process.env.GITHUB_SHA || null;
       ageMin: Number.isFinite(ageMin) ? Math.round(ageMin) : null,
       ticks: st.ticks ?? null,
       lastVerdict: st.lastVerdict ?? null,
+      opsToday: st.opsToday ?? null,
+      lastTxid: st.lastTxid ?? null,
     };
     if (st.conf?.enabled === true) {
       assertLaw(
         "law-grid-fresh",
         Number.isFinite(ageMin) && ageMin <= FRESH_MAX_MIN,
         `grid enabled=true: lastTickAt must be ≤ ${FRESH_MAX_MIN}min old (measured ${result.measured.ageMin ?? "NaN"}min)`
+      );
+      // T-65 law-grid-exec-alive (owner law verbatim: "אין מצב כזה שהוא לא עובד"):
+      // a ticking grid that CANNOT execute (credential blocked) is a dead grid in slow motion.
+      const credBlocked = String(st.lastVerdict ?? "").includes("CREDENTIAL-MISSING");
+      assertLaw(
+        "law-grid-exec-alive",
+        !credBlocked,
+        credBlocked
+          ? "grid enabled but blocked on credential (lastVerdict=CREDENTIAL-MISSING) — owner law: no such state where the grid does not work"
+          : "grid executable: lastVerdict=" + (st.lastVerdict ?? "none") + " opsToday=" + (st.opsToday ?? "?")
       );
     } else {
       result.alerts.push("grid-paused-by-operator: conf.enabled !== true — watchdog honest-idle, no red (the operator switch decides)");
