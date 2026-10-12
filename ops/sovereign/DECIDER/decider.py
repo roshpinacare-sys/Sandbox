@@ -351,6 +351,22 @@ def decide_owner_channel(degraded):
         inbox = [json.loads(l) for l in raw.splitlines() if l.strip()]
     except Exception:
         inbox = None
+    # [T19-fix] התיבה עברה-לריפו-פרטי — קריאה-keyless נכשלת; fallback: Contents API
+    # עם GITHUB_TOKEN מובנה (קריאה-עצמית-בלבד, אותו-ריפו — חוקי-מפתח-נשמרים)
+    if not inbox:
+        tok = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or ""
+        if tok:
+            try:
+                repo = os.environ.get("GITHUB_REPOSITORY", "roshpinacare-sys/Sandbox")
+                req = urllib.request.Request(
+                    f"https://api.github.com/repos/{repo}/contents/ops/sovereign/OWNER-CHANNEL/inbox.jsonl?ref=main",
+                    headers={"Authorization": f"Bearer {tok}", "User-Agent": "sovereign-decider",
+                             "Accept": "application/vnd.github.raw"})
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    raw = r.read().decode("utf-8", "ignore")
+                inbox = [json.loads(l) for l in raw.splitlines() if l.strip()]
+            except Exception:
+                inbox = None
     global _board_holder
     board, board_path = load_directive_board()
     _board_holder = board
@@ -359,7 +375,7 @@ def decide_owner_channel(degraded):
     acked = []
     if isinstance(board, dict):
         for d in board.get("directives") or []:
-            if isinstance(d, dict) and d.get("status") == "OPEN":
+            if isinstance(d, dict) and d.get("status") in ("OPEN", "NEW"):
                 d["status"] = "ACK"; d["ackAt"] = now(); d["ackBy"] = "sovereign-decider-v1"
                 d.setdefault("evidence", []).append(
                     f"ACK בפעימה {now()} — מנותב-למסילות-הביצוע (D2) בעדיפות {d.get('priority', 'P2')}")
