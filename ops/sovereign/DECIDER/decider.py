@@ -21,6 +21,7 @@ SOVEREIGN DECIDER v1 — מנוע-ההכרעה-הריבוני (keyless · T14)
 import hashlib
 import json
 import os
+import re
 import urllib.request
 from datetime import datetime, timezone
 
@@ -215,8 +216,10 @@ def decide_econ(chain, beacon, hc_scan, degraded):
             "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
 
 
-def decide_eng(foreman, work_orders, degraded):
-    """D2 — סוכנים-בתקלה/משימות-חסומות: ניתוב-P0 עצמאי (ללא-המתנה)."""
+def decide_eng(foreman, work_orders, degraded, ledger_lines=None):
+    """D2 — סוכנים-בתקלה/משימות-חסומות: ניתוב-P0 עצמאי (ללא-המתנה) + [T16] עדכון-אמת:
+    כשהנושא נמדד-נקי 3 פעימות רצופות — ההכרעה עוברת-ניטור (OBSERVING, RE-MEASURE כנה)
+    במקום להישאר ENFORCED-נצחית שהעולם עבר-ממנה (STALE-TRUTH). חזרת-תקלה → מיד ENFORCED."""
     if not foreman:
         return {"id": "D2-eng-errors", "area": "הנדסה", "status": "OBSERVING",
                 "titleHe": "תקלות-הצוות", "verdictHe": "מקור-הפורמן לא זמין — ממשיכים-למדוד, לא מכריעים-סתם",
@@ -224,11 +227,37 @@ def decide_eng(foreman, work_orders, degraded):
                 "decidedBy": "sovereign-decider-v1 (CHARTER)"}
     errs = [a.get("id") for a in (foreman.get("agents") or []) if a.get("state") == "error"]
     blocked = [t.get("id") for t in (foreman.get("tasks") or []) if t.get("status") == "blocked"]
-    if not errs and not blocked:
+    clean = not errs and not blocked
+
+    # [T16] רצף-נקי — נמדד מהפנקש העצמי (append-bounded; הריצה-הנוכחית תירשם עם engClean)
+    streak = 1 if clean else 0
+    if clean and ledger_lines:
+        for line in reversed(ledger_lines):
+            try:
+                e = json.loads(line)
+            except Exception:
+                continue
+            if e.get("engClean") is True:
+                streak += 1
+            else:
+                break
+
+    if clean:
+        if streak >= 3:
+            return {"id": "D2-eng-errors", "area": "הנדסה", "status": "OBSERVING",
+                    "titleHe": "תקלות-הצוות",
+                    "verdictHe": (f"הנושא-שנותב נמדד-נקי {streak} פעימות רצופות — ההכרעה עוברת-ניטור "
+                                  f"(RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים."),
+                    "evidence": [f"אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי={streak} (מהפנקס)"],
+                    "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)",
+                    "reMeasure": {"cleanStreak": streak, "subjectResolved": True}}
         return {"id": "D2-eng-errors", "area": "הנדסה", "status": "ENFORCED",
-                "titleHe": "תקלות-הצוות", "verdictHe": "הצוות נמדד נקי (אפס-תקלות, אפס-חסימות) — הכרעת-המשך ללא-שינוי",
-                "evidence": ["אפס סוכנים ב-state=error · אפס משימות blocked"],
-                "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
+                "titleHe": "תקלות-הצוות",
+                "verdictHe": (f"הצוות נמדד נקי (רצף {streak}<3) — ההכרעה נשארת-אוכפת עד-רצף-מלא, "
+                              f"ממשיכים-למדוד בלי-להכריז-הצלחה-מוקדמת."),
+                "evidence": [f"אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי={streak}"],
+                "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)",
+                "reMeasure": {"cleanStreak": streak, "subjectResolved": False}}
     wo_ids = [w.get("id") for w in (work_orders or []) if isinstance(w, dict)][:8]
     ev = [f"סוכנים בתקלה (מדוד): {', '.join(errs) or '—'}",
           f"משימות חסומות (מדוד): {', '.join(map(str, blocked)) or '—'}"]
@@ -241,6 +270,29 @@ def decide_eng(foreman, work_orders, degraded):
                           f"(work-orders) מיד, ללא-המתנה-להוראות (צו-סעיף 1)."),
             "evidence": ev, "routing": {"foreman": errs, "officeGrowthWorkOrders": wo_ids},
             "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
+
+
+def measure_work_order_status(degraded):
+    """[T16] סטטוס-מדוד לעבודות-שנותבו — done-ness נבדק במקום להישאר בלתי-ניתן-לאימות.
+    מה-שניתן-למידה-keyless נמדד; מה-שלא — מדווח כנה כ-unmeasured (אין המצאות).
+    · WO-FleetHQ-reds → קבלת-ה-CI האחרונה של FleetHQ (פיד-atom פומבי keyless)."""
+    status = {}
+    try:
+        with urllib.request.urlopen("https://github.com/roshpinacare-sys/FleetHQ/commits/main.atom", timeout=20) as r:
+            feed = r.read().decode("utf-8", "ignore")
+        titles = re.findall(r"<title>(.*?)</title>", feed, re.S)[:6]
+        receipts = [t.strip() for t in titles if "office-ci receipt" in t]
+        if receipts:
+            last = receipts[0]
+            ok = ("build pass" in last and "types pass" in last)
+            status["WO-FleetHQ-reds"] = {
+                "measured": True, "subjectResolved": bool(ok),
+                "evidence": f"קבלת-office-ci האחרונה: '{last[:70]}'"}
+    except Exception:
+        degraded.append("fleet-atom")
+        status["WO-FleetHQ-reds"] = {"measured": False, "subjectResolved": None,
+                                     "evidence": "פיד-atom לא זמין בריצה-זו — כנות"}
+    return status
 
 
 def decide_flow(flow, degraded):
@@ -334,6 +386,15 @@ def main():
     if not tg:
         degraded.append("console-truth-gate")
 
+    # [T16] פנקס-עצמי לרצף-הנקי (לפני-ההכרעות — ההכרעה קוראת-היסטוריה)
+    lpath = os.path.join(OUT_DIR, "ledger.jsonl")
+    ledger_lines = []
+    if os.path.exists(lpath):
+        with open(lpath, encoding="utf-8") as f:
+            ledger_lines = [l for l in f.read().splitlines() if l.strip()]
+    # [T16] סטטוס-מדוד לעבודות-שנותבו (done-ness נבדק, לא נטען)
+    wo_status = measure_work_order_status(degraded)
+
     # ביקורת-אמת: מדוד מול מפורסם
     match = None
     if chain and beacon:
@@ -343,7 +404,7 @@ def main():
 
     decisions = [
         decide_econ(chain, beacon, hc_scan, degraded),
-        decide_eng(foreman, wos, degraded),
+        decide_eng(foreman, wos, degraded, ledger_lines),
         decide_flow(flow, degraded),
         decide_verify(av, tg, degraded),  # [T15] רשת-האמת — בדיקה-עצמית נראית-ומוכרעת
     ]
@@ -362,6 +423,7 @@ def main():
             "beaconChainMatch": match,
         }),
         "decisions": decisions,
+        "workOrderStatus": wo_status,  # [T16] done-ness מדוד למה-שניתן-למידה; כנות לשאר
         "noAction": [],
         "law": "MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE · R1-R5 ב-CHARTER",
     }
@@ -371,22 +433,20 @@ def main():
     with open(path, "w", encoding="utf-8") as f:
         f.write(body + "\n")
 
-    # פנקס append-bounded
-    lpath = os.path.join(OUT_DIR, "ledger.jsonl")
-    lines = []
-    if os.path.exists(lpath):
-        with open(lpath, encoding="utf-8") as f:
-            lines = [l for l in f.read().splitlines() if l.strip()]
+    # פנקס append-bounded (ההיסטוריה נקראה-כבר-למעלה — ledger_lines)
     entry = json.dumps({
         "at": state["generatedAt"], "head": chain["head"] if chain else None,
         "treasuryNetSp": chain["treasuryNetSp"] if chain else None,
         "beaconChainMatch": match,
+        "engClean": ("not foreman" if not foreman else (
+            not [a for a in (foreman.get("agents") or []) if a.get("state") == "error"]
+            and not [t for t in (foreman.get("tasks") or []) if t.get("status") == "blocked"])),
         "decided": [d["id"] + ":" + d["status"] for d in decisions],
         "degraded": state["degraded"],
     }, ensure_ascii=False)
-    lines.append(entry)
+    ledger_lines.append(entry)
     with open(lpath, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines[-LEDGER_MAX:]) + "\n")
+        f.write("\n".join(ledger_lines[-LEDGER_MAX:]) + "\n")
 
     print("md5", hashlib.md5(body.encode()).hexdigest()[:12])
     for d in decisions:
