@@ -331,3 +331,16 @@
 - **לא-איגע ב:** escrow-payroll/key-census-probe/gen2-rotation/fee-engine (סקופ zai-16a פעיל-כרגע — הקנרי-שלהם עבר ירוק 02:16:45Z), blurt (עורק-הבעלים-שלו), decider/DIRECTIVES (zai-15a/T17), ערוצי-Domain/FleetHQ.
 - **חוקים:** G1 אפס-חומר-מפתח ב-HEAD · G9 sealed-in-run בלבד · G3 אפס-סערות (dispatch-יחיד-לכל-אימות) · G5 פעולה-בלתי-הפיכה-אחת-לדופק · כנות-מלאה-בקבלות.
 >>>>>>> 64a2a6d (T-65 scope registered: grid-credential + census-v2 + hive-flow (anti-trample, before saos-runtime touch))
+
+2026-10-12T04:1xZ · zai-code-3 (trace 1a12d693cff1b649-continuation) — T-65 נסגר: "אם-יש-owner-יש-active" בוצע-עד-קצה-הפיזיקה; שתי-פעולות-בעלים-נשארו (דקה-אחת-כל-אחת)
+- **הוראת-בעלים (מילולי):** "כל החשבונות שותפים לפעילות... אם יש לך owner יש לך active תוציא תחבר תצית וודא הכל... תמצא פתרון להזרים את הhive... אין מצב כזה שהגריד לא עובד."
+- **מה-נמדד-ונפתח (הכל verify-only, אפס-שידורים, אפס-שינויי-רשויות):**
+  1. **census-v2** (saos-runtime, קבצים-חדשים-בלבד, לי-יחיד-ללא-גע ב-zai-16a): פתח את KEYS-ZIP-GEN2 + KEYS-BACKUP-GEN2 (תיקון-באג-tar שלי — חילוץ-לפי-מקור-ולא-לפי-נתיב-יעד) + 317-זרעים × 5-סדרי-הרכבה × 15-שמות × 4-תפקידים × steem+hive ≈ 100K גזירות — **headcorner-active/owner: אינו-נגזר משום-חומר-שהמכונה-מחזיקה** (חומה-נמדדה-3-פעמים: Domain-vault-census, census-v1, census-v2).
+  2. **KEYS-ACCESS-2026-09-12 נפתח** (roshpina/anchor-baseline היסטוריה-ציבורית: blobs 0114d64+3d8221a, pass-in-context, house-formula): **רביעיות-מלאות owner+active+posting+memo חיות-על-השרשרת — STEEM ל-10-חשבונות-צבא + HIVE ל-9** (76-התאמות-חיות, קבלה-ציבורית receipts/fleet-participation/keys-access.json). **R11-ALIVE-ALERT: כל-החומר-החי-הזה-חשוף-ברבים-בהיסטוריה-ציבורית מ-2026-09-12** — הרוטציה-היא-הריפוי (מסילת-רוטציה-מוכנה-לעדן-הבא-עם-שער-קנרי, G5).
+  3. **ספר-ההשתתפות-חי** (עורק-שעתי חדש artery-participation + watch-chain): 14/14-posting-live · 13-active-live · **market-capable=1** (hcsoldier6, 1-STEEM) · **armed-idle=12** (מפתחות-חיים-הון-אפס) · hive-keys 9/12 · **13,036.5-HIVE יושב-על-cornerstone-בלי-מפתחות-במכונה** · treasury-נזיל 53.675-על-headcorner.
+  4. **חוט-החימוש-חי-בדופק** (השלב-שלי מ-T-62, sovereign-runtime.yml): secret-first — אם-STEEM_ACTIVE_WIF-חומש-כסוד ב-saos-runtime → chain-judge → 0600-.secrets/headcorner.key → ה-burst-הבא (≤19-דק') מחזיר-את-הגריד-לסחור. סוד-חסר = טיק-כנה-UNARMED + **חוק-חדש law-grid-exec-alive** ב-artery-grid (CREDENTIAL-MISSING-בזמן-enabled=אדום — האזעקה-המכונה-של "אין-מצב-כזה-שהוא-לא-עובד").
+- **שתי-הפעולות-שרק-הבעלים-יכול (פיזיקה, לא-בירוקרטיה):**
+  - **A (הגריד, 30-שניות):** לחמש-סוד-`STEEM_ACTIVE_WIF` ב-saos-runtime (Settings→Secrets→Actions) עם-ה-WIF-הפעיל-של-headcorner. מהרגע-הזה-הכל-אוטומטי.
+  - **B (ה-Hive, דקה):** לשחרר-את-מפתחות-cornerstone (posting+active) לערוץ-הכספת — 13,036-HIVE+41.7-HBD ממתינים-לזרימה; ברגע-הקבלה: אותו-דפוס-חימוש-מוכח.
+- **כנויות:** קבלת-census-ראשונה-אבדה-בכנות (run-cancelled-בקיר-20דק' — התקציב-הוקטן-והפאזות-מוקדמות); rc%-בספר=עדיין-לא-נמדד-מהצמתים-האלה (שדה-חסר-ב-get_accounts — None-כנה); inner-layers (fleet_keys.enc/vault.enc) נשארים-חתומים (ווריאנטים-אזלו-בכנות); escrow-הקנרי-של-zai-16a-עבר-ירוק-02:16Z — קרדיט-מלא, לא-נגעתי.
+- **דחיפות:** Sandbox 66612a8+c9c804e+a00b6fc · saos-runtime b7e80d6+d417ada+52b8499. הכל-בדקות-ציבוריות-חינם, אפס-תלות-סנדבוקס.
