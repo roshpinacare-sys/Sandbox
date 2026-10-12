@@ -1,13 +1,13 @@
-# דוח-אמת (verifier) · 2026-10-12T00:43:43.410Z
+# דוח-אמת (verifier) · 2026-10-12T01:07:04.759Z
 
-**overall: FAIL** · auth: token(fed) · took: 14727ms · כללים: config.json (אפס-דעה-אישית)
+**overall: FAIL** · auth: token(fed) · took: 14834ms · כללים: config.json (אפס-דעה-אישית)
 
 > יש-דברים-שבורים-ממש — זה הדוח-הכן, בלי-קישוטים.
 
 ## 1. בריאות-עורקי-הסנדבוקס
 | בדיקה | דרגה | ראיה |
 |---|---|---|
-| `sbx.wf-sovereign-tick` | **OK** | success recent |
+| `sbx.wf-sovereign-tick` | **FAIL** | no success in last 0 runs of sovereign.yml |
 | `sbx.wf-sovereign-state` | **OK** | success recent |
 | `sbx.wf-artery-watch` | **OK** | success recent |
 | `sbx.wf-federation` | **OK** | success recent |
@@ -17,10 +17,10 @@
 ## 2. קצב-בנייה-אמת (24h · code = infra/engine/src/scripts, churn = state/receipts/ops)
 | ריפו | נראות | commits-24h | code-חלק | הערה |
 |---|---|---|---|---|
-| Sandbox | public | 100+ | 17% | ok |
-| Console | public | 64 | 8% | ok |
-| Domain | public | 100+ | 33% | ok |
-| TruthRail | public | 21 | 0% | ok |
+| Sandbox | public | 100+ | 8% | ok |
+| Console | public | 73 | 75% | ok |
+| Domain | public | 100+ | 42% | ok |
+| TruthRail | public | 22 | 0% | ok |
 | saos-dex | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | saos-control-center | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | saos-agents | public | 4 | UNMEASURED (budget) | ok |
@@ -30,39 +30,41 @@
 | saos-sovereign-foundry | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 | steem | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
 
-**מדד-מסכם:** codeShare = 17% (42 commits מסווגים מתוך 440)
-> שיפוט: `dev.rate` = **NOTICE** — mixed activity: codeShare 17%
+**מדד-מסכם:** codeShare = 36% (42 commits מסווגים מתוך 450)
+> שיפוט: `dev.rate` = **OK** — building: codeShare 36% over 450 commits/24h
 
 ## 3. אמת-על-השרשרת · Steem (https://api.steemit.com)
 | חשבון | SP אפקטיבי | VP% | פוסט-אחרון | הצבעה-אחרונה |
 |---|---|---|---|---|
-| @headcorner | 2926 | 50% | 6.3h | 2.6h |
-| @haran | 78 | 78% | 6.6h | 5.9h |
-| @cashmachine | 75 | 78% | 7h | 5.9h |
-| @wic | 33 | 81% | 5.5h | 5.8h |
-| @woq | 70 | 90% | 5.4h | 5.5h |
-| @tov | 31 | 83% | 5.5h | 5.8h |
-| @spaminator | 69 | 0% | 57502.7h | 12904.4h |
+| אוצר-הצי | 2926 | 50% | 6.7h | 3h |
+| @haran | 78 | 78% | 7h | 6.3h |
+| @cashmachine | 75 | 78% | 7.3h | 6.3h |
+| @wic | 33 | 81% | 5.9h | 6.2h |
+| @woq | 70 | 90% | 5.8h | 5.9h |
+| @tov | 31 | 83% | 5.9h | 6.2h |
+| @spaminator | 69 | 0% | 57503.1h | 12904.8h |
 | @saos | 5 | 0% | מעולם-לא | — |
-| @powerspan | 0 | 0% | מעולם-לא | 888.4h |
-| @ynet | 0 | 0% | 25168.2h | 768.3h |
-| @hcsoldier4 | 17 | 98% | 5.1h | 5.5h |
-| @hcsoldier6 | 17 | 99% | 4h | 5.7h |
+| @powerspan | 0 | 0% | מעולם-לא | 888.8h |
+| @ynet | 0 | 0% | 25168.6h | 768.7h |
+| @hcsoldier4 | 17 | 98% | 5.5h | 5.9h |
+| @hcsoldier6 | 17 | 99% | 4.4h | 6.1h |
 
-> `steem.fleet` = **OK** — fleet posted 4h ago
+> `steem.fleet` = **OK** — fleet posted 4.4h ago
 > `steem.treasury` = **DEGRADED** — treasury headcorner at 2926 SP < 3000 (recovery-plan §3)
 
 ## 4. Blurt (https://rpc.blurt.blog)
-פוסט-צי-הכי-חדש: 197.7h · נמדד 2026-10-12T00:43:58.071Z
+פוסט-צי-הכי-חדש: 198.1h · נמדד 2026-10-12T01:07:19.532Z
 > `blurt.alive` = **FAIL** — blurt fleet silent 198h > 168h — loop dead until proven otherwise
 
 ## 5. שלמות-עץ (ריקבון-מצבות)
-נסרקו 151 קבצים; פגומים: 0
+נסרקו 154 קבצים; פגומים: 0
 
 ## 6. דלתא-מול-הריצה-הקודמת
-- ריצה-ראשונה או אפס-שינויים-בדירוגים
+- ↘ התדרדר: `sbx.wf-sovereign-tick` OK → **FAIL**
+- ↗ השתפר: `dev.rate` NOTICE → **OK**
 
 ## 7. משימות-שנצרתו-עכשיו
+- **V-LOOP-SOVEREIGN-TICK** — עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow)
 - **V-TREASURY-BALANCE** — איזון-אוצר לפי §3: לשמר ≥3,000 SP אצל-האוצר; top-up חשבונות-פעילים ל-100 SP
 - **V-BLURT-REVIVE** — החייאת-לופ-בלורט דרך gated blurt-connector (תנאי: P0 מפתחות-חדשים; workflow_dispatch בלבד + reviewer)
 
