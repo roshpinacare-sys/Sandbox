@@ -1,33 +1,33 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-10-11T23:25:41Z",
- "durationMs": 2159,
+ "generatedAt": "2026-10-12T00:18:41Z",
+ "durationMs": 2277,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
-  "generatedAt": "2026-10-11T23:12:04Z",
-  "stateAgeMin": 14,
+  "generatedAt": "2026-10-12T00:16:47Z",
+  "stateAgeMin": 2,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
-   "lastRunAt": "2026-10-11T23:11:49Z",
-   "ageS": 830,
+   "lastRunAt": "2026-10-12T00:16:41Z",
+   "ageS": 119,
    "stalled": false
   }
  },
  "measures": {
   "chain": {
-   "head": 110359796,
+   "head": 110360854,
    "treasuryNetSp": 2925.6,
-   "mult": 0.0006202076741410323
+   "mult": 0.0006202092207142543
   },
   "beaconPulse": {
    "treasuryNetSp": 2925.6
   },
   "faultedAgentsNow": [],
   "flowSummary": {
-   "nodes": 34,
-   "edges": 111,
+   "nodes": 35,
+   "edges": 117,
    "orphans": 0,
    "ghosts": null
   },
@@ -42,7 +42,8 @@
    "WO-unwired-sandbox-ops-docs",
    "WO-unwired-cmmq-host",
    "WO-unwired-swe-guard",
-   "WO-unwired-capability-fresh"
+   "WO-unwired-capability-fresh",
+   "WO-unwired-adsmarket-marketing"
   ]
  },
  "decisions": [
@@ -51,7 +52,7 @@
    "area": "כלכלה",
    "status": "ENFORCED",
    "priority": "P1",
-   "decidedAt": "2026-10-11T23:12:04Z",
+   "decidedAt": "2026-10-12T00:16:47Z",
    "truth": "UNEXECUTED",
    "checks": [
     {
@@ -92,7 +93,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 14min (limit 120)"
+     "detail": "state age 2min (limit 120)"
     }
    ],
    "note": "ENFORCED without a measured consumer - description vs action gap (routed via ledger)"
@@ -102,7 +103,7 @@
    "area": "הנדסה",
    "status": "ENFORCED",
    "priority": "P0",
-   "decidedAt": "2026-10-11T23:12:04Z",
+   "decidedAt": "2026-10-12T00:16:47Z",
    "truth": "STALE-TRUTH",
    "checks": [
     {
@@ -112,13 +113,13 @@
     },
     {
      "law": "orders-status-tracking",
-     "result": "unverifiable",
-     "detail": "orders without status field (done-ness unverifiable): [\"WO-unwired-fleethq-potential-link\",\"WO-unwired-sandbox-ops-docs\"] - route: growth engine add status lifecycle"
+     "result": "ok",
+     "detail": "all routed orders carry status"
     },
     {
      "law": "fleethq-reds-persist",
      "result": "ok",
-     "detail": "failure runs in last 48h: 9 - routed WO-FleetHQ-reds subject persists (work pending)"
+     "detail": "failure runs in last 48h: 4 - routed WO-FleetHQ-reds subject persists (work pending)"
     },
     {
      "law": "faulted-agents-fix",
@@ -128,7 +129,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 14min (limit 120)"
+     "detail": "state age 2min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -137,7 +138,7 @@
    "id": "D3-flow-weave",
    "area": "רשת",
    "status": "ENFORCED",
-   "decidedAt": "2026-10-11T23:12:04Z",
+   "decidedAt": "2026-10-12T00:16:47Z",
    "truth": "VERIFIED",
    "checks": [
     {
@@ -153,7 +154,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 14min (limit 120)"
+     "detail": "state age 2min (limit 120)"
     }
    ],
    "note": "evidence re-measured independently + execution present"
@@ -162,24 +163,24 @@
    "id": "D4-truth-network",
    "area": "אימות-עצמי",
    "status": "OBSERVING",
-   "decidedAt": "2026-10-11T23:12:04Z",
+   "decidedAt": "2026-10-12T00:16:47Z",
    "truth": "VERIFIED",
    "checks": [
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 14min (limit 120)"
+     "detail": "state age 2min (limit 120)"
     }
    ],
    "note": "evidence re-measured independently + execution present"
   }
  ],
  "provenance": {
-  "runId": "38184226724",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38184226724",
-  "sha": "a52ea7b0ff727992c0684f3cc683abf824af5fc4",
+  "runId": "38187501208",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38187501208",
+  "sha": "f5e8d356902f3886c513295fb35c15a4af02a182",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-10-11T23:25:41Z"
+  "generatedAt": "2026-10-12T00:18:41Z"
  },
  "selftest": {
   "vectors": 16,
