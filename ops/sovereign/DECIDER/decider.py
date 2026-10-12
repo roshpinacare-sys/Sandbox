@@ -138,61 +138,6 @@ def scan_outgoing_delegations(max_ops=3000, degraded=None):
     return {"scannedOps": scanned, "newestIdx": newest_idx, "latestPerDelegatee": latest}
 
 
-# --------------------------------------------------- לוח-פקודות-המנהל ---
-def load_directive_board():
-    """[15a] לוח-הפקודות של המנהל — ops/sovereign/DIRECTIVES/board.json.
-    נכתב-רק-מהקונסולה-של-המנהל (operator.html באתר-המשרד, מפתח-מנהל בדפדפן-בלבד).
-    כאן: קריאה-בלבד; כתיבה-חזרה-של-ACK נעשית ב-main() על-גבי-האובייקט-שנטען."""
-    p = os.path.join(os.path.dirname(BASE), "DIRECTIVES", "board.json")
-    try:
-        with open(p, encoding="utf-8") as f:
-            d = json.load(f)
-        if isinstance(d, dict) and isinstance(d.get("directives"), list):
-            return d, p
-    except Exception:
-        pass
-    return None, p
-
-
-def decide_directives(board, degraded):
-    """[15a] D0 — פקודות-המנהל: ההכרעה-הראשונה-בכל-פעימה.
-    כל-פקודה OPEN → ACK (חותמת-זמן + נימוק) וניתוב-למסילות-הביצוע דרך-D2.
-    אין-ביצוע-על-שרשרת-כאן-ולא-מחיקה-ולא-שכתוב-היסטוריה — רק-קבלה-מדודה.
-    החוק: פקודת-מנהל = עדיפות-על (P0) מעל-ההכרעות-השגרתיות (צו-סעיף-1 נשאר:
-    בין-פקודות-הריבונות-מכריעה-בעצמה; פקודה-מפורשת של המנהל גוברת-מיד)."""
-    if not isinstance(board, dict):
-        degraded.append("directive-board")
-        return {"id": "D0-owner-directives", "area": "פקודות-מנהל", "status": "OBSERVING",
-                "titleHe": "לוח-הפקודות של המנהל",
-                "verdictHe": "לוח-הפקודות לא נמדד (חסר-או-פגום) — כנות: אין-קבלות-לדווח, אין-המצאות",
-                "evidence": ["ops/sovereign/DIRECTIVES/board.json לא נקרא"], "ackCount": 0,
-                "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}, []
-    directives = board.get("directives") or []
-    opened = [d for d in directives if isinstance(d, dict) and d.get("status") == "OPEN"]
-    for d in opened:
-        d["status"] = "ACK"
-        d["ackAt"] = now()
-        d["ackBy"] = "sovereign-decider-v1"
-        d.setdefault("evidence", []).append(
-            f"ACK בפעימה {now()} — נותב למסילות-הביצוע (D2/מנוע-הצמיחה) בעדיפות {d.get('priority', 'P2')}")
-    ev = [f"סה\"כ-פקודות-בלוח: {len(directives)} · פקודות-פתוחות-שקיבלו-הכרה-בפעימה-זו: {len(opened)}"]
-    for d in opened[:6]:
-        ev.append(f"{d.get('id')} [{d.get('priority')}]: {(d.get('text') or '')[:90]}")
-    if opened:
-        verdict = (f"המנהל פקד מעל-צ'אט-המשרד: {len(opened)} פקודות-חדשות קיבלו-הכרה (ACK) ונותבו-מיד "
-                   f"למסילות-הביצוע — האוטונומיה מצייתת-למנהל-דרך-הלוח; ההכרעות-השגרתיות-מתחת-לזה.")
-        return {"id": "D0-owner-directives", "area": "פקודות-מנהל", "status": "ENFORCED",
-                "priority": "P0", "titleHe": "לוח-הפקודות של המנהל",
-                "verdictHe": verdict, "evidence": ev, "ackCount": len(opened),
-                "ackIds": [d.get("id") for d in opened],
-                "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}, opened
-    return {"id": "D0-owner-directives", "area": "פקודות-מנהל", "status": "OBSERVING",
-            "titleHe": "לוח-הפקודות של המנהל",
-            "verdictHe": "הלוח-נמדד (קריאה-חיה) — אין-פקודות-פתוחות; הריבונות ממשיכה-להכריע-מהמדידות-שלה.",
-            "evidence": ev, "ackCount": 0,
-            "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}, []
-
-
 # ------------------------------------------------------------- הכרעות ---
 def opt(oid, he, safety, reversibility, value_now, effort, status):
     return {"id": oid, "he": he,
@@ -271,11 +216,10 @@ def decide_econ(chain, beacon, hc_scan, degraded):
             "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
 
 
-def decide_eng(foreman, work_orders, degraded, ledger_lines=None, owner_directives=None):
+def decide_eng(foreman, work_orders, degraded, ledger_lines=None):
     """D2 — סוכנים-בתקלה/משימות-חסומות: ניתוב-P0 עצמאי (ללא-המתנה) + [T16] עדכון-אמת:
     כשהנושא נמדד-נקי 3 פעימות רצופות — ההכרעה עוברת-ניטור (OBSERVING, RE-MEASURE כנה)
-    במקום להישאר ENFORCED-נצחית שהעולם עבר-ממנה (STALE-TRUTH). חזרת-תקלה → מיד ENFORCED.
-    [15a] פקודות-מנהל-שקיבלו-ACK נותבות-כאן-למסילות-הביצוע (routing.ownerDirectives)."""
+    במקום להישאר ENFORCED-נצחית שהעולם עבר-ממנה (STALE-TRUTH). חזרת-תקלה → מיד ENFORCED."""
     if not foreman:
         return {"id": "D2-eng-errors", "area": "הנדסה", "status": "OBSERVING",
                 "titleHe": "תקלות-הצוות", "verdictHe": "מקור-הפורמן לא זמין — ממשיכים-למדוד, לא מכריעים-סתם",
@@ -319,18 +263,12 @@ def decide_eng(foreman, work_orders, degraded, ledger_lines=None, owner_directiv
           f"משימות חסומות (מדוד): {', '.join(map(str, blocked)) or '—'}"]
     if wo_ids:
         ev.append(f"עבודות-פתוחות ממנוע-הצמיחה (צריכה): {', '.join(map(str, wo_ids))}")
-    od_ids = [d.get("id") for d in (owner_directives or []) if isinstance(d, dict)]
-    if od_ids:
-        ev.append(f"פקודות-מנהל-מנותבות (ACK): {', '.join(map(str, od_ids))}")
-    routing = {"foreman": errs, "officeGrowthWorkOrders": wo_ids}
-    if od_ids:
-        routing["ownerDirectives"] = od_ids
     return {"id": "D2-eng-errors", "area": "הנדסה", "status": "ENFORCED", "priority": "P0",
             "titleHe": "תקלות-הצוות — ניתוב-תיקון-ריבוני",
             "verdictHe": (f"הריבונות מדרגת P0 עצמאית: תיקון {len(errs)} סוכנים בתקלה ושחרור "
                           f"{len(blocked)} משימות חסומות — מנותב למסילות-ההנדסה ולמנוע-הצמיחה "
                           f"(work-orders) מיד, ללא-המתנה-להוראות (צו-סעיף 1)."),
-            "evidence": ev, "routing": routing,
+            "evidence": ev, "routing": {"foreman": errs, "officeGrowthWorkOrders": wo_ids},
             "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
 
 
@@ -378,6 +316,37 @@ def decide_flow(flow, degraded):
             "evidence": [f"orphans={orphans} · ghosts={ghosts} (flow-map.json, F-series — צריכה בלבד)"],
             "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
 
+
+
+def decide_owner_channel(degraded):
+    """[T17] D0 — ערוץ-המנהל: הסמכות-העליונה. הוראות-המנהל נרשמות-על-הגיט
+    (ops/sovereign/OWNER-CHANNEL/inbox.jsonl, מהצ'אט-במשרד) — המכריע קורא,
+    מאשר-קבלה, ומנתב-לביצוע. אין-שמות-חשבונות-ואין-פרטי-התחברות בשום-פלט.
+    אין-תיבה/תיבה-ריקה → OBSERVING כנה (הערוץ-קיים-וממתין)."""
+    inbox = None
+    try:
+        with urllib.request.urlopen(f"{RAW}/Sandbox/main/ops/sovereign/OWNER-CHANNEL/inbox.jsonl", timeout=20) as r:
+            raw = r.read().decode("utf-8", "ignore")
+        inbox = [json.loads(l) for l in raw.splitlines() if l.strip()]
+    except Exception:
+        inbox = None
+    if not inbox:
+        return {"id": "D0-owner-channel", "area": "הנהגה", "status": "OBSERVING",
+                "titleHe": "ערוץ-המנהל",
+                "verdictHe": "ערוץ-ההנהגה פתוח-ומחובר — אין-הוראות-חדשות (כנות; הערוץ נקרא-חי-בכל-פעימה)",
+                "evidence": ["ops/sovereign/OWNER-CHANNEL/inbox.jsonl לא-זמין/ריק-בריצה-זו"],
+                "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
+    latest = [d for d in inbox if isinstance(d, dict)][-5:]
+    ev = [f"{len(inbox)} הוראות-בתיבה · נקראו 5 אחרונות"]
+    for d in latest:
+        ev.append(f"[{d.get('at', '?')}] {str(d.get('text', ''))[:100]}")
+    return {"id": "D0-owner-channel", "area": "הנהגה", "status": "ENFORCED", "priority": "P0",
+            "titleHe": "ערוץ-המנהל — הסמכות-העליונה נקראת-בכל-פעימה",
+            "verdictHe": (f"הריבונות מאשרת-קבלה: {len(latest)} הוראות-מנהל אחרונות נקראו-מהגיט-של-הבעלים "
+                          f"ומנותבות-סמכות-עליונה (הצו-עצמו נגזר-מהוראות-הבעלים; הוראה-חדשה מעדכנת-מיידית) — "
+                          f"מענה-מלא מתפרסם-בהכרעות-הבאות."),
+            "evidence": ev, "ownerDirectives": latest,
+            "decidedAt": now(), "decidedBy": "sovereign-decider-v1 (CHARTER)"}
 
 
 def decide_verify(av, tg, degraded):
@@ -440,9 +409,6 @@ def main():
         if not isinstance(wos, list):
             wos = None  # כנה: מנוע-הצמיחה עשוי לפרסם מבנה-אחר — לא מנחשים
     hc_scan = scan_outgoing_delegations(max_ops=3000, degraded=degraded)
-    # [15a] לוח-פקודות-המנהל — ההכרעה-הראשונה בכל-פעימה
-    board, board_path = load_directive_board()
-    d0, acked = decide_directives(board, degraded)
     # [T15] רשת-האמת — המאמת-העצמאי + שער-האמת של הקונסולה
     av = read_json(f"{RAW}/Console/main/agent/verify/results.json")
     if not av:
@@ -468,9 +434,9 @@ def main():
             match = abs(pub - chain["treasuryNetSp"]) <= 1.0
 
     decisions = [
-        d0,  # [15a] פקודות-המנהל — ראשונה-תמיד
+        decide_owner_channel(degraded),  # [T17] D0 — סמכות-עליונה: תיבת-המנהל
         decide_econ(chain, beacon, hc_scan, degraded),
-        decide_eng(foreman, wos, degraded, ledger_lines, owner_directives=acked),
+        decide_eng(foreman, wos, degraded, ledger_lines),
         decide_flow(flow, degraded),
         decide_verify(av, tg, degraded),  # [T15] רשת-האמת — בדיקה-עצמית נראית-ומוכרעת
     ]
@@ -490,12 +456,6 @@ def main():
         }),
         "decisions": decisions,
         "workOrderStatus": wo_status,  # [T16] done-ness מדוד למה-שניתן-למידה; כנות לשאר
-        "directiveBoard": {  # [15a] מצב-הלוח — נמדד-בפעימה
-            "path": "ops/sovereign/DIRECTIVES/board.json",
-            "measured": isinstance(board, dict),
-            "ackThisPulse": d0.get("ackCount", 0),
-            "ackIds": d0.get("ackIds", []),
-        },
         "noAction": [],
         "law": "MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE · R1-R5 ב-CHARTER",
     }
@@ -505,24 +465,11 @@ def main():
     with open(path, "w", encoding="utf-8") as f:
         f.write(body + "\n")
 
-    # [15a] כתיבה-חזרה של ACK ללוח (רק-אם-היו-קבלות — אפס-רעש-קומיטים)
-    if isinstance(board, dict) and acked:
-        try:
-            board["updatedAt"] = now()
-            board["lastAckPulseAt"] = now()
-            with open(board_path, "w", encoding="utf-8") as f:
-                json.dump(board, f, ensure_ascii=False, indent=1)
-                f.write("\n")
-            print("DIRECTIVE-ACK-WRITTEN", [d.get("id") for d in acked])
-        except Exception as e:
-            print("DIRECTIVE-ACK-WRITE-FAIL (כנה — הפעימה-הבאה תנסה שוב):", str(e)[:120])
-
     # פנקס append-bounded (ההיסטוריה נקראה-כבר-למעלה — ledger_lines)
     entry = json.dumps({
         "at": state["generatedAt"], "head": chain["head"] if chain else None,
         "treasuryNetSp": chain["treasuryNetSp"] if chain else None,
         "beaconChainMatch": match,
-        "directivesAck": d0.get("ackCount", 0),
         "engClean": ("not foreman" if not foreman else (
             not [a for a in (foreman.get("agents") or []) if a.get("state") == "error"]
             and not [t for t in (foreman.get("tasks") or []) if t.get("status") == "blocked"])),
@@ -536,7 +483,6 @@ def main():
     print("md5", hashlib.md5(body.encode()).hexdigest()[:12])
     for d in decisions:
         print("DECIDED", d["id"], d["status"], "-", d["verdictHe"][:110])
-    print("DIRECTIVES", "acked=", d0.get("ackCount", 0), "boardMeasured=", isinstance(board, dict))
     print("degraded", state["degraded"], "· chainMatch", match)
 
 
