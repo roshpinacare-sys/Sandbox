@@ -275,7 +275,7 @@ async function main() {
     capitalPolicy = { check: "MEASURED", decidedAt: d1.decidedAt, keepFloorSp, operatorsWatched: floorRows.length };
     if (acc && vestsPerSP) {
       const tv = num(acc.vesting_shares), td = num(acc.delegated_vesting_shares), tr = num(acc.received_vesting_shares);
-      capitalPolicy.treasuryNetSp = Math.round((tv - td + tr) * vestsPerSP * 10) / 10;
+      capitalPolicy.treasuryNetSp = Math.round((tv - td + tr) / vestsPerSP * 10) / 10; /* SP = vests·tvf/tvs (תיקון-מכפיל [15a-b]) */
       capitalPolicy.treasuryAboveFloor = keepFloorSp == null ? null : capitalPolicy.treasuryNetSp >= keepFloorSp;
     } else {
       capitalPolicy.treasuryNetSp = null; capitalPolicy.treasuryAboveFloor = null;
@@ -287,7 +287,7 @@ async function main() {
       for (const f of floorRows) {
         const o = opsR.result.find((a) => a && a.name === f.op);
         if (!o) { below.push(`${f.op}:read-failed`); continue; }
-        const sp = Math.round((num(o.vesting_shares) - num(o.delegated_vesting_shares) + num(o.received_vesting_shares)) * vestsPerSP * 10) / 10;
+        const sp = Math.round((num(o.vesting_shares) - num(o.delegated_vesting_shares) + num(o.received_vesting_shares)) / vestsPerSP * 10) / 10;
         if (sp < f.floorSp) below.push(`${f.op}:${sp}SP<${f.floorSp}`);
       }
       capitalPolicy.operatorsBelowFloor = below;
