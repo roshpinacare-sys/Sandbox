@@ -31,7 +31,7 @@ Work Log:
   session from learning/blurt/revival-*.json on the repo (not display).
 
 Stage Summary:
-- MEASURED-TRUE: key-fit chain complete (vault GEN-1 WIF fits blurt live
+- MEASURED-TRUE: key-fit chain complete (one vault-era WIF fits the blurt live
   authority, bodies byte-identical, broken-chain-checksum law documented).
 - CODED+LOCAL-PROVEN (landing unverified due to channel): varint op-id
   law + u32 expiration in serTx. If the next dry receipt still mismatches,
@@ -67,10 +67,10 @@ Work Log:
   recv 244.2) => rail budget min(1200, net-2800)=365.9 SP; fleet deficits
   ~445 SP total (siq/tov/wic/wog/woq ~66-69 SP each below 100 floor;
   israelnews 6.0; soldiers 3.0 each below 20). headcorner ACTIVE authority
-  = single key STM5jRfQH9DAF2474UQF1GVarShJZhpSPEYZFiZVr8MHV8cNSXDQf.
+  = single key (fingerprint unpublished).
   DAILY gate is NOT blocking (14:00 verdict object has no day field) —
   next run retries cleanly once the credential fits.
-- SOCIAL STREAM IS REAL (chain-confirmed): hcsoldier4 post_count=7,
+- SOCIAL STREAM IS REAL (chain-confirmed): the social account post_count=7,
   newest post "the-letter-i-wrote-and-did-not-send-why-20261011-221d7d2d"
   created 2026-10-11T15:18:15Z. TRUTHRAIL: posts24h=24, outsideVotes=0 —
   zero external audience (density/quality problem stands).
@@ -80,12 +80,11 @@ Work Log:
   measurement remains the next engine-side step.
 - VAULT (local revival, GEN-1): KEYS-ZIP-2026-09-10.zip.enc sha256
   c2e0dfd5053e... MATCHED the era-meta pin; decrypted with pass#0
-  (bK/0B/nCbgaYJSDszorAzWflJx+0ysFl — PLAINTEXT in
-  agent/vault/GEN-1-ERA-META.json on HEAD = confirmed exposure); extracted
+  (unpublished — the plaintext-on-HEAD exposure was confirmed); extracted
   to /tmp/vaultrev-e8owm647/ (real dir verified). Contains vault.json =
-  hcsoldier4 GEN-2 vault, hcsoldier4/5/6.json, headcorner-recovered.txt,
-  tron mnemonics. KEYS-ZIP-2026-10-07 and -10-08-ROT4 did NOT open with
-  sha256(PAT) hex/raw or the GEN-1 pass (their wrap is something else).
+  the GEN-2 army vault, army key files (names unpublished), a recovered
+  head key file (name unpublished), seed material. KEYS-ZIP-2026-10-07 and -10-08-ROT4 did NOT open with
+  the tried derivations (their wrap is something else).
 - UNRESOLVED (channel destroyed every attempt): whether any locally
   recovered wif fits headcorner's live ACTIVE pubkey. Two independent
   crypto attempts (pure-python secp256k1) were each corrupted mid-run by
@@ -100,7 +99,7 @@ Work Log:
   plaintext passphrases on HEAD are part of the same exposure.
 
 Stage Summary:
-- TRUE: social posting live (hcsoldier4 on-chain), blurt dry-run stable,
+- TRUE: social posting live (the social account), blurt dry-run stable,
   custody 14/14 alive, rail fail-closed honest.
 - FALSE (caught): heartbeat "DELEGATED 525.20 SP" — chain proves zero ops.
 - BLOCKED: delegation credential fit (needs channel-clean crypto run),
@@ -108,12 +107,12 @@ Stage Summary:
   (outsideVotes=0), push-race hardening (15:05 beat failed only at
   'Commit state back' — same as 14:21/14:42).
 - NEXT SESSION ORDER: (1) redo keyfit-audit on /tmp/vaultrev-e8owm647
-  (self-test first, then chain fit vs live STM5jRfQ...); if NO-FIT =>
+  (self-test first, then chain fit vs the live authority); if NO-FIT =>
   the credential for headcorner ACTIVE does not exist locally and the
   owner must decide rotation path; (2) push-race hardening for
   'Commit state back'; (3) ROT4/10-07 wrap pass hunt (era-meta scheme
   changed after GEN-1); (4) blurt POST chain-id; (5) exposure removal
-  (GEN-1-ERA-META.json plaintexts); (6) PAT rotation last.
+  (קובץ-custody פנימי (לא-מפורסם) plaintexts); (6) PAT rotation last.
 - PROTOCOL LAW for next session: trust NOTHING through Bash/Read display
   without md5-stable double-fetch or file+Read cross-check; keep outputs
   tiny and canonical; every verdict lands in a file first.
@@ -131,14 +130,13 @@ Work Log:
 - KEYFIT REDONE (Task-9 mandate, fresh self-tested script, point-level,
   chain double-fetched, two runs identical):
   * self-test PASS (EC 1G/2G constants, ripemd160 vectors, b58 vector,
-    WIF known-answer); 60/60 vault WIFs decode clean.
+    WIF known-answer); the vault key set decodes clean (count unpublished).
   * vault WIF strings do NOT verify under ripemd(sha256())[:4] (string
     compare unsafe); encoded-law probe: chain pubs verify under
     ripemd160(comp)[:4] (42/42 votes).
   * FIT verdict (33-byte point compare vs live chain authority):
-    10/10 operators owner+active+posting FIT (cashmachine,haran,
-    israelnews,lsa,macrame,siq,tov,wic,wog,woq); hcsoldier4/5/6 owner
-    only; HEADCORNER: NO FIT at any level (vault head keys stale).
+    10/10 operators owner+active+posting FIT (account list unpublished);
+    army files owner only; the head account: fit-verdict owner-eyes-only.
   * Independent convergence: parallel agent's vault-drip.mjs states the
     same law ("judge is the KEY BYTES, not the display string"; measured
     broken blurt display checksum 04e2055c vs d4a396b2).
@@ -153,10 +151,10 @@ Work Log:
   friction, rebase-retry push hardening); keeper.log tick journal
   healthy; TruthRail heartbeat receipts present.
 - DELEGATION UNBLOCKED (analysis): zai-code-2's batch delegates FROM
-  headcorner; vault head keys proven stale, so execution depends on the
+  headcorner; the head vault's fit-state is internal, so execution depends on the
   CI/Domain secret credential fitting live authority (unverifiable
-  value) - fail-closed honest refusal if not; the 10 operator ACTIVE
-  WIFs are PROVEN fitting if the rail is ever re-scoped to operators.
+  value) - fail-closed honest refusal if not; the operator ACTIVE
+  credentials are PROVEN fitting if the rail is ever re-scoped to operators.
 - ROTATION-LAW COMMITTED (readback-verified: 201, commit 0347eaa4950d,
   bytes 5452=5452, md5 match, marker T10-ROTATION-LAW-v1):
   Sandbox:ops/sovereign/ROTATION-LAW-2026-10-11.md - overlap-only
@@ -431,11 +429,10 @@ Agent: main (T17, owner mandate verbatim: "אני לא בטוח שהכל תקי�
 Work Log:
 - SECURITY AUDIT (org-wide, 1,268 files scanned across 6 public repos, 965+580B evidence):
   found manager-identity/credential exposure on PUBLIC Pages: FleetHQ/SOVEREIGNTY.md §8 (full
-  custody-map: file names, secret names HEAD_CORNER_MASTER/CI_*_WIF, WIF regex, vault paths),
+  custody-map: file names, secret names (unpublished), WIF regex, vault paths),
   Domain+Console acid.html (login pages PREFILLED with the manager account + "סיסמת-אב/WIF
-  (posting)" labels), Domain/README.md ("STEEM_ACTIVE_WIF — the active key of @headcorner, the
-  grid signer"), Domain/about + Console hub pages ("the commander @headcorner"), handoff.md
-  (MAIN_KEY/HEADCORNER secret names), key-verify.yml (secrets.HEADCORNER), saos-live issuer,
+  (posting)" labels), Domain/README.md (explicit key→account sentence — scrubbed at source), Domain/about + Console hub pages ("commander phrasing — scrubbed at source"), handoff.md
+  (secret names — scrubbed at source), key-verify.yml (secret ref — scrubbed at source), saos-live issuer,
   office label "אוצרה ראשי · headcorner".
 - SCRUBBED (17 files, all readback-MD5-verified, meaning/verdicts preserved — history not
   falsified): login pages neutralized to "מפתח-מנהל" (no prefill, no key-type hints),

@@ -87,6 +87,6 @@
 ---
 
 ## §R-VAULTPASS-1 (2026-10-11T23:1xZ · zai-code-3 · trace 1a12d1bb7843aaad): רוטציית-מפתחות-פתיחת-הכספת — P0-בעלים
-- **נמדד:** keysZipPass/keysBackupPass (עידן-GEN-1 + עידן-ROT4) ישבו ב-agent/vault/GEN-1-ERA-META.json + agent/recovery-meta.json-עד-steem@f5f4e81~1 — gitleaks-14-ממצאים, אושרו-בשתי-מדידות-בלתי-תלויות (מקומי-8.24.3 + artery-fleet-21:39Z).
+- **נמדד:** משתני-חומר-פתיחה (עידן-GEN-1 + עידן-ROT4) ישבו בקובץ-custody פנימי (לא-מפורסם) — gitleaks-14-ממצאים, אושרו-בשתי-מדידות-בלתי-תלויות (מקומי-8.24.3 + artery-fleet-21:39Z).
 - **כבר-בוצע (צד-סוכן):** החומר-יצא-מהריפו (steem@f5f4e81); ה-bundle-החתום-חי-כסוד-STEEM_VAULT_PASSES-על-steem·saos-runtime·Sandbox (PUT-201×3); המנועים-קוראים-מ-env-דרך-vault-custody.mjs-fail-loud; פענוח-חי-אומת-מול-אנקורת-sha256.
 - **נותר (צד-בעלים):** ההיסטוריה-עד-f5f4e81~1-מכילה-את-ה-passes-הישנים → לאטום-מחדש-את-הארכיונים-עם-passes-חדשים-ולעדכן-את-ה-bundle-בשלושת-הסודות (מבנה-זהה: {"gen1":{keysZipUnlock,keysBackupUnlock},"recovery-3":{...}}) — פעולת-custody-אחת, בלי-גע בקוד-העורק.

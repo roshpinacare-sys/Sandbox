@@ -23,7 +23,7 @@
       "file": "docs/app.js",
       "line": "321 (also 350-356); docs/index.html:6",
       "what": "HTML injection via unescaped RPC-derived strings into innerHTML: line 321 interpolates String(e.message) (can be j.error.message from any configured RPC endpoint) and lines 350-356 interpolate dgpo.head_block_id/time/current_supply etc. directly into innerHTML. docs CSP has no form-action directive.",
-      "why": "A hostile/compromised community RPC endpoint (api.justyy.com, steem.61bts.com, api.deathwing.me are community-run) can inject arbitrary HTML into the trusted cockpit page. script-src 'self' blocks script execution, but form-action is unset and per CSP3 does NOT fall back to default-src — an injected overlay (position:fixed) with a fake 're-enter password' form can submit the master password cross-origin. The master password opens BOTH gates (shared canon-62 wrap), so this is a credible phishing primitive against the single most valuable secret. Impact is phishing-grade (requires operator re-typing), not script-execution grade — stated honestly.",
+      "why": "A hostile/compromised community RPC endpoint (api.justyy.com, steem.61bts.com, api.deathwing.me are community-run) can inject arbitrary HTML into the trusted cockpit page. script-src 'self' blocks script execution, but form-action is unset and per CSP3 does NOT fall back to default-src — an injected overlay (position:fixed) with a fake 're-enter password' form can submit the master password cross-origin. The manager key opens the gates, so this is a credible phishing primitive against the single most valuable secret. Impact is phishing-grade (requires operator re-typing), not script-execution grade — stated honestly.",
       "fix": "Render error/state strings via textContent or the existing escapeHtml() instead of innerHTML interpolation (lines 321, 350-356, and apply the same discipline to renderCustody/renderAudit for vault-derived strings); add form-action 'none' to docs/index.html CSP."
     },
     {
@@ -31,9 +31,9 @@
       "severity": "M",
       "file": "boot/bootstrap.sh",
       "line": "104-108 (also 88-100)",
-      "what": "Army-vault zip password (keysZipPass) is read in plaintext from recovery-meta.json which lives in the same external steem repo as the encrypted KEYS-ZIP…ROT4.zip.enc.",
-      "why": "Double sha256 pins prove integrity, not confidentiality. If the steem repo is public (or any reader is compromised), anyone can decrypt all 15 accounts' WIFs (owner/active/posting/memo). The design 'new machine + one credential (PAT)' confirms the password is not treated as a secret. Unverifiable from this clone — severity escalates to C if that repo is world-readable.",
-      "fix": "Do not ship the vault password inside the repo that holds the ciphertext: keep keysZipPass out of recovery-meta.json (operator-provided at unseal time or derived from a secret held outside both repos); at minimum verify the steem repo is private and plan a key rotation round (worklog already flags 61 stale keys)."
+      "what": "Fleet-vault opening material is not treated as a secret in its storage arrangement — details owner-only.",
+      "why": "Double sha256 pins prove integrity, not confidentiality. If the steem repo is public (or any reader is compromised), the fleet key material becomes decryptable. The design 'new machine + one credential' confirms the password is not treated as a secret. Unverifiable from this clone — severity escalates to C if that repo is world-readable.",
+      "fix": "Do not ship the opening material inside the store that holds the ciphertext (operator-provided at unseal time or held outside both stores); at minimum verify the store is private and plan a key rotation round (stale keys already flagged in the worklog)."
     },
     {
       "id": "F-M2",
@@ -166,7 +166,7 @@
       "severity": "N",
       "file": "console/params.json + docs/vault.enc.json",
       "line": "all",
-      "what": "Crypto parameters byte-verified: console = PBKDF2-HMAC-SHA256 ×650,000 (≥600k ✓), AES-256-GCM tag 128-bit ✓, salt 16B ✓, IV 12B ✓, key 32B ✓, payload = 2928B ct + 16B tag ✓. Cockpit vault v2 = 3 wraps (primary-52/canon-62/word), each iter 600,000 ✓, salt 16B, IV 12B, 48B wrap-ct; body 19707B ct (GCM).",
+      "what": "Crypto parameters byte-verified: console = PBKDF2-HMAC-SHA256 ×650,000 (≥600k ✓), AES-256-GCM tag 128-bit ✓, salt 16B ✓, IV 12B ✓, key 32B ✓, payload = 2928B ct + 16B tag ✓. Cockpit vault v2 = 3 wraps, each iter 600,000 ✓, salt 16B, IV 12B; body 19707B ct (GCM).",
       "why": "Matches SECURITY.md exactly; GCM-authenticated-decrypt-as-verifier on both gates is the correct pattern (no timing-compare needed).",
       "fix": "None."
     },
@@ -226,7 +226,7 @@
     "Cannot decrypt console/sealed-payload.bin or docs/vault.enc.json — no password held, none sought (forbidden). The correct-password unlock path is therefore unverified by this reviewer; evidence base is the GCM-auth design, engine/seal-selftest.mjs, and agent-3d's live browser rejection tests.",
     "docs/vendor/gate-crypto.js 'verbatim from SovereignConsole' is unverifiable (source not in this clone); its custom secp256k1/ripemd160 correctness was not independently re-proven here — mitigated by the recorded live verify_authority=TRUE evidence.",
     "M-1 (army-vault password in steem repo) hinges on external repos (steem, vault-home) not present in this clone — their ACLs could not be checked.",
-    "Password entropy (~62-byte canon / claimed ~335-bit) is taken from SECURITY.md; it is not measurable from the repo, and the strength of BOTH gates rests on it.",
+    "Password entropy (the shared canon) is taken from SECURITY.md; it is not measurable from the repo, and the strength of the gates rests on it.",
     "JS heap erasure guarantees cannot be verified (inherent language limit; see F-L4).",
     "GitHub Pages headers (HSTS present, no CSP header — meta-CSP only) confirmed from agent-3d's receipt; frame-ancestors is undeliverable on Pages, which shapes the M-3 fix.",
     "INCIDENT DISCLOSURE (honesty law): while probing usage I ran `node engine/sovereign-tick.mjs --help`; the script ignores argv and executed a real tick, writing receipts/latest.json and appending receipts/ticks.jsonl. I immediately restored both via `git checkout -- receipts/` and verified the working tree returned to its committed state (last tick line = CI tick 11:28:52.287Z, matching HEAD). No data lost, nothing committed or pushed, worklog.md untouched.",
