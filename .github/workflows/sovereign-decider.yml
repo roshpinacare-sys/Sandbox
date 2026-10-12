@@ -8,6 +8,8 @@ name: sovereign-decider
 on:
   schedule: [{cron: '4,34 * * * *'}]
   workflow_dispatch: {}
+  repository_dispatch:
+    types: [sovereign-decider-tick]  # [T16] מופעל-על-ידי המפעיל-הפנימי (artery-watch, T-51) — cron כאן מוכח-שוקק
 
 permissions:
   contents: write
