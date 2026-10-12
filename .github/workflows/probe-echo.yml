@@ -1,0 +1,11 @@
+name: probe-echo
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo PROBE-OK
