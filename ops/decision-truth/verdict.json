@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-10-12T01:11:38Z",
- "durationMs": 1628,
+ "generatedAt": "2026-10-12T01:48:54Z",
+ "durationMs": 1981,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
-  "generatedAt": "2026-10-12T01:07:10Z",
-  "stateAgeMin": 4,
+  "generatedAt": "2026-10-12T01:17:51Z",
+  "stateAgeMin": 31,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
-   "lastRunAt": "2026-10-12T01:07:03Z",
-   "ageS": 274,
+   "lastRunAt": "2026-10-12T01:17:40Z",
+   "ageS": 1873,
    "stalled": false
   }
  },
  "measures": {
   "chain": {
-   "head": 110361907,
-   "treasuryNetSp": 2925.6,
-   "mult": 0.0006202107621916818
+   "head": 110362651,
+   "treasuryNetSp": 2925.7,
+   "mult": 0.0006202118514200585
   },
   "beaconPulse": {
    "treasuryNetSp": 2925.6
@@ -52,13 +52,13 @@
    "area": "הנהגה",
    "status": "ENFORCED",
    "priority": "P0",
-   "decidedAt": "2026-10-12T01:07:10Z",
+   "decidedAt": "2026-10-12T01:17:50Z",
    "truth": "VERIFIED",
    "checks": [
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 4min (limit 120)"
+     "detail": "state age 31min (limit 120)"
     }
    ],
    "note": "evidence re-measured independently + execution present"
@@ -68,7 +68,7 @@
    "area": "כלכלה",
    "status": "ENFORCED",
    "priority": "P1",
-   "decidedAt": "2026-10-12T01:07:10Z",
+   "decidedAt": "2026-10-12T01:17:51Z",
    "truth": "VERIFIED",
    "checks": [
     {
@@ -79,7 +79,7 @@
     {
      "law": "treasury-basis-fresh-measure",
      "result": "ok",
-     "detail": "claimed=2925.6 fresh=2925.6 tol=1"
+     "detail": "claimed=2925.6 fresh=2925.7 tol=1"
     },
     {
      "law": "beacon-vs-fresh",
@@ -109,7 +109,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 4min (limit 120)"
+     "detail": "state age 31min (limit 120)"
     }
    ],
    "note": "evidence re-measured independently + execution present"
@@ -119,7 +119,7 @@
    "area": "הנדסה",
    "status": "ENFORCED",
    "priority": "P0",
-   "decidedAt": "2026-10-12T01:07:10Z",
+   "decidedAt": "2026-10-12T01:17:51Z",
    "truth": "STALE-TRUTH",
    "checks": [
     {
@@ -145,7 +145,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 4min (limit 120)"
+     "detail": "state age 31min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -154,7 +154,7 @@
    "id": "D3-flow-weave",
    "area": "רשת",
    "status": "ENFORCED",
-   "decidedAt": "2026-10-12T01:07:10Z",
+   "decidedAt": "2026-10-12T01:17:51Z",
    "truth": "VERIFIED",
    "checks": [
     {
@@ -170,7 +170,7 @@
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 4min (limit 120)"
+     "detail": "state age 31min (limit 120)"
     }
    ],
    "note": "evidence re-measured independently + execution present"
@@ -179,24 +179,24 @@
    "id": "D4-truth-network",
    "area": "אימות-עצמי",
    "status": "OBSERVING",
-   "decidedAt": "2026-10-12T01:07:10Z",
+   "decidedAt": "2026-10-12T01:17:51Z",
    "truth": "VERIFIED",
    "checks": [
     {
      "law": "decider-state-age",
      "result": "ok",
-     "detail": "state age 4min (limit 120)"
+     "detail": "state age 31min (limit 120)"
     }
    ],
    "note": "evidence re-measured independently + execution present"
   }
  ],
  "provenance": {
-  "runId": "38190924959",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38190924959",
-  "sha": "1773033b3e177e04eac378df8f6035ba444bd00e",
+  "runId": "38193332633",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38193332633",
+  "sha": "2b521b0558c576b694679ca1b528d055cb13a39a",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-10-12T01:11:38Z"
+  "generatedAt": "2026-10-12T01:48:54Z"
  },
  "selftest": {
   "vectors": 16,
