@@ -423,3 +423,59 @@ Stage Summary:
   ARTERIES registry is the single place to register new loops (don't build parallel
   metronomes); cron-probe lesson: don't rely on new-file cron registration in this repo —
   use the internal operator.
+
+---
+Task ID: 17-security-owner-channel-final
+Agent: main (T17, owner mandate verbatim: "אני לא בטוח שהכל תקין כמתואר... חייב לבדוק שהכל עובד מחובר ופעיל וייעיל... שלא יסגירו מי המנהל... דרך חכמה לתקשר שתשפיע חזק על כל האוטונומיה דרך הצאט של המשרד... הכנות היא חובה")
+
+Work Log:
+- SECURITY AUDIT (org-wide, 1,268 files scanned across 6 public repos, 965+580B evidence):
+  found manager-identity/credential exposure on PUBLIC Pages: FleetHQ/SOVEREIGNTY.md §8 (full
+  custody-map: file names, secret names HEAD_CORNER_MASTER/CI_*_WIF, WIF regex, vault paths),
+  Domain+Console acid.html (login pages PREFILLED with the manager account + "סיסמת-אב/WIF
+  (posting)" labels), Domain/README.md ("STEEM_ACTIVE_WIF — the active key of @headcorner, the
+  grid signer"), Domain/about + Console hub pages ("the commander @headcorner"), handoff.md
+  (MAIN_KEY/HEADCORNER secret names), key-verify.yml (secrets.HEADCORNER), saos-live issuer,
+  office label "אוצרה ראשי · headcorner".
+- SCRUBBED (17 files, all readback-MD5-verified, meaning/verdicts preserved — history not
+  falsified): login pages neutralized to "מפתח-מנהל" (no prefill, no key-type hints),
+  README key-map → "held only in system secrets; never published", SOVEREIGNTY §8 →
+  "שמות-הסודות-אינם-מפורסמים-מדיניות" (verdicts kept), identity bindings removed everywhere.
+  Residual re-scan after CDN refresh: 0 identity tokens on live pages. Historical
+  STATE-REPORTs left intact (public chain records — anti-forgery; forward-looking policy
+  documented in the scrub commit messages).
+- OWNER CHANNEL BUILT+VERIFIED END-TO-END: office chat (🎙️ floating panel, mobile-safe,
+  RTL, theme-consistent) → gate "מפתח-מנהל" (first-use-claim; SHA-256+pepper local-only,
+  never sent/stored raw; session 12h) → directive written to the OWNER'S GIT
+  (Sandbox ops/sovereign/OWNER-CHANNEL/inbox.jsonl, append-bounded 60, readback-verified,
+  commits 17439737c/2b68e2659) → decider CONSUMES as D0-owner-channel (supreme authority,
+  read every pulse) → D0 ENFORCED P0 published with public acknowledgment of both test
+  directives. Live proof chain: browser claim → send → git commit → ignite → run → state
+  readback (01:07:10Z, evidence lists both directives verbatim).
+- MEASURED ON THE WAY: repository_dispatch on this repo currently returns 204 but does NOT
+  materialize runs (workflow_dispatch works instantly) — chat ignite uses the proven
+  workflow_dispatch path with repository_dispatch fallback; the metronome covers the loops
+  regardless. Bug found in my own gate (session-hash pepper mismatch between routes) —
+  caught by direct API test, fixed, re-verified.
+- UNBLOCK (t1083, the 1 blocked task "cross two fleet books"): the SUBSTANCE delivered —
+  ops/sovereign/T17-CROSSCHECK-t1083.md (889f506bb): beacon vs chain vs value-scan
+  cross-check = 0.0 deviation on all measured metrics; 5 below-floor operators consistent
+  across all three books; no material contradiction. Board closure stays with the foreman
+  engine (R4).
+- FINAL SWEEP (all measured 01:15-01:20Z): verifier 51/51 ALL_PASS · truth-gate ALL-GREEN ·
+  decisions D0/D1/D2/D3 ENFORCED + D4 OBSERVING · DEX two-sided (2073/2081, 60/62) with
+  treasuryProfitEverMu=213752µ · beacon 2,925.6 SP (keep-line +125.6) · content heartbeats
+  every ~15min · 3 fresh quality posts today with votes · office browser-verified with the
+  chat visible (desktop, zero console errors) · lint clean · dev.log 200s only.
+
+Stage Summary:
+- TRUE (all browser/git/chain/CI-verified): the network's public pages no longer bind the
+  manager identity or the connection method (מפתח-מנהל only); the owner commands the whole
+  sovereignty from the office chat with every directive landing on his git and receiving
+  public P0 acknowledgment; the blocked task's value was delivered; every organ re-measured
+  green. Honesty notes: repository_dispatch materialization is flaky on this repo (metronome
+  + workflow_dispatch cover it); the t1083 board cell clears via the foreman engine; the
+  74.4 SP gap to target 3,000 remains D1's yield-engine work.
+- COORDINATION: next agent MUST read tmp scope + ops/sovereign/OWNER-CHANNEL/README.md —
+  the inbox is the owner's supreme channel (append-bounded, never hand-edit); keep the
+  "no identity binding" disclosure policy on ALL new pages.
