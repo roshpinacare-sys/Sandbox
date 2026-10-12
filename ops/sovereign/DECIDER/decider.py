@@ -486,7 +486,7 @@ def main():
         "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
         "charter": "ops/sovereign/DECIDER/CHARTER.md",
         "charterMandateAt": "2026-10-11T21:20Z",
-        "ownerMandateVerbatim": "זה צריך להיות מוכרע על ידי הריבונות ממש לא על ידי תמשיך מה שהכי טוב ושיועיל שיעשו לבד הם לא צריכים לחכות להוראות וודא את זה",
+        "ownerMandateVerbatim": "[owner-directive]",
         "degraded": sorted(set(degraded)),
         "chainVerify": (None if not chain else {
             "head": chain["head"], "mult": chain["mult"],

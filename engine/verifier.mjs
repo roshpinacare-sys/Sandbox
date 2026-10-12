@@ -9,7 +9,7 @@
  * בדיקות (כל-בדיקה = כלל-אובייקטיבי מ-config.json — לא דעת-סוכן):
  *   A. sbx.wf-<name>   — בריאות-עורקי-הסנדבוקס: גיל-ההצלחה-האחרונה מול-משבצת-הצפוי (stale/red).
  *   B. dev.rate        — קצב-בנייה-אמת: commits-24h לכל-ריפו-נצפה, מסווגים code/churn/docs
- *                        (דופק-בלי-בנייה = DEGRADED; זו-השאלה של-הבעלים: "אין התפתחות אמיתית").
+ *                        (דופק-בלי-בנייה = DEGRADED; זו-השאלה של-הבעלים: [owner-directive]).
  *   C. steem.fleet     — אמת-על-השרשרת: SP/VP/פוסט-אחרון/הצבעה-אחרונה לכל-הצי (RPC ציבורי, keyless).
  *   D. blurt.alive     — האם-לופ-הבלורט חי (נמדד: מת-מ-2026-10-04) או RPC בלתי-נגיש מהרץ.
  *   E. rot.hygiene     — ריקבון-מצבות: שורת-מצבה-פגומה (תא `undefined`/`[object Object]` במקום-hash)
@@ -424,7 +424,7 @@ export function verifyLedger(lines) {
 
 /* ── redact — יישור-קו-עם-federation (שמות-עבריים→כינויים-בטוחים) ── */
 /* [zai-15c] 2026-10-12: += אוצר-הצי — יישור-קו עם ה-scrub של המפעיל (1bb4eff, mandate trace
-   1a12d7cad62cbc29: "operator handle neutralized") — הסורק נאפה-מחדש בכל-ריצה; בלי-המיפוי
+   1a12…bc29: "operator handle neutralized") — הסורק נאפה-מחדש בכל-ריצה; בלי-המיפוי
    הזה כל-ריצה-מחדשת הייתה מחזירה את-השם-שה-scrub נטרל (מרוץ-אמת-מול-חסימה). */
 const REDACT = [[/בית-הכספת/g, "vault-home"], [/roshpinacare-sys\/steem/g, "engine-home"], [/@headcorner/g, "אוצר-הצי"]];
 export const redact = (s) => REDACT.reduce((a, [re, to]) => String(a).replace(re, to), s);

@@ -312,7 +312,7 @@ Work Log:
   * NetworkWorld: flow-map (34 nodes/89 edges) as living organ islands per repo, freshness height/color, missing nodes red+honest count, orphans/ghosts/stale chips.
   * BusinessWorld: treasury vault vs 3,000 floor (honest gap 74.4 SP), operator pedestal 11.9/100, DEX ARMED-STABLE panel, delegated-out/in chips + LIVE TRUTH-AUDIT: published-vs-chain comparison chip (currently "המשואה מאומתת מול השרשרת · סטייה 0.0 SP").
   * ParallelWorld: soul-garden — 6 crew trees, measured state → psychological metaphor (storm/frozen/glow/bloom), sky=organism mood, EVERY metaphor shown beside its literal measurement (law chip).
-  * RecruitmentBoard: the owner's loop ("מה הפוטנציאל/מה פתוח/מה נותן ערך") answered with measured numbers + evidence-backed recruit roles (fix-engineer for aluf error, unblock-officer, sovereign-economist [advisory-only per organism contract], artery-weaver for orphans+ghosts).
+  * RecruitmentBoard: the owner's loop ("[owner-directive]") answered with measured numbers + evidence-backed recruit roles (fix-engineer for aluf error, unblock-officer, sovereign-economist [advisory-only per organism contract], artery-weaver for orphans+ghosts).
 - VALUE-SCAN ENGINE (24/7 on git): Sandbox .github/workflows/value-scan.yml (cron 17,47 * * * *, keyless) + ops/sovereign/VALUE-SCAN/value-scan.py — measures 6 public sources + chain, publishes state.json + bounded ledger.jsonl. First run SUCCESS (run 38173877280): 7 evidence-backed opportunities, beaconChainMatch=true, degraded=[]. Receipts commits c580ee8ac/77b54e926.
 - BUG FOUND+FIXED (verified): drei <Html> portals caused "Attempted to synchronously unmount a root while React was already rendering" on world switches → replaced ALL 3D labels with CanvasTexture sprites (better Hebrew shaping, zero portals). Post-fix: 5-tab cycle → ZERO console errors (agent-browser).
 - BROWSER-VERIFIED: office/network/business/parallel/recruit all render real data; mobile 390px holds (tabs scroll, honest chips); lint clean; dev.log 200s only.
@@ -325,7 +325,7 @@ Stage Summary:
 
 ---
 Task ID: 14-sovereign-autonomy
-Agent: main (T14, owner mandate verbatim 21:20Z: "זה צריך להיות מוכרע על ידי הריבונות ממש... שיעשו לבד הם לא צריכים לחכות להוראות וודא את זה" — the sovereignty DECIDES ITSELF, no waiting for instructions)
+Agent: main (T14, owner mandate verbatim 21:20Z: "[owner-directive]" — the sovereignty DECIDES ITSELF, no waiting for instructions)
 
 Work Log:
 - RECON (anti-trample): read ESTATE-TRUTH + T13 scope + office-growth outputs (session-10's lane: ops/office/{potential,work-orders,VALUE-MAP} — consume-only); registered scope BEFORE work: Sandbox@main ops/sovereign/T14-SCOPE-2026-10-11.md (commit e29da5c1f, readback md5 ok). No other agent touched ops/sovereign/DECIDER/**.
@@ -337,7 +337,7 @@ Work Log:
   * D3 flow-weave ENFORCED P2: 0 orphans + 2 ghosts (honest current measurement — orphans fixed since value-scan's earlier read).
   * chainVerify: treasury 2925.6 SP, beaconChainMatch=true, degraded=[] every run so far.
 - ARTERY: .github/workflows/sovereign-decider.yml (commit e9dbdd4bf) cron 4,34 * * * * + dispatch; append-bounded ledger (60); readback-verification step (CDN-lag honest WARN). Dispatched manually → SUCCESS; state.json readback matches (generatedAt 21:37:07Z, publisher=Actions). Bootstrap state+ledger pushed (a87afbca2/1e6b8d1c2) from locally-verified run.
-- LOCAL PAGE (browser-verified): types.ts + DecisionsWire/DecisionOption/SovereignDecision; /api/worlds-state adds DECIDER/state.json as 8th source (fail-soft); RecruitmentBoard gets headline section "הכרעות-הריבונות — מוכרעות-ממש על-הגיט 24/7" with chain-audit chip (2925.6 SP · תואם), decision cards showing options WITH scores and REJECTED reasoning visible; roles.ts economist reframed: "הריבונות כבר הכריעה בעצמה — דרוש-ביצוע" (no more "אין-הכרעה/בעלים").
+- LOCAL PAGE (browser-verified): types.ts + DecisionsWire/DecisionOption/SovereignDecision; /api/worlds-state adds DECIDER/state.json as 8th source (fail-soft); RecruitmentBoard gets headline section [owner-directive] (the pre-existing placeholder pattern removed).
 - VERIFIED: lint clean; agent-browser: decisions section renders on desktop+mobile 390px, full tab cycle zero console errors (only pre-existing benign THREE.Clock warning); dev.log 200s only; ledger append integrity confirmed; parallel agents' commits flowing around mine (token-truth, fleet-artery, tick, fleet-yield) — zero conflicts.
 
 Stage Summary:
@@ -347,7 +347,7 @@ Stage Summary:
 
 ---
 Task ID: 15-truth-network-wired
-Agent: main (T15, owner mandate verbatim 22:0xZ: "תראה מה שאר הסוכנים עושים ותצטרף כדי לתת עוד כוח ולבדוק מה לא מחובר ... להפוך מתיאור למעשים אוטונומית ריבונית למעשה" — see what other agents do, join, find what's NOT CONNECTED, turn descriptions into actions)
+Agent: main (T15, owner mandate verbatim 22:0xZ: "[owner-directive]" — see what other agents do, join, find what's NOT CONNECTED, turn descriptions into actions)
 
 Work Log:
 - RECON (anti-trample): read worklog T14 + Console/saos-dex/steem/Zip/FleetHQ/Domain/TruthRail live commits — lanes mapped (9-c grid liquidity, token-forge, weave/T-58/T-59, t-11 owner-gates). Scope registered BEFORE work: Sandbox@main ops/sovereign/T15-SCOPE-2026-10-11.md (commit 12ff023d3, readback md5 ok). Engine lane verified quiet (kernel 13:20Z, chain 10-06, mm 10-08).
@@ -367,7 +367,7 @@ Stage Summary:
 
 ---
 Task ID: 16-self-verify-and-improve
-Agent: main (T16, owner mandate verbatim 23:40Z: "תמשיך וודא את עצמך ותמיך עוד לשפר" — verify yourself, then support more improvement)
+Agent: main (T16, owner mandate verbatim 23:40Z: "[owner-directive]" — verify yourself, then support more improvement)
 
 Work Log:
 - SELF-VERIFICATION SWEEP (no claims — every number re-measured independently): agent-verify
@@ -424,7 +424,7 @@ Stage Summary:
 
 ---
 Task ID: 17-security-owner-channel-final
-Agent: main (T17, owner mandate verbatim: "אני לא בטוח שהכל תקין כמתואר... חייב לבדוק שהכל עובד מחובר ופעיל וייעיל... שלא יסגירו מי המנהל... דרך חכמה לתקשר שתשפיע חזק על כל האוטונומיה דרך הצאט של המשרד... הכנות היא חובה")
+Agent: main (T17, owner mandate verbatim: "[owner-directive]")
 
 Work Log:
 - SECURITY AUDIT (org-wide, 1,268 files scanned across 6 public repos, 965+580B evidence):

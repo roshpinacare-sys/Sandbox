@@ -44,7 +44,7 @@ const NODES = [
   { repo: `${OWNER}/Domain`,  path: "agents/office-live.json",         kind: "book",    maxAgeH: 3,  feeds: "office-artery (2h)" },
   { repo: `${OWNER}/Domain`,  path: "dex/office-feed.json",            kind: "book",    maxAgeH: 26, feeds: "office-feed (daily)" },
   { repo: `${OWNER}/Domain`,  path: "status.json",                     kind: "book",    maxAgeH: 30, feeds: "pages build" },
-  // R31 (WO-unwired-adsmarket-marketing, trace 1a12d4daf2926fd5): the public
+  // R31 (WO-unwired-adsmarket-marketing, trace 1a12…6fd5): the public
   // measured-view book of the PRIVATE marketing source repo — the arc's public
   // face. The source (roshpinacare-sys/Adsmarket) is private: raw 404s, so the
   // node measured here is the BOOK; the book itself carries the canonical
@@ -119,7 +119,7 @@ const PATTERNS = [
   { re: /ops\/flow\/flow-map\.json/g,                     to: () => `${OWNER}/Sandbox:ops/flow/flow-map.json` },
   { re: /receipts\/(wallet|fleet|grid)\/verdict\.json/g,  to: (m) => `${OWNER}/Sandbox:receipts/${m[1]}/verdict.json` },
   { re: /receipts\/latest\.json/g,                        to: () => `${OWNER}/Sandbox:receipts/latest.json` },
-  // R31 (WO-unwired-adsmarket-marketing, trace 1a12d4daf2926fd5): the
+  // R31 (WO-unwired-adsmarket-marketing, trace 1a12…6fd5): the
   // adsmarket measured-view arc. The SOURCE repo is private (raw 404s), so any
   // file touching the private source or the public book lands on the book node
   // — the public face of the arc (one-room law: pointers, never prose).

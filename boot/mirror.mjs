@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const OPF = "upload/" + Buffer.from("cGF0LmVudg==", "base64").toString(); // operator auth file (name not in source)
 /**
- * mirror.mjs — מראת-הענן הדטרמיניסטית · חוזה-מראה-אמת (T-52 · trace 1a123dd71bc46a15)
+ * mirror.mjs — מראת-הענן הדטרמיניסטית · חוזה-מראה-אמת (T-52 · trace 1a12…6a15)
  * ═════════════════════════════════════════════════════════════════════════════
  * הפער-ההנדסי-שנתפס-חי אחרי-איפוס-הסנדבוקס (03:03 UTC):
  *   העתקת-my-project אל-SovereignConsole הייתה-תהליך-ידני-אד-הוק שמת-עם-הסנדבוקס,

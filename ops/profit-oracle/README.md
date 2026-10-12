@@ -1,6 +1,6 @@
 # profit-oracle · פעימת-רווחיות-עומדת יומית (STANDING DAILY PROFIT PULSE)
 
-**zai-14b · trace 1a12d502a99b7021** — מצטרף ל-OWNER-WORD: *"the autonomy itself checks profitability daily"*.
+**zai-14b · trace 1a12…7021** — מצטרף ל-OWNER-WORD: [owner-directive] (daily-autonomous-profitability-check).
 הקבלה לשער-הבית (ops/fresh-oracle, zai-12b): אפס-תלות · ESM · node≥18 · fail-open כן · union-receipt
 (prior נשמר מילה-במילה, runs מוגבל-12) · סריקת-סודות לפני-כתיבה · אימות-readback. **אפס-מפתחות** — קריאות-ציבוריות בלבד, אין-חתימה, אין-STASIS.
 

@@ -3,8 +3,7 @@
  * KEY-PROOF — הוכחת-מתים לחומר-מפתחות שדלף להיסטוריית-git (R11) · saos/key-proof/1
  * ═══════════════════════════════════════════════════════════════════════
  *
- * Owner mandate trace 1a12c9d6f5df1b95 ("find sovereign solutions for what
- * remains owner-gated"): לא סיבוב-ריפואים אצל ה-owner אלא הוכחה עומדת
+ * Owner mandate trace 1a12…1b95 ([owner-directive] — sovereign solutions for what remains owner-gated): לא סיבוב-ריפואים אצל ה-owner אלא הוכחה עומדת
  * מבוססת-שרשרת שכל חומר-מפתח שדלף לא מאשר דבר על אף חשבון-צי.
  *
  * שלבים:
@@ -723,7 +722,7 @@ async function main() {
     protocol: "saos/key-proof/1",
     generatedAt: startedAt,
     finishedAt: new Date().toISOString(),
-    mandate: "owner trace 1a12c9d6f5df1b95 — dead-key standing proof for R11 leaked key material (roshpina/anchor-baseline/saos-jummper/Sdk/Adsmarket)",
+    mandate: "owner trace 1a12…1b95 — dead-key standing proof for R11 leaked key material (roshpina/anchor-baseline/saos-jummper/Sdk/Adsmarket)",
     redaction: { law: "hash16-of-material + derived pubkeys + place metadata ONLY; no private material, no passphrases, no file contents; auditor enforced pre-write (violation = hard failure, nothing written)", selfAudited: true },
     scan: {
       ...scan,

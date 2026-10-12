@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * profit-oracle — פעימת-רווחיות-עומדת יומית (STANDING DAILY PROFIT PULSE) · zai-14b · trace 1a12d502a99b7021
+ * profit-oracle — פעימת-רווחיות-עומדת יומית (STANDING DAILY PROFIT PULSE) · zai-14b · trace 1a12…7021
  * ═══════════════════════════════════════════════════════════════════════════════════════════════════
- * מצטרף ל-OWNER-WORD: "the autonomy itself checks profitability daily" — האוטונומיה בודקת-רווחיות
+ * מצטרף ל-OWNER-WORD: [owner-directive] (daily-autonomous-profitability-check) — האוטונומיה בודקת-רווחיות
  * כל-יום. הקבלה לשער-הבית (ops/fresh-oracle, zai-12b): אותו-ארכיטקט — אפס-תלות, ESM, node>=18,
  * fail-open כן, union-receipt (prior נשמר מילה-במילה, runs מוגבל-12), סריקת-סודות לפני-כתיבה,
  * אימות-readback. אפס-מפתחות: קריאות-שרשרת ציבוריות בלבד + raw/Pages ציבורי. אין-חתימה, אין-STASIS.
@@ -430,7 +430,7 @@ export function unionAppend(existing, run, { cap = LAWS.RUNS_CAP, prior } = {}) 
   doc.agent = doc.agent || AGENT_ID;
   doc.law = doc.law ||
     "keyless daily profitability pulse: V-WORTH (14-roster own/eff SP + liquid + order-book mid → netWorthSbdEquiv) · V-GRID-EDGE (pnl-desk verdict/edge/realized — value is data, desk decides) · V-ZOMBIE-LADDER (headcorner open orders vs prior: vanished = AMBER until fill/cancel verified); delta > +0.5% = PROFIT, ±0.5% = FLAT, < −0.5% = LOSS; network failure = UNKNOWN + reason, never guessed";
-  doc.gate = doc.gate || "profit-oracle (zai-14b) — standing daily profit pulse; joins zai-12b's fresh-oracle house pattern; owner trace 1a12d502a99b7021 'the autonomy itself checks profitability daily'";
+  doc.gate = doc.gate || "profit-oracle (zai-14b) — standing daily profit pulse; joins zai-12b's fresh-oracle house pattern; owner trace 1a12…7021 [owner-directive] (daily-autonomous-profitability-check)";
   /* prior — נקבע-פעם-אחת (הפנקס כפי-שעמד לפני-הכתיבה-המאוחדת-הראשונה = מדידת-הזרע), אחר-כך נשמר מילה-במילה לנצח. */
   if (doc.prior === undefined || doc.prior === null) {
     doc.prior = prior !== undefined ? prior : null;

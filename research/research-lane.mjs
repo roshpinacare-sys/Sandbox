@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* research-lane.mjs — RESEARCH & DISCOVERY lane (task 10-d, phase 3).
  *
- * Owner mandate (trace 1a12c59452cbc355): "שיהיה גם מחקר וגילוי על דברים
+ * Owner mandate (trace 1a12…c355): "שיהיה גם מחקר וגילוי על דברים
  * בטוחים שיכולים לשפר את המערכת — קדמה, אבטחה, יעילות, אוטונומיה ריבונית".
  *
  * חוקי-המסילה (same laws as every Sandbox probe layer):

@@ -2,7 +2,7 @@
 /**
  * integrity-guard.mjs — שומר-השלמות v2 (zai-code-3 · טריטוריה: engine/integrity-guard.mjs + ops/integrity + artery-integrity.yml)
  * ═══════════════════════════════════════════════════════════════════════════════════════════
- * דרישת-בעלים (מילה-במילה): "חייב לוודא שאין זיופים... ולא לסמוך יותר מדי על כלום — גם לא על עצמנו".
+ * דרישת-בעלים (מילה-במילה): [owner-directive].
  *
  * ביקורת-ידנית 2026-10-11 (אחרי-תיקון-עצמי של פתרון-URL-חוצה-ריפו): אפס-זיופים בשרשרת.
  * v1-של-השומר-עצמו ייצר אזעקות-שקר (bare-runId בלי-ריפו נשפט ghost; 403 תורגם "זיוף";
@@ -320,7 +320,7 @@ async function main() {
     "## ממצאים (מדורג — כשל-רשת-שלנו לעולם לא מדווח כזיוף)",
     ...(findings.length ? findings.sort((a, b) => LEVELS[b.level] - LEVELS[a.level]).map((f) => "- **" + f.level + "** `" + f.where + "` — " + f.law + " — " + f.detail) : ["- אין"]),
     "",
-    "_חוקי-L0..L7 · דרישת-בעלים: אין-זיופים · גם-השומר-עצמו נבדק (L0) · fail-closed_",
+    "[owner-directive]",
     "",
   ].join("\n");
   writeFileSync(path.join(ROOT, "ops/integrity/REPORT.md"), md);

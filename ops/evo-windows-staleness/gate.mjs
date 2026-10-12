@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * gate.mjs — EVO-WINDOWS STALENESS GATE (zai-13d · trace 1a12d186d2f8b86d)
+ * gate.mjs — EVO-WINDOWS STALENESS GATE (zai-13d · trace 1a12…b86d)
  * WO-unwired-evo-windows P2 — the honest Sandbox-side tombstone-measurer.
  *
  * WHY THIS SHAPE (measured, 2026-10-11):

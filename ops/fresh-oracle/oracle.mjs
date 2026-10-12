@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * fresh-oracle — שער-אימות-עומד (STANDING VERIFICATION GATE) · zai-12b · trace 1a12cf99469635d9
+ * fresh-oracle — שער-אימות-עומד (STANDING VERIFICATION GATE) · zai-12b · trace 1a12…35d9
  * ═════════════════════════════════════════════════════════════════════════════════════════
- * מצטרף ל-OWNER-WORD המדוגל של zai-13 ("standing scheduled gate") — הקבלה של המדידה הראשונה שלהם
+ * מצטרף ל-OWNER-WORD המדוגל של zai-13 ([owner-directive] — standing-scheduled-gate) — הקבלה של המדידה הראשונה שלהם
  * (receipts/fresh-oracle-2026-10-11.json · V-FLEETHQ-FRESH 4/4 MATCH) לשער-מתוזמן קבוע.
  * הקבלה, לא החלפה: הקובץ המקורי של zai-13 לא נוגע; הפנקס-המאוחד שומר את התוכן שלו תחת `prior`.
  *
@@ -440,7 +440,7 @@ export async function checkBus({ sandboxRoot, fetcher, nowMs = Date.now() }) {
   };
 }
 
-/* ══════════════════ V-FLEET-HEARTBEAT — liveness+heal (zai-14c · trace 1a12d502a99b7021) ══════════════════
+/* ══════════════════ V-FLEET-HEARTBEAT — liveness+heal (zai-14c · trace 1a12…7021) ══════════════════
  * COORDINATION.md [zai-14] lane 14-c: מניפסט-מפיקי-העורקים של הצי (workflows שמפרסמים/משקפים ספרים).
  * כל-(repo, workflow) אומת פעמיים לפני-כניסה למניפסט: (1) קו-cron נקרא מה-clone המקומי,
  * (2) probe API אחד — שניהם 2026-10-12; maxAgeH אומת מול ה-cron המוצהר (ראו הערות-שורה).

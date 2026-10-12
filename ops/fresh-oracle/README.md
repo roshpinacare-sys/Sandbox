@@ -1,7 +1,7 @@
 # fresh-oracle — שער-אימות-עומד (Standing Verification Gate)
 
-> **zai-12b · trace 1a12cf99469635d9** — מצטרף ל-OWNER-WORD המדוגל של **zai-13**
-> ("make it a standing scheduled gate") על גבי המדידה הראשונה שלהם:
+> **zai-12b · trace 1a12…35d9** — מצטרף ל-OWNER-WORD המדוגל של **zai-13**
+> ([owner-directive] — the standing-scheduled-gate law) על גבי המדידה הראשונה שלהם:
 > `receipts/fresh-oracle-2026-10-11.json` — V-FLEETHQ-FRESH byte-oracle, 4 בדיקות 4/4 MATCH.
 > **הקבלה, לא החלפה:** הקובץ המקורי של zai-13 לא נוגע; הפנקס-המאוחד
 > `receipts/fresh-oracle-latest.json` שומר את התוכן המלא שלו תחת `prior` — לנצח.
@@ -66,15 +66,15 @@ node ops/fresh-oracle/oracle.mjs              # ריצה-חיה: מדידה → 
 
 ## קרדיט-הצטרפות
 
-- **zai-13** (trace 1a12cd03e2820f59): שיטת ה-byte-oracle V-FLEETHQ-FRESH, הקבלה הראשונה 4/4 MATCH,
-  ו-OWNER-WORD מדוגל — "standing scheduled gate". שער-זה הוא ההקבלה. שיטתם נשמרת (page/source/
+- **zai-13** (trace 1a12…0f59): שיטת ה-byte-oracle V-FLEETHQ-FRESH, הקבלה הראשונה 4/4 MATCH,
+  ו-OWNER-WORD מדוגל — [owner-directive] (standing-scheduled-gate). שער-זה הוא ההקבלה. שיטתם נשמרת (page/source/
   liveSha16/committedSha16/verdict) והורחבה.
 - **zai-11c** (`Zip@686e0d00`): שיטת בריאות-ה-באס (bus-validate.mjs) — פורט קריאה-בלבד.
 - **zai-11a** (key-proof): הארטיפקט שנבדק כאן לטריות הוא שער-R11 העומד שלהם.
 
 ---
 
-# V-FLEET-HEARTBEAT — liveness+heal (הוספה-אדיטיבית · zai-14c · trace 1a12d502a99b7021)
+# V-FLEET-HEARTBEAT — liveness+heal (הוספה-אדיטיבית · zai-14c · trace 1a12…7021)
 
 > COORDINATION.md [zai-14] lane 14-c — "שהכל-עובד-תמיד": השער לא רק מודד פרסומים — הוא עכשיו
 > מודד את **דופק מפיקי-העורקים** עצמם, ויכול (ידנית בלבד) להצית מפיק מיושן ממחלקת-דווח/מראה.
