@@ -1,6 +1,6 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-12T15:21:48Z",
+ "generatedAt": "2026-10-12T22:35:37Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
@@ -10,9 +10,9 @@
   "value-scan"
  ],
  "chainVerify": {
-  "head": 110378849,
-  "mult": 0.000620235579022351,
-  "treasuryNetSp": 2925.8,
+  "head": 110387491,
+  "mult": 0.0006202482449979156,
+  "treasuryNetSp": 2830.0,
   "minOperatorSp": 11.9,
   "beaconChainMatch": true
  },
@@ -20,30 +20,14 @@
   {
    "id": "D0-owner-channel",
    "area": "הנהגה",
-   "status": "ENFORCED",
-   "priority": "P0",
-   "titleHe": "ערוץ-המנהל — הסמכות-העליונה נקראת-בכל-פעימה (תיבה+לוח)",
-   "verdictHe": "הריבונות מאשרת-קבלה: 0 הוראות-מהתיבה + 2 פקודות-קונסולה-חדשות נקראו-מהגיט-של-הבעלים ומנותבות-סמכות-עליונה — הוראה-חדשה מעדכנת-מיד.",
+   "status": "OBSERVING",
+   "titleHe": "ערוץ-המנהל",
+   "verdictHe": "ערוץ-ההנהגה פתוח-ומחובר (שני-המקורות-נמדדו) — אין-הוראות-חדשות (כנות; נקרא-חי-בכל-פעימה)",
    "evidence": [
-    "inbox.jsonl: 0 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 2",
-    "[board ACK DIR-20261012-0002] בדיקה-טכנית של ערוץ-המפעיל (office3d/operator.html): הפקודה נכתבה מהדפדפן, נשמרה בלוח ואומ",
-    "[board ACK DIR-20261012-0003] צו-התאמת-מפתח: המפתח-הציבורי STM8StTG4aesGfmAUgBpMU9LKvoz98E5uz9eCCtEUvYM8Ywnicnoh (נמדד: "
+    "inbox.jsonl: 0 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0"
    ],
-   "ownerDirectives": [],
-   "ackIds": [
-    "DIR-20261012-0002",
-    "DIR-20261012-0003"
-   ],
-   "ackCount": 2,
-   "routing": {
-    "ownerDirectives": [
-     "DIR-20261012-0002",
-     "DIR-20261012-0003"
-    ],
-    "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
-   },
    "boardMeasured": true,
-   "decidedAt": "2026-10-12T15:21:48Z",
+   "decidedAt": "2026-10-12T22:35:36Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -68,7 +52,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.2 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2681.6 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.2 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2585.8 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -95,12 +79,12 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 2925.8 SP (ראש 110378849, מכפיל 0.000620236)",
-    "יעד 3000 · פער 74.2 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 1344.7 SP · נכנסת-נמדדת 244.2 SP",
-    "משואה מפרסמת 2925.8 SP · תואם=True",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 87335)",
-    "האצלות-אחרונות למפעילי-הצי: ~242.1 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
+    "אוצרה נמדדת 2830.0 SP (ראש 110387491, מכפיל 0.000620248)",
+    "יעד 3000 · פער 170.0 SP · מסילת-שימור 2800 (R2)",
+    "האצלה-יוצאת-נמדדת 1440.5 SP · נכנסת-נמדדת 244.2 SP",
+    "משואה מפרסמת 2830.0 SP · תואם=True",
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 89756)",
+    "האצלות-אחרונות למפעילי-הצי: ~166.5 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
     "treasury": {
@@ -203,7 +187,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-12T15:21:48Z",
+   "decidedAt": "2026-10-12T22:35:37Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -221,7 +205,7 @@
     "foreman": [],
     "officeGrowthWorkOrders": []
    },
-   "decidedAt": "2026-10-12T15:21:48Z",
+   "decidedAt": "2026-10-12T22:35:37Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -233,7 +217,7 @@
    "evidence": [
     "flow-map.json לא זמין"
    ],
-   "decidedAt": "2026-10-12T15:21:48Z",
+   "decidedAt": "2026-10-12T22:35:37Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -242,23 +226,19 @@
    "status": "ENFORCED",
    "priority": "P1",
    "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
-   "verdictHe": "הריבונות מכריעה: 1 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
+   "verdictHe": "הריבונות מכריעה: 3 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-10-12T06:50:45.975Z)",
+    "מאמת-הרשת: 48/51 HAS_FAILURES (2026-10-12T18:27:48.030Z)",
     "שער-האמת: ALL-GREEN (pass=7 fail=0)",
-    "A14: pattern matched 2 time(s), first match \"—\""
+    "A14: pattern matched 2 time(s), first match \"—\"",
+    "A31: core op saos.weave.core.v1 not found within the 26h window of any witness on the",
+    "A43: markets.1.bestAsk = 0, minimum is 1"
    ],
-   "decidedAt": "2026-10-12T15:21:48Z",
+   "decidedAt": "2026-10-12T22:35:37Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
- "workOrderStatus": {
-  "WO-FleetHQ-reds": {
-   "measured": true,
-   "subjectResolved": true,
-   "evidence": "קבלת-office-ci האחרונה: 'office-ci receipt: build pass, types pass [skip ci]'"
-  }
- },
+ "workOrderStatus": {},
  "noAction": [],
  "law": "MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE · R1-R5 ב-CHARTER"
 }
