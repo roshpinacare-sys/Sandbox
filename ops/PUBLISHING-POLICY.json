@@ -1,6 +1,6 @@
 {
   "protocol": "SAOS-PUBLISHING-POLICY/1",
-  "at": "2026-10-12T14:55:00Z",
+  "at": "2026-10-12T15:29:59Z",
   "authority": "owner-directive trace-1a12…79b9",
   "title": "מדיניות-פרסום ריבונית — מה יוצא החוצה, מה נשאר בפנים, באיזה נוסח",
   "rule": "כל-תוכן-שיוצא-החוצה-חייב-לעמוד-במבחן-המבקר-החיצוני: אסטרטגיה-מפלילה, טון-צ'אט, או נתון-מיושן = לא-יוצא.",
@@ -11,7 +11,7 @@
       "language": "עברית-מקצועית לטקסט-פנים; אנגלית-טכנית ל-eyebrow/מטא; עקרון-refero: כותרות-שקטות, אקסנט-יחיד, אפס-זוהר."
     },
     "PRIVATE": {
-      "what": "פנקסים, worklogs, צווי-בעלים מילוליים, requests.json של-הצ'אט, מפות-אחוזה (ESTATE-INDEX), registry-כולל-ריפו-פרטיים, RUNBOOK-טוקנים, RESUME-PACKET, OWNER-CHANNEL-תיעוד, STATE-REPORT-יומיים, קבלות-עם-נתיבי-/home/z.",
+      "what": "פנקסים, worklogs, צווי-בעלים מילוליים, requests.json של-הצ'אט, מפות-אחוזה (ESTATE-INDEX), registry-כולל-ריפו-פרטיים, RUNBOOK-טוקנים, RESUME-PACKET, OWNER-CHANNEL-תיעוד, STATE-REPORT-יומיים, קבלות-עם-נתיבי-מארח-פנימיים.",
       "law": "לא-דוחפים-לריפו-ציבורי-בשום-נימוק. יעד: ריפו-פרטי או זיכרון-חוץ-מכונה-סגור. מי-שדוחף-בטעות — מוחק-בהקדם-ורושם-תקרית."
     },
     "SANITIZE_THEN_PUBLISH": {
@@ -35,11 +35,12 @@
   "entrances": {
     "law": "שער-אחד, מפתח-אחד, בעלים-אחד: כל-שער-מאמת-מול-מפתח-הפרסום-הנוכחי-של-owner-treasury מול-השרשרת-חיה (signature-derive) או מול-האש-המאושר-על-ידי-הבעלים-בעת-רישום. שום-סוכן-לא-בוחר-מפתחות-מנהל-בעצמו.",
     "current-violations": [
-      "FleetHQ/operator.html (Pages): PBKDF2 עם-2-האשים-שנאפו-על-ידי-סוכן — מפתח-הבעלים-לא-רשום",
+      "FleetHQ/operator.html (Pages): שער-סיסמה-חי — PBKDF2-310k, האש-יחיד-רשום-12:49Z-ומקבל-את-המחרוזת-שהדביק-הבעלים (אומת-MATCH-ב-trace-1a130b35). הערה-מבקרת: המחרוזת-אינה-WIF-תקין-לשרשרת — השער-מזהה-סיסמה-בלבד, לא-סמכות-חתימה; שערי-Console/Domain-מבוססי-השרשרת-עדיין-דוחים-אותה",
       "FleetHQ /api/operator/unlock: 404 בייצור (Pages-סטטי) — לא-רלוונטי, להסיר-הפניה-אליו",
       "קובץ-תצורת-שער-השרת-על-המארח (מחוץ-לכל-הריפו): לא-נוצר-מעולם — שער-השרת-מת-מלידה",
       "Console/sovereign-anchor.html: מבקש-WIF-ציבורית — להסיר-מיד"
-    ]
+    ],
+    "wave-1-entrances": "חצי-הושלם: שער-FleetHQ-מקבל-את-מחרוזת-הבעלים-מאז-12:49Z (רישום-continuum); נותרו-בפועל: שערי-Console/Domain-המבוססים-על-השרשרת (דורשים-WIF-תקין-שהבעלים-יספק) + הסרת-sovereign-anchor (עדיין-חי-200)"
   },
   "enforcement": {
     "pre-push-checklist": [
@@ -54,5 +55,5 @@
     "wave-2-scrub": "סריקת-7-a (40-ממצאים, ~150-טענות-קול-בעלים) → הסרה/סניטציה לפי-מדיניות — עם-אישור-בעלים-לגל-המחיקות",
     "wave-3-rotation": "הכרעת-בעלים G5: רוטציית-מפתחות cashmachine-והסרת-חומר-מהיסטוריה-ציבורית-של-roshpina"
   },
-  "revision": "v1.1 — fix: mangled redaction repaired (self-audit trace 1a13094b)"
+  "revision": "v1.2 — self-audit trace-1a130b35: stale FleetHQ-gate violation corrected (owner string accepted since 12:49Z, measured MATCH) + host-path removed from own text + wave-1 marked half-done"
 }
