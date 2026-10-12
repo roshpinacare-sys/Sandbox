@@ -351,3 +351,23 @@
 - TAKING (additive, in saos-runtime only): ops/fleet-rotation/* + .github/workflows/fleet-rotation-a.yml — phase-A rotation of EXPOSED army credentials (10 steem quads->active/posting/memo, 3 hcsoldier active+posting, 9 hive active+posting), owner authorities UNTOUCHED (recovery window). Reuses probe/probe-v2 census machinery + steem repo steemtx.mjs signer. Dispatch-only, fail-closed, chain-judged pre/post, incremental custody (per-account secret PUT before next broadcast), bundle re-seal + meta v4 pushed to steem so custody consumers auto-resolve.
 - NOT touching: probe*.cjs internals (zai-16a territory), gen2 era, headcorner posting (live lanes), treasury-ladder, sovereign-runtime heartbeat. Zero overlap with zai-16a files.
 - Zero broadcasts from the sandbox itself; all chain writes happen inside the CI lane with dual verification.
+
+---
+Task ID: 6 (lead, audit)
+Agent: Z.ai Code (zai-main-1a12fce5, trace 1a12fce52f7f79b9)
+Task: תביעת-בעלים "התעוררתי — מה נעשה בשינה? האם זה תואם ציפיות?" + מפתחות-לא-מתחברים + חשיפה-מפלילה + מקצועיות + מידע-מיושן.
+
+Work Log:
+- מדידת-מפתח-בעלים (upload/headcorner.txt, לא-הודפס): 52-תווים (WIF=51), checksum-WIF-נכשל, תיקון-תו-יחיד (מחיקה/החלפה ×~3000) = 0-פתרונות → המחרוזת-פגומה-2+שגיאות.
+- שרשרת-המפתחות-מדודה: (1) Console/gate.html מאמת-מול-שרשרת-חיה — נכון-עיקרון, אבל-מפתח-פגום=נדחה. (2) FleetHQ operator.html-חי-ב-Pages: PBKDF2-310k GATE_HASHES=2-האשים-שנאפו-ע"י-סוכן; מפתח-בעלים-נבדק-מולם=REJECTED. (3) FleetHQ /api/operator/unlock=404-בייצור (Pages-סטטי). (4) /home/z/.operator/config.json לא-נוצר-מעולם.
+- גילוי-שרשרת: headcorner last_owner_update=2026-10-12T11:12:33Z — posting+active-סובבו-בחלון-זה (STM7Rq…→STM8m3r…); gen2-rotation-run-11:14=failure; הצי-ממשיך-בפועל-הצבעות-10:58-11:06-והזמנות-limit_order (ACTIVE-חי) — ה-"park"-לא-מדויק.
+- keys-access.json (Sandbox): מפתחות-cashmachine-posting+active-חשופים-בהיסטוריה-ציבורית-של-roshpina-מ-09-12 — רוטציה-בביצוע-ע"י-מסילה-אחרת (phase-A) — לא-נוגעים.
+- key-proof.mjs WIF=וקטור-privkey=1-ציבורי — לא-דליפה (נבדק-בגזירה).
+- סריקת-חשיפה-עצמאית ×9-ריפו: אפס-סודות-גולמיים; הסיכון-מטא-מנגנונים. סוכן-7-a (מקביל): 40-ממצאים — ~150-טענות-קול-בעלים-בציבור (requests.json ×2-כ-API-ציבורי! worklogs-על-בעלים, CR-quotes, ESTATE-INDEX, RUNBOOK), 14-מיושנים (readiness-09-17, beacon-ירוק-על-נתון-2-ימים-ושבור-מ-P0-1), sovereign-anchor-מבקש-WIF-בעמוד-ציבורי.
+- סוכן-7-b: refero.design-נגיש-חי; דוקטרינת-13-עקרונות + roast-gate.html (זהב-×16, CTA-שקוף, זוהרים, כרטיסים-מרחפים, סגול-כאקסנט-שני, חצאי-פיקסלים) + tokens-מוכנים.
+- נדחף Sandbox@main 97868d3c: ops/PUBLISHING-POLICY.json (PUBLISH/PRIVATE/SANITIZE/FORBIDDEN + חוק-חיות 24h/72h + חוק-שער-אחד).
+
+Stage Summary:
+- מסקנת-הבעלים-צודקת: הכניסות-לא-תואמות-את-מפתחו (מדוד-מקצה-לקצה), הציבור-רואה-קול-צ'אט-ומנגנוני-כניסה, יש-מיושנים-בכמויות, והתוכן-הציבורי-מתחת-לסטנדרט.
+- נדרש-מהבעלים: מחרוזת-מפתח-תקינה-או-סיסמה-שתבחר → רישום-לכל-השערים; הכרעה-על-גל-מחיקות-לפי-PUBLISHING-POLICY; אישור-רוטציית-cashmachine (כבר-בביצוע-מסילה-אחרת).
+- אין-דריסה: לא-נגעתי-ב-phase-A-rotation, gen2, office3d, steem-repair, FleetHQ-office-reds, fresh-oracle.
