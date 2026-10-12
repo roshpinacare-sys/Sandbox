@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-12T02:57:53.073Z",
+  "measuredAt": "2026-10-12T03:51:03.315Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,9 +16,16 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 10min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 6min)",
       "severity": "fail",
       "verdict": "pass"
+    },
+    {
+      "id": "law-grid-exec-alive",
+      "ok": false,
+      "detail": "grid enabled but blocked on credential (lastVerdict=CREDENTIAL-MISSING) — owner law: no such state where the grid does not work",
+      "severity": "fail",
+      "verdict": "fail"
     },
     {
       "id": "law-grid-revival-wired",
@@ -29,20 +36,22 @@
     }
   ],
   "alerts": [],
-  "overall": "PASS",
-  "reason": "grid state measured from git; laws pass",
+  "overall": "FAIL",
+  "reason": "grid-law failed: law-grid-exec-alive",
   "provenance": {
-    "stateBlobSha": "3af1edece4cfb1572fdcbd67ada18a52aa9c1a4d",
+    "stateBlobSha": "48bdac54a61e38bf2847b3d67d942a163fdb712f",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "38197849372",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38197849372",
-    "sha": "1a515922e99ebee04ed6f95ad839f8f31f4b0cd0"
+    "runId": "38201375531",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38201375531",
+    "sha": "805098fd20f1732d2dce39e26dfe12797254a8f6"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-10-12T02:48:18.050Z",
-    "ageMin": 10,
-    "ticks": 36401,
-    "lastVerdict": "CREDENTIAL-MISSING"
+    "lastTickAt": "2026-10-12T03:45:30.349Z",
+    "ageMin": 6,
+    "ticks": 36491,
+    "lastVerdict": "CREDENTIAL-MISSING",
+    "opsToday": 12,
+    "lastTxid": "fc492553b848a31499523ca5d854e91f09bf71ad"
   }
 }
