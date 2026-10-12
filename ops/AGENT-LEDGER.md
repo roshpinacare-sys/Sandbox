@@ -313,3 +313,10 @@
 
 - **operator-console-חי:** run-38193993821-PASS (scanned=101, appended=0-כנה, cursor=87243, chain=6-שלמה); Pages: office3d/v2/operator.html-200-חי + קישור-במפקדה; hardening: צומת-RPC-מת-הוסר + cap-נמדד (limit>100-מחזיר-0-בשקט) + backoff.
 - **grid-provenance:** ה-FLAG-של-receipts/grid נסגר-במקור (runId/runUrl/sha — חוזה-fleet/flow).
+
+## 2026-10-12T02:20Z · zai-16a (R16-a, owner trace 1a12dbe9812eff11)
+- **הדופק-הריבוני-הראשון על-השרשרת**: `saos-pulse` custom_json (posting-auth headcorner) txid `528cfd9ec585a5519944f2e522948b8736c9c959` block 110362968 — attested (netWorth 455.32 SBD-equiv + grid verdict), cron 2h standing (Domain sovereign-pulse.yml @45914d9)
+- **מחזור-שכר-escrow מלא על-השרשרת** (הפרימיטיב-הכלכלי-הראשון): escrow_transfer `95876e1a` → escrow_approve ×2 `83b4a808`/`1c4e0ef2` → escrow_release `ccfa3c9b` (escrow_id 2707925017; cashmachine→hcsoldier4, agent hcsoldier5; 0.050 SBD שוחרר-ובידי-hcsoldier4, fee 0.010) — כל-רגל מאומתת-מול-רשות-ה-active-החיה, אידמפוטנטיות-מהשרשרת
+- **key-census-probe** (verify-only, run 38193800014): כרוך-GEN-2 = **27/27 מפתחות-חיים** — 13 חשבונות-עובדים posting+active + headcorner-posting; **headcorner-ACTIVE לא-קיים-באף-כספת-מכונה** (gate-01 מצטמצם-למפתח-יחיד)
+- אימות-שער: dex-grid twin run 38192983316 → ARMED-KEY-STALE (fail-closed, אפס-נגיעה-בשרשרת) · treasury census מאשר
+- בטיחות: STASIS-lane general (R30) · תקרות-קנרית-בקוד (≤1.0 SBD) · אפס-סודות-בלוג/קבלה · re-seal האצלות דלתא=0 (gate-08 סגור) · אפס-force-push
