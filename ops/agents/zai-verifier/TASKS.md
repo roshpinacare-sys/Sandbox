@@ -15,3 +15,6 @@
 - [CLOSED 2026-10-11T15:47:03.723Z] V-LOOP-FLEET-YIELD — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
 - [OPEN] V-TREASURY-BALANCE (DEGRADED @ 2026-10-11T16:29:43.814Z): איזון-אוצר לפי §3: לשמר ≥3,000 SP אצל-האוצר; top-up חשבונות-פעילים ל-100 SP | ראיה: treasury headcorner at 2926 SP < 3000 (recovery-plan §3)
 - [OPEN] V-LOOP-SOVEREIGN-TICK (FAIL @ 2026-10-12T01:07:04.759Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: no success in last 0 runs of sovereign.yml
+- [OPEN] V-LOOP-FLEET-YIELD (DEGRADED @ 2026-10-12T08:42:22.238Z): עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow) | ראיה: last success 175min ago > slot
+- [OPEN] V-DEV-FOCUS (DEGRADED @ 2026-10-12T08:42:22.238Z): דופק-בלי-בנייה: להפנות-משאב-סוכנים מטביעות-מצב לבניית-מוצר/תיקונים אמתיים | ראיה: heartbeat-without-building: codeShare 0% < 10% over 489 commits/24h
+- [CLOSED 2026-10-12T08:42:22.238Z] V-LOOP-SOVEREIGN-TICK — הכלל-כבר-לא-נצרת (ראה-דוח-הריצה-הנוכחית)
