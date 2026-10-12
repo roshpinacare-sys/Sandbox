@@ -1,19 +1,37 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-12T00:16:47Z",
+ "generatedAt": "2026-10-12T00:27:21Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "זה צריך להיות מוכרע על ידי הריבונות ממש לא על ידי תמשיך מה שהכי טוב ושיועיל שיעשו לבד הם לא צריכים לחכות להוראות וודא את זה",
  "degraded": [],
  "chainVerify": {
-  "head": 110360815,
-  "mult": 0.0006202091636044629,
+  "head": 110361023,
+  "mult": 0.0006202094676623006,
   "treasuryNetSp": 2925.6,
   "minOperatorSp": 11.9,
   "beaconChainMatch": true
  },
  "decisions": [
+  {
+   "id": "D0-owner-directives",
+   "area": "פקודות-מנהל",
+   "status": "ENFORCED",
+   "priority": "P0",
+   "titleHe": "לוח-הפקודות של המנהל",
+   "verdictHe": "המנהל פקד מעל-צ'אט-המשרד: 1 פקודות-חדשות קיבלו-הכרה (ACK) ונותבו-מיד למסילות-הביצוע — האוטונומיה מצייתת-למנהל-דרך-הלוח; ההכרעות-השגרתיות-מתחת-לזה.",
+   "evidence": [
+    "סה\"כ-פקודות-בלוח: 1 · פקודות-פתוחות-שקיבלו-הכרה-בפעימה-זו: 1",
+    "DIR-20261012-0001 [P0]: צו-בעלים (מועבר ללוח כרשומה-מייסדת): סבב-אחרון — האוטונומיה חייבת לעבוד לבד בכל הרבדים, בל"
+   ],
+   "ackCount": 1,
+   "ackIds": [
+    "DIR-20261012-0001"
+   ],
+   "decidedAt": "2026-10-12T00:27:21Z",
+   "decidedBy": "sovereign-decider-v1 (CHARTER)"
+  },
   {
    "id": "D1-econ-treasury-floor",
    "area": "כלכלה",
@@ -63,7 +81,7 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 2925.6 SP (ראש 110360815, מכפיל 0.000620209)",
+    "אוצרה נמדדת 2925.6 SP (ראש 110361023, מכפיל 0.000620209)",
     "יעד 3000 · פער 74.4 SP · מסילת-שימור 2800 (R2)",
     "האצלה-יוצאת-נמדדת 1344.6 SP · נכנסת-נמדדת 244.2 SP",
     "משואה מפרסמת 2925.6 SP · תואם=True",
@@ -171,7 +189,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-12T00:16:47Z",
+   "decidedAt": "2026-10-12T00:27:21Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -184,7 +202,8 @@
    "evidence": [
     "סוכנים בתקלה (מדוד): —",
     "משימות חסומות (מדוד): t1083",
-    "עבודות-פתוחות ממנוע-הצמיחה (צריכה): WO-FleetHQ-reds, WO-saos-runtime-reds, WO-unwired-dex-mirror, WO-unwired-steem-social-cadence, WO-unwired-evo-windows, WO-unwired-fleethq-gitignore, WO-unwired-fleethq-potential-link, WO-unwired-sandbox-ops-docs"
+    "עבודות-פתוחות ממנוע-הצמיחה (צריכה): WO-FleetHQ-reds, WO-saos-runtime-reds, WO-unwired-dex-mirror, WO-unwired-steem-social-cadence, WO-unwired-evo-windows, WO-unwired-fleethq-gitignore, WO-unwired-fleethq-potential-link, WO-unwired-sandbox-ops-docs",
+    "פקודות-מנהל-מנותבות (ACK): DIR-20261012-0001"
    ],
    "routing": {
     "foreman": [],
@@ -197,9 +216,12 @@
      "WO-unwired-fleethq-gitignore",
      "WO-unwired-fleethq-potential-link",
      "WO-unwired-sandbox-ops-docs"
+    ],
+    "ownerDirectives": [
+     "DIR-20261012-0001"
     ]
    },
-   "decidedAt": "2026-10-12T00:16:47Z",
+   "decidedAt": "2026-10-12T00:27:21Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -211,7 +233,7 @@
    "evidence": [
     "orphans=0 · ghosts=0"
    ],
-   "decidedAt": "2026-10-12T00:16:47Z",
+   "decidedAt": "2026-10-12T00:27:21Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -224,7 +246,7 @@
     "מאמת-הרשת: 51/51 ALL_PASS (2026-10-12T00:08:24.365Z)",
     "שער-האמת: ALL-GREEN (pass=7 fail=0)"
    ],
-   "decidedAt": "2026-10-12T00:16:47Z",
+   "decidedAt": "2026-10-12T00:27:21Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
@@ -234,6 +256,14 @@
    "subjectResolved": true,
    "evidence": "קבלת-office-ci האחרונה: 'office-ci receipt: build pass, types pass [skip ci]'"
   }
+ },
+ "directiveBoard": {
+  "path": "ops/sovereign/DIRECTIVES/board.json",
+  "measured": true,
+  "ackThisPulse": 1,
+  "ackIds": [
+   "DIR-20261012-0001"
+  ]
  },
  "noAction": [],
  "law": "MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE · R1-R5 ב-CHARTER"
