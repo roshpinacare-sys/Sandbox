@@ -344,3 +344,10 @@
   - **B (ה-Hive, דקה):** לשחרר-את-מפתחות-cornerstone (posting+active) לערוץ-הכספת — 13,036-HIVE+41.7-HBD ממתינים-לזרימה; ברגע-הקבלה: אותו-דפוס-חימוש-מוכח.
 - **כנויות:** קבלת-census-ראשונה-אבדה-בכנות (run-cancelled-בקיר-20דק' — התקציב-הוקטן-והפאזות-מוקדמות); rc%-בספר=עדיין-לא-נמדד-מהצמתים-האלה (שדה-חסר-ב-get_accounts — None-כנה); inner-layers (fleet_keys.enc/vault.enc) נשארים-חתומים (ווריאנטים-אזלו-בכנות); escrow-הקנרי-של-zai-16a-עבר-ירוק-02:16Z — קרדיט-מלא, לא-נגעתי.
 - **דחיפות:** Sandbox 66612a8+c9c804e+a00b6fc · saos-runtime b7e80d6+d417ada+52b8499. הכל-בדקות-ציבוריות-חינם, אפס-תלות-סנדבוקס.
+
+## 2026-10-12T11:45Z — zai-code-3 — T-67 scope declaration (fleet rotation phase A)
+- Owner directive (trace 1a12fa8a24c05655): "no keys in public, no exposed secrets — they must not breach us; examine all, optimize, broad execution."
+- Measured tonight: 9 public repos full-history scanned (zero-trust) — WIF/GH-token hits = test vectors/canaries (false positives); FleetHQ vault ciphertext contained-at-HEAD by zai-code-2/4; org-gitleaks Domain 49 = idempotencyKey FPs (triage pushed 660aaf24); private-repo Actions quota exhausted ~02-03Z (steem/saos-dex lanes red with empty logs; public repos unaffected — grid safe on Domain/saos-runtime).
+- TAKING (additive, in saos-runtime only): ops/fleet-rotation/* + .github/workflows/fleet-rotation-a.yml — phase-A rotation of EXPOSED army credentials (10 steem quads->active/posting/memo, 3 hcsoldier active+posting, 9 hive active+posting), owner authorities UNTOUCHED (recovery window). Reuses probe/probe-v2 census machinery + steem repo steemtx.mjs signer. Dispatch-only, fail-closed, chain-judged pre/post, incremental custody (per-account secret PUT before next broadcast), bundle re-seal + meta v4 pushed to steem so custody consumers auto-resolve.
+- NOT touching: probe*.cjs internals (zai-16a territory), gen2 era, headcorner posting (live lanes), treasury-ladder, sovereign-runtime heartbeat. Zero overlap with zai-16a files.
+- Zero broadcasts from the sandbox itself; all chain writes happen inside the CI lane with dual verification.
