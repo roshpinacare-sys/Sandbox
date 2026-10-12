@@ -6,7 +6,8 @@
 # pattern (book-audit/cognition-beat, Domain).
 name: sovereign-decider
 on:
-  schedule: [{cron: '9,39 * * * *'}] # [15a] דקות-אי-זוגיות-פנויות — :04/:34 הוספו-בשתיקה-על-ידי-תור-GitHub (נמדד: value-scan פלטה-באיחור-17-דק')
+  schedule:
+    - cron: "9,39 * * * *"   # [15a] דקות-אי-זוגיות-פנויות · סגנון-בלוק — הדפוס-היחיד-שנרשם-ונמדד-יורה-בריפו-זה (flow-style: value-scan הפסיק-להירשם — נמדד 00:47/01:17/01:47-הוספו)
   workflow_dispatch: {}
 
 permissions:
