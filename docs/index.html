@@ -32,7 +32,7 @@
     <form id="gate-form" autocomplete="off">
       <label class="sr-only" for="pass">סיסמת כניסה</label>
       <input id="pass" type="password" inputmode="text" autocomplete="off"
-             placeholder="סיסמת-האב הראשית (תוכן-הסוד-המלא)" disabled
+             placeholder="מפתח-מנהל" disabled
              aria-describedby="gate-error">
       <button id="unlock-btn" type="submit" disabled>פתח את הכספת</button>
     </form>
@@ -239,7 +239,7 @@
         <ul class="kv-list">
           <li>steem-repo <code>agent/vault/KEYS-ZIP…ROT4.zip.enc</code> — חתום, סיכות-sha256 כפולות</li>
           <li>vault-home (P + wraps) — נפתח אוטונומית במכונה-חדשה (הוכח-חי 2026-10-09)</li>
-          <li>כספת-האתר — PBKDF2 600k + AES-256-GCM, סיסמת-האב הראשית של המפעיל</li>
+          <li>כספת-האתר — PBKDF2 600k + AES-256-GCM, מפתח-מנהל</li>
           <li>boot/ — החזרת-ריבונות מכל מכונה חדשה, בפקודה אחת</li>
         </ul>
       </div>

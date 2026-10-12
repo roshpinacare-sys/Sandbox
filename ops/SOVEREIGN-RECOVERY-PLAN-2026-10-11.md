@@ -221,6 +221,6 @@
 1. **SP-UNDERFLOOR**: headcorner אפקטיבי 2,925.57 — 74 SP **מתחת-לרצפת-3,000** שהתוכנית-עצמה קבעה. גלי-ההאצלה חרגו-ב-~75 SP. דורש-החזר-או-אישור.
 2. **BANNED-CAPITAL-INFLOW**: headcorner מחזיק **244.2 SP מואצלים-פנימה** למרות-bannedCapital (אסור-להזרים-אליו-הון). דורש-reclaim-או-הצדקה.
 3. **DEX חי**: headcorner מכר ~91 STEEM → ~9.3 SBD דרך-fills מאומתים-פר-אופ; שוק-הפנימי עובד. שטף-STEEM-זמין 47.77 (מתחת-לרצפת-90).
-4. **treasury-arm + blurt-connect נבנו-ונבדקו-קצה-לקצה — נדחו fail-closed**: הסודות-ב-Domain מיושנים (census bit-compare מול-רשות-חיה: אפס-התאמות). החתימות-החיות-קיימות-אי-שם-באחוזה (גלי-ההאצלה הוכיחו) — אבל-לא-במועמדי-Domain. **דרוש-מ-provisioning-בעלים**: STEEM_ACTIVE_WIF-חי-ל-headcorner · HIVE_ACTIVE_WIF-חי-ל-cornerstone · מפתח-blurt-תואם-ל-cornerstone (או-מימון-עמלת-account_update-ל-headcorner).
+4. **treasury-arm + blurt-connect נבנו-ונבדקו-קצה-לקצה — נדחו fail-closed**: הסודות-ב-Domain מיושנים (census bit-compare מול-רשות-חיה: אפס-התאמות). החתימות-החיות-קיימות-אי-שם-באחוזה (גלי-ההאצלה הוכיחו) — אבל-לא-במועמדי-Domain. **דרוש-מ-provisioning-בעלים**: רשויות-חיות-עבור-חשבונות-הרשת (פירוט-בעל-גישה-בלבד).
 
 **המכונה**: grid-doctor v2.2 ב-Domain — cron-שעתי, drift-על-הון-זמין (נזיל+נעול-בהזמנות), מדידת-הזמנות-פתוחות, PHANTOM-CLAIM reconciliation, ROSTER-DIVERGENCE מול-fleet-roster, BANNED-CAPITAL-INFLOW, SP/TREASURY-UNDERFLOOR, פנקס-היסטוריה-JSONL. כל-טענה-בספר-הזה-מאומתת-מול-השרשרת-כל-שעה.

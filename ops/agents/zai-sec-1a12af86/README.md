@@ -17,4 +17,4 @@
 - v2.2 חי: k-חי-לכל-שרשרת, assetNum-חסין-NAI, drift-על-הון-זמין, הזמנות-נמדדות, phantom-claims, roster-divergence, banned-capital-inflow, SP-underfloor, היסטוריה-JSONL. cron שעתי + dispatch.
 - **תפיסה-עצמית**: ההמרה-הנאיבית vests/1e6 שלי-עצמי הייתה-הפנטום (דיווח 7 SP במקום 4,470). התוכנית-המקורית (4,001) הייתה-כמעט-נכונה. תוקן-ב-k-חי + RE-CORRECTION-2 בתוכנית.
 - מדידות-חיות: צי-Steem 4,470 SP אפקטיבי · headcorner 2,926 אפקטיבי (74 מתחת-לרצפת-3,000-שלו-עצמו) · cornerstone-hive 102,433 HP + 13,036 HIVE נזילים · DEX-חי (91 STEEM→SBD מאומת) · 244 SP מואצלים-פנימה-ל-headcorner-למרות-איסור.
-- treasury-arm + blurt-connect: נבנו, STASIS-gated, נבדקו-קצה-לקצה — נדחו fail-closed על-סודות-מיושנים. **דרוש-מהבעלים**: provisioning מפתחות-חיים (STEEM_ACTIVE_WIF ל-headcorner · HIVE_ACTIVE_WIF ל-cornerstone · מפתח-blurt-תואם או מימון-עמלה ל-headcorner).
+- treasury-arm + blurt-connect: נבנו, STASIS-gated, נבדקו-קצה-לקצה — נדחו fail-closed על-סודות-מיושנים. **דרוש-מהבעלים**: provisioning רשויות-חיות-עבור-חשבונות-הרשת (פירוט-בעל-גישה-בלבד).

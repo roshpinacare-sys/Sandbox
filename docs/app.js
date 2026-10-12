@@ -5,7 +5,7 @@
  * שרשרת-אמון:
  *   gate-crypto.js (התאום, אפס-תלות, מאומת) — קריפטו-primitives + חתימה
  *   steemtx.mjs (המנוע, מוכח-שרשרת R209/R216/R245) — סריאליזציית בייטים, פורט נאמן
- *   vault.enc.json — PBKDF2 600k + AES-256-GCM, סיסמת-האב הראשית של המפעיל
+ *   vault.enc.json — PBKDF2 600k + AES-256-GCM, מפתח-מנהל
  * ═══════════════════════════════════════════════════════════════════════ */
 if (window.top !== window.self) { try { window.top.location = window.self.location; } catch { document.documentElement.hidden = true; } } // T-42 framebust (M3)
 (function () {
