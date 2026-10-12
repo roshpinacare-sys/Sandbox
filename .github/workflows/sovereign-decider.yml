@@ -8,8 +8,6 @@ name: sovereign-decider
 on:
   schedule: [{cron: '4,34 * * * *'}]
   workflow_dispatch: {}
-  repository_dispatch:
-    types: [sovereign-decider-tick]  # [T16] מופעל-על-ידי המפעיל-הפנימי (artery-watch, T-51) — cron כאן מוכח-שוקק
 
 permissions:
   contents: write
@@ -35,6 +33,8 @@ jobs:
           git config user.name  "sovereign-decider-bot"
           git config user.email "sovereign-decider-bot@users.noreply.github.com"
           git add ops/sovereign/DECIDER/state.json ops/sovereign/DECIDER/ledger.jsonl
+          # [15a] לוח-פקודות-המנהל: ACK-חוזר-לגיט כשהיו קבלות
+          git add ops/sovereign/DIRECTIVES/board.json
           if git diff --cached --quiet; then
             echo "no changes — honest skip"
           else

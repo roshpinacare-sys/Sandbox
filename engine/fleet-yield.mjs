@@ -258,6 +258,48 @@ async function main() {
   if (acc) voter.votesRead = votesArr ? votesHow : "failed";
   if (acc && !votesArr) voter.votesError = String(votesR.error ?? "history-unavailable").slice(0, 120);
 
+  /* 4.7 · צרכן-D1 — מדיניות-ההון (75/30/20) נמדדת-חיה בכל-ריצת-תשואה [15a]:
+   * מקור-האמת: ops/sovereign/DECIDER/state.json (ההכרעה D1-econ-treasury-floor של ה-decider).
+   * מה-נמדד: האוצרה (net SP) מול-קו-השימור + כל-מפעיל-מול-הרצפה-המדורגת-שלו.
+   * אין-טענות: קריאה-נפלה → POLICY-UNAVAILABLE/reads-failed כנה; אפס-המצאות-מדידה.
+   * זו-ההצמדה-המדודה-הראשונה בין-ההכרעה-הכלכלית-לעורק-התשואה (D1 → T-45). */
+  const decState = readJsonSafe(path.join(process.cwd(), "ops", "sovereign", "DECIDER", "state.json"));
+  const d1 = ((decState && Array.isArray(decState.decisions)) ? decState.decisions : [])
+    .find((d) => d && d.id === "D1-econ-treasury-floor");
+  const floorRows = ((d1?.policy?.operatorInterimFloors || []))
+    .map((f) => ({ op: f.operator, floorSp: Number(f.interimFloorSp) || 0 }))
+    .filter((f) => f.op);
+  const keepFloorSp = d1?.policy?.treasury?.operatingFloorSp ?? null;
+  let capitalPolicy = { check: "POLICY-UNAVAILABLE", decidedAt: d1?.decidedAt ?? null, keepFloorSp, note: "decider-state.json חסר/בלי D1 — כנות" };
+  if (d1 && floorRows.length) {
+    capitalPolicy = { check: "MEASURED", decidedAt: d1.decidedAt, keepFloorSp, operatorsWatched: floorRows.length };
+    if (acc && vestsPerSP) {
+      const tv = num(acc.vesting_shares), td = num(acc.delegated_vesting_shares), tr = num(acc.received_vesting_shares);
+      capitalPolicy.treasuryNetSp = Math.round((tv - td + tr) * vestsPerSP * 10) / 10;
+      capitalPolicy.treasuryAboveFloor = keepFloorSp == null ? null : capitalPolicy.treasuryNetSp >= keepFloorSp;
+    } else {
+      capitalPolicy.treasuryNetSp = null; capitalPolicy.treasuryAboveFloor = null;
+      capitalPolicy.note = "account-read-failed — כנות";
+    }
+    const opsR = await rpc("condenser_api.get_accounts", [floorRows.map((f) => f.op)]);
+    if (opsR.ok && Array.isArray(opsR.result)) {
+      const below = [];
+      for (const f of floorRows) {
+        const o = opsR.result.find((a) => a && a.name === f.op);
+        if (!o) { below.push(`${f.op}:read-failed`); continue; }
+        const sp = Math.round((num(o.vesting_shares) - num(o.delegated_vesting_shares) + num(o.received_vesting_shares)) * vestsPerSP * 10) / 10;
+        if (sp < f.floorSp) below.push(`${f.op}:${sp}SP<${f.floorSp}`);
+      }
+      capitalPolicy.operatorsBelowFloor = below;
+      capitalPolicy.floorAlert = (capitalPolicy.treasuryAboveFloor === false) || below.length > 0;
+    } else {
+      capitalPolicy.operatorsBelowFloor = null;
+      capitalPolicy.note = "operators-read-failed — כנות";
+    }
+  } else if (d1) {
+    capitalPolicy = { check: "POLICY-NO-FLOORS", decidedAt: d1.decidedAt, keepFloorSp, note: "D1 קיים בלי רצפות-מפעילים (degraded?) — כנות" };
+  }
+
   /* 5 · זרם-חי → חוקי-ה-curator (voter=קריאה-בלבד; אפס-מדינה-יומית = תוכנית-מלאה) */
   const fetched = await cur.fetchCandidates(policy, null, nowMs);
   if (!fetched.ok) failReceipt("RPC-STREAM-FAIL", { engineHead, selftest, voter, vestsPerSP, error: "all nodes down" });
@@ -305,6 +347,7 @@ async function main() {
       weights: [policy.baseWeightPct, policy.minWeightPct],
       ref: "docs/measured/t35-probe.json — SP/G-rshares peak 0.000416 @10-30 votes · -55% @150+ (T-35, 96 chain ops)",
     },
+    capitalPolicy, /* [15a] צרכן-D1 — מדיניות-ההון-נמדדת-בכל-ריצה */
     tookMs: Date.now() - t0,
   };
   const receipt = writeLedgerReceipt(payload);
@@ -315,6 +358,7 @@ async function main() {
     selected: receipt.candidates.selected.length, crowded: receipt.candidates.crowded,
     votedOnChain: receipt.candidates.votedOnChain.length,
     dedup: receipt.candidates.dedup,
+    capital: `${capitalPolicy.check}${capitalPolicy.floorAlert ? " ⚠FLOOR-ALERT" : ""}` /* [15a] */,
     chain: receipt.chain.cur.slice(0, 12), tookMs: receipt.tookMs,
   }));
 }
