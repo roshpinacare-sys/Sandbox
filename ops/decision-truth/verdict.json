@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-10-12T06:17:20Z",
- "durationMs": 2166,
+ "generatedAt": "2026-10-12T07:10:22Z",
+ "durationMs": 1915,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
-  "generatedAt": "2026-10-12T01:17:51Z",
-  "stateAgeMin": 299,
+  "generatedAt": "2026-10-12T06:28:23Z",
+  "stateAgeMin": 42,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
-   "lastRunAt": "2026-10-12T01:17:40Z",
-   "ageS": 17979,
-   "stalled": true
+   "lastRunAt": "2026-10-12T06:28:16Z",
+   "ageS": 2525,
+   "stalled": false
   }
  },
  "measures": {
   "chain": {
-   "head": 110368000,
+   "head": 110369059,
    "treasuryNetSp": 2925.7,
-   "mult": 0.000620219688658909
+   "mult": 0.0006202212337446926
   },
   "beaconPulse": {
    "treasuryNetSp": 2925.7
@@ -32,18 +32,8 @@
    "ghosts": null
   },
   "workOrderIds": [
-   "WO-FleetHQ-reds",
-   "WO-saos-runtime-reds",
-   "WO-unwired-dex-mirror",
-   "WO-unwired-steem-social-cadence",
-   "WO-unwired-evo-windows",
-   "WO-unwired-fleethq-gitignore",
-   "WO-unwired-fleethq-potential-link",
-   "WO-unwired-sandbox-ops-docs",
-   "WO-unwired-cmmq-host",
-   "WO-unwired-swe-guard",
-   "WO-unwired-capability-fresh",
-   "WO-unwired-adsmarket-marketing"
+   "WO-Sandbox-reds",
+   "WO-saos-runtime-reds"
   ]
  },
  "decisions": [
@@ -52,24 +42,24 @@
    "area": "הנהגה",
    "status": "ENFORCED",
    "priority": "P0",
-   "decidedAt": "2026-10-12T01:17:50Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-10-12T06:28:22Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 299min (limit 120)"
+     "result": "ok",
+     "detail": "state age 42min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   },
   {
    "id": "D1-econ-treasury-floor",
    "area": "כלכלה",
    "status": "ENFORCED",
    "priority": "P1",
-   "decidedAt": "2026-10-12T01:17:51Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-10-12T06:28:23Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "policy-internal-consistency",
@@ -79,7 +69,7 @@
     {
      "law": "treasury-basis-fresh-measure",
      "result": "ok",
-     "detail": "claimed=2925.6 fresh=2925.7 tol=1"
+     "detail": "claimed=2925.7 fresh=2925.7 tol=1"
     },
     {
      "law": "beacon-vs-fresh",
@@ -108,29 +98,29 @@
     },
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 299min (limit 120)"
+     "result": "ok",
+     "detail": "state age 42min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   },
   {
    "id": "D2-eng-errors",
    "area": "הנדסה",
    "status": "ENFORCED",
    "priority": "P0",
-   "decidedAt": "2026-10-12T01:17:51Z",
+   "decidedAt": "2026-10-12T06:28:23Z",
    "truth": "STALE-TRUTH",
    "checks": [
     {
      "law": "routed-orders-exist",
-     "result": "ok",
-     "detail": "routed=[\"WO-FleetHQ-reds\",\"WO-saos-runtime-reds\",\"WO-unwired-dex-mirror\",\"WO-unwired-steem-social-cadence\",\"WO-unwired-evo-windows\",\"WO-unwired-fleethq-gitignore\",\"WO-unwired-fleethq-potential-link\",\"WO-unwired-sandbox-ops-docs\"] missing=[]"
+     "result": "mismatch",
+     "detail": "routed=[\"WO-FleetHQ-reds\",\"WO-saos-runtime-reds\",\"WO-unwired-dex-mirror\",\"WO-unwired-steem-social-cadence\",\"WO-unwired-evo-windows\",\"WO-unwired-fleethq-gitignore\",\"WO-unwired-fleethq-potential-link\",\"WO-unwired-sandbox-ops-docs\"] missing=[\"WO-FleetHQ-reds\",\"WO-unwired-dex-mirror\",\"WO-unwired-steem-social-cadence\",\"WO-unwired-evo-windows\",\"WO-unwired-fleethq-gitignore\",\"WO-unwired-fleethq-potential-link\",\"WO-unwired-sandbox-ops-docs\"]"
     },
     {
      "law": "orders-status-tracking",
-     "result": "ok",
-     "detail": "all routed orders carry status"
+     "result": "unverifiable",
+     "detail": "orders without status field (done-ness unverifiable): [\"WO-saos-runtime-reds\"] - route: growth engine add status lifecycle"
     },
     {
      "law": "fleethq-reds-persist",
@@ -144,8 +134,8 @@
     },
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 299min (limit 120)"
+     "result": "ok",
+     "detail": "state age 42min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -154,8 +144,8 @@
    "id": "D3-flow-weave",
    "area": "רשת",
    "status": "ENFORCED",
-   "decidedAt": "2026-10-12T01:17:51Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-10-12T06:28:23Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "orphans-fresh",
@@ -169,34 +159,34 @@
     },
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 299min (limit 120)"
+     "result": "ok",
+     "detail": "state age 42min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   },
   {
    "id": "D4-truth-network",
    "area": "אימות-עצמי",
    "status": "OBSERVING",
-   "decidedAt": "2026-10-12T01:17:51Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-10-12T06:28:23Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 299min (limit 120)"
+     "result": "ok",
+     "detail": "state age 42min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   }
  ],
  "provenance": {
-  "runId": "38211778920",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38211778920",
-  "sha": "fd01b818ab15c8a2545ad442b8df676ee4026637",
+  "runId": "38216253843",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38216253843",
+  "sha": "8ea6042c3003db2a038324e18830f7e0caf98ab5",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-10-12T06:17:20Z"
+  "generatedAt": "2026-10-12T07:10:22Z"
  },
  "selftest": {
   "vectors": 16,
