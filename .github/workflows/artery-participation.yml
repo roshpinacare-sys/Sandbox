@@ -1,0 +1,63 @@
+name: artery-participation
+# ═══════════════════════════════════════════════════════════════════════════
+# ARTERY-PARTICIPATION · T-65 (zai-code-3) — ספר-ההשתתפות של הצי, שתי-שרשרות.
+# ───────────────────────────────────────────────────────────────────────────
+# הוראת-בעלים (2026-10-12): "כל החשבונות יהיו שותפים לפעילות... לא בטוח שכולם
+# עושים שוק... תמצא פתרון להזרים את הhive". העורק מודד לכל-חשבון: רשויות-חיות
+# (census-v2 + KEYS-ACCESS — מפתחות-ציבוריים בלבד), יתרות, SP/HP, RC%, פקודות,
+# פעילות, ורכסות-השתתפות אמיתיות. אפס-סודות (APIs-ציבוריים בלבד).
+# כל-שעה בדקה 13 · dispatch · tick דרך artery-watch. כנות-קודמת-לנוחות.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  schedule:
+    - cron: "13 * * * *"
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - participation-tick
+
+permissions:
+  contents: write
+
+concurrency:
+  group: artery-participation
+  cancel-in-progress: false
+
+jobs:
+  book:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Measure the fleet participation book (zero secrets)
+        run: node engine/fleet-participation.mjs
+
+      - name: Commit receipts (FF-only with yield, honest on failure)
+        if: always()
+        run: |
+          set -Eeuo pipefail
+          git config user.name "participation[bot]"
+          git config user.email "participation[bot]@users.noreply.github.com"
+          git add receipts/fleet-participation/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "no receipt change — clean exit"
+          else
+            git commit -m "fleet-participation receipts: $(node -e "try{const r=require('./receipts/fleet-participation/latest.json');process.stdout.write(r.overall+' · '+r.reason.slice(0,110))}catch(e){process.stdout.write('receipt-read-fail')}") $(date -u +%FT%TZ) [skip ci]"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push origin HEAD:main && break || { sleep $((i*5)); git rebase --abort 2>/dev/null || true; }
+            done
+          fi
+
+      - name: Honest verdict gate
+        if: always()
+        run: |
+          node -e "try{const r=require('./receipts/fleet-participation/latest.json');console.log('PARTICIPATION:',r.overall,'·',r.reason);(r.alerts||[]).forEach(a=>console.log('ALERT:',a));}catch(e){console.log('receipt unreadable — honest red');process.exit(1);}"

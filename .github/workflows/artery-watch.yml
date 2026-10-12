@@ -70,6 +70,7 @@ jobs:
             { wf: "artery-scribe.yml",   maxAge: 90000, chain: "scribe-tick" },        // רישומת-למידה — יומית (T-52)
             { wf: "artery-fleet.yml",    maxAge: 9000, chain: "fleet-verify-tick" },
             { wf: "artery-grid.yml",    maxAge: 2700, chain: "grid-watch-tick" },
+            { wf: "artery-participation.yml", maxAge: 5400, chain: "participation-tick" },   // ספר-ההשתתפות — שעתית (T-65, zai-code-3)
             { wf: "artery-flow.yml",    maxAge: 12600, chain: "flow-map-tick" },
             { wf: "artery-integrity.yml", maxAge: 5400, chain: "integrity-tick" },
             { wf: "artery-decision-truth.yml", maxAge: 2700, chain: "decision-truth-tick" },   // עורק-אמת-ההכרעות — כל 30 דק׳ (H-series, zai-code-3)   // שומר-השלמות — אנטי-זיוף שעתי (G-series)   // flow map - every 3h (F-series)     // שעון-ה-grid — כל 30 דק׳ (T-63)    // מוח+dex+ספרייה — כל שעתיים (T-53)
