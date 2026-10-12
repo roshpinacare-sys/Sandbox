@@ -11,9 +11,11 @@ name: sovereign-tick
 # ה-runner-אפמרלי-במכוון — הרציפות-חיה-בריפו. אפס-PAT: GITHUB_TOKEN בלבד.
 on:
   schedule:
-    - cron: "*/15 * * * *"
-    # T-42 agent-3 merge: redundant offset grid — scheduler is best-effort under load
-    - cron: "9-59/20 * * * *"
+    # trace-1a1312f4: private-repo Actions minutes are a metered quota — once it
+    # ran dry, even a bare echo failed in ~2s (measured 18:01Z). The heavy public
+    # cadence moved to Domain/.github/workflows/sandbox-arteries.yml (public
+    # minutes); this lane is now an hourly redundancy + dispatch triggers.
+    - cron: "21 * * * *"
   push:
     branches: [main]
   workflow_dispatch:
@@ -72,40 +74,7 @@ jobs:
             git push origin main
           fi
 
-      # חוליית-השרשרת (T-42): רק-טביעה-אמתית (ticked=1) או-כישלון (דלג-על-הסיגנל) מולידות-יורשת —
-      # הרצה-מוצערת (ticked=0) מתה-בלי-יורש (צמצום-אוכלוסיית-השרשרות-לאחת — אפס-התדרדרות-קצב).
-      # sleep-עד-המשבצת-הבאה (15-דק' מהקבלה-האחרונה; תקרה-870ש); קבלה-סטלה/חסרה (כישלון) =
-      # נסיגה-קבועה-600ש (אפס-סערת-ניסיון-חוזר). כישלון-dispatch = יציאה-1 (נראה-ב-Actions;
-      # הצתה-מחדש-ידנית-אפשרית-תמיד: Actions → Run-workflow).
-      - name: chain-next (sleep to next slot, then dispatch the next beat)
-        if: always() && steps.tick.outputs.ticked != '0'
-        # T-42 agent-3 FIX (live-proven): the automatic token is NOT in the
-        # default env of run steps — the peer's chain died on `dispatch http=401`
-        # (empty bearer). The documented GITHUB_TOKEN→repository_dispatch
-        # exception is real, but the token must be mapped explicitly.
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          SLEEP_S="$(node -e '
-            const fs = require("fs");
-            let last = 0;
-            try { last = Date.parse(JSON.parse(fs.readFileSync("receipts/latest.json", "utf8")).at) || 0; } catch {}
-            const elapsed = Date.now() - last;
-            const s = (last > 0 && elapsed >= 0 && elapsed <= 900000)
-              ? Math.max(5, Math.min(870, Math.ceil((900000 - elapsed) / 1000)))
-              : 600; // אין-קבלה-טרייה (כישלון/עץ-רענן) — נסיגה-מצמצמת-סערה
-            process.stdout.write(String(s));
-          ')"
-          echo "chain-next: sleeping ${SLEEP_S}s until next slot"
-          sleep "$SLEEP_S"
-          HTTP="$(curl -sS -o /dev/null -w '%{http_code}' -X POST \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/roshpinacare-sys/Sandbox/dispatches \
-            -d '{"event_type":"sovereign-tick","client_payload":{"from":"chain"}}')"
-          echo "dispatch http=$HTTP"
-          if [ "$HTTP" != "204" ]; then
-            echo "dispatch-failed — chain broken; re-ignite via workflow_dispatch"
-            exit 1
-          fi
+      # trace-1a1312f4: the runner-sleep self-chain (sleep ≤870s on the metered
+      # runner) was the top private-minutes burner. The public-side
+      # sandbox-arteries workflow now carries the cadence; this lane stays
+      # hourly-cron + push + dispatch (manual re-ignite always possible).
