@@ -8,13 +8,18 @@ value-scan.py — מנוע-סריקת-הערך האוטונומי של הריב�
  · כל הזדמנות נושאת ראיה מדודה + מקור פומבי. אין ראיה → אין הזדמנות.
  · מקור שנפל → מסומן בכנות (degraded), לעולם לא ממולא בהמצאה.
  · כלכלת-רצפות = דיווח-בלבד; הכרעה = הבעלים (חוזה-האורגניזם).
-פלט: ops/sovereign/VALUE-SCAN/state.json + ledger.jsonl (append-bounded 60).
+פלט: ops/sovereign/VALUE-SCAN/state.json + ledger.jsonl (append-bounded 60) +
+     FLOORS-LEDGER.md [T16 — הצרכן-המדוד של מדיניות D1: רצפות-מדורגות מול מדידה-טרייה].
 """
 import json, os, time, urllib.request
 
 RAW = 'https://raw.githubusercontent.com/roshpinacare-sys'
 RPC = 'https://api.steemit.com'
 FLOORS = {'treasury': 3000.0, 'operator': 100.0, 'soldier': 20.0}
+# [T16] סגל-המפעילים — זהה ל-FLEET של המכריע (ops/sovereign/DECIDER/decider.py) —
+# הצרכן-המדוד של מדיניות D1 (רצפות-מדורגות 75/30/20 + קו-שימור 2800 + יעד 3000)
+FLEET = ['cashmachine', 'haran', 'israelnews', 'lsa', 'macrame',
+         'siq', 'tov', 'wic', 'wog', 'woq', 'hcsoldier4', 'hcsoldier5', 'hcsoldier6']
 
 def jget(url, timeout=12):
     try:
@@ -76,6 +81,27 @@ def main():
         r = float(a['received_vesting_shares'].split(' ')[0])
         chain_treasury = round((v - d + r) * mult, 1)
 
+    # [T16] צרכן-מדיניות D1 — מדידת-סגל מלאה מהשרשרת (מפעילים 13 + אוצרה בקריאה-אחת)
+    all_acc = rpc('condenser_api.get_accounts', [['headcorner'] + FLEET])
+    ops_measured = {}
+    if all_acc and mult and len(all_acc) == len(FLEET) + 1:
+        for a in all_acc[1:]:
+            v = float(a['vesting_shares'].split(' ')[0])
+            d = float(a['delegated_vesting_shares'].split(' ')[0])
+            r = float(a['received_vesting_shares'].split(' ')[0])
+            ops_measured[a['name']] = round((v - d + r) * mult, 1)
+    else:
+        degraded.append('fleet-rpc')
+
+    # [T16] בסיס-המדיניות: מדיניות D1 כפי-שפורסמה על-ידי המכריע (מקור-פומבי)
+    decider = jget(f'{RAW}/Sandbox/main/ops/sovereign/DECIDER/state.json') or {}
+    d1 = next((x for x in (decider.get('decisions') or [])
+               if x.get('id') == 'D1-econ-treasury-floor'), None)
+    d1_policy = (d1 or {}).get('policy') or None
+    sources['decider-d1-policy'] = bool(d1_policy)
+    if not d1_policy:
+        degraded.append('decider-d1-policy')
+
     # ── מדדים ──
     treasury = (beacon.get('lastPulse') or {}).get('treasuryNetSp')
     min_op = (beacon.get('lastPulse') or {}).get('minOperatorSp')
@@ -91,6 +117,24 @@ def main():
     nodes = len(flow.get('nodes') or [])
     dex_orders = dex.get('openOrdersNow') if isinstance(dex.get('openOrdersNow'), (int, float)) else None
 
+    # [T16] הצרכן-המדוד של D1: רצפות-המדיניות (מהמכריע) מול מדידה-טרייה (מהשרשרת)
+    operator_floors = []
+    if d1_policy and ops_measured:
+        pol_floors = {t.get('operator'): t.get('interimFloorSp')
+                      for t in (d1_policy.get('operatorInterimFloors') or [])
+                      if isinstance(t, dict) and t.get('operator')}
+        for name in FLEET:
+            m = ops_measured.get(name)
+            f = pol_floors.get(name)
+            operator_floors.append({
+                'operator': name, 'measuredSp': m, 'policyFloorSp': f,
+                'gapSp': (round((f - m), 1) if isinstance(m, (int, float)) and isinstance(f, (int, float)) else None),
+                'ok': (bool(m >= f) if isinstance(m, (int, float)) and isinstance(f, (int, float)) else None),
+            })
+    below = [o['operator'] for o in operator_floors if o.get('ok') is False]
+    keep = (d1_policy or {}).get('treasury') or {}
+    keep_floor = keep.get('operatingFloorSp')
+
     metrics = {
         'treasuryNetSp': treasury, 'treasuryFloor': FLOORS['treasury'],
         'treasuryGapSp': round(FLOORS['treasury'] - treasury, 1) if isinstance(treasury, (int, float)) else None,
@@ -102,6 +146,16 @@ def main():
         'blockedTasks': len(blocked), 'errorAgents': len(err_agents),
         'flowNodes': nodes, 'flowOrphans': orphans, 'flowGhosts': ghosts, 'flowStale': stale_flow,
         'dexVerdict': dex.get('verdict'), 'dexOpenOrders': dex_orders,
+        # [T16] צריכת-D1 בפועל: מדיניות-הרצפות נמדדת-מול-השרשרת בכל פעימה
+        'd1Consumer': {
+            'policyBasis': (d1.get('decidedAt') if isinstance(d1, dict) else None),
+            'deciderStateAgeOk': bool(decider.get('generatedAt')),
+            'operatingFloorSp': keep_floor,
+            'treasuryVsKeepSp': (round(treasury - keep_floor, 1)
+                                 if isinstance(treasury, (int, float)) and isinstance(keep_floor, (int, float)) else None),
+            'operatorInterimFloors': operator_floors,
+            'operatorsBelowPolicyFloor': below,
+        },
     }
 
     ops = []
@@ -175,6 +229,31 @@ def main():
     os.makedirs(base, exist_ok=True)
     with open(os.path.join(base, 'state.json'), 'w', encoding='utf-8') as f:
         json.dump(state, f, ensure_ascii=False, indent=1)
+
+    # [T16] פנקס-הרצפות (regenerated, bounded-by-design): הצרכן-המדוד של
+    # D1-econ-treasury-floor — מדיניות-הרצפות המדורגת בפעולה: מדידה-טרייה
+    # מול operatorInterimFloors + operatingFloorSp, בכל פעימה, מפורסם-ונבדק.
+    md = []
+    md.append('# פנקס-הרצפות — הצרכן-המדוד של D1-econ-treasury-floor [T16]')
+    md.append('')
+    md.append(f'נמדד: {now} · מקור-המדיניות: ops/sovereign/DECIDER/state.json (D1, {metrics["d1Consumer"]["policyBasis"]})')
+    md.append('')
+    md.append('מדיניות-D1 בפעולה: רצפות-מפעילים מדורגות (operatorInterimFloors 75/30/20 לפי-מדידה) + '
+              f'קו-שימור-אוצרה operatingFloorSp={keep_floor} + יעד-3000 דרך-מנועי-התשואה.')
+    md.append('')
+    md.append('| מפעיל | SP נמדד (שרשרת) | רצפת-מדיניות | פער | תקין |')
+    md.append('|---|---|---|---|---|')
+    for o in operator_floors:
+        md.append(f'| {o["operator"]} | {o["measuredSp"]} | {o["policyFloorSp"]} | {o["gapSp"]} | '
+                  f'{("כן" if o["ok"] else ("לא" if o["ok"] is False else "—"))} |')
+    md.append('')
+    md.append(f'מתחת-לרצפת-המדיניות (מדוד): {", ".join(below) if below else "אף-אחד — כנות"}')
+    if isinstance(treasury, (int, float)) and isinstance(keep_floor, (int, float)):
+        md.append(f'אוצרה מול קו-השימור: {treasury} SP (מעל/מתחת הפער {round(treasury - keep_floor, 1)} SP)')
+    md.append('')
+    md.append('חוק: מדידה-בלבד (api.steemit.com המרה מדויקת) · מקור שנפל מסומן ב-degraded — אין זיופים.')
+    with open(os.path.join(base, 'FLOORS-LEDGER.md'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(md) + '\n')
 
     ledger_path = os.path.join(base, 'ledger.jsonl')
     lines = []
