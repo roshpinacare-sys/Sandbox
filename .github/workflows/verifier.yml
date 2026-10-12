@@ -67,18 +67,40 @@ jobs:
           done
 
       - name: commit + push (rebase-safe, territory-only)
+        env:
+          FED_TOKEN: ${{ secrets.SBX_FLEET_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "sandbox-verifier"
           git config user.email "sandbox-verifier@users.noreply.github.com"
-          git add ops/agents/zai-verifier state/verifier
-          [ -f status/truth.html ] && git add status/truth.html || true
-          if git diff --cached --quiet; then
-            echo "no verdict changes — skip"
-          else
-            git commit -m "[verifier] honest verdict: $(date -u +%FT%TZ)"
-            git pull --rebase origin main
-            git push origin main
-          fi
+          # [zai-15c] 2026-10-12 — מדוד-חי (run 38190286372): "rebase-safe" לא היה — קונפליקט
+          # יחיד ב-status/truth.html (מרוץ מול security-redact 1bb4eff) הפיל את-הצעד ביציאה-1
+          # והעורק נשאר אדום. לקח: לולאת-פרסום חסומה ×3 — קונפליקט = origin מנצח (מילת-הבטחון
+          # של-ה-scrub קודמת), חוזרים-למדוד על-העץ-הטרי (redact מיישר-את-כינוי-האוצר — אפס-דליפה-מחדש).
+          for attempt in 1 2 3; do
+            git add ops/agents/zai-verifier state/verifier
+            [ -f status/truth.html ] && git add status/truth.html || true
+            if git diff --cached --quiet; then
+              echo "no verdict changes — skip"
+              exit 0
+            fi
+            git commit -m "[verifier] honest verdict: $(date -u +%FT%TZ)" || { echo "nothing to commit — skip"; exit 0; }
+            git fetch origin main
+            if git rebase origin/main; then
+              if git push origin main; then
+                echo "verdict published (attempt ${attempt})"
+                exit 0
+              fi
+              echo "push failed (attempt ${attempt}) — retrying from fresh origin"
+            else
+              echo "rebase conflict (attempt ${attempt}) — origin's truth.html wins; re-measuring on fresh tree"
+              git rebase --abort || true
+              git reset --hard origin/main
+            fi
+            node engine/verifier.mjs --guard-minutes 22 || echo "re-measure exit=$? (honest continue)"
+          done
+          echo "publish failed after 3 attempts — honest exit (artery red, next slot retries)"
+          exit 1
 
       # חוליית-השרשרת (דפוס-T-42 verbatim): רק-אימות-אמת (ticked=1) או-כישלון מולידים-יורשת;
       # הרצה-מוצערת (ticked=0) מתה-בלי-יורש. sleep-עד-המשבצת-הבאה (30-דק' מהקבלה; תקרה-1740ש);

@@ -423,7 +423,10 @@ export function verifyLedger(lines) {
 }
 
 /* ── redact — יישור-קו-עם-federation (שמות-עבריים→כינויים-בטוחים) ── */
-const REDACT = [[/בית-הכספת/g, "vault-home"], [/roshpinacare-sys\/steem/g, "engine-home"]];
+/* [zai-15c] 2026-10-12: += אוצר-הצי — יישור-קו עם ה-scrub של המפעיל (1bb4eff, mandate trace
+   1a12d7cad62cbc29: "operator handle neutralized") — הסורק נאפה-מחדש בכל-ריצה; בלי-המיפוי
+   הזה כל-ריצה-מחדשת הייתה מחזירה את-השם-שה-scrub נטרל (מרוץ-אמת-מול-חסימה). */
+const REDACT = [[/בית-הכספת/g, "vault-home"], [/roshpinacare-sys\/steem/g, "engine-home"], [/@headcorner/g, "אוצר-הצי"]];
 export const redact = (s) => REDACT.reduce((a, [re, to]) => String(a).replace(re, to), s);
 
 /* ── דוח-עברית ── */
