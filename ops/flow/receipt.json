@@ -1,86 +1,51 @@
 {
-  "at": "2026-10-12T10:55:59.897Z",
+  "at": "2026-10-12T20:51:46.478Z",
   "overall": "PASS",
   "alerts": [
     {
       "law": "law-feed-fresh",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:office/data.json age=1.5h > 1h (consumer: roshpinacare-sys/Domain/index.html (page))"
+      "detail": "roshpinacare-sys/Sandbox:ops/flow/flow-map.json age=9.9h > 4h (consumer: roshpinacare-sys/Domain/index.html (page))"
     },
     {
       "law": "law-feed-fresh",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:office/data.json age=1.5h > 1h (consumer: roshpinacare-sys/Domain/agents/office-pulse.cjs (agent))"
+      "detail": "roshpinacare-sys/Sandbox:receipts/wallet/verdict.json age=9.5h > 2h (consumer: roshpinacare-sys/Domain/agents/office-pulse.cjs (agent))"
     },
     {
       "law": "law-feed-fresh",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/bridge.json age=538.5h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (learner))"
+      "detail": "roshpinacare-sys/Sandbox:receipts/grid/verdict.json age=2.7h > 1h (consumer: roshpinacare-sys/Domain/agents/office-pulse.cjs (agent))"
     },
     {
       "law": "law-feed-fresh",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/fleet.json age=538.5h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (learner))"
+      "detail": "roshpinacare-sys/Sandbox:receipts/fleet/verdict.json age=11.9h > 3h (consumer: roshpinacare-sys/Domain/agents/office-pulse.cjs (agent))"
     },
     {
       "law": "law-feed-fresh",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/redeem-requests.json age=189.8h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (learner))"
+      "detail": "roshpinacare-sys/Sandbox:receipts/latest.json age=2.7h > 1h (consumer: roshpinacare-sys/Domain/agents/office-pulse.cjs (agent))"
     },
     {
-      "law": "law-feed-fresh",
+      "law": "law-orphan-producer",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/mirror-stub.json age=538.5h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (learner))"
+      "detail": "roshpinacare-sys/Domain:dex/bridge.json produced (discovered) but no consumer found in corpus"
     },
     {
-      "law": "law-feed-fresh",
+      "law": "law-orphan-producer",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:office/data.json age=1.5h > 1h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (learner))"
+      "detail": "roshpinacare-sys/Domain:dex/fleet.json produced (discovered) but no consumer found in corpus"
     },
     {
-      "law": "law-feed-fresh",
+      "law": "law-orphan-producer",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:office/data.json age=1.5h > 1h (consumer: roshpinacare-sys/Domain/.github/workflows/office-pulse-twin.yml (workflow))"
+      "detail": "roshpinacare-sys/Domain:dex/mirror-stub.json produced (discovered) but no consumer found in corpus"
     },
     {
-      "law": "law-feed-fresh",
+      "law": "law-orphan-producer",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:office/data.json age=1.5h > 1h (consumer: roshpinacare-sys/Domain/.github/workflows/office-pulse.yml (workflow))"
-    },
-    {
-      "law": "law-feed-fresh",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/agent.json age=538.5h > 48h (consumer: roshpinacare-sys/Domain/agents/dex-router.cjs (agent))"
-    },
-    {
-      "law": "law-feed-fresh",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:office/data.json age=1.5h > 1h (consumer: roshpinacare-sys/Sandbox/engine/integrity-guard.mjs (engine))"
-    },
-    {
-      "law": "law-feed-fresh",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/bridge.json age=538.5h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (engine))"
-    },
-    {
-      "law": "law-feed-fresh",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/fleet.json age=538.5h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (engine))"
-    },
-    {
-      "law": "law-feed-fresh",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/redeem-requests.json age=189.8h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (engine))"
-    },
-    {
-      "law": "law-feed-fresh",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/mirror-stub.json age=538.5h > 48h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (engine))"
-    },
-    {
-      "law": "law-feed-fresh",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:office/data.json age=1.5h > 1h (consumer: roshpinacare-sys/Sandbox/engine/scribe.mjs (engine))"
+      "detail": "roshpinacare-sys/Domain:dex/redeem-requests.json produced (discovered) but no consumer found in corpus"
     },
     {
       "law": "law-plane-internal",
@@ -95,22 +60,7 @@
     {
       "law": "law-plane-internal",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/bridge.json circulates only inside its producer plane — verify the organ's own output flows somewhere"
-    },
-    {
-      "law": "law-plane-internal",
-      "severity": "flag",
       "detail": "roshpinacare-sys/Domain:dex/credits.json circulates only inside its producer plane — verify the organ's own output flows somewhere"
-    },
-    {
-      "law": "law-plane-internal",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/fleet.json circulates only inside its producer plane — verify the organ's own output flows somewhere"
-    },
-    {
-      "law": "law-plane-internal",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/mirror-stub.json circulates only inside its producer plane — verify the organ's own output flows somewhere"
     },
     {
       "law": "law-plane-internal",
@@ -136,11 +86,6 @@
       "law": "law-plane-internal",
       "severity": "flag",
       "detail": "roshpinacare-sys/Domain:dex/portfolio.json circulates only inside its producer plane — verify the organ's own output flows somewhere"
-    },
-    {
-      "law": "law-plane-internal",
-      "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/redeem-requests.json circulates only inside its producer plane — verify the organ's own output flows somewhere"
     },
     {
       "law": "law-plane-internal",
@@ -180,37 +125,47 @@
     {
       "law": "law-content-divergence",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/pegout-queue.json commit-age=18.7h but content-age=188.5h — fresh commits of stale content"
+      "detail": "roshpinacare-sys/Domain:dex/pegout-queue.json commit-age=28.6h but content-age=198.5h — fresh commits of stale content"
     },
     {
       "law": "law-content-divergence",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/xc-intents.json commit-age=18.7h but content-age=180.9h — fresh commits of stale content"
+      "detail": "roshpinacare-sys/Domain:dex/state.json commit-age=2.6h but content-age=15.0h — fresh commits of stale content"
     },
     {
       "law": "law-content-divergence",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/xc-ops.json commit-age=18.7h but content-age=188.5h — fresh commits of stale content"
+      "detail": "roshpinacare-sys/Domain:dex/world.json commit-age=2.6h but content-age=15.0h — fresh commits of stale content"
     },
     {
       "law": "law-content-divergence",
       "severity": "flag",
-      "detail": "roshpinacare-sys/Domain:dex/xc-requests.json commit-age=18.7h but content-age=188.6h — fresh commits of stale content"
+      "detail": "roshpinacare-sys/Domain:dex/xc-intents.json commit-age=28.6h but content-age=190.9h — fresh commits of stale content"
+    },
+    {
+      "law": "law-content-divergence",
+      "severity": "flag",
+      "detail": "roshpinacare-sys/Domain:dex/xc-ops.json commit-age=28.6h but content-age=198.4h — fresh commits of stale content"
+    },
+    {
+      "law": "law-content-divergence",
+      "severity": "flag",
+      "detail": "roshpinacare-sys/Domain:dex/xc-requests.json commit-age=28.6h but content-age=198.5h — fresh commits of stale content"
     }
   ],
   "summary": {
     "nodes": 35,
-    "edges": 119,
-    "orphans": 0,
-    "planeInternal": 19,
+    "edges": 83,
+    "orphans": 4,
+    "planeInternal": 15,
     "ghosts": 0,
-    "stale": 16,
+    "stale": 5,
     "integrated": 15,
-    "flowDensity": 3.4
+    "flowDensity": 2.37
   },
   "provenance": {
-    "runId": "38239292754",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38239292754",
-    "sha": "8cdb643e30e74ad32de2103d5e4260b25ebbd9ae"
+    "runId": "38306852721",
+    "runUrl": "https://github.com/roshpinacare-sys/GridWatch/actions/runs/38306852721",
+    "sha": "a34b0a4d495fab018878d3ab290077a4d6b19ab9"
   }
 }
