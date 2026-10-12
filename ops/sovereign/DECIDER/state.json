@@ -1,15 +1,18 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-12T06:28:23Z",
+ "generatedAt": "2026-10-12T15:21:48Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
- "degraded": [],
+ "degraded": [
+  "flow-map",
+  "value-scan"
+ ],
  "chainVerify": {
-  "head": 110368219,
-  "mult": 0.0006202200096298429,
-  "treasuryNetSp": 2925.7,
+  "head": 110378849,
+  "mult": 0.000620235579022351,
+  "treasuryNetSp": 2925.8,
   "minOperatorSp": 11.9,
   "beaconChainMatch": true
  },
@@ -20,34 +23,27 @@
    "status": "ENFORCED",
    "priority": "P0",
    "titleHe": "ערוץ-המנהל — הסמכות-העליונה נקראת-בכל-פעימה (תיבה+לוח)",
-   "verdictHe": "הריבונות מאשרת-קבלה: 2 הוראות-מהתיבה + 0 פקודות-קונסולה-חדשות נקראו-מהגיט-של-הבעלים ומנותבות-סמכות-עליונה — הוראה-חדשה מעדכנת-מיד.",
+   "verdictHe": "הריבונות מאשרת-קבלה: 0 הוראות-מהתיבה + 2 פקודות-קונסולה-חדשות נקראו-מהגיט-של-הבעלים ומנותבות-סמכות-עליונה — הוראה-חדשה מעדכנת-מיד.",
    "evidence": [
-    "inbox.jsonl: 2 הוראות · נקראו 5 אחרונות · board.json: 1 פקודות · ACK-חדשות: 0",
-    "[inbox 2026-10-12T01:00:32.991Z] הוראת-בדיקה: דווח מצב אוצרה מעודכן בפעימה הבאה",
-    "[inbox 2026-10-12T01:07:00.442Z] אימות-ערוץ: הריבונות תדווח קבלה פומבית בפעימה-זו"
+    "inbox.jsonl: 0 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 2",
+    "[board ACK DIR-20261012-0002] בדיקה-טכנית של ערוץ-המפעיל (office3d/operator.html): הפקודה נכתבה מהדפדפן, נשמרה בלוח ואומ",
+    "[board ACK DIR-20261012-0003] צו-התאמת-מפתח: המפתח-הציבורי STM8StTG4aesGfmAUgBpMU9LKvoz98E5uz9eCCtEUvYM8Ywnicnoh (נמדד: "
    ],
-   "ownerDirectives": [
-    {
-     "at": "2026-10-12T01:00:32.991Z",
-     "text": "הוראת-בדיקה: דווח מצב אוצרה מעודכן בפעימה הבאה",
-     "source": "office-chat",
-     "kind": "directive"
-    },
-    {
-     "at": "2026-10-12T01:07:00.442Z",
-     "text": "אימות-ערוץ: הריבונות תדווח קבלה פומבית בפעימה-זו",
-     "source": "office-chat",
-     "kind": "directive"
-    }
+   "ownerDirectives": [],
+   "ackIds": [
+    "DIR-20261012-0002",
+    "DIR-20261012-0003"
    ],
-   "ackIds": [],
-   "ackCount": 0,
+   "ackCount": 2,
    "routing": {
-    "ownerDirectives": [],
+    "ownerDirectives": [
+     "DIR-20261012-0002",
+     "DIR-20261012-0003"
+    ],
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-10-12T06:28:22Z",
+   "decidedAt": "2026-10-12T15:21:48Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -72,7 +68,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.2 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2681.5 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.2 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2681.6 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -99,11 +95,11 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 2925.7 SP (ראש 110368219, מכפיל 0.000620220)",
-    "יעד 3000 · פער 74.3 SP · מסילת-שימור 2800 (R2)",
+    "אוצרה נמדדת 2925.8 SP (ראש 110378849, מכפיל 0.000620236)",
+    "יעד 3000 · פער 74.2 SP · מסילת-שימור 2800 (R2)",
     "האצלה-יוצאת-נמדדת 1344.7 SP · נכנסת-נמדדת 244.2 SP",
-    "משואה מפרסמת 2925.7 SP · תואם=True",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 87255)",
+    "משואה מפרסמת 2925.8 SP · תואם=True",
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 87335)",
     "האצלות-אחרונות למפעילי-הצי: ~242.1 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
@@ -139,7 +135,7 @@
      },
      {
       "operator": "macrame",
-      "measuredSp": 75.1,
+      "measuredSp": 75.2,
       "tier": 1,
       "interimFloorSp": 75
      },
@@ -207,7 +203,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-12T06:28:23Z",
+   "decidedAt": "2026-10-12T15:21:48Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -219,52 +215,50 @@
    "verdictHe": "הריבונות מדרגת P0 עצמאית: תיקון 0 סוכנים בתקלה ושחרור 1 משימות חסומות — מנותב למסילות-ההנדסה ולמנוע-הצמיחה (work-orders) מיד, ללא-המתנה-להוראות (צו-סעיף 1).",
    "evidence": [
     "סוכנים בתקלה (מדוד): —",
-    "משימות חסומות (מדוד): t1083",
-    "עבודות-פתוחות ממנוע-הצמיחה (צריכה): WO-FleetHQ-reds, WO-saos-runtime-reds, WO-unwired-dex-mirror, WO-unwired-steem-social-cadence, WO-unwired-evo-windows, WO-unwired-fleethq-gitignore, WO-unwired-fleethq-potential-link, WO-unwired-sandbox-ops-docs"
+    "משימות חסומות (מדוד): t1083"
    ],
    "routing": {
     "foreman": [],
-    "officeGrowthWorkOrders": [
-     "WO-FleetHQ-reds",
-     "WO-saos-runtime-reds",
-     "WO-unwired-dex-mirror",
-     "WO-unwired-steem-social-cadence",
-     "WO-unwired-evo-windows",
-     "WO-unwired-fleethq-gitignore",
-     "WO-unwired-fleethq-potential-link",
-     "WO-unwired-sandbox-ops-docs"
-    ]
+    "officeGrowthWorkOrders": []
    },
-   "decidedAt": "2026-10-12T06:28:23Z",
+   "decidedAt": "2026-10-12T15:21:48Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
    "id": "D3-flow-weave",
    "area": "רשת",
-   "status": "ENFORCED",
+   "status": "OBSERVING",
    "titleHe": "מפת-הזרימה",
-   "verdictHe": "הרשת נמדדה מחוברת (אפס-יתומים, אפס-רוחות) — המשך",
+   "verdictHe": "מפת-הזרימה לא זמינה — ממשיכים-למדוד",
    "evidence": [
-    "orphans=0 · ghosts=0"
+    "flow-map.json לא זמין"
    ],
-   "decidedAt": "2026-10-12T06:28:23Z",
+   "decidedAt": "2026-10-12T15:21:48Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
    "id": "D4-truth-network",
    "area": "אימות-עצמי",
-   "status": "OBSERVING",
-   "titleHe": "רשת-האמת",
-   "verdictHe": "הגוף מאמת-את-עצמו ירוק בפומבי (51/51 + שער-ירוק) — ממשיכים-למדוד",
+   "status": "ENFORCED",
+   "priority": "P1",
+   "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
+   "verdictHe": "הריבונות מכריעה: 1 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 51/51 ALL_PASS (2026-10-12T00:08:24.365Z)",
-    "שער-האמת: ALL-GREEN (pass=7 fail=0)"
+    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-10-12T06:50:45.975Z)",
+    "שער-האמת: ALL-GREEN (pass=7 fail=0)",
+    "A14: pattern matched 2 time(s), first match \"—\""
    ],
-   "decidedAt": "2026-10-12T06:28:23Z",
+   "decidedAt": "2026-10-12T15:21:48Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
- "workOrderStatus": {},
+ "workOrderStatus": {
+  "WO-FleetHQ-reds": {
+   "measured": true,
+   "subjectResolved": true,
+   "evidence": "קבלת-office-ci האחרונה: 'office-ci receipt: build pass, types pass [skip ci]'"
+  }
+ },
  "noAction": [],
  "law": "MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE · R1-R5 ב-CHARTER"
 }
