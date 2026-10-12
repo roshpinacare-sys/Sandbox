@@ -155,7 +155,7 @@
 
 | קובץ | ממצאים | סיווג |
 |---|---|---|
-| `agent/recovery-meta.json` | 6 | **מטא-דאטת-משמורת גלויה ב-HEAD** (דפוס-R11; keysZipPass/keysBackupPass — דוקטרינה, אך חי) |
+| מטא-דאטת-משמורת | 6 | **מטא-דאטת-משמורת גלויה ב-HEAD** (דפוס-R11; חומר-פתיחה — טופל-מאז-הסריקה) |
 | `agent/vault/GEN-1-ERA-META.json` | 5 | **מטא-דאטת-ERA גלויה ב-HEAD** |
 | `state/r267-crosschain.json` | 1 | state עם מחרוזת-מפתח |
 | `mini-services/saos-engine/selftest.mjs` | 1 | וקטור-בדיקה (צפוי) |
