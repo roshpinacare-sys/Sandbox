@@ -58,6 +58,12 @@ try {
     out(`grid state fetch http=${stateRes.status}`);
   }
   result.provenance = { stateBlobSha: blobSha, stateUrl };
+// Actions-run identity (closes the integrity-guard unprovenanced FLAG at source — same contract as fleet/flow)
+result.provenance.runId = process.env.GITHUB_RUN_ID || null;
+result.provenance.runUrl = process.env.GITHUB_SERVER_URL && process.env.GITHUB_RUN_ID
+  ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+  : null;
+result.provenance.sha = process.env.GITHUB_SHA || null;
   assertLaw("law-grid-state-present", !!st, "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD");
 
   if (st) {
