@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-13T14:05:06.538Z",
+  "measuredAt": "2026-10-13T14:35:16.825Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,16 +16,16 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 6min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 9min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
-      "ok": true,
-      "detail": "grid executable: lastVerdict=BROADCAST opsToday=1030",
+      "ok": false,
+      "detail": "grid enabled but blocked on credential (lastVerdict=CREDENTIAL-MISSING) — owner law: no such state where the grid does not work",
       "severity": "fail",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "id": "law-grid-revival-wired",
@@ -36,10 +36,10 @@
     }
   ],
   "alerts": [],
-  "overall": "PASS",
-  "reason": "grid state measured from git; laws pass",
+  "overall": "FAIL",
+  "reason": "grid-law failed: law-grid-exec-alive",
   "provenance": {
-    "stateBlobSha": "a64062a3f4127dfa8a39597feec912cb073687ed",
+    "stateBlobSha": "c3b7f7a01721b2ce8c2e33f969984938fc466cc6",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "runId": null,
     "runUrl": null,
@@ -47,10 +47,10 @@
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-10-13T13:59:20.743Z",
-    "ageMin": 6,
-    "ticks": 834,
-    "lastVerdict": "BROADCAST",
+    "lastTickAt": "2026-10-13T14:25:50.319Z",
+    "ageMin": 9,
+    "ticks": 894,
+    "lastVerdict": "CREDENTIAL-MISSING",
     "opsToday": 1030,
     "lastTxid": "8abfa069f5eb636d624803ac9fb06ea6c67a0bed"
   }
