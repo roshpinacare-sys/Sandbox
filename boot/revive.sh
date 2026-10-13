@@ -150,7 +150,7 @@ if [ "$CHECK" = "0" ] && [ -d "$SANDBOX/.git" ]; then
   if command -v node >/dev/null 2>&1 && [ -f "$SANDBOX/engine/leak-scan.mjs" ]; then
     node "$SANDBOX/engine/leak-scan.mjs" --staged || { say "leak-scan LIT — receipt push refused (fail-closed)"; exit 1; }
   fi
-  git -C "$SANDBOX" -c user.name=sandbox-sovereign -c user.email=sandbox-sovereign@users.noreply.github.com commit -q -m "[revive] local runtime revival: $(date -u +%Y-%m-%dT%H:%M:%SZ)" 2>/dev/null \
+  git -C "$SANDBOX" -c user.name=roshpinacare-sys -c user.email=326012154+roshpinacare-sys@users.noreply.github.com commit -q -m "[revive] local runtime revival: $(date -u +%Y-%m-%dT%H:%M:%SZ)" 2>/dev/null \
     && git -C "$SANDBOX" -c credential.helper="$CRED_HELPER" pull -q --rebase --autostash origin main 2>/dev/null \
     && git -C "$SANDBOX" -c credential.helper="$CRED_HELPER" push -q origin HEAD:main \
     && say "receipt: committed+pushed to $ORG/Sandbox" || say "receipt: nothing to commit or push deferred (honest)"

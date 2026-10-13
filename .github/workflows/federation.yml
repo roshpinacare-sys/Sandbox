@@ -85,8 +85,8 @@ jobs:
       - name: commit + push (rebase-safe)
         if: always() && steps.guard.outputs.suppressed != 'true'
         run: |
-          git config user.name "sovereign-federation"
-          git config user.email "federation@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           if git diff --cached --quiet; then
             echo "no ledger changes — skip"
           else

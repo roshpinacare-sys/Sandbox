@@ -94,8 +94,8 @@ jobs:
       - name: commit + push (rebase-safe, scoped to agents/inbox only)
         run: |
           set -euo pipefail
-          git config user.name "sandbox-agents"
-          git config user.email "sandbox-agents@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add agents/inbox.sealed.json
           if git diff --cached --quiet; then
             echo "no envelope changes — nothing to commit"; exit 0

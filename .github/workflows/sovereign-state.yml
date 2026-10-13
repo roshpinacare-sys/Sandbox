@@ -118,8 +118,8 @@ jobs:
       # קומיט-ממושפע: רק state/ (אף-פעם לא -A) · pull --rebase ×3 · כישלון-אחרי-3 = יציאה 1 (אף-ירוק-שקרי)
       - name: commit + push (rebase-safe)
         run: |
-          git config user.name "sandbox-state"
-          git config user.email "sandbox-state@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add state/
           N=$(node -p "require('./state/network-state.json').keeper.tickCount")
           if git diff --cached --quiet; then

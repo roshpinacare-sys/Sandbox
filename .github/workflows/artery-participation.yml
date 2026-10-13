@@ -45,8 +45,8 @@ jobs:
         if: always()
         run: |
           set -Eeuo pipefail
-          git config user.name "participation[bot]"
-          git config user.email "participation[bot]@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add receipts/fleet-participation/ 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "no receipt change — clean exit"

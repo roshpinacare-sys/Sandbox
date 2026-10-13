@@ -51,8 +51,8 @@ jobs:
       - name: Commit refreshed receipt + verdict (receipt = commit; rebase loop ×5)
         run: |
           set -u
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add receipts/evo-windows-staleness-latest.json ops/evo-windows-staleness/verdict.md
           if git diff --cached --quiet; then
             echo "no artifact change — clean exit"

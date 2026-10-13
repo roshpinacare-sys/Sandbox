@@ -56,8 +56,8 @@ jobs:
       - name: commit receipt (honest verdicts always land, FAIL included)
         if: always()
         run: |
-          git config user.name "grid-watch"
-          git config user.email "grid-watch@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add receipts/grid
           if git diff --cached --quiet; then
             echo "receipt unchanged - nothing to commit"

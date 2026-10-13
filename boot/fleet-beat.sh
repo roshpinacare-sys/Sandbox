@@ -89,7 +89,7 @@ if [ -d "$SANDBOX/.git" ]; then
     fi
     GH="$(bash "$SANDBOX/boot/gh-token.sh" 2>/dev/null || true)"  # T-56: היררכיה — כספת-origin קודם (העורק-החי)
     HELPER="!f() { echo username=x-access-token; echo password=$GH; }; f"
-    git -C "$SANDBOX" -c user.name=sandbox-sovereign -c user.email=sandbox-sovereign@users.noreply.github.com \
+    git -C "$SANDBOX" -c user.name=roshpinacare-sys -c user.email=326012154+roshpinacare-sys@users.noreply.github.com \
       commit -q -m "[fleet-beat] cloud+gitlab receipts: $(date -u +%Y-%m-%dT%H:%M:%SZ)" 2>/dev/null || true
     git -C "$SANDBOX" -c credential.helper="$HELPER" pull -q --rebase --autostash origin main 2>/dev/null || true
     if git -C "$SANDBOX" -c credential.helper="$HELPER" push -q origin HEAD:main 2>/dev/null; then

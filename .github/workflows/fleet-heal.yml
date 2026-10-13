@@ -59,8 +59,8 @@ jobs:
       - name: commit + push (rebase-safe)
         if: always()
         run: |
-          git config user.name "fleet-healer"
-          git config user.email "fleet-healer@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add heal/
           if git diff --cached --quiet; then
             echo "no heal receipt changes — skip"

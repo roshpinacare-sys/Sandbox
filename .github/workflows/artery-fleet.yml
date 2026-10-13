@@ -58,8 +58,8 @@ jobs:
       - name: commit receipts (honest verdicts always land, FAIL included)
         if: always()
         run: |
-          git config user.name "fleet-artery"
-          git config user.email "fleet-artery@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add receipts/fleet
           if git diff --cached --quiet; then
             echo "receipts unchanged - nothing to commit"

@@ -96,8 +96,8 @@ jobs:
         if: always() && steps.stale.outputs.stale == 'true' && steps.ignite.outputs.dispatch != '204'
         run: |
           node engine/sovereign-tick.mjs
-          git config user.name "artery-catchup"
-          git config user.email "artery-catchup@users.noreply.github.com"
+          git config user.name "roshpinacare-sys"
+          git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"
           git add receipts/
           if git diff --cached --quiet; then
             echo "no receipt changes — skip"
