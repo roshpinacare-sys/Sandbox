@@ -1,0 +1,32 @@
+name: compute-canary
+# ═══════════════════════════════════════════════════════════════════════════
+# COMPUTE-CANARY — פעימת-בקרה אחת, כוונת-חיים-אחת (T-REARM · compute-policy.md)
+# ───────────────────────────────────────────────────────────────────────────
+# נמדד-חי 2026-10-13: מיצוי-דקות-Actions בריפו-הפרטיים הציף את אימייל-הבעלים
+# ב-~95 חסימות (startup-failure, 0-סטפים). הרשת חנתה-עצמית 18 ריפו-פרטיים
+# (Actions enabled=false) כדי-להפסיק-את-ההצפה, והציבה טבעת-התאוששות:
+# Autonomy/.github/workflows/compute-rearm.yml.
+#
+# ה-canary הוא המד-עצמו:
+#   · הרשת חונה → ה-rearm מצית canary פעם-ב-6ש (cooldown) בלבד;
+#     כל-ניסיון-חסום = אימייל-אחד-שעות-עומדות, לא מאות-ביום.
+#   · הבעלים פותח-את-תקרת-ההוצאה → ה-canary עובר → הרשת מתעוררת-עצמאית
+#     (שלב-ראשון הסנטינל, ואז שאר-הריפו-הפרטיים) — בלי-לגעת-באף-אדם.
+# ═══════════════════════════════════════════════════════════════════════════
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compute-canary
+  cancel-in-progress: false
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: one trivial runner step — proves the billing wall is open
+        run: echo "compute-canary: runner alive $(date -u +%FT%TZ)"
