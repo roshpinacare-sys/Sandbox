@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-13T12:35:06.415Z",
+  "measuredAt": "2026-10-13T13:05:06.473Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,16 +16,16 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 1min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 6min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
-      "ok": false,
-      "detail": "grid enabled but blocked on credential (lastVerdict=CREDENTIAL-MISSING) — owner law: no such state where the grid does not work",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=CANCEL-RACE-LOST opsToday=70",
       "severity": "fail",
-      "verdict": "fail"
+      "verdict": "pass"
     },
     {
       "id": "law-grid-revival-wired",
@@ -36,10 +36,10 @@
     }
   ],
   "alerts": [],
-  "overall": "FAIL",
-  "reason": "grid-law failed: law-grid-exec-alive",
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "351d59a8b38fe077f9cc22c2cbf655105c5650c9",
+    "stateBlobSha": "d02a03ac576f9a286609521541998e0b018c6aee",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "runId": null,
     "runUrl": null,
@@ -47,11 +47,11 @@
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-10-13T12:34:05.549Z",
-    "ageMin": 1,
-    "ticks": 45533,
-    "lastVerdict": "CREDENTIAL-MISSING",
-    "opsToday": 3404,
-    "lastTxid": "5e4d13318d0c44437eb53cd21690f6bdb48c5341"
+    "lastTickAt": "2026-10-13T12:59:18.144Z",
+    "ageMin": 6,
+    "ticks": 41,
+    "lastVerdict": "CANCEL-RACE-LOST",
+    "opsToday": 70,
+    "lastTxid": "442d442d683621fb7c00b7081b25920e5012ec0c"
   }
 }
