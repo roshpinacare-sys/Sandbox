@@ -10,12 +10,10 @@ name: sovereign-tick
 # ו-concurrency ממזגת-את-כל-הגורמים-לזרם-טורי-אחד — אפס-סערת-הרצות (יחס-1:1).
 # ה-runner-אפמרלי-במכוון — הרציפות-חיה-בריפו. אפס-PAT: GITHUB_TOKEN בלבד.
 on:
-  schedule:
     # trace-1a1312f4: private-repo Actions minutes are a metered quota — once it
     # ran dry, even a bare echo failed in ~2s (measured 18:01Z). The heavy public
     # cadence moved to Domain/.github/workflows/sandbox-arteries.yml (public
     # minutes); this lane is now an hourly redundancy + dispatch triggers.
-    - cron: "21 * * * *"
   push:
     branches: [main]
   workflow_dispatch:

@@ -21,8 +21,6 @@ name: artery-watch
 #     לכן: contents:write-בלבד · כל-ההצתות-דרך-/dispatches (repository_dispatch) — הנתיב-המוכח-היחיד.
 # ═══════════════════════════════════════════════════════════════════════════
 on:
-  schedule:
-    - cron: "*/15 * * * *"   # ניסיון-הצתה-חיצוני-בלבד — הלולאה-העצמית-היא-המקור-האמיתי
   workflow_dispatch:
   repository_dispatch:
     types: [artery-watch]

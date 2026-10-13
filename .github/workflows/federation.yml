@@ -10,8 +10,6 @@ name: federation
 # guard: פנקס-טרי-מ-28-דק' → CHAIN-SUPPRESSED (יציאה-מוקדמת-לפני-setup-node).
 # ═══════════════════════════════════════════════════════════════════════
 on:
-  schedule:
-    - cron: "19,49 * * * *"
   workflow_dispatch: {}
   repository_dispatch:
     types: [federation-next, revive-federation]   # revive-federation: T-51 המפעיל-הפנימי · אירוע-פר-עורק

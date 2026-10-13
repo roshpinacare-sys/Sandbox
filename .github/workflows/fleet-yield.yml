@@ -9,8 +9,6 @@ name: fleet-yield
 # cron-מוסט: דקה-11 של-שעות-זוגיות — מרווח-מן-העורקים-האחים (sovereign 0/15 ·
 # state 3,18,33,48) כדיי-ששלושת-העורקים-לא-יתנגשו-באותה-דקה.
 on:
-  schedule:
-    - cron: "11 */2 * * *"
   workflow_dispatch: {}
   repository_dispatch:   # T-51: הצתה-מהמפעיל-הפנימי — אירוע-פר-עורק (אפס-חצימה)
     types: [revive-fleet-yield]

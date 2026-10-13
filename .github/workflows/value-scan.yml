@@ -5,8 +5,6 @@
 # pattern (book-audit/cognition-beat, Domain).
 name: value-scan
 on:
-  schedule:
-    - cron: "17,47 * * * *"  # [15a] סגנון-בלוק — flow-style-חדל-להירשם (נמדד: אפס-סלוטים 00:47+; דפוס-העורקים-היורים)
   workflow_dispatch: {}
   repository_dispatch:
     types: [value-scan-tick]  # [T16] מופעל-על-ידי המפעיל-הפנימי (artery-watch, T-51) — cron כאן מוכח-שוקק

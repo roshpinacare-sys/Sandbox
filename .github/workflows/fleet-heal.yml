@@ -11,8 +11,6 @@ name: fleet-heal
 #  5. קבלות-כנות: heal/latest.json · heal/state.json · heal/ledger.jsonl (append-only).
 # מכסה: מודע-ל-x-ratelimit-remaining-בכל-תגובה; מתחת-סף-רך: חצאית-round-robin.
 on:
-  schedule:
-    - cron: "5,35 * * * *"
   workflow_dispatch:
     inputs:
       probe_force:

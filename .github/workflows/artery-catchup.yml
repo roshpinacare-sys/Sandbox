@@ -7,8 +7,6 @@ name: artery-catchup
 #  ② אם-ה-dispatch-נכשל — טביעה-ישירה+קומיט (הדופק-שורד-גם-כשמערכת-ה-dispatch-כולה-מושבתת).
 # כשהדופק-טרי (<20 דק') — יציאה-שקטה: אפס-התערבות-בשרשרת-החיה.
 on:
-  schedule:
-    - cron: "7,37 * * * *"
   push:
     branches: [main]
   workflow_dispatch:
