@@ -1,12 +1,12 @@
 {
-  "at": "2026-10-12T11:22:41.395Z",
+  "at": "2026-10-13T12:40:06.415Z",
   "slug": "roshpinacare-sys/Saosmartwallet",
-  "walletHead": "55b132dbade796021e06342d38b7471836556895",
+  "walletHead": "d61db0813607c11a3a573754a124b47904c557d8",
   "checks": {
     "install": "pass",
     "prismaGenerate": "pass",
     "typecheck": "pass",
-    "productionBuild": "pass"
+    "productionBuild": "fail"
   },
   "asserts": [
     {
@@ -32,20 +32,20 @@
     {
       "id": "law-pass-provenance",
       "verdict": "flag",
-      "detail": "PASS receipt minted out-of-band (unverified-local-engine) — flagged; artery measurement is the authoritative verdict; mint age: 101h at 55b132dbade7"
+      "detail": "PASS receipt minted out-of-band (unverified-local-engine) — flagged; artery measurement is the authoritative verdict; mint age: 127h at d61db0813607"
     }
   ],
   "warns": [
     "db/custom.db committed at HEAD (owner decision pending — never auto-touched)"
   ],
   "alerts": [
-    "law-pass-provenance: PASS receipt minted out-of-band (unverified-local-engine) — flagged; artery measurement is the authoritative verdict; mint age: 101h at 55b132dbade7"
+    "law-pass-provenance: PASS receipt minted out-of-band (unverified-local-engine) — flagged; artery measurement is the authoritative verdict; mint age: 127h at d61db0813607"
   ],
-  "overall": "PASS",
-  "reason": "install, prisma, typecheck, build and all wallet laws pass — with 1 persistent trust-flag(s) (see alerts)",
+  "overall": "FAIL",
+  "reason": "productionBuild failed: Command failed: bunx next build --webpack\n⚠ You are using a non-standard \"NODE_ENV\" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env\nMultiple bundler flags set: TURBOPACK=1, --webpack.\n\nEdit your command or your package.json script to configure only one bundler.\n",
   "provenance": {
-    "runId": "38242234259",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38242234259",
-    "sha": "2fab84c4642649f95fe93b7a37159e77ba5a0644"
+    "runId": null,
+    "runUrl": null,
+    "sha": null
   }
 }
