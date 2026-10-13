@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-13T12:25:30.817Z",
+  "at": "2026-10-13T14:25:06.548Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "125ea037d38ef50a29afbcb379a53b2665f24860",
+  "head": "c5031f1fce18818d0178bd18522e60e1774ae8b3",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -10,8 +10,8 @@
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "pass",
-      "detail": "gitleaks HEAD scan: 0 findings"
+      "verdict": "flag",
+      "detail": "gitleaks HEAD scan: 3 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-QHl1pX/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl"
     },
     {
       "id": "law-no-skipped-pass",
@@ -29,7 +29,9 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "law-no-secrets-at-head: gitleaks HEAD scan: 3 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-QHl1pX/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl"
+  ],
   "overall": "FAIL",
   "reason": ""
 }
