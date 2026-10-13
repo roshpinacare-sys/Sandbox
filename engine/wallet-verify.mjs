@@ -80,6 +80,11 @@ try {
     if (existsSync(join(wdir, "package.json")) && readFileSync(join(wdir, "package.json"), "utf8").includes('"build"')) {
       const cfg = ["next.config.ts", "next.config.mjs", "next.config.js"].map((f) => join(wdir, f)).filter(existsSync);
       const useWebpack = cfg.some((f) => readFileSync(f, "utf8").includes("webpack"));
+      // the probe decides its own bundler; an ambient TURBOPACK=1 exported by a
+      // parent shell collides with the explicit --webpack flag and Next refuses
+      // to run at all (measured 12:40Z: "Multiple bundler flags set") — strip
+      // the ambient flag so the probe tests the build, not the parent's env.
+      delete process.env.TURBOPACK;
       check("productionBuild", "bunx", useWebpack ? ["next", "build", "--webpack"] : ["next", "build"], 1500000);
     } else { result.checks.productionBuild = "skip"; result.warns.push("no build script"); }
   }
