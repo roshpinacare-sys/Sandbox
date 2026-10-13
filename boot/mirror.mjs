@@ -95,7 +95,7 @@ try {
   git(WORK, `clone -q --depth 1 --branch ${BRANCH} https://github.com/${ORG}/${REPO}.git ${REPO}`, { quiet: true, env: withCred().env });
 } catch { fail(`${REPO} unreachable — no Git, no mirror`); }
 git(DEST, "config user.name sandbox-sovereign");
-git(DEST, "config user.email sandbox-sovereign@users.noreply.github.com");
+git(DEST, "config user.email sandbox-sovereign@agents.roshpinacare-sys");
 
 // ── 4) logical copy with canonical exclusions ──
 let copied = 0, skippedLarge = 0, skippedSecret = 0;
