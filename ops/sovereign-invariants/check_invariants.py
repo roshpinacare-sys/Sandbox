@@ -13,7 +13,10 @@ Usage:
 כללים:
   D1  פורמט-הפנקס — רשומות-פרוטוקול (מ-2026-10-11) = שורה-אחת, 5 שדות מופרדי " | "
   D2  קיום-קבלות — כל נתיב-קונקרטי שרשומת-פנקס של Sandbox טוענת, חייב להתקיים ב-HEAD
-  D3  תקרת-תקציב — כל workflow מתוזמן חייב "# budget: max=N" או רשומה ב-budgets.json
+  D3  תקרת-תקציב — כל workflow מתוזמן חייב "# budget: max=N" או רשומה ב-budgets.json;
+      פורמט=חוק (budgets.json שבור/ריק/במבנה-שגוי אדום גם-בלי-קרונות) + סחרור-הפוך
+      (רשומה-ל-workflow שאינו-קיים = כיסוי-רפאים = אדום) — מוגרים-הביתה מ-check_i38.py של
+      רושפינה (0348a40b) שם-נולדו; הדיסציפלינה: לא להעתיק — לחדד
   D4  אין-דחיפה-שקטה — כישלון-git-push חייב להצטעק (לא || true, לא /dev/null,
       ולולאת-ניסיונות חייבת שער-נחיתה מצטעק אחריה)
   D5  זהות-אחת — כל user.email בהקשר-חתימה חייב להתאים ל-ALLOWED של identity-guard
@@ -156,19 +159,28 @@ def d2_receipt_existence(root, rep, fileset):
         rep.ok("D2", f"{checked} נתיבי-קבלה אומתו מול עץ-HEAD; {len(rep.unverifiable)} רשומות-תיאוריות (בלתי-ניתנות-לאימות-מבני)")
 
 
-# ---------------- D3: budget ceilings ----------------
+# ---------------- D3: budget ceilings (sharpened: format-is-law + reverse drift) ----------------
 def d3_budgets(root, rep):
     wf_dir = os.path.join(root, ".github", "workflows")
     budgets = {}
     btxt = load_text(os.path.join(root, BUDGETS_REL))
-    if btxt:
+    if btxt is not None:
+        # FORMAT IS LAW — migrated from roshpina check_i38.py (0348a40b): a malformed
+        # budgets.json is RED even when no cron exists. File exists but empty/whitespace
+        # → JSONDecodeError → RED (the old code silently treated "" as "no ledger").
         try:
-            with open(os.path.join(root, BUDGETS_REL)) as f:
-                budgets = json.load(f) or {}
-        except json.JSONDecodeError:
-            rep.fail("D3", f"{BUDGETS_REL} אינו JSON תקין")
+            parsed = json.loads(btxt)
+        except json.JSONDecodeError as e:
+            rep.fail("D3", f"{BUDGETS_REL} אינו JSON תקין: {e}")
             return
-    declared = budgets.get("workflows", {}) if isinstance(budgets.get("workflows", {}), dict) else {}
+        if not isinstance(parsed, dict) or not isinstance(parsed.get("workflows"), dict):
+            rep.fail("D3", f"{BUDGETS_REL} — מבנה שגוי (נדרש {{\"workflows\": {{…}}}}; מפתח-חסר/שורש-שאינו-מילון = אין-ספר-חוק)")
+            return
+        budgets = parsed["workflows"]
+        for fn, entry in budgets.items():
+            if not (isinstance(entry, dict) and isinstance(entry.get("max"), int) and not isinstance(entry.get("max"), bool) and entry["max"] >= 0):
+                rep.fail("D3", f"{BUDGETS_REL} — {fn}: תקרה שאינה מספר-שלם ≥0")
+                return
     scheduled = []
     missing = []
     if os.path.isdir(wf_dir):
@@ -181,14 +193,20 @@ def d3_budgets(root, rep):
             scheduled.append(fn)
             if re.search(r"#\s*budget:\s*max=(\d+)", txt):
                 continue
-            entry = declared.get(fn)
+            entry = budgets.get(fn)
             if isinstance(entry, dict) and isinstance(entry.get("max"), int) and entry["max"] >= 0:
                 continue
             missing.append(fn)
+    # REVERSE DRIFT — migrated from roshpina check_i38.py: a budget entry naming a
+    # workflow file that does not exist is RED (ghost coverage lies). The old code
+    # checked only the forward direction.
+    ghosts = [fn for fn in budgets if not os.path.isfile(os.path.join(wf_dir, fn))]
     if missing:
         rep.fail("D3", f"{len(missing)} workflows מתוזמנים בלי תקרת-תקציב מוצהרת: {', '.join(missing[:6])}")
+    elif ghosts:
+        rep.fail("D3", f"{len(ghosts)} רשומות-תקציב ל-workflows שאינם קיימים (כיסוי-רפאים משקר): {', '.join(ghosts[:6])}")
     else:
-        rep.ok("D3", f"{len(scheduled)} workflows מתוזמנים — לכולם תקרת-תקציב (inline או budgets.json)")
+        rep.ok("D3", f"{len(scheduled)} workflows מתוזמנים — לכולם תקרת-תקציב (inline או budgets.json); {len(budgets)} רשומות-תקציב, 0 רפאים")
 
 
 # ---------------- D4: no silent push ----------------
