@@ -1,18 +1,15 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-14T01:53:08Z",
+ "generatedAt": "2026-10-14T07:33:36Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
- "degraded": [
-  "flow-map",
-  "value-scan"
- ],
+ "degraded": [],
  "chainVerify": {
-  "head": 110420043,
-  "mult": 0.000620295937966379,
-  "treasuryNetSp": 2791.6,
+  "head": 110426762,
+  "mult": 0.0006203057587603107,
+  "treasuryNetSp": 2841.7,
   "minOperatorSp": 11.9,
   "beaconChainMatch": true
  },
@@ -20,14 +17,85 @@
   {
    "id": "D0-owner-channel",
    "area": "הנהגה",
-   "status": "OBSERVING",
-   "titleHe": "ערוץ-המנהל",
-   "verdictHe": "ערוץ-ההנהגה פתוח-ומחובר (שני-המקורות-נמדדו) — אין-הוראות-חדשות (כנות; נקרא-חי-בכל-פעימה)",
+   "status": "ENFORCED",
+   "priority": "P0",
+   "titleHe": "ערוץ-המנהל — הסמכות-העליונה נקראת-בכל-פעימה (תיבה+לוח)",
+   "verdictHe": "הריבונות מאשרת-קבלה: 5 הוראות-מהתיבה + 0 פקודות-קונסולה-חדשות נקראו-מהגיט-של-הבעלים ומנותבות-סמכות-עליונה — הוראה-חדשה מעדכנת-מיד.",
    "evidence": [
-    "inbox.jsonl: 0 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0"
+    "inbox.jsonl: 28 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0",
+    "[inbox 2026-10-14T02:09:07.730Z] ",
+    "[inbox 2026-10-14T02:17:35.237Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם.",
+    "[inbox 2026-10-14T00:45:00.000Z] T27 sharp-optimization: git-state SWR read-cache (write-lane always-fresh; engineering GET",
+    "[inbox 2026-10-14T05:07:01.428Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם.",
+    "[inbox ?] "
    ],
+   "ownerDirectives": [
+    {
+     "at": "2026-10-14T02:09:07.730Z",
+     "role": "agent",
+     "source": "zai-code-t26",
+     "kind": "report",
+     "subject": "T26 — גל-הנדסה שני: A9/A6/A3/A8/A7 מנגנונים חיים ומדודים",
+     "summary": "A9 שער-מיזוג ריבוני (writeGitFile נקודת-חנק; מדידה 10/10 mech-selftest) · A6 תשתית-דמה SIM=1+x-sim:1 (מחזור-זהב מדוד: ask/answer/settle/reopen כל-החוקים; אמת-גיט לא-נגעה sha זהה) · A3 גרף-תור /api/queue-graph (חי: 3 פתוחים, 66/82 סגירות-מוכחות, ממצא: 3 קבלות-על-פתוחים שאינן סוגרות) · A8 costUsd ביישוב+סיכום · A7 ניגודיות tools/check-contrast.mjs (נמדד 20 כישלונות → תוקנו → PASS 25/25) · engineering.json עודכן (commit 9dc66c218, readback MATCH)",
+     "receipts": {
+      "engineeringCommit": "9dc66c218",
+      "contrast": "PASS 25/25",
+      "mechSelftest": "10/10",
+      "simGoldenCycle": "real-git-untouched"
+     },
+     "nextSteps": "בעלים: כפתור \"בדיקת-דמה+שער\" בלשונית הנדסה רץ תחת-כניסתך ורושם-פנקס ריבוני; תיקוני-הצבעים נמדדים-בכל-ריצת check-contrast"
+    },
+    {
+     "at": "2026-10-14T02:17:35.237Z",
+     "role": "autonomy",
+     "source": "selfhood",
+     "replyTo": "owner-channel:2026-10-14T02:09:07.730Z|zai-code-t26",
+     "engine": "route",
+     "text": "משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
+    },
+    {
+     "at": "2026-10-14T00:45:00.000Z",
+     "role": "agent",
+     "source": "zai-code-t27",
+     "engine": "report",
+     "text": "T27 sharp-optimization: git-state SWR read-cache (write-lane always-fresh; engineering GET 0.88s->5-11ms), chain cache (worlds-state 0.97s->12-45ms), terminal-receipt law in queue-graph, 2 zombie orders closed receipt-backed in ops-intake commit 1bdc548e1 (open 3->1, provenClosed 66->78), chmod noise closed 4 submodules; verified: mech-selftest 10/10, contrast PASS, lint 0/0, browser 1440+390 clean"
+    },
+    {
+     "at": "2026-10-14T05:07:01.428Z",
+     "role": "autonomy",
+     "source": "selfhood",
+     "replyTo": "owner-channel:2026-10-14T00:45:00.000Z|zai-code-t27",
+     "engine": "route",
+     "text": "משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
+    },
+    {
+     "ts": "2026-10-14T06:39:58Z",
+     "role": "agent",
+     "agent": "zai-code-t28",
+     "kind": "T28-report",
+     "summary": "T28: A4 חוזה-מיוצר+CI (מחזור-מלא: תפס סטייה missing A4,A11 → נסגר → ירוק, run 38522636052); מפת-האימוצים A1-A12 סגורה; כלוב-מחובר-לספון-ops-forge (measured caged=128/free=0, fail-closed, f96c2b1da); תור 0-פתוחים (79/83, QUEUE-20261013-12 נסגר 066f02889 כי-האדום הבריא מדידה 38520845667); Sandbox/compute-canary מושבת-לפי-חוק-T23 (readback disabled_manually, 81ce6cfe8); FleetHQ/office-3d ירוק (שורש נמדד, RUN46 success, 55b48e24b); lint/selftest/contrast PASS; דפדפן 1440+390 אפס-שגיאות",
+     "commits": {
+      "sandbox": "508e4ac",
+      "ops-intake": "066f02889",
+      "Autonomy-contract": "5e9126c80",
+      "Autonomy-ci": "e8e2ae37f",
+      "Autonomy-eng": "9c33c3236",
+      "ops-forge": "f96c2b1da",
+      "receipts": [
+       "81ce6cfe8",
+       "55b48e24b"
+      ]
+     }
+    }
+   ],
+   "ackIds": [],
+   "ackCount": 0,
+   "routing": {
+    "ownerDirectives": [],
+    "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
+   },
    "boardMeasured": true,
-   "decidedAt": "2026-10-14T01:53:08Z",
+   "decidedAt": "2026-10-14T07:33:35Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -52,7 +120,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.2 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2547.4 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.2 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2597.5 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -79,11 +147,11 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 2791.6 SP (ראש 110420043, מכפיל 0.000620296)",
-    "יעד 3000 · פער 208.4 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 1479.3 SP · נכנסת-נמדדת 244.2 SP",
-    "משואה מפרסמת 2791.6 SP · תואם=True",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 99395)",
+    "אוצרה נמדדת 2841.7 SP (ראש 110426762, מכפיל 0.000620306)",
+    "יעד 3000 · פער 158.3 SP · מסילת-שימור 2800 (R2)",
+    "האצלה-יוצאת-נמדדת 1429.2 SP · נכנסת-נמדדת 244.2 SP",
+    "משואה מפרסמת 2841.7 SP · תואם=True",
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 101191)",
     "האצלות-אחרונות למפעילי-הצי: ~0.0 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
@@ -187,7 +255,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-14T01:53:08Z",
+   "decidedAt": "2026-10-14T07:33:36Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -196,28 +264,33 @@
    "status": "ENFORCED",
    "priority": "P0",
    "titleHe": "תקלות-הצוות — ניתוב-תיקון-ריבוני",
-   "verdictHe": "הריבונות מדרגת P0 עצמאית: תיקון 0 סוכנים בתקלה ושחרור 2 משימות חסומות — מנותב למסילות-ההנדסה ולמנוע-הצמיחה (work-orders) מיד, ללא-המתנה-להוראות (צו-סעיף 1).",
+   "verdictHe": "הריבונות מדרגת P0 עצמאית: תיקון 0 סוכנים בתקלה ושחרור 3 משימות חסומות — מנותב למסילות-ההנדסה ולמנוע-הצמיחה (work-orders) מיד, ללא-המתנה-להוראות (צו-סעיף 1).",
    "evidence": [
     "סוכנים בתקלה (מדוד): —",
-    "משימות חסומות (מדוד): t1083, t1852"
+    "משימות חסומות (מדוד): t1083, t1852, t1971",
+    "עבודות-פתוחות ממנוע-הצמיחה (צריכה): WO-Sandbox-reds, WO-saos-runtime-reds"
    ],
    "routing": {
     "foreman": [],
-    "officeGrowthWorkOrders": []
+    "officeGrowthWorkOrders": [
+     "WO-Sandbox-reds",
+     "WO-saos-runtime-reds"
+    ]
    },
-   "decidedAt": "2026-10-14T01:53:08Z",
+   "decidedAt": "2026-10-14T07:33:36Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
    "id": "D3-flow-weave",
    "area": "רשת",
-   "status": "OBSERVING",
-   "titleHe": "מפת-הזרימה",
-   "verdictHe": "מפת-הזרימה לא זמינה — ממשיכים-למדוד",
+   "status": "ENFORCED",
+   "priority": "P2",
+   "titleHe": "מפת-הזרימה — חיבור-עורקים",
+   "verdictHe": "הריבונות מכריעה: חיבור 5 יתומים וטיפול ב-0 רוחות-רפאים במסילת-מחבר-העורקים — everything-uses-everything, ללא-המתנה.",
    "evidence": [
-    "flow-map.json לא זמין"
+    "orphans=5 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-10-14T01:53:08Z",
+   "decidedAt": "2026-10-14T07:33:36Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -228,13 +301,13 @@
    "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
    "verdictHe": "הריבונות מכריעה: 3 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 48/51 HAS_FAILURES (2026-10-14T00:03:55.603Z)",
+    "מאמת-הרשת: 48/51 HAS_FAILURES (2026-10-14T05:42:04.212Z)",
     "שער-האמת: ALL-GREEN (pass=7 fail=0)",
     "A10: field \"freshness.verdict\" = \"STALE\", expected \"FRESH\"",
     "A14: pattern matched 3 time(s), first match \"—\"",
     "A43: markets.1.bestAsk = 0, minimum is 1"
    ],
-   "decidedAt": "2026-10-14T01:53:08Z",
+   "decidedAt": "2026-10-14T07:33:36Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
