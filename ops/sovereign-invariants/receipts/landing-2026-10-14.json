@@ -1,0 +1,68 @@
+{
+ "schema": "sovereign.invariants.receipt/1",
+ "generatedAt": "2026-10-14T00:08:33Z",
+ "root": "Sandbox",
+ "rules": {
+  "D1": "OK",
+  "D2": "OK",
+  "D3": "OK",
+  "D4": "OK",
+  "D5": "OK",
+  "D6": "OK",
+  "D7": "OK"
+ },
+ "findings": [
+  {
+   "rule": "D1",
+   "status": "OK",
+   "detail": "96 רשומות-פרוטוקול מאז 2026-10-11 — כולן שורה-אחת, 5 שדות"
+  },
+  {
+   "rule": "D2",
+   "status": "OK",
+   "detail": "9 נתיבי-קבלה אומתו מול עץ-HEAD; 3 רשומות-תיאוריות (בלתי-ניתנות-לאימות-מבני)"
+  },
+  {
+   "rule": "D3",
+   "status": "OK",
+   "detail": "1 workflows מתוזמנים — לכולם תקרת-תקציב (inline או budgets.json)"
+  },
+  {
+   "rule": "D4",
+   "status": "OK",
+   "detail": "36 קבצים נסרקו — אפס דחיפה-שקטה"
+  },
+  {
+   "rule": "D5",
+   "status": "OK",
+   "detail": "29 הקשרי-חתימה נבדקו מול ה-ALLOWED שנגזר-מ-identity-guard — הכל ריבוני"
+  },
+  {
+   "rule": "D6",
+   "status": "OK",
+   "detail": "S1–S7 מונוטוני-מלא, כל-סעיף עם ארבעת-הסעיפים; רישום-D מסונכרן דו-כיווני (7 חוקים)"
+  },
+  {
+   "rule": "D7",
+   "status": "OK",
+   "detail": "333 קבצי-טקסט נסרקו מול 4 צורות-סוד — אפס פגיעות"
+  }
+ ],
+ "unverifiableCount": 3,
+ "verdict": "GREEN",
+ "landingFindings": {
+  "method": "pre-fix run on pristine clone (exit 1 RED) → surgical fixes → post-fix run (exit 0 GREEN)",
+  "before": [
+   "D1: 1 רשומות-פרוטוקול בפורמט-שגוי (נדרש 5 שדות): line 81 has 4 fields",
+   "D4: .github/workflows/artery-participation.yml — לולאת-ניסיונות-push בלי שער-נחיתה מצטעק (כישלון-כל-הניסיונות = ירוק-שקט)",
+   "D6: ops/sovereign-invariants/SECURITY-INVARIANTS.md חסר — מכונה בלי מסמך-חוק",
+   "D7: 2 פגיעות צורת-סוד: ops/evo-windows-staleness/gate.mjs:178 [github-pat-classic]; proof/key-proof.mjs:291 [wif]"
+  ],
+  "fixedInSameCommit": [
+   "D1: ops/AGENT-LEDGER.md line 81 (zai-worlds 2026-10-11) missing 5th field — structurally completed with explicit dash, content untouched",
+   "D4: .github/workflows/artery-participation.yml retry-loop drained all-attempts-failed into silent green — landing gate added (fetch+rebase+final push+exit 1)",
+   "D7: 2 hits verified manually as test vectors (gate.mjs self-tests its secrets-scan with a dummy ghp_ token; key-proof.mjs uses the public privkey=1 WIF KAT) — allowlisted with dated reasons"
+  ],
+  "after": "GREEN: D1=OK D2=OK D3=OK D4=OK D5=OK D6=OK D7=OK"
+ }
+}

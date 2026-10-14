@@ -53,6 +53,11 @@ jobs:
             for i in 1 2 3 4 5; do
               git pull --rebase origin main && git push origin HEAD:main && break || { sleep $((i*5)); git rebase --abort 2>/dev/null || true; }
             done
+            # S4 landing gate (2026-10-14): all-retries-failed used to drain into a silent green
+            # (the verdict gate reads the LOCAL receipt). Final attempt must land or fail loud.
+            git fetch origin main --quiet
+            git rebase origin/main --quiet || { echo "::error::S4: rebase failed during landing gate"; exit 1; }
+            git push origin HEAD:main || { echo "::error::S4: push did not land after retries — failing loud"; exit 1; }
           fi
 
       - name: Honest verdict gate

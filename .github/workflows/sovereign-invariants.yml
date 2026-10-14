@@ -1,0 +1,46 @@
+# SOVEREIGN-INVARIANTS — CI teeth for ops/sovereign-invariants/check_invariants.py
+# Law: S6 (doc self-integrity) + all D-rules run on every legal-doc / ledger / workflow change.
+# fail-loud: violations → red check-run. אדום-מפורסם עדיף על ירוק-שקר.
+# budget: max=0 (checkout + python3 stdlib only — אפס קריאות-חוץ)
+
+name: sovereign-invariants
+
+on:
+  push:
+    paths:
+      - "ops/sovereign-invariants/**"
+      - "ops/AGENT-LEDGER.md"
+      - ".github/workflows/sovereign-invariants.yml"
+      - ".github/workflows/*.yml"
+  schedule:
+    - cron: "23 3 * * *" # יומי 03:23 UTC — מחוץ-לשעות-השיא; תקרת-תקציב: budgets.json (max=0)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run sovereign invariants (D1..D7)
+        run: |
+          python3 ops/sovereign-invariants/check_invariants.py . \
+            --json ops/sovereign-invariants/receipts/latest.json
+          echo "---- receipt ----"
+          cat ops/sovereign-invariants/receipts/latest.json
+
+      - name: Honest verdict gate
+        if: always()
+        run: |
+          python3 - << 'EOF'
+          import json, sys
+          try:
+              r = json.load(open("ops/sovereign-invariants/receipts/latest.json"))
+          except Exception:
+              print("receipt unreadable — honest red"); sys.exit(1)
+          print("VERDICT:", r["verdict"], "·", r["rules"])
+          sys.exit(0 if r["verdict"] == "GREEN" else 1)
+          EOF

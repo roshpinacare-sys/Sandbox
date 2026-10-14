@@ -1,0 +1,53 @@
+{
+ "schema": "sovereign.invariants.receipt/1",
+ "generatedAt": "2026-10-14T00:06:52Z",
+ "root": "Sandbox",
+ "rules": {
+  "D1": "FAIL",
+  "D2": "OK",
+  "D3": "OK",
+  "D4": "FAIL",
+  "D5": "OK",
+  "D6": "FAIL",
+  "D7": "FAIL"
+ },
+ "findings": [
+  {
+   "rule": "D1",
+   "status": "FAIL",
+   "detail": "1 רשומות-פרוטוקול בפורמט-שגוי (נדרש 5 שדות): line 81 has 4 fields"
+  },
+  {
+   "rule": "D2",
+   "status": "OK",
+   "detail": "9 נתיבי-קבלה אומתו מול עץ-HEAD; 3 רשומות-תיאוריות (בלתי-ניתנות-לאימות-מבני)"
+  },
+  {
+   "rule": "D3",
+   "status": "OK",
+   "detail": "0 workflows מתוזמנים — לכולם תקרת-תקציב (inline או budgets.json)"
+  },
+  {
+   "rule": "D4",
+   "status": "FAIL",
+   "detail": ".github/workflows/artery-participation.yml — לולאת-ניסיונות-push בלי שער-נחיתה מצטעק (כישלון-כל-הניסיונות = ירוק-שקט)"
+  },
+  {
+   "rule": "D5",
+   "status": "OK",
+   "detail": "29 הקשרי-חתימה נבדקו מול ה-ALLOWED שנגזר-מ-identity-guard — הכל ריבוני"
+  },
+  {
+   "rule": "D6",
+   "status": "FAIL",
+   "detail": "ops/sovereign-invariants/SECURITY-INVARIANTS.md חסר — מכונה בלי מסמך-חוק"
+  },
+  {
+   "rule": "D7",
+   "status": "FAIL",
+   "detail": "2 פגיעות צורת-סוד: ops/evo-windows-staleness/gate.mjs:178 [github-pat-classic]; proof/key-proof.mjs:291 [wif]"
+  }
+ ],
+ "unverifiableCount": 3,
+ "verdict": "RED"
+}
