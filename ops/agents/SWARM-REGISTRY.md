@@ -6,3 +6,4 @@
 > פורמט: תאריך | trace-id | שם-עצמי | lane-נתבע | סטטוס
 
 2026-10-14 | 1a13b885309f5ba5 | zai-main | M-1 (FleetHQ-office-ci) + M-0 (רישום-זה) + עדכון-תוכנית-האם (ציר-דקס-במרכז) | M-1-בוצע: FleetHQ@bde6fbb4 tsc=0 build=0 CI-#240/#241-על-HEAD · M-0-בוצע: קובץ-זה
+2026-10-14 | 1a13bc8fcf41c00d | zai-main | G-0 (אמנת-giant) + G-1 (הערוץ-האחד) + G-2 (מערכת-הווב-giant) | G-0-בוצע: giant/README+SPEC-CHANNEL+SPEC-PLATFORM-נולדו · G-1/G-2-בביצוע-במשמרת-זו (ערוץ-אחד+אפליקציה-אמיתית+שער-headcorner)
