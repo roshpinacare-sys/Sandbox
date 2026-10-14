@@ -66,6 +66,45 @@ def read_json(url, timeout=20):
         return None
 
 
+def read_repo_text(repo_path, timeout=20):
+    """[C-2c] קריאת-עצמי (אותו-ריפו) — השיעור-שנמדד 2026-10-14: הריפו פרטי, ולכן
+    raw חסר-מפתח מחזיר 404 על כל-קובץ-עצמי (flow-map + value-scan התדרדרו-בכל-פעימה
+    מאז-ההפרטה — עיוורון-מדידה-של-המחליט-עצמו, לא-תקלה-במדדים). הסדר-החוקי:
+    1) קובץ-מקומי-מה-checkout — המחליט-רץ-בתוך-הריפו-שלו (checkout@v4 = main@HEAD
+       להרצה-המפעילה; התאומה-על-מכונה-חיה-עם-עותק) — אפס-רשת, אמת-מהעץ-שנבדק;
+    2) גיבוי: Contents API מאומת עם GITHUB_TOKEN (אותו-דפוס-מוכח T19; קריאה-עצמית
+       בלבד, אותו-ריפו — חוקי-מפתח-נשמרים: הטוקן-רק-מסביבה, לעולם-לא-stdout);
+    3) None כנה אם-שניהם-נכשלו — נכנס ל-degraded במקום המצאה (חוק-הבית)."""
+    try:
+        with open(os.path.join(os.getcwd(), repo_path), "rb") as f:
+            return f.read().decode("utf-8", "ignore")
+    except Exception:
+        pass
+    tok = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or ""
+    if tok:
+        try:
+            repo = os.environ.get("GITHUB_REPOSITORY", "roshpinacare-sys/Sandbox")
+            req = urllib.request.Request(
+                f"https://api.github.com/repos/{repo}/contents/{repo_path}?ref=main",
+                headers={"Authorization": f"Bearer {tok}", "User-Agent": "sovereign-decider",
+                         "Accept": "application/vnd.github.raw"})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read().decode("utf-8", "ignore")
+        except Exception:
+            return None
+    return None
+
+
+def read_repo_json(repo_path, timeout=20):
+    raw = read_repo_text(repo_path, timeout=timeout)
+    if raw is None:
+        return None
+    try:
+        return json.loads(raw)
+    except Exception:
+        return None
+
+
 def measure_chain(degraded):
     """מדידת-שרשרת עצמאית: המרה מדויקת VESTS→SP. None כנה במקום המצאה."""
     gp = rpc("condenser_api.get_dynamic_global_properties", [])
@@ -345,28 +384,15 @@ def decide_owner_channel(degraded):
         ופקודה-OPEN מקבלת-ACK-כתוב-חזרה עם-חותמת — [15a])
     אין-שמות-חשבונות-ואין-פרטי-התחברות בשום-פלט. אין-מקורות → OBSERVING כנה."""
     inbox = None
-    try:
-        with urllib.request.urlopen(f"{RAW}/Sandbox/main/ops/sovereign/OWNER-CHANNEL/inbox.jsonl", timeout=20) as r:
-            raw = r.read().decode("utf-8", "ignore")
-        inbox = [json.loads(l) for l in raw.splitlines() if l.strip()]
-    except Exception:
-        inbox = None
-    # [T19-fix] התיבה עברה-לריפו-פרטי — קריאה-keyless נכשלת; fallback: Contents API
-    # עם GITHUB_TOKEN מובנה (קריאה-עצמית-בלבד, אותו-ריפו — חוקי-מפתח-נשמרים)
-    if not inbox:
-        tok = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or ""
-        if tok:
-            try:
-                repo = os.environ.get("GITHUB_REPOSITORY", "roshpinacare-sys/Sandbox")
-                req = urllib.request.Request(
-                    f"https://api.github.com/repos/{repo}/contents/ops/sovereign/OWNER-CHANNEL/inbox.jsonl?ref=main",
-                    headers={"Authorization": f"Bearer {tok}", "User-Agent": "sovereign-decider",
-                             "Accept": "application/vnd.github.raw"})
-                with urllib.request.urlopen(req, timeout=20) as r:
-                    raw = r.read().decode("utf-8", "ignore")
-                inbox = [json.loads(l) for l in raw.splitlines() if l.strip()]
-            except Exception:
-                inbox = None
+    # [T19-fix→C-2c] התיבה עברה-לריפו-פרטי — קריאה-keyless נכשלת (404 מדוד);
+    # קריאת-עצמי-אחת-לכל-המדדים: read_repo_text (קובץ-מקומי-קודם, Contents API
+    # מאומת-כגיבוי, None כנה) — הדפוס-המוכח הופך-חוק-אחת במקום-שלושה-עותקים.
+    _inbox_raw = read_repo_text("ops/sovereign/OWNER-CHANNEL/inbox.jsonl")
+    if _inbox_raw is not None:
+        try:
+            inbox = [json.loads(l) for l in _inbox_raw.splitlines() if l.strip()]
+        except Exception:
+            inbox = None
     global _board_holder
     board, board_path = load_directive_board()
     _board_holder = board
@@ -450,16 +476,16 @@ def main():
     beacon = read_json(f"{RAW}/sovereign-beacon/main/state.json")
     if not beacon:
         degraded.append("beacon")
-    vs = read_json(f"{RAW}/Sandbox/main/ops/sovereign/VALUE-SCAN/state.json")
+    vs = read_repo_json("ops/sovereign/VALUE-SCAN/state.json")  # [C-2c] קריאת-עצמי
     if not vs:
         degraded.append("value-scan")
     foreman = read_json(f"{RAW}/FleetHQ/main/office/state/office-state.json")
     if not foreman:
         degraded.append("foreman")
-    flow = read_json(f"{RAW}/Sandbox/main/ops/flow/flow-map.json")
+    flow = read_repo_json("ops/flow/flow-map.json")  # [C-2c] קריאת-עצמי
     if not flow:
         degraded.append("flow-map")
-    wos = read_json(f"{RAW}/Sandbox/main/ops/office/work-orders.json")
+    wos = read_repo_json("ops/office/work-orders.json")  # [C-2c] קריאת-עצמי
     if not isinstance(wos, list):
         wos = (wos or {}).get("orders") if isinstance(wos, dict) else None
         if not isinstance(wos, list):
