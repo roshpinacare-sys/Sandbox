@@ -1,14 +1,14 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-14T21:38:18Z",
+ "generatedAt": "2026-10-15T00:07:05Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
  "degraded": [],
  "chainVerify": {
-  "head": 110443583,
-  "mult": 0.0006203303935877368,
+  "head": 110446550,
+  "mult": 0.0006203347417030928,
   "treasuryNetSp": 2810.8,
   "minOperatorSp": 11.9,
   "beaconChainMatch": true
@@ -87,7 +87,7 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-10-14T21:38:17Z",
+   "decidedAt": "2026-10-15T00:07:05Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -112,7 +112,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.2 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2566.6 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.3 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2566.5 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -139,12 +139,12 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 2810.8 SP (ראש 110443583, מכפיל 0.000620330)",
+    "אוצרה נמדדת 2810.8 SP (ראש 110446550, מכפיל 0.000620335)",
     "יעד 3000 · פער 189.2 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 1460.3 SP · נכנסת-נמדדת 244.2 SP",
+    "האצלה-יוצאת-נמדדת 1460.3 SP · נכנסת-נמדדת 244.3 SP",
     "משואה מפרסמת 2810.8 SP · תואם=True",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 104316)",
-    "האצלות-אחרונות למפעילי-הצי: ~41.8 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 105704)",
+    "האצלות-אחרונות למפעילי-הצי: ~0.0 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
     "treasury": {
@@ -247,7 +247,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-14T21:38:18Z",
+   "decidedAt": "2026-10-15T00:07:05Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -255,14 +255,14 @@
    "area": "הנדסה",
    "status": "OBSERVING",
    "titleHe": "תקלות-הצוות",
-   "verdictHe": "הנושא-שנותב נמדד-נקי 3 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
+   "verdictHe": "הנושא-שנותב נמדד-נקי 4 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
    "evidence": [
-    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=3 (מהפנקס)"
+    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=4 (מהפנקס)"
    ],
-   "decidedAt": "2026-10-14T21:38:18Z",
+   "decidedAt": "2026-10-15T00:07:05Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
-    "cleanStreak": 3,
+    "cleanStreak": 4,
     "subjectResolved": true
    }
   },
@@ -276,7 +276,7 @@
    "evidence": [
     "orphans=5 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-10-14T21:38:18Z",
+   "decidedAt": "2026-10-15T00:07:05Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -285,13 +285,15 @@
    "status": "ENFORCED",
    "priority": "P1",
    "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
-   "verdictHe": "הריבונות מכריעה: 1 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
+   "verdictHe": "הריבונות מכריעה: 3 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-10-14T20:23:21.920Z)",
-    "שער-האמת: ALL-GREEN (pass=7 fail=0)",
-    "A40: 21/22 healthy · failing: sovereign.html:2076B<10000B"
+    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-10-14T23:35:13.114Z)",
+    "שער-האמת: 2 RED (pass=5 fail=2)",
+    "A40: 21/22 healthy · failing: sovereign.html:2076B<10000B",
+    "G2-zero-broken-links: truth.html: mirror.json → HTTP 503 | receipts/: ../hub/guides/verify-anything.html → HTTP 503 | receipts/: r40-the-save.json → HTTP 503 | versus.html: https://roshpinacare-sys.github.io/Domain/versus.html → HTTP 503",
+    "G8-complete-map: sovereign.html: 2245B <= 10000B"
    ],
-   "decidedAt": "2026-10-14T21:38:18Z",
+   "decidedAt": "2026-10-15T00:07:05Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
