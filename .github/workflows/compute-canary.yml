@@ -3,10 +3,19 @@ name: compute-canary
 # Measured 2026-10-13: exhausted private-repo Actions minutes flooded the owner
 # with ~95 blocked-run emails (0-step startup failures). The estate parked 18
 # private repos (Actions enabled=false) and armed Autonomy/compute-rearm.yml.
-# This canary is the meter: dispatch-only, one trivial runner step, cheap.
-# Wall closed -> probe blocked -> honest silence, 6h cooldown between probes.
+# This canary is the meter: one trivial runner step, cheap.
+# Wall closed -> probe blocked -> honest silence between probes.
 # Owner opens the ceiling -> canary goes green -> the network revives itself.
+# canary cadence 24h — billing-wall probes emit failure emails ~1/day while
+# compute wall is closed; widen further if storm resumes.
+# Measured 61-d: while walled, the live dispatch cadence is governed by
+# Autonomy/agents/compute-park-ledger.json (cooldownHours widened 6->24 in the
+# same wave); this schedule is the declared daily beat and keeps probing
+# once/day after revival. workflow_dispatch kept for manual probes.
 on:
+  schedule:
+    # daily 03:17 UTC — odd minute/hour, outside fleet rush hours
+    - cron: "17 3 * * *"
   workflow_dispatch:
 
 permissions:
