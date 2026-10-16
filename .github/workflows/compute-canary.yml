@@ -13,9 +13,6 @@ name: compute-canary
 # same wave); this schedule is the declared daily beat and keeps probing
 # once/day after revival. workflow_dispatch kept for manual probes.
 on:
-  schedule:
-    # daily 03:17 UTC — odd minute/hour, outside fleet rush hours
-    - cron: "17 3 * * *"
   workflow_dispatch:
 
 permissions:
