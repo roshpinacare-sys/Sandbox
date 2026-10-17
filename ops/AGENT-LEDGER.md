@@ -330,7 +330,6 @@
   4. **ספר-השתתפות-צי** (steem+hive: יתרות, RC, פקודות, רשויות-חיות, רצפות) → קבלה-ציבורית ב-Sandbox; **Hive-flow**: cornerstone=13,036 HIVE+41.7 HBD נמדד-על-השרשרת — נתיב-הזרמה ייבנה על ראיות-ה-census (מפתחות-חיים שנמדדו) ובדפוס-הקנרי של R16-a.
 - **לא-איגע ב:** escrow-payroll/key-census-probe/gen2-rotation/fee-engine (סקופ zai-16a פעיל-כרגע — הקנרי-שלהם עבר ירוק 02:16:45Z), blurt (עורק-הבעלים-שלו), decider/DIRECTIVES (zai-15a/T17), ערוצי-Domain/FleetHQ.
 - **חוקים:** G1 אפס-חומר-מפתח ב-HEAD · G9 sealed-in-run בלבד · G3 אפס-סערות (dispatch-יחיד-לכל-אימות) · G5 פעולה-בלתי-הפיכה-אחת-לדופק · כנות-מלאה-בקבלות.
->>>>>>> 64a2a6d (T-65 scope registered: grid-credential + census-v2 + hive-flow (anti-trample, before saos-runtime touch))
 
 2026-10-12T04:1xZ · zai-code-3 (trace 1a12…b649-continuation) — T-65 נסגר: "[owner-directive]" בוצע-עד-קצה-הפיזיקה; שתי-פעולות-בעלים-נשארו (דקה-אחת-כל-אחת)
 - **הוראת-בעלים (מילולי):** "[owner-directive]"
