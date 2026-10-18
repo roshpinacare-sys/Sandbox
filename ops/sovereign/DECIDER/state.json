@@ -1,17 +1,17 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-18T04:20:33Z",
+ "generatedAt": "2026-10-18T09:02:42Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
  "degraded": [],
  "chainVerify": {
-  "head": 110537414,
-  "mult": 0.0006204677346707225,
-  "treasuryNetSp": 2854.9,
+  "head": 110543027,
+  "mult": 0.0006204759255842161,
+  "treasuryNetSp": 2855.0,
   "minOperatorSp": 17.0,
-  "beaconChainMatch": false
+  "beaconChainMatch": true
  },
  "decisions": [
   {
@@ -79,7 +79,7 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-10-18T04:20:32Z",
+   "decidedAt": "2026-10-18T09:02:41Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -104,7 +104,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.3 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2610.6 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.3 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2610.7 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -131,12 +131,12 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 2854.9 SP (ראש 110537414, מכפיל 0.000620468)",
-    "יעד 3000 · פער 145.1 SP · מסילת-שימור 2800 (R2)",
+    "אוצרה נמדדת 2855.0 SP (ראש 110543027, מכפיל 0.000620476)",
+    "יעד 3000 · פער 145.0 SP · מסילת-שימור 2800 (R2)",
     "האצלה-יוצאת-נמדדת 1418.6 SP · נכנסת-נמדדת 244.3 SP",
-    "משואה מפרסמת 3064.8 SP · תואם=False",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 114376)",
-    "האצלות-אחרונות למפעילי-הצי: ~584.6 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
+    "משואה מפרסמת 2855.0 SP · תואם=True",
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 114725)",
+    "האצלות-אחרונות למפעילי-הצי: ~269.6 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
     "treasury": {
@@ -238,7 +238,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-18T04:20:33Z",
+   "decidedAt": "2026-10-18T09:02:42Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -246,14 +246,14 @@
    "area": "הנדסה",
    "status": "OBSERVING",
    "titleHe": "תקלות-הצוות",
-   "verdictHe": "הנושא-שנותב נמדד-נקי 15 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
+   "verdictHe": "הנושא-שנותב נמדד-נקי 16 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
    "evidence": [
-    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=15 (מהפנקס)"
+    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=16 (מהפנקס)"
    ],
-   "decidedAt": "2026-10-18T04:20:33Z",
+   "decidedAt": "2026-10-18T09:02:42Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
-    "cleanStreak": 15,
+    "cleanStreak": 16,
     "subjectResolved": true
    }
   },
@@ -267,7 +267,7 @@
    "evidence": [
     "orphans=6 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-10-18T04:20:33Z",
+   "decidedAt": "2026-10-18T09:02:42Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -278,23 +278,17 @@
    "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
    "verdictHe": "הריבונות מכריעה: 3 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 48/51 HAS_FAILURES (2026-10-17T22:43:19.301Z)",
+    "מאמת-הרשת: 48/51 HAS_FAILURES (2026-10-18T05:12:40.860Z)",
     "שער-האמת: ALL-GREEN (pass=7 fail=0)",
     "A31: core op saos.weave.core.v1 not found within the 26h window of any witness on the",
-    "A39: state.rail.lifetime.wsteem = 106849, minimum is 300000",
-    "A44: state.rail.lifetime.wsteem = 106849, minimum is 300000"
+    "A39: state.rail.lifetime.wsteem = 0, minimum is 300000",
+    "A44: state.rail.lifetime.wsteem = 0, minimum is 300000"
    ],
-   "decidedAt": "2026-10-18T04:20:33Z",
+   "decidedAt": "2026-10-18T09:02:42Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
- "workOrderStatus": {
-  "WO-FleetHQ-reds": {
-   "measured": true,
-   "subjectResolved": true,
-   "evidence": "קבלת-office-ci האחרונה: 'office-ci receipt: build pass, types pass [skip ci]'"
-  }
- },
+ "workOrderStatus": {},
  "noAction": [],
  "law": "MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE · R1-R5 ב-CHARTER"
 }
