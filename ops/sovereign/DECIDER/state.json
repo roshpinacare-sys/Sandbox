@@ -1,15 +1,15 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-17T00:45:57Z",
+ "generatedAt": "2026-10-18T04:20:33Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
  "degraded": [],
  "chainVerify": {
-  "head": 110504500,
-  "mult": 0.0006204196280860039,
-  "treasuryNetSp": 3310.3,
+  "head": 110537414,
+  "mult": 0.0006204677346707225,
+  "treasuryNetSp": 2854.9,
   "minOperatorSp": 17.0,
   "beaconChainMatch": false
  },
@@ -79,7 +79,7 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-10-17T00:45:56Z",
+   "decidedAt": "2026-10-18T04:20:32Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -104,7 +104,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.3 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~3066.0 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.3 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2610.6 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -131,12 +131,12 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 3310.3 SP (ראש 110504500, מכפיל 0.000620420)",
-    "יעד 3000 · פער 0.0 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 961.8 SP · נכנסת-נמדדת 244.3 SP",
-    "משואה מפרסמת 3502.6 SP · תואם=False",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 112275)",
-    "האצלות-אחרונות למפעילי-הצי: ~0.0 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
+    "אוצרה נמדדת 2854.9 SP (ראש 110537414, מכפיל 0.000620468)",
+    "יעד 3000 · פער 145.1 SP · מסילת-שימור 2800 (R2)",
+    "האצלה-יוצאת-נמדדת 1418.6 SP · נכנסת-נמדדת 244.3 SP",
+    "משואה מפרסמת 3064.8 SP · תואם=False",
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 114376)",
+    "האצלות-אחרונות למפעילי-הצי: ~584.6 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
     "treasury": {
@@ -158,50 +158,50 @@
       "interimFloorSp": 75
      },
      {
-      "operator": "siq",
-      "measuredSp": 70.0,
+      "operator": "tov",
+      "measuredSp": 87.5,
       "tier": 1,
       "interimFloorSp": 75
      },
      {
-      "operator": "tov",
+      "operator": "siq",
+      "measuredSp": 82.7,
+      "tier": 1,
+      "interimFloorSp": 75
+     },
+     {
+      "operator": "lsa",
+      "measuredSp": 79.9,
+      "tier": 1,
+      "interimFloorSp": 75
+     },
+     {
+      "operator": "haran",
+      "measuredSp": 78.4,
+      "tier": 1,
+      "interimFloorSp": 75
+     },
+     {
+      "operator": "cashmachine",
+      "measuredSp": 75.4,
+      "tier": 1,
+      "interimFloorSp": 75
+     },
+     {
+      "operator": "macrame",
+      "measuredSp": 75.2,
+      "tier": 1,
+      "interimFloorSp": 75
+     },
+     {
+      "operator": "woq",
       "measuredSp": 70.0,
       "tier": 1,
       "interimFloorSp": 75
      },
      {
       "operator": "wic",
-      "measuredSp": 70.0,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "woq",
-      "measuredSp": 33.5,
-      "tier": 2,
-      "interimFloorSp": 30
-     },
-     {
-      "operator": "cashmachine",
-      "measuredSp": 24.9,
-      "tier": 2,
-      "interimFloorSp": 30
-     },
-     {
-      "operator": "haran",
-      "measuredSp": 24.9,
-      "tier": 2,
-      "interimFloorSp": 30
-     },
-     {
-      "operator": "lsa",
-      "measuredSp": 24.9,
-      "tier": 2,
-      "interimFloorSp": 30
-     },
-     {
-      "operator": "macrame",
-      "measuredSp": 24.9,
+      "measuredSp": 41.7,
       "tier": 2,
       "interimFloorSp": 30
      },
@@ -225,13 +225,7 @@
      }
     ],
     "operatorsBelowInterimFloor": [
-     "siq",
-     "tov",
-     "wic",
-     "cashmachine",
-     "haran",
-     "lsa",
-     "macrame",
+     "woq",
      "hcsoldier4",
      "hcsoldier5",
      "hcsoldier6"
@@ -244,7 +238,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-17T00:45:57Z",
+   "decidedAt": "2026-10-18T04:20:33Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -252,14 +246,14 @@
    "area": "הנדסה",
    "status": "OBSERVING",
    "titleHe": "תקלות-הצוות",
-   "verdictHe": "הנושא-שנותב נמדד-נקי 14 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
+   "verdictHe": "הנושא-שנותב נמדד-נקי 15 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
    "evidence": [
-    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=14 (מהפנקס)"
+    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=15 (מהפנקס)"
    ],
-   "decidedAt": "2026-10-17T00:45:57Z",
+   "decidedAt": "2026-10-18T04:20:33Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
-    "cleanStreak": 14,
+    "cleanStreak": 15,
     "subjectResolved": true
    }
   },
@@ -273,7 +267,7 @@
    "evidence": [
     "orphans=6 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-10-17T00:45:57Z",
+   "decidedAt": "2026-10-18T04:20:33Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -282,21 +276,23 @@
    "status": "ENFORCED",
    "priority": "P1",
    "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
-   "verdictHe": "הריבונות מכריעה: 1 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
+   "verdictHe": "הריבונות מכריעה: 3 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-10-16T23:11:50.707Z)",
+    "מאמת-הרשת: 48/51 HAS_FAILURES (2026-10-17T22:43:19.301Z)",
     "שער-האמת: ALL-GREEN (pass=7 fail=0)",
-    "A31: core op saos.weave.core.v1 not found within the 26h window of any witness on the"
+    "A31: core op saos.weave.core.v1 not found within the 26h window of any witness on the",
+    "A39: state.rail.lifetime.wsteem = 106849, minimum is 300000",
+    "A44: state.rail.lifetime.wsteem = 106849, minimum is 300000"
    ],
-   "decidedAt": "2026-10-17T00:45:57Z",
+   "decidedAt": "2026-10-18T04:20:33Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
  "workOrderStatus": {
   "WO-FleetHQ-reds": {
    "measured": true,
-   "subjectResolved": false,
-   "evidence": "קבלת-office-ci האחרונה: 'office-ci receipt: build pass, types fail [skip ci]'"
+   "subjectResolved": true,
+   "evidence": "קבלת-office-ci האחרונה: 'office-ci receipt: build pass, types pass [skip ci]'"
   }
  },
  "noAction": [],
