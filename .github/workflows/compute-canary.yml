@@ -8,6 +8,7 @@ name: compute-canary
 # Owner opens the ceiling -> canary goes green -> the network revives itself.
 # canary cadence 24h — billing-wall probes emit failure emails ~1/day while
 # compute wall is closed; widen further if storm resumes.
+# t27 measured: repo-wide zero-step runner-acquisition failure — 31 consecutive across 4 workflows and 2 image versions (15.10–19.10), t22-b autopsy BlobNotFound; the Sandbox runner lane is dead at GitHub-infra level (not fixable from tree); the billing-wall openness it was built to meter is continuously proven by the fleet (hundreds of green runs/day org-wide). Passed to owner for GitHub-support-level revival.
 # Measured 61-d: while walled, the live dispatch cadence is governed by
 # Autonomy/agents/compute-park-ledger.json (cooldownHours widened 6->24 in the
 # same wave); this schedule is the declared daily beat and keeps probing
@@ -24,7 +25,7 @@ concurrency:
 
 jobs:
   canary:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: one trivial runner step proves the billing wall is open
