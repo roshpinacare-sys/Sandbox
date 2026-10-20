@@ -68,8 +68,32 @@ jobs:
             echo "no receipt changes — skip"
           else
             git commit -m "[tick] sovereign heartbeat: $(date -u +%FT%TZ)"
-            git pull --rebase origin main
-            git push origin main
+            OK=0
+            for i in 1 2 3; do
+              if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((i * 5))
+            done
+            if [ "$OK" != "1" ]; then
+              # [19.43 · DECISIONS #32-E alive-wins] a heartbeat is redundant work:
+              # if a live sibling tick already beat at origin inside the 12-min
+              # throttle window, the beat EXISTS — honest skip; only a missing
+              # beat stays loud (class-D).
+              git fetch -q origin main
+              LASTMSG=$(git log origin/main -1 --format='%s')
+              case "$LASTMSG" in
+                "[tick] sovereign heartbeat:"*)
+                  TS=$(git log origin/main -1 --format='%cI')
+                  AGE=$(( $(date -u +%s) - $(date -u -d "$TS" +%s) ))
+                  if [ "$AGE" -lt 900 ]; then
+                    echo "alive-wins: a live sibling tick already beat at origin (${AGE}s ago) — honest skip per DECISIONS #32-E, not a regression"
+                    exit 0
+                  fi
+                  ;;
+              esac
+              echo "tick push failed after retries and no fresh tick at origin — honest failure"
+              exit 1
+            fi
           fi
 
       # trace-1a1312f4: the runner-sleep self-chain (sleep ≤870s on the metered
