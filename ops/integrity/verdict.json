@@ -1,37 +1,36 @@
 {
   "schema": "integrity-guard/2",
-  "at": "2026-10-20T13:00:28.042Z",
-  "overall": "FAIL",
+  "at": "2026-10-20T14:35:29.339Z",
+  "overall": "PASS_WITH_ALERTS",
   "summary": {
     "sources": 11,
     "verified": 11,
-    "findings": 9,
+    "findings": 8,
     "counts": {
-      "CRITICAL": 1,
-      "FLAG": 4,
-      "MEDIUM": 4
+      "FLAG": 5,
+      "MEDIUM": 3
     }
   },
   "provenance": {
-    "runId": "39426715243",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39426715243",
-    "sha": "03c8d08991914e9041f869537681978bed8c9218"
+    "runId": "39440442223",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39440442223",
+    "sha": "36ce8d41f923aa4e763770beacdddae036d49f6f"
   },
   "verified": [
     {
       "where": "self:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=39414648144 conc=success repo=Sandbox"
+      "detail": "run=39426715243 conc=failure repo=Sandbox"
     },
     {
       "where": "Sandbox:receipts/wallet/verdict.json",
       "law": "verified",
-      "detail": "run=39421480834 conc=success repo=Sandbox"
+      "detail": "run=39434350863 conc=success repo=Sandbox"
     },
     {
       "where": "Sandbox:receipts/fleet/verdict.json",
       "law": "verified",
-      "detail": "run=39414992730 conc=success repo=Sandbox"
+      "detail": "run=39436366729 conc=success repo=Sandbox"
     },
     {
       "where": "Sandbox:ops/flow/receipt.json",
@@ -41,45 +40,45 @@
     {
       "where": "FleetHQ:receipts/office-ci/verdict.json",
       "law": "verified",
-      "detail": "run=39425950860 conc=success repo=FleetHQ"
+      "detail": "run=39440190424 conc=success repo=FleetHQ"
     },
     {
       "where": "Domain:office/data.json",
       "law": "verified",
-      "detail": "run=39425950860 conc=success repo=FleetHQ"
+      "detail": "run=39438073643 conc=success repo=FleetHQ"
     },
     {
       "where": "Domain:office/data.json",
       "law": "verified",
-      "detail": "run=39420101030 conc=success repo=Autonomy"
+      "detail": "run=39429845051 conc=success repo=Autonomy"
     },
     {
       "where": "Domain:office/data.json",
       "law": "verified",
-      "detail": "run=39422642587 conc=success repo=Autonomy"
+      "detail": "run=39437646988 conc=success repo=Autonomy"
     },
     {
       "where": "Domain:office/data.json",
       "law": "verified",
-      "detail": "run=39418129562 conc=success repo=Autonomy"
+      "detail": "run=39432761541 conc=success repo=Autonomy"
     },
     {
       "where": "Sandbox:ops/decision-truth/verdict.json",
       "law": "verified",
-      "detail": "run=39424945777 conc=success repo=Sandbox"
+      "detail": "run=39440442568 conc=success repo=Sandbox"
     },
     {
       "where": "Sandbox:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=39414648144 conc=success repo=Sandbox"
+      "detail": "run=39426715243 conc=failure repo=Sandbox"
     }
   ],
   "findings": [
     {
-      "level": "CRITICAL",
+      "level": "FLAG",
       "where": "Sandbox:receipts/grid/verdict.json",
-      "law": "conclusion-contradiction",
-      "detail": "receipt=PASS run=null"
+      "law": "unprovenanced",
+      "detail": "אין-טענת-run — שדרוג-מתוכנן ל-lane: artery-grid"
     },
     {
       "level": "FLAG",
@@ -91,7 +90,7 @@
       "level": "FLAG",
       "where": "Sandbox:state/verifier/verdict-latest.json",
       "law": "stale",
-      "detail": "196h > 26h — verifier.yml"
+      "detail": "198h > 26h — verifier.yml"
     },
     {
       "level": "FLAG",
@@ -114,12 +113,6 @@
     {
       "level": "MEDIUM",
       "where": "Sandbox:receipts/fleet/verdict.json",
-      "law": "agent-authored-receipt",
-      "detail": "committer=326012154+roshpinacare-sys@users.noreply.github.com — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions"
-    },
-    {
-      "level": "MEDIUM",
-      "where": "Sandbox:receipts/grid/verdict.json",
       "law": "agent-authored-receipt",
       "detail": "committer=326012154+roshpinacare-sys@users.noreply.github.com — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions"
     },
