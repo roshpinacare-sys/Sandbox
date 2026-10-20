@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-20T08:44:13.714Z",
+  "at": "2026-10-20T08:51:24.846Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "79cbbf0a17c786c3b23c5fcd0a7519f30d2b0f56",
+  "head": "6ef88f7e5a1d0e3fec1e08e88e77f067c03a363c",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -20,8 +20,8 @@
     },
     {
       "id": "law-gitleaks-push",
-      "verdict": "fail",
-      "detail": "gitleaks.yml exists but PR-only — pushes unscanned"
+      "verdict": "flag",
+      "detail": "dispatch-only billing tombstone (documented in-file) — artery law-no-secrets-at-head is the push coverage"
     },
     {
       "id": "law-r11-head-absent",
@@ -29,7 +29,9 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [],
-  "overall": "FAIL",
-  "reason": ""
+  "alerts": [
+    "law-gitleaks-push: dispatch-only billing tombstone (documented in-file) — artery law-no-secrets-at-head is the push coverage"
+  ],
+  "overall": "PASS",
+  "reason": "all checks and fleet laws pass"
 }
