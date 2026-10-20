@@ -1,57 +1,9 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-20T19:15:15.688Z",
-  "sources": [
-    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
-  ],
-  "asserts": [
-    {
-      "id": "law-grid-state-present",
-      "ok": true,
-      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-fresh",
-      "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 17min)",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-exec-alive",
-      "ok": true,
-      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=1296",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-revival-wired",
-      "ok": true,
-      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
-      "severity": "flag",
-      "verdict": "pass"
-    }
-  ],
+  "measuredAt": "2026-10-20T19:24:04.396Z",
+  "sources": [],
+  "asserts": [],
   "alerts": [],
-  "overall": "PASS",
-  "reason": "grid state measured from git; laws pass",
-  "provenance": {
-    "stateBlobSha": "bbdd6ab22e1453bdc29b487974b2a8230b402d31",
-    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "39481839318",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39481839318",
-    "sha": "f67da6991e920766fbd2d4503b790808a5364391"
-  },
-  "measured": {
-    "enabled": true,
-    "lastTickAt": "2026-10-20T18:58:22.610Z",
-    "ageMin": 17,
-    "ticks": 27655,
-    "lastVerdict": "GOVERNOR-ACCUMULATING",
-    "opsToday": 1296,
-    "lastTxid": "f5ad8d2c52443a87b92b994ad1ac614780f403bb"
-  }
+  "overall": "ERROR",
+  "reason": "ECO_WALLET_TOKEN absent — nothing measured, nothing claimed"
 }
