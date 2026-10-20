@@ -1,23 +1,23 @@
 {
  "schema": "verifier/1",
- "at": "2026-10-12T08:42:22.238Z",
+ "at": "2026-10-20T16:28:25.675Z",
  "overall": "FAIL",
  "authMode": "token(fed)",
  "counts": {
   "checks": 11,
-  "degraded": 3,
-  "fail": 1
+  "degraded": 0,
+  "fail": 2
  },
  "levels": {
   "sbx.wf-sovereign-tick": "NOTICE",
   "sbx.wf-sovereign-state": "OK",
   "sbx.wf-artery-watch": "OK",
   "sbx.wf-federation": "OK",
-  "sbx.wf-fleet-yield": "DEGRADED",
+  "sbx.wf-fleet-yield": "OK",
   "sbx.wf-fleet-heal": "OK",
-  "dev.rate": "DEGRADED",
-  "steem.fleet": "OK",
-  "steem.treasury": "DEGRADED",
+  "dev.rate": "NOTICE",
+  "steem.fleet": "FAIL",
+  "steem.treasury": "NOTICE",
   "blurt.alive": "FAIL",
   "rot.hygiene": "OK"
  },
@@ -27,8 +27,8 @@
    "level": "NOTICE",
    "why": "latest completed=failure",
    "evidence": {
-    "at": "2026-10-12T08:01:39Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38221104499"
+    "at": "2026-10-20T16:08:18Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39454769764"
    }
   },
   {
@@ -36,8 +36,8 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-12T08:18:27Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38222767178"
+    "at": "2026-10-20T16:00:14Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39453551683"
    }
   },
   {
@@ -45,8 +45,8 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-12T08:16:16Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38222547792"
+    "at": "2026-10-20T16:08:06Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39454738258"
    }
   },
   {
@@ -54,17 +54,17 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-12T08:29:50Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38223909310"
+    "at": "2026-10-20T16:21:38Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39456732993"
    }
   },
   {
    "id": "sbx.wf-fleet-yield",
-   "level": "DEGRADED",
-   "why": "last success 175min ago > slot",
+   "level": "OK",
+   "why": "success recent",
    "evidence": {
-    "at": "2026-10-12T05:47:45Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38209508488"
+    "at": "2026-10-20T15:41:44Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39450786554"
    }
   },
   {
@@ -72,67 +72,61 @@
    "level": "OK",
    "why": "success recent",
    "evidence": {
-    "at": "2026-10-12T07:49:55Z",
-    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/38219948675"
+    "at": "2026-10-20T16:21:38Z",
+    "url": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39456732174"
    }
   },
   {
    "id": "dev.rate",
-   "level": "DEGRADED",
-   "why": "heartbeat-without-building: codeShare 0% < 10% over 489 commits/24h",
+   "level": "NOTICE",
+   "why": "mixed activity: codeShare 10%",
    "evidence": {
     "windowHours": 24
    }
   },
   {
    "id": "steem.fleet",
-   "level": "OK",
-   "why": "fleet posted 2.5h ago",
+   "level": "FAIL",
+   "why": "fleet silent 25376h > 168h",
    "evidence": {
-    "newestPostHours": 2.5
+    "newestPostHours": 25376
    }
   },
   {
    "id": "steem.treasury",
-   "level": "DEGRADED",
-   "why": "treasury owner-treasury at 2926 SP < 3000 (recovery-plan §3)",
-   "evidence": {
-    "sp": 2926
-   }
+   "level": "NOTICE",
+   "why": "treasury account absent"
   },
   {
    "id": "blurt.alive",
    "level": "FAIL",
-   "why": "blurt fleet silent 206h > 168h — loop dead until proven otherwise",
-   "evidence": {
-    "newestPostHours": 205.7
-   }
+   "why": "blurt fleet never posted"
   },
   {
    "id": "rot.hygiene",
    "level": "OK",
-   "why": "no tombstone rot in 161 files scanned"
+   "why": "no tombstone rot in 171 files scanned"
   }
  ],
  "dev": {
-  "totalCommits": 489,
-  "codeRatePercent": 0,
+  "totalCommits": 743,
+  "codeRatePercent": 10,
   "classified": 42,
   "repos": [
    {
     "name": "Sandbox",
     "visibility": "public",
-    "pushedAt": "2026-10-12T08:32:56Z",
+    "pushedAt": "2026-10-20T16:28:26Z",
     "commits24h": 100,
     "redWorkflowEcho": null,
-    "codeShare": 0,
+    "codeShare": 8,
     "sampleSize": 12
    },
    {
     "name": "Console",
     "visibility": "public",
-    "pushedAt": "2026-10-12T06:50:47Z",
-    "commits24h": 79,
+    "pushedAt": "2026-10-20T16:11:59Z",
+    "commits24h": 100,
     "redWorkflowEcho": null,
     "codeShare": 0,
     "sampleSize": 12
@@ -140,7 +134,7 @@
    {
     "name": "Domain",
     "visibility": "public",
-    "pushedAt": "2026-10-12T08:05:01Z",
+    "pushedAt": "2026-10-20T16:27:42Z",
     "commits24h": 100,
     "redWorkflowEcho": null,
     "codeShare": 0,
@@ -149,32 +143,40 @@
    {
     "name": "TruthRail",
     "visibility": "public",
-    "pushedAt": "2026-10-12T00:46:17Z",
-    "commits24h": 22,
+    "pushedAt": "2026-10-17T06:54:27Z",
+    "commits24h": 0,
     "redWorkflowEcho": null,
-    "codeShare": 0,
-    "sampleSize": 6
+    "codeShare": null
    },
    {
     "name": "saos-dex",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
+    "visibility": "public",
+    "pushedAt": "2026-10-20T16:25:52Z",
+    "commits24h": 100,
+    "redWorkflowEcho": null,
+    "codeShare": 50,
+    "sampleSize": 6
    },
    {
     "name": "saos-control-center",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
-   },
-   {
-    "name": "saos-agents",
     "visibility": "public",
-    "pushedAt": "2026-10-11T19:28:09Z",
-    "commits24h": 4,
+    "pushedAt": "2026-10-20T16:23:19Z",
+    "commits24h": 14,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
    {
+    "name": "saos-agents",
+    "visibility": "public",
+    "pushedAt": "2026-10-18T05:20:44Z",
+    "commits24h": 0,
+    "redWorkflowEcho": null,
+    "codeShare": null
+   },
+   {
     "name": "FleetHQ",
     "visibility": "public",
-    "pushedAt": "2026-10-12T08:30:54Z",
+    "pushedAt": "2026-10-20T15:40:57Z",
     "commits24h": 100,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
@@ -182,96 +184,49 @@
    {
     "name": "saos-runtime",
     "visibility": "public",
-    "pushedAt": "2026-10-12T06:01:08Z",
-    "commits24h": 69,
+    "pushedAt": "2026-10-20T16:15:32Z",
+    "commits24h": 91,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "sovereign-lighthouse",
     "visibility": "public",
-    "pushedAt": "2026-10-12T08:30:58Z",
-    "commits24h": 15,
+    "pushedAt": "2026-10-20T15:50:15Z",
+    "commits24h": 37,
     "redWorkflowEcho": null,
     "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "saos-sovereign-foundry",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
+    "visibility": "public",
+    "pushedAt": "2026-10-20T05:34:31Z",
+    "commits24h": 1,
+    "redWorkflowEcho": null,
+    "codeShare": "UNMEASURED (budget)"
    },
    {
     "name": "steem",
-    "status": "UNVERIFIED-PRIVATE-OR-GONE"
+    "visibility": "public",
+    "pushedAt": "2026-10-20T16:24:09Z",
+    "commits24h": 100,
+    "redWorkflowEcho": null,
+    "codeShare": "UNMEASURED (budget)"
    }
   ]
  },
  "steem": {
   "host": "https://api.steemit.com",
-  "treasury": {
-   "account": "owner-treasury",
-   "exists": true,
-   "sp": 2926,
-   "vpPercent": 52,
-   "lastPostAgeHours": 5,
-   "lastVoteAgeHours": 2.6
-  },
-  "fleetNewestPostHours": 2.5,
+  "treasury": null,
+  "fleetNewestPostHours": 25376,
   "fleet": [
-   {
-    "account": "owner-treasury",
-    "exists": true,
-    "sp": 2926,
-    "vpPercent": 52,
-    "lastPostAgeHours": 5,
-    "lastVoteAgeHours": 2.6
-   },
-   {
-    "account": "acct-02",
-    "exists": true,
-    "sp": 78,
-    "vpPercent": 79,
-    "lastPostAgeHours": 5.3,
-    "lastVoteAgeHours": 1.3
-   },
-   {
-    "account": "acct-01",
-    "exists": true,
-    "sp": 75,
-    "vpPercent": 79,
-    "lastPostAgeHours": 5.6,
-    "lastVoteAgeHours": 1.6
-   },
-   {
-    "account": "acct-08",
-    "exists": true,
-    "sp": 33,
-    "vpPercent": 82,
-    "lastPostAgeHours": 2.5,
-    "lastVoteAgeHours": 0.6
-   },
-   {
-    "account": "acct-10",
-    "exists": true,
-    "sp": 70,
-    "vpPercent": 90,
-    "lastPostAgeHours": 2.5,
-    "lastVoteAgeHours": 2.6
-   },
-   {
-    "account": "acct-07",
-    "exists": true,
-    "sp": 31,
-    "vpPercent": 83,
-    "lastPostAgeHours": 2.5,
-    "lastVoteAgeHours": 2.6
-   },
    {
     "account": "spaminator",
     "exists": true,
     "sp": 69,
     "vpPercent": 0,
-    "lastPostAgeHours": 57510.7,
-    "lastVoteAgeHours": 12912.4
+    "lastPostAgeHours": 57710.4,
+    "lastVoteAgeHours": 13112.2
    },
    {
     "account": "saos",
@@ -287,50 +242,34 @@
     "sp": 0,
     "vpPercent": 0,
     "lastPostAgeHours": null,
-    "lastVoteAgeHours": 896.4
+    "lastVoteAgeHours": 1096.1
    },
    {
-    "account": "ynet",
+    "account": "acct-19",
     "exists": true,
     "sp": 0,
     "vpPercent": 0,
-    "lastPostAgeHours": 25176.2,
-    "lastVoteAgeHours": 776.3
-   },
-   {
-    "account": "acct-11",
-    "exists": true,
-    "sp": 17,
-    "vpPercent": 98,
-    "lastPostAgeHours": 5.6,
-    "lastVoteAgeHours": 13.5
-   },
-   {
-    "account": "acct-13",
-    "exists": true,
-    "sp": 17,
-    "vpPercent": 99,
-    "lastPostAgeHours": 4.1,
-    "lastVoteAgeHours": 1.6
+    "lastPostAgeHours": 25376,
+    "lastVoteAgeHours": 976
    }
   ]
  },
  "blurt": {
   "reachable": true,
   "host": "https://rpc.blurt.blog",
-  "fleetNewestPostHours": 205.7,
+  "fleetNewestPostHours": null,
   "errors": [],
-  "probedAt": "2026-10-12T08:42:43.033Z"
+  "probedAt": "2026-10-20T16:28:47.750Z"
  },
  "rot": {
-  "scanned": 161,
+  "scanned": 171,
   "hits": []
  },
  "soft": [],
- "tookMs": 20866,
- "prevChain": "84eaedac3075d56ab21d9ce41d732127ec3ebeadb907a7c3c4466cf7a01024fb",
+ "tookMs": 22149,
+ "prevChain": "d13239ddb014a921a3649111702a5bdaff891ec8da99fa3e26262f5f335ad09f",
  "chain": {
-  "prev": "84eaedac3075d56ab21d9ce41d732127ec3ebeadb907a7c3c4466cf7a01024fb",
-  "cur": "d13239ddb014a921a3649111702a5bdaff891ec8da99fa3e26262f5f335ad09f"
+  "prev": "d13239ddb014a921a3649111702a5bdaff891ec8da99fa3e26262f5f335ad09f",
+  "cur": "b2a1f7cf19428b88c2705e4db3e48111711b40e32936f5b8adacfbf9ffccf64d"
  }
 }

@@ -1,6 +1,6 @@
-# דוח-אמת (verifier) · 2026-10-12T08:42:22.238Z
+# דוח-אמת (verifier) · 2026-10-20T16:28:25.675Z
 
-**overall: FAIL** · auth: token(fed) · took: 20866ms · כללים: config.json (אפס-דעה-אישית)
+**overall: FAIL** · auth: token(fed) · took: 22149ms · כללים: config.json (אפס-דעה-אישית)
 
 > יש-דברים-שבורים-ממש — זה הדוח-הכן, בלי-קישוטים.
 
@@ -11,63 +11,54 @@
 | `sbx.wf-sovereign-state` | **OK** | success recent |
 | `sbx.wf-artery-watch` | **OK** | success recent |
 | `sbx.wf-federation` | **OK** | success recent |
-| `sbx.wf-fleet-yield` | **DEGRADED** | last success 175min ago > slot |
+| `sbx.wf-fleet-yield` | **OK** | success recent |
 | `sbx.wf-fleet-heal` | **OK** | success recent |
 
 ## 2. קצב-בנייה-אמת (24h · code = infra/engine/src/scripts, churn = state/receipts/ops)
 | ריפו | נראות | commits-24h | code-חלק | הערה |
 |---|---|---|---|---|
-| Sandbox | public | 100+ | 0% | ok |
-| Console | public | 79 | 0% | ok |
+| Sandbox | public | 100+ | 8% | ok |
+| Console | public | 100+ | 0% | ok |
 | Domain | public | 100+ | 0% | ok |
-| TruthRail | public | 22 | 0% | ok |
-| saos-dex | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
-| saos-control-center | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
-| saos-agents | public | 4 | UNMEASURED (budget) | ok |
+| TruthRail | public | 0 | — | ok |
+| saos-dex | public | 100+ | 50% | ok |
+| saos-control-center | public | 14 | UNMEASURED (budget) | ok |
+| saos-agents | public | 0 | — | ok |
 | FleetHQ | public | 100+ | UNMEASURED (budget) | ok |
-| saos-runtime | public | 69 | UNMEASURED (budget) | ok |
-| sovereign-lighthouse | public | 15 | UNMEASURED (budget) | ok |
-| saos-sovereign-foundry | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
-| steem | ? | 0 | — | UNVERIFIED-PRIVATE-OR-GONE |
+| saos-runtime | public | 91 | UNMEASURED (budget) | ok |
+| sovereign-lighthouse | public | 37 | UNMEASURED (budget) | ok |
+| saos-sovereign-foundry | public | 1 | UNMEASURED (budget) | ok |
+| steem | public | 100+ | UNMEASURED (budget) | ok |
 
-**מדד-מסכם:** codeShare = 0% (42 commits מסווגים מתוך 489)
-> שיפוט: `dev.rate` = **DEGRADED** — heartbeat-without-building: codeShare 0% < 10% over 489 commits/24h
+**מדד-מסכם:** codeShare = 10% (42 commits מסווגים מתוך 743)
+> שיפוט: `dev.rate` = **NOTICE** — mixed activity: codeShare 10%
 
 ## 3. אמת-על-השרשרת · Steem (https://api.steemit.com)
 | חשבון | SP אפקטיבי | VP% | פוסט-אחרון | הצבעה-אחרונה |
 |---|---|---|---|---|
-| אוצר-הצי | 2926 | 52% | 5h | 2.6h |
-| @acct-02 | 78 | 79% | 5.3h | 1.3h |
-| @acct-01 | 75 | 79% | 5.6h | 1.6h |
-| @acct-08 | 33 | 82% | 2.5h | 0.6h |
-| @acct-10 | 70 | 90% | 2.5h | 2.6h |
-| @acct-07 | 31 | 83% | 2.5h | 2.6h |
-| @spaminator | 69 | 0% | 57510.7h | 12912.4h |
+| @spaminator | 69 | 0% | 57710.4h | 13112.2h |
 | @saos | 5 | 0% | מעולם-לא | — |
-| @powerspan | 0 | 0% | מעולם-לא | 896.4h |
-| @ynet | 0 | 0% | 25176.2h | 776.3h |
-| @acct-11 | 17 | 98% | 5.6h | 13.5h |
-| @acct-13 | 17 | 99% | 4.1h | 1.6h |
+| @powerspan | 0 | 0% | מעולם-לא | 1096.1h |
+| @acct-19 | 0 | 0% | 25376h | 976h |
 
-> `steem.fleet` = **OK** — fleet posted 2.5h ago
-> `steem.treasury` = **DEGRADED** — treasury owner-treasury at 2926 SP < 3000 (recovery-plan §3)
+> `steem.fleet` = **FAIL** — fleet silent 25376h > 168h
+> `steem.treasury` = **NOTICE** — treasury account absent
 
 ## 4. Blurt (https://rpc.blurt.blog)
-פוסט-צי-הכי-חדש: 205.7h · נמדד 2026-10-12T08:42:43.033Z
-> `blurt.alive` = **FAIL** — blurt fleet silent 206h > 168h — loop dead until proven otherwise
+פוסט-צי-הכי-חדש: מעולם-לא · נמדד 2026-10-20T16:28:47.750Z
+> `blurt.alive` = **FAIL** — blurt fleet never posted
 
 ## 5. שלמות-עץ (ריקבון-מצבות)
-נסרקו 161 קבצים; פגומים: 0
+נסרקו 171 קבצים; פגומים: 0
 
 ## 6. דלתא-מול-הריצה-הקודמת
-- ↗ השתפר: `sbx.wf-sovereign-tick` FAIL → **NOTICE**
-- ↘ התדרדר: `sbx.wf-fleet-yield` OK → **DEGRADED**
-- ↘ התדרדר: `dev.rate` OK → **DEGRADED**
+- ↗ השתפר: `sbx.wf-fleet-yield` DEGRADED → **OK**
+- ↗ השתפר: `dev.rate` DEGRADED → **NOTICE**
+- ↘ התדרדר: `steem.fleet` OK → **FAIL**
+- ↗ השתפר: `steem.treasury` DEGRADED → **NOTICE**
 
 ## 7. משימות-שנצרתו-עכשיו
-- **V-LOOP-FLEET-YIELD** — עורק-סנדבוקס סטלה/אדום — בדיקת-שורש + רה-הצתה (workflow_dispatch / תיקון-ה-workflow)
-- **V-DEV-FOCUS** — דופק-בלי-בנייה: להפנות-משאב-סוכנים מטביעות-מצב לבניית-מוצר/תיקונים אמתיים
-- **V-TREASURY-BALANCE** — איזון-אוצר לפי §3: לשמר ≥3,000 SP אצל-האוצר; top-up חשבונות-פעילים ל-100 SP
+- **V-GRID-REVIVE** — החייאת-מסלול-פרסום-הצי לפי-מדיניות §4 (2-3 פוסטים/שבוע/חשבון, ייחודיות, גילוי-נאות)
 - **V-BLURT-REVIVE** — החייאת-לופ-בלורט דרך gated blurt-connector (תנאי: P0 מפתחות-חדשים; workflow_dispatch בלבד + reviewer)
 
 ## 8. שיטה-וראיות
