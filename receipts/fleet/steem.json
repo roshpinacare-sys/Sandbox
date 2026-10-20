@@ -1,17 +1,17 @@
 {
-  "at": "2026-10-20T08:05:34.581Z",
+  "at": "2026-10-20T08:14:40.031Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "c03d2ce72f4a27d0d8ad17d6b2451b9d6f5db5a7",
+  "head": "d2f5cb7cd8d1af64083b6733e594ae1c56e70e92",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
-    "engineSelftest": "fail"
+    "engineSelftest": "pass"
   },
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "pass",
-      "detail": "gitleaks HEAD scan: 0 findings"
+      "verdict": "flag",
+      "detail": "gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-U3huWC/steem-cockpit/agent/recovery-meta.json"
     },
     {
       "id": "law-no-skipped-pass",
@@ -29,7 +29,9 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-U3huWC/steem-cockpit/agent/recovery-meta.json"
+  ],
   "overall": "FAIL",
-  "reason": "engineSelftest failed:   57.8b SKIP (honest): upload/htx.txt absent on this host — exposure guard runs where the seal lives |  | SELFTEST 1939/1941 FAIL | "
+  "reason": ""
 }
