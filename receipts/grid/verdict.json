@@ -1,9 +1,57 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-20T13:35:17.284Z",
-  "sources": [],
-  "asserts": [],
+  "measuredAt": "2026-10-20T13:54:03.833Z",
+  "sources": [
+    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
+  ],
+  "asserts": [
+    {
+      "id": "law-grid-state-present",
+      "ok": true,
+      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-fresh",
+      "ok": true,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 6min)",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-exec-alive",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=2482",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-revival-wired",
+      "ok": true,
+      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
+      "severity": "flag",
+      "verdict": "pass"
+    }
+  ],
   "alerts": [],
-  "overall": "ERROR",
-  "reason": "ECO_WALLET_TOKEN absent — nothing measured, nothing claimed"
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
+  "provenance": {
+    "stateBlobSha": "ae1e9c9609eeea84d50bd44fc6bfdeb3c8d024c4",
+    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "runId": "39434352261",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39434352261",
+    "sha": "1fe58bb387b781706668b452b8562b8d30bbbdfe"
+  },
+  "measured": {
+    "enabled": true,
+    "lastTickAt": "2026-10-20T13:47:53.437Z",
+    "ageMin": 6,
+    "ticks": 23729,
+    "lastVerdict": "GOVERNOR-ACCUMULATING",
+    "opsToday": 2482,
+    "lastTxid": "315abbb01f91f8450f545e7224b0df385466a646"
+  }
 }
