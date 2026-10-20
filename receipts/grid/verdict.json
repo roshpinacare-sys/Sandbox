@@ -1,9 +1,57 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-20T22:27:42.705Z",
-  "sources": [],
-  "asserts": [],
+  "measuredAt": "2026-10-20T22:48:44.323Z",
+  "sources": [
+    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
+  ],
+  "asserts": [
+    {
+      "id": "law-grid-state-present",
+      "ok": true,
+      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-fresh",
+      "ok": true,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 11min)",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-exec-alive",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=BROADCAST opsToday=1352",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-revival-wired",
+      "ok": true,
+      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
+      "severity": "flag",
+      "verdict": "pass"
+    }
+  ],
   "alerts": [],
-  "overall": "ERROR",
-  "reason": "ECO_WALLET_TOKEN absent — nothing measured, nothing claimed"
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
+  "provenance": {
+    "stateBlobSha": "661abf6aa47ee934cee3d4fae13ca833035cbfb7",
+    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "runId": "39510741741",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39510741741",
+    "sha": "5c1e57c7e325082df5e1cce49aea11a86dfadfaa"
+  },
+  "measured": {
+    "enabled": true,
+    "lastTickAt": "2026-10-20T22:37:48.764Z",
+    "ageMin": 11,
+    "ticks": 27835,
+    "lastVerdict": "BROADCAST",
+    "opsToday": 1352,
+    "lastTxid": "f4dfd7f19bb636dbaebf31a7e39acd3e9846f296"
+  }
 }
