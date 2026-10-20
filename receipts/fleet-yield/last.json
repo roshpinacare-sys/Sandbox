@@ -1,27 +1,107 @@
 {
   "schema": "fleet-yield/1",
-  "at": "2026-10-20T08:44:16.519Z",
-  "verdict": "SELFTEST-GATE-RED",
-  "engineHead": "79cbbf0a17c7",
+  "at": "2026-10-20T09:51:06.080Z",
+  "verdict": "INTEL-OK",
+  "engineHead": "47811378b7ad",
   "selftest": {
-    "passed": null,
-    "total": null,
-    "status": "UNPARSED",
-    "code": 1,
-    "timedOut": false
+    "passed": 1941,
+    "total": 1941,
+    "status": "PASS"
   },
-  "tail": [
-    "at file:///home/runner/work/Sandbox/Sandbox/fleet-engine/mini-services/saos-engine/steemtx.mjs:380:32",
-    "at Array.map (<anonymous>)",
-    "at buildTx (file:///home/runner/work/Sandbox/Sandbox/fleet-engine/mini-services/saos-engine/steemtx.mjs:380:21)",
-    "at file:///home/runner/work/Sandbox/Sandbox/fleet-engine/mini-services/saos-engine/selftest.mjs:372:15",
-    "at ModuleJob.run (node:internal/modules/esm/module_job:343:25)",
-    "at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)",
-    "at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)",
-    "Node.js v22.23.3"
-  ],
+  "state": {
+    "vestsPerSP": 1611.458464,
+    "tvs": 325073189331.4205,
+    "tvf": 201726074.015,
+    "head": "110597733"
+  },
+  "voter": {
+    "account": "headcorner",
+    "status": "read-ok",
+    "vestsEff": 4448424.783539,
+    "vpEff": 34.8,
+    "votesRead": "get_account_history:100x5",
+    "recentVotes": []
+  },
+  "candidates": {
+    "scanned": 480,
+    "selected": [
+      {
+        "author": "aboutkrypto",
+        "permlink": "crypto-update-oct-20-2026-mvghg237",
+        "weight": 6836,
+        "ageMinutes": 21,
+        "tag": "crypto"
+      },
+      {
+        "author": "roohiasif99",
+        "permlink": "season-34-week-9-challenge-questions-question-no2",
+        "weight": 6814,
+        "ageMinutes": 22,
+        "tag": "steem"
+      },
+      {
+        "author": "ll2unicc",
+        "permlink": "researcher-claims-neural-networks-far-easier-to-understand-than-thought-20261020t091912z",
+        "weight": 6666,
+        "ageMinutes": 32,
+        "tag": "technology"
+      }
+    ],
+    "rejectedTop": [
+      "foxkoit/cold-morning-and-tether:too-young",
+      "steemburnup/burn-pool-1792487842163:day-cap",
+      "lifetrail/5w2fis-the-11-111-steem-challenge:day-cap",
+      "techcirkle/rpa-consulting-checklist-2026:day-cap",
+      "hive-173434/daily-manually-curated-top-posts-october-19-2026-6lxe7w:day-cap",
+      "chorock/hive-price-reversed-down-after-touching-great-resistance:day-cap",
+      "mauromar/sam-altman-confirmed-that-openai-is-going-to-build-a-humanoid-robot-sam-altman-confirmo-que-openai-va-a-construir-un-robot:day-cap",
+      "love-speeder/how-i-have-doubled-60-000-steem-within-58-days-for-you-20261020t072501:day-cap",
+      "hricks/why-solana-sol-is-the-best-crypto-for-beginner-traders:day-cap",
+      "steemburnup/burn-pool-1792480642064:day-cap",
+      "muzegen-france/how-to-make-viral-hotel-lobby-ai-videos-the-complete-wan-3-0-guide-for-creators:day-cap",
+      "ellymin/38nqzb:short-body",
+      "verseyking/in-30-days-with-just-a-phone-what-would-you-do-44qghe:day-cap",
+      "headcorner/sv-20261020-mvgajle4:self-fleet"
+    ],
+    "rejectedCount": 430,
+    "crowded": 0,
+    "dayCapReached": true,
+    "votedOnChain": [],
+    "dedup": "on-chain"
+  },
+  "laws": {
+    "maxPostVotes": 100,
+    "maxPerDay": 30,
+    "ageWindow": [
+      10,
+      240
+    ],
+    "minVpEffPct": 35,
+    "weights": [
+      70,
+      35
+    ],
+    "ref": "docs/measured/t35-probe.json — SP/G-rshares peak 0.000416 @10-30 votes · -55% @150+ (T-35, 96 chain ops)"
+  },
+  "capitalPolicy": {
+    "check": "MEASURED",
+    "decidedAt": "2026-10-20T05:13:14Z",
+    "keepFloorSp": 2800,
+    "operatorsWatched": 13,
+    "treasuryNetSp": 2760.5,
+    "treasuryAboveFloor": false,
+    "operatorsBelowFloor": [
+      "wic:61SP<75",
+      "woq:20.5SP<30",
+      "hcsoldier4:17SP<30",
+      "hcsoldier5:17SP<30",
+      "hcsoldier6:17SP<30"
+    ],
+    "floorAlert": true
+  },
+  "tookMs": 11902,
   "chain": {
-    "prev": "a5d89c940bb148f13a7545a637e60db4082f5951f145e7740b08797f6f2229f8",
-    "cur": "9bddff084963a1409996397206bf0cfb15cd774116c2c56717cb8822551f06a5"
+    "prev": "9bddff084963a1409996397206bf0cfb15cd774116c2c56717cb8822551f06a5",
+    "cur": "e067575cdd963b38c6cd828fe97c4d84bdcb2703e665b4c57ff64b21d18f2b72"
   }
 }
