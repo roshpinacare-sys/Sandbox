@@ -138,19 +138,41 @@ try {
 function gitleaksHeadScan(wdir, repName) {
   if (!GLBIN) return { id: "law-no-secrets-at-head", verdict: "flag", detail: "scanner unavailable this run (download failed) — no HEAD secret scan" };
   const rep = join(tmp, `gl-${repName}.json`);
+  // LAW-C (wave-19.39): המוֹת-חוק מכבד את פנקס-השקרים-השליליים הרשמי .gitleaksignore (בבעלות-הריפו).
+  // ממצא-מנוטרל-בפנקס = פסק-דין מתועד (עוגן-שלמות/עיצוב-כספת), לא סוד-פתוח. ממצא-חי-שאינו-בפנקס נשאר אדום.
+  let ledger = new Set();
+  try {
+    ledger = new Set(readFileSync(join(wdir, ".gitleaksignore"), "utf8").split(/\r?\n/).map((s) => s.trim()).filter((s) => s && !s.startsWith("#")));
+  } catch { /* no ledger — every finding is live */ }
+  const isLedgered = (f) => {
+    // gitleaks emits File relative to the INVOCATION cwd (may carry the source-dir prefix) —
+    // normalize to repo-root-relative so ledger pins (repo-root) match regardless of how the
+    // scanner was invoked. Measured 19.39: `--source steem` ⇒ File="steem/agent/…".
+    const files = new Set([String(f.File || "")]);
+    const base = String(wdir).replace(/\/+$/, "");
+    for (const p of [...files]) { if (base) { const i = p.indexOf(`${base}/`); if (i >= 0) files.add(p.slice(i + base.length + 1)); } }
+    for (const file of files) {
+      if (ledger.has(`${file}:${f.RuleID}:${f.StartLine}`) || ledger.has(`${file}:${f.RuleID}`) || ledger.has(`${file}:${f.StartLine}:${f.RuleID}`)) return true;
+      if (f.Fingerprint && ledger.has(String(f.Fingerprint))) return true;
+    }
+    return false;
+  };
   try {
     execFileSync(GLBIN, ["detect", "--source", wdir, "--no-git", "--report-format", "json", "--report-path", rep, "--redact", "--no-banner", "--log-level", "error"], { timeout: 300000, stdio: ["ignore", "pipe", "pipe"] });
-    return { id: "law-no-secrets-at-head", verdict: "pass", detail: "gitleaks HEAD scan: 0 findings" };
+    return { id: "law-no-secrets-at-head", verdict: "pass", detail: ledger.size ? `gitleaks HEAD scan: 0 findings (${ledger.size} ledger pin(s) armed)` : "gitleaks HEAD scan: 0 findings" };
   } catch (e) {
     // exit 1 = findings; פרס-מטא-דאטה בלבד (--redact — אפס-ערכים)
-    let count = 0; const top = [];
+    let count = 0; const top = []; let ignored = 0;
     try {
-      const findings = JSON.parse(readFileSync(rep, "utf8"));
-      count = findings.length;
-      const uniq = [...new Set(findings.map((f) => `${f.RuleID}@${f.File || ""}`))];
+      const all = JSON.parse(readFileSync(rep, "utf8"));
+      const live = all.filter((f) => !isLedgered(f));
+      ignored = all.length - live.length;
+      count = live.length;
+      const uniq = [...new Set(live.map((f) => `${f.RuleID}@${f.File || ""}`))];
       top.push(...uniq);
     } catch { /* report unreadable */ }
-    return { id: "law-no-secrets-at-head", verdict: count > 0 ? "flag" : "flag", detail: count > 0 ? `gitleaks HEAD scan: ${count} finding(s) — redacted metadata: ${top.join(", ")}` : "scan ran, report unreadable" };
+    const ledgerNote = ignored ? ` — ${ignored} ledgered false-positive(s) honored (.gitleaksignore)` : (ledger.size ? " — ledger pins armed, none matched" : "");
+    return { id: "law-no-secrets-at-head", verdict: count > 0 ? "flag" : "pass", detail: count > 0 ? `gitleaks HEAD scan: ${count} live finding(s)${ledgerNote} — redacted metadata: ${top.join(", ")}` : `gitleaks HEAD scan: 0 live findings${ledgerNote}` };
   }
 }
 
