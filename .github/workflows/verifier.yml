@@ -50,6 +50,7 @@ jobs:
         env:
           FED_TOKEN: ${{ secrets.SBX_FLEET_PAT }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node engine/verifier.mjs --guard-minutes 22
 
       # חסם-הדחיפה (fail-closed) על-הטריטוריה-שלי בלבד (דפוס-sovereign.yml).
@@ -67,6 +68,7 @@ jobs:
         env:
           FED_TOKEN: ${{ secrets.SBX_FLEET_PAT }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: |
           git config user.name "roshpinacare-sys"
           git config user.email "326012154+roshpinacare-sys@users.noreply.github.com"

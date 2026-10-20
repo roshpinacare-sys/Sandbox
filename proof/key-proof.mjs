@@ -42,13 +42,22 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { fleetNames, scrubAll } from "../engine/refs.mjs"; // חוק-השטח-הפומבי (wave-19.44 port)
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ORG = "roshpinacare-sys";
 const REPOS = ["roshpina", "anchor-baseline", "saos-jummper", "Sdk", "Adsmarket"];
-const FLEET = [OWNER_ACC, "cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6"];
+// חוק-השטח-הפומבי (wave-19.44): הרוסטר נגזר בזמן-ריצה מ-FLEET_ROSTER_MAP — refs בלבד בקוד.
+const FLEET = (() => {
+  try { return fleetNames(["acct-00","acct-01","acct-02","acct-03","acct-04","acct-05","acct-06","acct-07","acct-08","acct-09","acct-10","acct-11","acct-12","acct-13"]); }
+  catch (e) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — key-proof not measurable (honest FAIL)"); process.exit(1); }
+})();
 // ה-9 של R11 (owner keys לא-בכספת → tx_missing_owner_auth) — saos-dex SAOS_BREAKTHROUGH_PROOF §15.4
-const NINE = ["cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wog", "woq"];
+// (acct-08 חסר מה-9 לפי-ההגדרה-המקורית)
+const NINE = (() => {
+  try { return fleetNames(["acct-01","acct-02","acct-03","acct-04","acct-05","acct-06","acct-07","acct-09","acct-10"]); }
+  catch (e) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — NINE not measurable (honest FAIL)"); process.exit(1); }
+})();
 const ROLES = ["owner", "active", "posting", "memo"];
 const NODES = ["https://api.steemit.com", "https://api.justyy.com", "https://steem-api.4everland.org"];
 const B58A = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
@@ -604,7 +613,7 @@ function buildSoldierProbe(chainState, accountsRaw) {
       ownerThreshold: raw.owner?.weight_threshold ?? null,
       ownerAuthCount: (raw.owner?.key_auths?.length || 0) + (raw.owner?.account_auths?.length || 0),
       postingAuthCount: (raw.posting?.key_auths?.length || 0) + (raw.posting?.account_auths?.length || 0),
-      note: name === "wic" ? "proof-of-mechanism: rotated 2026-09-12 (tx 9fd13d50…) per SAOS_BREAKTHROUGH_PROOF §15.4" : NINE.includes(name) ? "rotation requires owner-issued keys (cross-ref 11-b OWNER-GATE-PLAYBOOK)" : null,
+      note: name === FLEET[8] ? "proof-of-mechanism: rotated 2026-09-12 (tx 9fd13d50…) per SAOS_BREAKTHROUGH_PROOF §15.4" : NINE.includes(name) ? "rotation requires owner-issued keys (cross-ref 11-b OWNER-GATE-PLAYBOOK)" : null,
     });
   }
   const nine = rows.filter((r) => NINE.includes(r.account));
@@ -617,7 +626,7 @@ function buildSoldierProbe(chainState, accountsRaw) {
       nineWithOwnerEqualsActive: nine.filter((r) => r.ownerEqualsActive).length,
       nineWithOwnerUpdatedSinceLeak_2026_09_12: nine.filter((r) => r.lastOwnerUpdate && r.lastOwnerUpdate >= "2026-09-12").map((r) => `${r.account}@${r.lastOwnerUpdate}`),
       fleetWithOwnerUpdatedSinceLeak_2026_09_12: rows.filter((r) => r.lastOwnerUpdate && r.lastOwnerUpdate >= "2026-09-12").map((r) => `${r.account}@${r.lastOwnerUpdate}`),
-      machineClaimCrossRef: "11-b recon (claims, not secrets): hcsoldier4/5/6 ACTIVE=GEN-2 · the 9 ACTIVE=GEN-1 (machine can sign active ops; owner-auth blocked). Possession of machine-held keys is intentionally NOT verifiable here — the vault is never touched by this engine.",
+      machineClaimCrossRef: "11-b recon (claims, not secrets): acct-11/12/13 ACTIVE=GEN-2 · the 9 ACTIVE=GEN-1 (machine can sign active ops; owner-auth blocked). Possession of machine-held keys is intentionally NOT verifiable here — the vault is never touched by this engine.",
     },
   };
 }
@@ -750,8 +759,8 @@ async function main() {
 
   const day = startedAt.slice(0, 10);
   const outPath = path.join(outDir, `key-proof-${day}.json`);
-  writeFileSync(outPath, JSON.stringify(artifact, null, 1) + "\n");
-  writeFileSync(path.join(outDir, "KEY-PROOF-LATEST.json"), JSON.stringify(artifact, null, 1) + "\n");
+  writeFileSync(outPath, scrubAll(JSON.stringify(artifact, null, 1)) + "\n");
+  writeFileSync(path.join(outDir, "KEY-PROOF-LATEST.json"), scrubAll(JSON.stringify(artifact, null, 1)) + "\n");
 
   /* SUMMARY TABLE (מפתחות-ציבוריים מותרים מתכנון; אף חומר-פרטי לא נדפס) */
   console.log("\n═══ KEY-PROOF SUMMARY ═══");

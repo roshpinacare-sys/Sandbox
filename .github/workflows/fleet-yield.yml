@@ -63,6 +63,7 @@ jobs:
         run: node engine/fleet-yield.mjs
         env:
           FLEET_ENGINE_DIR: fleet-engine
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
 
       # טריטוריה-לאינדקס לפני-הסריקה (כיסוי-staged+untracked) — גם-בכישלון (כנות)
       - name: stage territory

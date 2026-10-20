@@ -57,18 +57,14 @@ export const LAWS = {
   LADDER_ACCOUNT: OWNER_ACC,
 };
 
-/* מניפסט-14-החשבונות — הרשימה המדויקת כפי שנמדדה בקריאה #3 של נספח-א'
-   (ECONOMIC-PLAN-2026-10-11.md · עבודה-מקומית econ10d/raw-measure.json · zai-10d 19:54Z):
-   עוגן: ${OWNER_ACC} · פוסטרים ×5: cashmachine, haran, israelnews, lsa, macrame ·
-   מיקרו ×3: siq, tov, wic · wog, woq · חיילים-דור-חי ×3: hcsoldier4/5/6.
-   hcsoldier1/2/3 מחוץ-למניפסט (LOST-NO-CUSTODY, מעוגן ב-ONE-ROSTER-2026-10-11.md + פסקי-r196/r200). */
-export const ROSTER = [
-  OWNER_ACC,
-  "cashmachine", "haran", "israelnews", "lsa", "macrame",
-  "siq", "tov", "wic",
-  "wog", "woq",
-  "hcsoldier4", "hcsoldier5", "hcsoldier6",
-];
+/* מניפסט-14-החשבונות — אותה-מדידה (קריאה #3 של נספח-א' · ECONOMIC-PLAN-2026-10-11.md).
+   חוק-השטח-הפומבי (wave-19.44): הרוסטר נגזר בזמן-ריצה מסוד FLEET_ROSTER_MAP — refs בלבד בקוד;
+   לא-נפתר = יציאה-כנה 1. acct-ext-2/3/4 מחוץ-למניפסט (LOST-NO-CUSTODY, פסקי-r196/r200). */
+import { fleetNames, scrubAll } from "../../engine/refs.mjs";
+let ROSTER = [];
+try { ROSTER = fleetNames(["acct-00","acct-01","acct-02","acct-03","acct-04","acct-05","acct-06","acct-07","acct-08","acct-09","acct-10","acct-11","acct-12","acct-13"]); }
+catch (e) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — profit-oracle not measurable (honest FAIL)"); process.exit(1); }
+export { ROSTER };
 
 export const AGENT_ID = "profit-oracle v1 (zai-14b)";
 export const RECEIPT_SCHEMA = "roshpinacare.profit-oracle/1";
@@ -691,7 +687,7 @@ async function main() {
   const run = await runAll({ trigger, priorSummary });
 
   const doc = unionAppend(existing, run, { prior: priorPin });
-  const out = JSON.stringify(doc, null, 2) + "\n";
+  const out = scrubAll(JSON.stringify(doc, null, 2)) + "\n"; // scrub לפני-הסריקה — ה-audit רואה-את-הטקסט-הסופי (wave-19.44)
 
   /* auditor לפני-כתיבה (R1): פלט עם חומר-מפתות = אבוט, כלום לא נכתב */
   const findings = scanSecrets(out);
@@ -703,7 +699,7 @@ async function main() {
   fs.mkdirSync(path.dirname(latestPath), { recursive: true });
   fs.writeFileSync(latestPath, out);
   const mdPath = path.join(root, "ops", "profit-oracle", "verdict.md");
-  fs.writeFileSync(mdPath, renderVerdictMd(run));
+  fs.writeFileSync(mdPath, scrubAll(renderVerdictMd(run)));
 
   /* readback-אימות (charter VERIFY): מה שנכתב הוא מה שנמדד */
   try {

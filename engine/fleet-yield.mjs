@@ -43,10 +43,13 @@ const FETCH_LIMIT_DEFAULT = 80; // T-62 release: false self-limit raised — rea
 const sha256 = (s) => crypto.createHash("sha256").update(s).digest("hex");
 const num = (s) => Number(String(s ?? "0").split(" ")[0].replace(/,/g, "")) || 0;
 
+import { scrubAll, resolved } from "./refs.mjs"; // חוק-השטח-הפומבי (wave-19.44 port)
+if (!resolved()) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — receipt name-scrub unavailable; honest fail (refs law · DECISIONS #32: chain-derived writers fail-closed in ALL environments)"); process.exit(1); }
+
 function writeJson(p, v) {
   fs.mkdirSync(path.dirname(p), { recursive: true });
   const t = `${p}.tmp.${process.pid}`;
-  fs.writeFileSync(t, JSON.stringify(v, null, 2));
+  fs.writeFileSync(t, scrubAll(JSON.stringify(v, null, 2)));
   fs.renameSync(t, p); /* atomic — ה-rename הוא-נקודת-המחויבות */
 }
 
@@ -93,12 +96,12 @@ function writeLedgerReceipt(payload) {
   writeJson(path.join(REC_DIR, "last.json"), receipt);
   fs.mkdirSync(REC_DIR, { recursive: true });
   const logPath = path.join(REC_DIR, "log.jsonl");
-  fs.appendFileSync(logPath, JSON.stringify(receipt) + "\n");
+  fs.appendFileSync(logPath, scrubAll(JSON.stringify(receipt)) + "\n");
   try {
     const lines = fs.readFileSync(logPath, "utf8").split("\n").filter(Boolean);
     if (lines.length > LOG_MAX) {
       const t = `${logPath}.tmp.${process.pid}`;
-      fs.writeFileSync(t, lines.slice(-LOG_MAX).join("\n") + "\n");
+      fs.writeFileSync(t, scrubAll(lines.slice(-LOG_MAX).join("\n")) + "\n");
       fs.renameSync(t, logPath);
     }
   } catch { /* סבוב-הוא-תחזוקה-בלבד; הקבלה-כבר-נכתבה */ }

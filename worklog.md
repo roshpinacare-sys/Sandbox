@@ -65,8 +65,8 @@ Work Log:
   @2026-10-11T14:00:12Z (repo, md5-verified double-fetch).
 - Measured (chain, live): owner-treasury netSP=3165.9 (own 4026.0, out 1104.2,
   recv 244.2) => rail budget min(1200, net-2800)=365.9 SP; fleet deficits
-  ~445 SP total (siq/tov/wic/wog/woq ~66-69 SP each below 100 floor;
-  israelnews 6.0; soldiers 3.0 each below 20). owner-treasury ACTIVE authority
+  ~445 SP total (acct-06/acct-07/acct-08/acct-09/acct-10 ~66-69 SP each below 100 floor;
+  acct-03 6.0; soldiers 3.0 each below 20). owner-treasury ACTIVE authority
   = single key (fingerprint unpublished).
   DAILY gate is NOT blocking (14:00 verdict object has no day field) —
   next run retries cleanly once the credential fits.
@@ -191,11 +191,11 @@ Work Log:
     gross (the "525.20" T9 flagged as fake at 14:00Z landed AFTER its scan — no forgery);
     15:48/16:18 re-set waves. Engine self-report ALREADY-TODAY (18:46Z) consistent.
   * Floors still open (honest numbers): treasury 2925.6 netSP (<3000), ALL 10 operators
-    <100 SP (wog 11.9 .. israelnews 94.0), soldiers 17.0 (<20), hcsoldier1/2/3 empty.
+    <100 SP (acct-09 11.9 .. acct-03 94.0), soldiers 17.0 (<20), acct-ext-2/2/3 empty.
   * Economic gap: floors need ~429.5 SP; available above keep-2800 = 125.6 SP; options
     recorded (banned 244.2 SP inflow recovery ~57%, tiered floors, DEX micro-trading live:
     1,480 order ops + 25 fills today, Hive 13,036.5 liquid).
-  * Verified true: cornerstone 102,433.3 HP; blurt 1/7 nodes (saboin) honest.
+  * Verified true: acct-ext-1 102,433.3 HP; blurt 1/7 nodes (saboin) honest.
 - Revival verified (anti-fake): zai-code-3/E-series revived 5 repos at 19:19:37..57Z;
   independent check 19:2xZ — tombstones gone, REVIVAL present, archived:false on all 5.
 - PULSES WIRED (create-only, keyless, no secrets): lighthouse-pulse.yml (cron 13,43 * * *
@@ -210,7 +210,7 @@ Work Log:
 
 Stage Summary:
 - TRUE (verified): 5 repos revived; lighthouse+beacon alive on 30/60-min pulses; delegation
-  waves real (~1,014 SP gross); engine self-reports honest; cornerstone Hive claim exact.
+  waves real (~1,014 SP gross); engine self-reports honest; acct-ext-1 Hive claim exact.
 - OPEN (owner-level): floors deficit ~304 SP after available budget — tiered floors vs
   top-up vs banned-inflow recovery; office+living-domain (zai-sec working); GEN-3 rotation
   per T10 law; PAT overlap rotation at session end.
@@ -285,8 +285,8 @@ Work Log:
 - SIDE-BY-SIDE HEALTH: lighthouse pages-build success 19:28Z; beacon-pulse success 19:26Z;
   saos-runtime in_progress at 20:17Z (prev success 19:55Z); rate-limit pristine.
 - ANTI-FORGERY SPOT-CHECK (independent api.steemit.com, head 110,356,113): owner-treasury
-  netSP=2,925.6 — EXACTLY what beacon publishes and the room displays; israelnews 94.0,
-  wog 11.9 (honest floors). The room's numbers are chain truth.
+  netSP=2,925.6 — EXACTLY what beacon publishes and the room displays; acct-03 94.0,
+  acct-09 11.9 (honest floors). The room's numbers are chain truth.
 - Sandbox hygiene: eslint ignores tmp//download//db/ (standalone build assets choked lint);
   lint clean; test server on 3999 killed.
 
@@ -306,7 +306,7 @@ Agent: main (T13, owner mandate: no fakes, wire office<->network/sovereignty, au
 
 Work Log:
 - RECON (anti-trample): 4 repos committed-read; lanes mapped — zai-sec (office+domain), office-3D-v2 agent (Domain office3d/v2 + FleetHQ v2), zai-code-3/F-series (ops/flow/*), gov(T-58) revival lanes, E-series, T10/T11 laws. Scope registered BEFORE work: Sandbox@main ops/sovereign/T13-SCOPE-2026-10-11.md (commit effdc5a08, readback MD5 ok).
-- ANTI-FORGERY AUDIT (owner demand): independent api.steemit.com measurement with EXACT vest conversion (mult 0.0006202027, head 110,356,383): owner-treasury netSP=2,925.6, wog=11.9, israelnews=94.0 — EXACTLY what beacon publishes and office displays. NO FORGERY. First-pass 2,304.8 was MY stale-multiplier tool error — self-disclosed in TRUTH-AUDIT-2026-10-11T2035Z.md (commit 0e89d56c7) so the honesty law applies to me too.
+- ANTI-FORGERY AUDIT (owner demand): independent api.steemit.com measurement with EXACT vest conversion (mult 0.0006202027, head 110,356,383): owner-treasury netSP=2,925.6, acct-09=11.9, acct-03=94.0 — EXACTLY what beacon publishes and office displays. NO FORGERY. First-pass 2,304.8 was MY stale-multiplier tool error — self-disclosed in TRUTH-AUDIT-2026-10-11T2035Z.md (commit 0e89d56c7) so the honesty law applies to me too.
 - TRUTH BRIDGE v2: NEW /api/worlds-state — aggregates 7 keyless public sources (flow-map, lighthouse, beacon, dex/grid, VALUE-SCAN state, foreman mirror, DIRECT CHAIN measurement api.steemit.com exact-converted). 60s cache, fail-soft, honest degradation.
 - WORLDS (local flagship, port 3000 — my T12 lane extended): WorldDeck tabs משרד|רשת|עסקים|מקביל|גיוס·ערך:
   * NetworkWorld: flow-map (34 nodes/89 edges) as living organ islands per repo, freshness height/color, missing nodes red+honest count, orphans/ghosts/stale chips.
@@ -374,7 +374,7 @@ Work Log:
   51/51 ALL_PASS (live readback) · truth-gate ALL-GREEN · dex books two-sided (SAOS/USDS
   2073/2081, USDS/WSTEEM 60/62) · ratchet seed intact (treasuryProfitEverMu=213752,
   fundedEverMu=18300, rail.lifetime.wsteem=300000) · decider D1/D2 ENFORCED, D4 OBSERVING ·
-  chain exact (owner-treasury 4026.0+244.2−1344.6 = 2925.6 SP, wog 11.8, israelnews 94.0 —
+  chain exact (owner-treasury 4026.0+244.2−1344.6 = 2925.6 SP, acct-09 11.8, acct-03 94.0 —
   matches beacon 0.0 deviation) · D2's P0 agent errors CLEARED (aluf writing t1107) ·
   office-ci green since my T15 fix (5 successes 23:51-23:54Z) · local page browser-verified.
 - DISCONNECT #1 FOUND+ROOT-CAUSED: the two autonomous loops (value-scan, sovereign-decider)

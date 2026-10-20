@@ -47,9 +47,13 @@ jobs:
           node-version: 20
 
       - name: Selftest gate (zero network — must be all green)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node ops/profit-oracle/oracle.mjs --selftest
 
       - name: Live pulse (measure → honest verdicts → union receipt + verdict.md)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node ops/profit-oracle/oracle.mjs
 
       - name: Commit refreshed receipt + verdict (receipt = commit; rebase loop ×5)

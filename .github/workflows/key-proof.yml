@@ -43,11 +43,14 @@ jobs:
           node-version: 20
 
       - name: Selftest gate (zero network, zero scan — must be 26/26)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node proof/key-proof.mjs --selftest
 
       - name: Live proof (scan 5 leak-repos → derive → chain read-only → verdicts)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node proof/key-proof.mjs
 
       - name: Commit refreshed proof/out (receipt = commit; rebase loop ×5)

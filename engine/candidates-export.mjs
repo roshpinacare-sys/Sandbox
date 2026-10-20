@@ -17,6 +17,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { scrubAll, resolved } from "../engine/refs.mjs"; // חוק-השטח-הפומבי (wave-19.44 port)
+if (!resolved()) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — export name-scrub unavailable; honest fail (refs law · DECISIONS #32)"); process.exit(1); }
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const SRC = path.join(ROOT, "receipts", "fleet-yield", "last.json");
@@ -25,7 +27,7 @@ const DST = path.join(ROOT, "receipts", "cockpit-candidates.json");
 const writeJson = (p, v) => {
   fs.mkdirSync(path.dirname(p), { recursive: true });
   const t = `${p}.tmp.${process.pid}`;
-  fs.writeFileSync(t, JSON.stringify(v, null, 2));
+  fs.writeFileSync(t, scrubAll(JSON.stringify(v, null, 2)));
   fs.renameSync(t, p); /* אטומי — rename הוא-נקודת-המחויבות */
 };
 

@@ -27,6 +27,8 @@
 import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { scrubAll, resolved } from "./refs.mjs"; // חוק-השטח-הפומבי (wave-19.44 port)
+if (!resolved()) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — verdict name-scrub unavailable; honest fail (refs law · DECISIONS #32)"); process.exit(1); }
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OWNER = "roshpinacare-sys";
@@ -303,8 +305,8 @@ async function main() {
     verified, findings,
   };
   mkdirSync(path.join(ROOT, "ops/integrity"), { recursive: true });
-  writeFileSync(path.join(ROOT, "ops/integrity/verdict.json"), JSON.stringify(verdict, null, 2) + "\n");
-  appendFileSync(path.join(ROOT, "ops/integrity/log.jsonl"), JSON.stringify({ at, overall, ...summary }) + "\n");
+  writeFileSync(path.join(ROOT, "ops/integrity/verdict.json"), scrubAll(JSON.stringify(verdict, null, 2)) + "\n");
+  appendFileSync(path.join(ROOT, "ops/integrity/log.jsonl"), scrubAll(JSON.stringify({ at, overall, ...summary })) + "\n");
   try {
     const lines = readFileSync(path.join(ROOT, "ops/integrity/log.jsonl"), "utf8").trim().split("\n");
     if (lines.length > 300) writeFileSync(path.join(ROOT, "ops/integrity/log.jsonl"), lines.slice(-300).join("\n") + "\n");
@@ -323,7 +325,7 @@ async function main() {
     "[owner-directive]",
     "",
   ].join("\n");
-  writeFileSync(path.join(ROOT, "ops/integrity/REPORT.md"), md);
+  writeFileSync(path.join(ROOT, "ops/integrity/REPORT.md"), scrubAll(md));
   out("== verdict ==");
   out(overall + " · " + JSON.stringify(summary));
   for (const f of findings.sort((a, b) => LEVELS[b.level] - LEVELS[a.level]).slice(0, 14)) out("  " + f.level + " " + f.where + " " + f.law);

@@ -39,9 +39,13 @@ jobs:
           node-version: 20
 
       - name: Selftest first (mocked fetch — network-independent gate)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node research/research-lane.mjs --selftest
 
       - name: Run research lane (read-only; honest exit codes preserved)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: |
           set +e
           node research/research-lane.mjs | tee /tmp/research.out

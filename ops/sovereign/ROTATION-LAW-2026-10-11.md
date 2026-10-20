@@ -6,9 +6,9 @@
 
 ## 1 · מדידות-מאומתות (בסיס-ההחלטה · double-run identical · point-level)
 - **keyfit (טרי, self-test עובר, דיוק-נקודה 33-בייט, שרשרת double-fetch):**
-  10/10 מפעילות (cashmachine,haran,israelnews,lsa,macrame,siq,tov,wic,wog,woq) —
+  10/10 מפעילות (acct-01,acct-02,acct-03,acct-04,acct-05,acct-06,acct-07,acct-08,acct-09,acct-10) —
   WIF-הכספת **מתאים-חי** ל-authority ה-active בשרשרת (owner+posting גם-כן).
-  hcsoldier4/5/6 — owner-fit בלבד. **owner-treasury — אין-התאמה בשום-רמה** (הכספת-מיושנת מול-השרשרת).
+  acct-11/5/6 — owner-fit בלבד. **owner-treasury — אין-התאמה בשום-רמה** (הכספת-מיושנת מול-השרשרת).
 - **חוק-האימות:** פסק-דין לפי **בייטי-המפתח**, לא-מחרוזת-התצוגה (נמדד-באופן-בלתי-תלוי
   גם-ב-vault-drip.mjs: blurt מציג-checksum שבור — 04e2055c מול d4a396b2 על-גוף-זהה).
   חוק-הקידוד-האמפירי למחרוזות-השרשרת: checksum = ripemd160(comp)[:4] (42/42 הצבעות).

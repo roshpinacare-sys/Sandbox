@@ -20,6 +20,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync, appendFileSync } from "node:fs";
+import { fleetNames, scrubAll } from "./refs.mjs"; // חוק-השטח-הפומבי (wave-19.44 port)
 const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -34,8 +35,12 @@ const LEDGER_MAX = 60;
 
 const RAW = "https://raw.githubusercontent.com/roshpinacare-sys";
 const STEEM_RPC = "https://api.steemit.com";
-const FLEET = ["cashmachine", "haran", "israelnews", "lsa", "macrame",
-  "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6"];
+// חוק-השטח-הפומבי (wave-19.44): הרוסטר נגזר בזמן-ריצה מ-FLEET_ROSTER_MAP — refs בלבד בקוד.
+// לא-נפתר = יציאה-כנה 1 (לעולם לא רשימה-גולמית; חוק-הרצה-מקומית · DECISIONS #32).
+const FLEET = (() => {
+  try { return fleetNames(["acct-01","acct-02","acct-03","acct-04","acct-05","acct-06","acct-07","acct-08","acct-09","acct-10","acct-11","acct-12","acct-13"]); }
+  catch (e) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing/incomplete — decision-truth not measurable (honest FAIL, never a raw-list fallback)"); process.exit(1); }
+})();
 const TREASURY_TOL = 1.0;   // SP — כמו חוק-התאמת-המשואה של T14 עצמו
 const OPERATOR_TOL = 2.0;   // SP — דריפת-מכפיל בין-פעימות
 const DECIDER_STALL_S = 90 * 60;
@@ -436,19 +441,19 @@ function provenance() {
 
 function writeBooks(verdict, logs) {
   mkdirSync(OUT_DIR, { recursive: true });
-  writeFileSync(join(OUT_DIR, "verdict.json"), JSON.stringify(verdict, null, 1) + "\n");
+  writeFileSync(join(OUT_DIR, "verdict.json"), scrubAll(JSON.stringify(verdict, null, 1)) + "\n");
   const lp = join(OUT_DIR, "log.jsonl");
-  const entry = JSON.stringify({
+  const entry = scrubAll(JSON.stringify({
     at: verdict.generatedAt, overall: verdict.overall,
     decisions: (verdict.decisions || []).map((d) => `${d.id}:${d.truth}`),
     deciderStalled: verdict.decider ? verdict.decider.heartbeat.stalled : null,
     provenance: { runId: verdict.provenance.runId, sha: verdict.provenance.sha },
-  });
+  }));
   let lines = [];
   try { lines = readFileSync(lp, "utf8").split("\n").filter(Boolean); } catch { }
   lines.push(entry);
-  writeFileSync(lp, lines.slice(-LEDGER_MAX).join("\n") + "\n");
-  try { appendFileSync(join(OUT_DIR, "run.log"), logs.join("\n") + "\n"); } catch { }
+  writeFileSync(lp, scrubAll(lines.slice(-LEDGER_MAX).join("\n")) + "\n");
+  try { appendFileSync(join(OUT_DIR, "run.log"), scrubAll(logs.join("\n")) + "\n"); } catch { }
 }
 
 if (process.argv.includes("--selftest")) {

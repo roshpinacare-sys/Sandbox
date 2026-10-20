@@ -44,7 +44,7 @@ const FIXTURE_POLICY = {
   minVpEffPct: 35, baseWeightPct: 70, minWeightPct: 35,
   ageMinMinutes: 10, ageMaxMinutes: 240, minBodyChars: 600,
   maxPendingSbd: 30, fetchLimit: 50,
-  tags: ["steem", "ai"], excludeAccounts: [OWNER_ACC, "hcsoldier1"],
+  tags: ["steem", "ai"], excludeAccounts: [OWNER_ACC], // acct-ext-2 (lost-custody) is outside the roster map entirely — the exclusion is vacuous under the refs law (wave-19.44); owner-exclusion still exercises the curator's exclusion path
 };
 const FIXTURE_POSTS = [
   { author: "alice", permlink: "fresh-a", tag: "steem", voteCount: 20, tooYoung: false },

@@ -18,8 +18,8 @@
  *   E2 feed-divergence — witness-feed median vs internal-market mid (peg stress).
  *                        Baseline: feed 0.10409 vs mid 0.10153 → ~251 bps.
  *   E3 rc-census       — fleet RC health; starved (<40%) accounts suppress activity.
- *                        Baseline: hcsoldier4 8.05%, wog 25.9%, hcsoldier5 35.4%,
- *                        hcsoldier6 31.0%.
+ *                        Baseline: acct-11 8.05%, acct-09 25.9%, acct-12 35.4%,
+ *                        acct-13 31.0%.
  * Plus: joins latest local probe digests (probes/hive, probes/blurt) when present.
  *
  * Usage:
@@ -32,6 +32,7 @@ import fs from "node:fs";
 const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { fleetNames, scrubAll } from "../engine/refs.mjs"; // חוק-השטח-הפומבי (wave-19.44 port)
 
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const RESEARCH_DIR = DIR;
@@ -43,11 +44,11 @@ export const HIVE_RPC = "https://api.hive.blog";
 const TIMEOUT_MS = 12000;
 const RETRIES = 2;
 
-/** Fleet roster (14 accounts — same census as ECONOMIC-PLAN-2026-10-11 §2). */
-export const FLEET = [
-  OWNER_ACC, "cashmachine", "haran", "israelnews", "lsa", "macrame",
-  "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6",
-];
+/** Fleet roster (14 accounts — same census as ECONOMIC-PLAN-2026-10-11 §2).
+ *  חוק-השטח-הפומבי (wave-19.44): נגזר בזמן-ריצה מ-FLEET_ROSTER_MAP; לא-נפתר = יציאה-כנה. */
+export let FLEET = [];
+try { FLEET = fleetNames(["acct-00","acct-01","acct-02","acct-03","acct-04","acct-05","acct-06","acct-07","acct-08","acct-09","acct-10","acct-11","acct-12","acct-13"]); }
+catch (e) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — research-lane not measurable (honest FAIL)"); process.exit(1); }
 
 const RC_STARVED_PCT = 40; // below this = starved (10-d baseline law)
 
@@ -172,7 +173,7 @@ export async function e3RcCensus(opts = {}) {
   const exp = {
     id: "E3", name: "rc-census",
     hypothesis: "חשבונות-מורעבי-RC (<40%) מדכאים-פעילות-צי — סקר-שבועי מנבא חנק לפני-שהוא נראה בפועל",
-    baseline: { starved: ["hcsoldier4 8.05%", "wog 25.9%", "hcsoldier6 31.0%", "hcsoldier5 35.4%"], at: "2026-10-11T19:56Z" },
+    baseline: { starved: ["acct-11 8.05%", "acct-09 25.9%", "acct-13 31.0%", "acct-12 35.4%"], at: "2026-10-11T19:56Z" },
   };
   // steem rc_api uses OBJECT params (unlike condenser arrays law)
   const rc = await rpcCall(STEEM_RPC, "rc_api.find_rc_accounts", { accounts: FLEET }, opts);
@@ -240,7 +241,7 @@ export async function runResearchLane(opts = {}) {
 export function writeFindings(findings) {
   const date = findings.at.slice(0, 10);
   const file = path.join(RESEARCH_DIR, `findings-${date}.json`);
-  fs.writeFileSync(file, JSON.stringify(findings, null, 2) + "\n");
+  fs.writeFileSync(file, scrubAll(JSON.stringify(findings, null, 2)) + "\n");
   const ledger = path.join(RESEARCH_DIR, "LEDGER.md");
   if (!fs.existsSync(ledger)) {
     fs.writeFileSync(ledger,
@@ -248,8 +249,9 @@ export function writeFindings(findings) {
       "> research-lane.mjs (10-d) · read-only · every entry cites its finding file\n\n");
   }
   fs.appendFileSync(ledger,
-    `\n## ${findings.at}\n` +
-    findings.experiments.map((e) => ledgerEntry(findings.at, e)).join("\n") + "\n");
+    scrubAll(
+      `\n## ${findings.at}\n` +
+      findings.experiments.map((e) => ledgerEntry(findings.at, e)).join("\n") + "\n"));
   return file;
 }
 
@@ -298,11 +300,11 @@ export async function selftest() {
   // V5: E3 rc-census detects starved accounts (object-params law)
   const rcResult = { rc_accounts: [
     { account: OWNER_ACC, rc_manabar: { current_mana: "9820000" }, max_rc: "10000000" },
-    { account: "hcsoldier4", rc_manabar: { current_mana: "805000" }, max_rc: "10000000" },
-    { account: "wog", rc_manabar: { current_mana: "2590000" }, max_rc: "10000000" },
+    { account: FLEET[11], rc_manabar: { current_mana: "805000" }, max_rc: "10000000" },
+    { account: FLEET[9], rc_manabar: { current_mana: "2590000" }, max_rc: "10000000" },
   ] };
   const e3 = await e3RcCensus({ fetchImpl: mkRpcResponse(rcResult), retries: 1 });
-  t("E3: starved census finds hcsoldier4+wog", e3.ok === true && e3.measured.starved.length === 2 && /hcsoldier4/.test(e3.measured.starved[0]));
+  t("E3: starved census finds acct-11+acct-09", e3.ok === true && e3.measured.starved.length === 2 && new RegExp(FLEET[11]).test(e3.measured.starved[0]));
 
   // V6: ledger entry shape
   const entry = ledgerEntry("2026-10-11T20:00:00Z", { id: "E1", name: "spread-regime", ok: true, verdict: "v", next: "n" });

@@ -38,11 +38,14 @@ jobs:
 
       # שער-עצמי: המנוע מוכיח את-עצמו על וקטורים דטרמיניסטיים לפני כל-ריצה-חיה
       - name: selftest (fail-closed)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node engine/integrity-guard.mjs --selftest
 
       - name: measure receipts provenance (never trust, always verify)
         env:
           ECO_WALLET_TOKEN: ${{ secrets.ECO_WALLET_TOKEN }}
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node engine/integrity-guard.mjs
 
       - name: leak-scan (fail-closed)

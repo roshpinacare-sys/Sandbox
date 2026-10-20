@@ -7,11 +7,11 @@
 
 ```json
 [
-  ["delegate_vesting_shares", {"vesting_shares": "34828.198686 VESTS",  "delegatee": "haran",       "delegator": "owner-treasury"}],
-  ["delegate_vesting_shares", {"vesting_shares": "39987.931825 VESTS",  "delegatee": "cashmachine", "delegator": "owner-treasury"}],
-  ["delegate_vesting_shares", {"vesting_shares": "108515.637573 VESTS", "delegatee": "wic",         "delegator": "owner-treasury"}],
-  ["delegate_vesting_shares", {"vesting_shares": "107064.462627 VESTS", "delegatee": "woq",         "delegator": "owner-treasury"}],
-  ["delegate_vesting_shares", {"vesting_shares": "110934.262481 VESTS", "delegatee": "tov",         "delegator": "owner-treasury"}]
+  ["delegate_vesting_shares", {"vesting_shares": "34828.198686 VESTS",  "delegatee": "acct-02",       "delegator": "owner-treasury"}],
+  ["delegate_vesting_shares", {"vesting_shares": "39987.931825 VESTS",  "delegatee": "acct-01", "delegator": "owner-treasury"}],
+  ["delegate_vesting_shares", {"vesting_shares": "108515.637573 VESTS", "delegatee": "acct-08",         "delegator": "owner-treasury"}],
+  ["delegate_vesting_shares", {"vesting_shares": "107064.462627 VESTS", "delegatee": "acct-10",         "delegator": "owner-treasury"}],
+  ["delegate_vesting_shares", {"vesting_shares": "110934.262481 VESTS", "delegatee": "acct-07",         "delegator": "owner-treasury"}]
 ]
 ```
 

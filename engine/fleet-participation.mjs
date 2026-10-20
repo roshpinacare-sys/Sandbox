@@ -14,12 +14,19 @@
 // ═══════════════════════════════════════════════════════════════════════════
 import { writeFileSync, appendFileSync, mkdirSync, readFileSync } from "node:fs";
 const OWNER_ACC = Buffer.from("aGVhZGNvcm5lcg==","base64").toString("utf8"); // אוצר-הבעלים — נגזר בזמן-ריצה, אפס-קישור-זהות במקור
+import { refOf, scrubAll, fleetNames } from "./refs.mjs";
 
 const STEEM_NODES = ["https://api.steemit.com", "https://api.justyy.com"];
 const HIVE_NODES = ["https://api.hive.blog", "https://api.deathwing.me"];
 const CENSUS_RAW = "https://raw.githubusercontent.com/roshpinacare-sys/saos-runtime/main/ops/key-census-probe/receipt-v2.json";
-const ROSTER = [OWNER_ACC, "cashmachine", "haran", "israelnews", "lsa", "macrame", "siq", "tov", "wic", "wog", "woq", "hcsoldier4", "hcsoldier5", "hcsoldier6"];
-const EXTRA = ["cornerstone"]; // hive-only
+// חוק-השטח-הפומבי (wave-2): הרוסטר מדובר ב-refs ניטרליים — השמות נגזרים בזמן-ריצה
+// מ-FLEET_ROSTER_MAP. אף שם-צי לא נמצא כליטרל. לא-נפתר = FAIL כן (לעולם לא 0/0-ירוק).
+const TREASURY_REF = "acct-00";
+const ROSTER_REFS = ["acct-00", "acct-01", "acct-02", "acct-03", "acct-04", "acct-05",
+  "acct-06", "acct-07", "acct-08", "acct-09", "acct-10", "acct-11", "acct-12", "acct-13"];
+const EXTRA_REFS = ["acct-14"]; // hive-capital בלבד
+let ROSTER = [], EXTRA = [];
+try { ROSTER = fleetNames(ROSTER_REFS); EXTRA = fleetNames(EXTRA_REFS); } catch { ROSTER = []; EXTRA = []; }
 const RC_WARN_PCT = 40;
 
 const out = (...a) => console.log(...a);
@@ -65,6 +72,11 @@ const rcPct = (a) => {
 const fnum = (s) => parseFloat(String(s ?? "0").split(" ")[0]) || 0;
 
 try {
+  if (!ROSTER.length) {
+    result.reason = "roster-unresolved: FLEET_ROSTER_MAP missing/incomplete — participation not measurable (honest FAIL, never a 0/0 green)";
+    result.alerts.push(result.reason);
+    throw new Error(result.reason);
+  }
   // 0) keys-live matrix from the census receipt (public repo, public keys only)
   let census = null;
   try {
@@ -109,7 +121,7 @@ try {
     const ha = hiveByName.get(name) ?? null;
     const roles = { steem: [...(live.get("steem:" + name) ?? [])], hive: [...(live.get("hive:" + name) ?? [])] };
     const row = {
-      account: name,
+      account: refOf(name),
       exists: { steem: !!sa, hive: !!ha },
       rolesLive: roles,
       steem: sa ? {
@@ -146,10 +158,10 @@ try {
       payroll: activeLive ? "open" : "no-active-key",
       hiveRails: roles.hive.length ? "keys-live:" + roles.hive.join("+") : ha ? "no-hive-keys-measured" : "no-hive-account",
     };
-    if ((row.steem?.rcPct ?? 100) < RC_WARN_PCT) result.alerts.push(`rc-starved: ${name} steem-rc=${row.steem?.rcPct}%`);
-    if (row.rails.market === "armed-idle-no-capital") result.alerts.push(`armed-idle: ${name} has live active key but ~zero liquid capital`);
-    if (name === OWNER_ACC && row.rails.market === "no-active-key") result.alerts.push(`${OWNER_ACC}-market-blocked: no active key in any machine-held material (census-v2 verdict=${census?.verdict ?? "?"}) — the ladder lives on-chain (openOrders=${row.steem?.openOrders ?? 0}) but cannot refresh; owner one-action pending`);
-    if (name === "cornerstone") result.alerts.push(`hive-capital: cornerstone holds ${row.hive?.hive} HIVE + ${row.hive?.hbd} HBD — machine holds no hive keys (flow awaits owner release)`);
+    if ((row.steem?.rcPct ?? 100) < RC_WARN_PCT) result.alerts.push(`rc-starved: ${refOf(name)} steem-rc=${row.steem?.rcPct}%`);
+    if (row.rails.market === "armed-idle-no-capital") result.alerts.push(`armed-idle: ${refOf(name)} has live active key but ~zero liquid capital`);
+    if (name === OWNER_ACC && row.rails.market === "no-active-key") result.alerts.push(`${TREASURY_REF}-market-blocked: no active key in any machine-held material (census-v2 verdict=${census?.verdict ?? "?"}) — the ladder lives on-chain (openOrders=${row.steem?.openOrders ?? 0}) but cannot refresh; owner one-action pending`);
+    if (name === EXTRA[0]) result.alerts.push(`hive-capital: ${EXTRA_REFS[0]} holds ${row.hive?.hive} HIVE + ${row.hive?.hbd} HBD — machine holds no hive keys (flow awaits owner release)`);
     result.accounts.push(row);
   }
 
@@ -174,8 +186,10 @@ try {
 }
 
 mkdirSync("receipts/fleet-participation", { recursive: true });
-writeFileSync("receipts/fleet-participation/latest.json", JSON.stringify(result, null, 2));
-try { appendFileSync("receipts/fleet-participation/log.jsonl", JSON.stringify({ at: result.measuredAt, overall: result.overall, reason: result.reason }) + "\n"); } catch {}
+// חוק-השטח-הפומבי: הקבלה נכתבת דרך scrubAll — כל שם-צי (מקבלת-ה-census הפומבית,
+// מהשרשרת) יוצא כ-ref. הברזל-השני: audit-ה-workflow.
+writeFileSync("receipts/fleet-participation/latest.json", scrubAll(JSON.stringify(result, null, 2)) + "\n");
+try { appendFileSync("receipts/fleet-participation/log.jsonl", scrubAll(JSON.stringify({ at: result.measuredAt, overall: result.overall, reason: result.reason })) + "\n"); } catch {}
 out("PARTICIPATION:", result.overall, "—", result.reason);
 (result.alerts || []).forEach((a) => out("ALERT:", a));
 process.exit(result.overall === "FAIL" ? 1 : 0);

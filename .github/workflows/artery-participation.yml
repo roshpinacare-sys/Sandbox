@@ -37,7 +37,26 @@ jobs:
           node-version: 20
 
       - name: Measure the fleet participation book (zero secrets)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node engine/fleet-participation.mjs
+
+      - name: public-surface audit (zero fleet names — refs law, fail-closed)
+        if: always()
+        run: |
+          # דפוס-האיסור נבנה בזמן-ריצה מ-base64 (אפס-שמות-צי בעץ — אחרת-הסריקה-תחסום-את-עצמה);
+          # wave-19.44 port: המנוע-המקומי היה-הגרסה-הקדם-refs (שמות-גולמיים בקוד+בקבלות) —
+          # הכותב מרופא; השער-הזה הוא-הקו-האחרון.
+          PAT=$(printf '%s' 'Y2FzaG1hY2hpbmV8aGNzb2xkaWVyfGlzcmFlbG5ld3N8bWFjcmFtZXxcYndvcVxifFxid29nXGJ8XGJ3aWNcYnxcYnNpcVxifFxibHNhXGJ8XGJoYXJhblxifFxidG92XGJ8Y29ybmVyc3RvbmV8aGVhZGNvcm5lcg==' | base64 -d)
+          # חוק-הטריטוריה (הלקח-החי-של-verifier.yml): השער סורק-את-מה-העורק-הזה מפרסם.
+          # סריקת-עץ-מלאה תעבור-כשכותבי-ה-python (DECIDER/VALUE-SCAN) יועברו-ל-refs (Next wave).
+          HITS=$(grep -rEn "$PAT" receipts/fleet-participation engine/fleet-participation.mjs engine/refs.mjs 2>/dev/null || true)
+          if [ -n "$HITS" ]; then
+            echo "$HITS" | head -20
+            echo "fleet-name leak in the public tree — blocked (refs law)"
+            exit 1
+          fi
+          echo "public-surface audit: clean (zero fleet names)"
 
       - name: Commit receipts (FF-only with yield, honest on failure)
         if: always()

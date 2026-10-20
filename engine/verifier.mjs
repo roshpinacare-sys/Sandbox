@@ -35,6 +35,8 @@ import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, sta
 import { execSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { scrubAll, resolved } from "./refs.mjs"; // חוק-השטח-הפומבי (wave-19.44 port)
+if (!resolved()) { console.error("roster-unresolved: FLEET_ROSTER_MAP missing — redact name-scrub unavailable; honest fail (refs law · DECISIONS #32)"); process.exit(1); }
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const sha256 = (s) => createHash("sha256").update(s).digest("hex");
@@ -428,7 +430,7 @@ export function verifyLedger(lines) {
    1a12…bc29: "operator handle neutralized") — הסורק נאפה-מחדש בכל-ריצה; בלי-המיפוי
    הזה כל-ריצה-מחדשת הייתה מחזירה את-השם-שה-scrub נטרל (מרוץ-אמת-מול-חסימה). */
 const REDACT = [[/בית-הכספת/g, "vault-home"], [/roshpinacare-sys\/steem/g, "engine-home"], [/@${OWNER_ACC}/g, "אוצר-הצי"]];
-export const redact = (s) => REDACT.reduce((a, [re, to]) => String(a).replace(re, to), s);
+export const redact = (s) => scrubAll(REDACT.reduce((a, [re, to]) => String(a).replace(re, to), s)); // +refs-scrub (wave-19.44): שמות-צי מה-census/מהשרשרת יוצאים-כ-refs
 
 /* ── דוח-עברית ── */
 function fmtCheck(c) { return `| \`${c.id}\` | **${c.level}** | ${String(c.why).replace(/\|/g, "/")} |`; }

@@ -46,11 +46,14 @@ jobs:
 
       # שער-עצמי: המנוע מוכיח את-עצמו על וקטורים דטרמיניסטיים לפני כל-ריצה-חיה
       - name: selftest (fail-closed)
+        env:
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node engine/decision-truth.mjs --selftest
 
       - name: re-measure every sovereign decision (never trust, always verify)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLEET_ROSTER_MAP: ${{ secrets.FLEET_ROSTER_MAP }}
         run: node engine/decision-truth.mjs
 
       - name: leak-scan (fail-closed)

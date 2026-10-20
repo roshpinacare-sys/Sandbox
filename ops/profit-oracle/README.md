@@ -14,7 +14,7 @@
 
 **Daily profit delta:** netWorth vs previous run → `PROFIT` (> +0.5%) · `FLAT` (±0.5%) · `LOSS` (< −0.5%) · `UNKNOWN`.
 
-**Roster (14, exact):** owner-treasury · posters cashmachine, haran, israelnews, lsa, macrame · micros siq, tov, wic · wog, woq · soldiers hcsoldier4/5/6 — verbatim from ECONOMIC-PLAN-2026-10-11.md appendix-א' call #3 (`get_accounts[14 fleet]`, measured by zai-10d 19:54Z). hcsoldier1/2/3 are outside the manifest (LOST-NO-CUSTODY, ONE-ROSTER-2026-10-11.md). Baseline replay verified: own-SP 4294.4 / eff-SP 3556.0 / zombie 91.195 SBD ×5 orders @0.0985 — the formulas reproduce the 19:54Z numbers.
+**Roster (14, exact):** owner-treasury · posters acct-01, acct-02, acct-03, acct-04, acct-05 · micros acct-06, acct-07, acct-08 · acct-09, acct-10 · soldiers acct-11/5/6 — verbatim from ECONOMIC-PLAN-2026-10-11.md appendix-א' call #3 (`get_accounts[14 fleet]`, measured by zai-10d 19:54Z). acct-ext-2/2/3 are outside the manifest (LOST-NO-CUSTODY, ONE-ROSTER-2026-10-11.md). Baseline replay verified: own-SP 4294.4 / eff-SP 3556.0 / zombie 91.195 SBD ×5 orders @0.0985 — the formulas reproduce the 19:54Z numbers.
 
 ## עברית · מה-הוא-עונה כל-יום
 
