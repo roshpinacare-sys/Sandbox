@@ -1,34 +1,34 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-10-20T07:23:39Z",
- "durationMs": 1751,
+ "generatedAt": "2026-10-20T08:20:38Z",
+ "durationMs": 1983,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
   "generatedAt": "2026-10-20T05:13:14Z",
-  "stateAgeMin": 130,
+  "stateAgeMin": 187,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
    "lastRunAt": "2026-10-13T03:29:21Z",
-   "ageS": 618857,
+   "ageS": 622276,
    "stalled": true
   }
  },
  "measures": {
   "chain": {
-   "head": 110594811,
+   "head": 110595940,
    "treasuryNetSp": 2754.2,
-   "mult": 0.0006205515877487071
+   "mult": 0.0006205532407042973
   },
   "beaconPulse": {
-   "treasuryNetSp": 2740.7
+   "treasuryNetSp": 2754.2
   },
   "faultedAgentsNow": [],
   "flowSummary": {
    "nodes": 38,
-   "edges": 83,
-   "orphans": 6,
+   "edges": 128,
+   "orphans": 1,
    "ghosts": null
   },
   "workOrderIds": [
@@ -48,7 +48,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 130min (limit 120)"
+     "detail": "state age 187min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -73,8 +73,8 @@
     },
     {
      "law": "beacon-vs-fresh",
-     "result": "mismatch",
-     "detail": "beacon=2740.7"
+     "result": "ok",
+     "detail": "beacon=2754.2"
     },
     {
      "law": "operators-basis",
@@ -99,7 +99,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 130min (limit 120)"
+     "detail": "state age 187min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -134,7 +134,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 130min (limit 120)"
+     "detail": "state age 187min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -149,8 +149,8 @@
    "checks": [
     {
      "law": "orphans-fresh",
-     "result": "ok",
-     "detail": "claimed=6 fresh=6"
+     "result": "mismatch",
+     "detail": "claimed=6 fresh=1"
     },
     {
      "law": "ghosts-fresh",
@@ -160,7 +160,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 130min (limit 120)"
+     "detail": "state age 187min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -176,18 +176,18 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 130min (limit 120)"
+     "detail": "state age 187min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   }
  ],
  "provenance": {
-  "runId": "39386183074",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39386183074",
-  "sha": "9e2fe148022a1377f3ee8709aca15a336436da57",
+  "runId": "39392684740",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39392684740",
+  "sha": "0729ace6ed464cf795fd164d45d53249fbf692ab",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-10-20T07:23:39Z"
+  "generatedAt": "2026-10-20T08:20:38Z"
  },
  "selftest": {
   "vectors": 16,
