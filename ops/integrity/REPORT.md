@@ -1,20 +1,20 @@
-# דוח-שומר-השלמות — 2026-10-20T17:41:46.176Z
+# דוח-שומר-השלמות — 2026-10-20T19:15:32.753Z
 
 **פסק-דין: PASS_WITH_ALERTS** · מקורות=11 · טענות-שאומתו=12 · ממצאים=7
 
 ## טענות-שאומתו מול Actions API
-- ✅ `self:ops/integrity/verdict.json` — run=39454774487 conc=success repo=Sandbox
-- ✅ `Sandbox:receipts/wallet/verdict.json` — run=39462549564 conc=success repo=Sandbox
+- ✅ `self:ops/integrity/verdict.json` — run=39468269103 conc=success repo=Sandbox
+- ✅ `Sandbox:receipts/wallet/verdict.json` — run=39476018228 conc=success repo=Sandbox
 - ✅ `Sandbox:receipts/fleet/verdict.json` — run=39460642466 conc=success repo=Sandbox
-- ✅ `Sandbox:receipts/grid/verdict.json` — run=39466339722 conc=success repo=Sandbox
-- ✅ `Sandbox:ops/flow/receipt.json` — run=39440439844 conc=success repo=Sandbox
+- ✅ `Sandbox:receipts/grid/verdict.json` — run=39481839318 conc=success repo=Sandbox
+- ✅ `Sandbox:ops/flow/receipt.json` — run=39472099272 conc=success repo=Sandbox
 - ✅ `FleetHQ:receipts/office-ci/verdict.json` — run=39461127538 conc=success repo=FleetHQ
 - ✅ `Domain:office/data.json` — run=39461127538 conc=success repo=FleetHQ
-- ✅ `Domain:office/data.json` — run=39457868215 conc=success repo=Autonomy
-- ✅ `Domain:office/data.json` — run=39461901233 conc=success repo=Autonomy
-- ✅ `Domain:office/data.json` — run=39465503960 conc=success repo=Autonomy
-- ✅ `Sandbox:ops/decision-truth/verdict.json` — run=39464404280 conc=success repo=Sandbox
-- ✅ `Sandbox:ops/integrity/verdict.json` — run=39454774487 conc=success repo=Sandbox
+- ✅ `Domain:office/data.json` — run=39477323570 conc=success repo=Autonomy
+- ✅ `Domain:office/data.json` — run=39476384770 conc=success repo=Autonomy
+- ✅ `Domain:office/data.json` — run=39477326847 conc=success repo=Autonomy
+- ✅ `Sandbox:ops/decision-truth/verdict.json` — run=39479906350 conc=success repo=Sandbox
+- ✅ `Sandbox:ops/integrity/verdict.json` — run=39468269103 conc=success repo=Sandbox
 
 ## ממצאים (מדורג — כשל-רשת-שלנו לעולם לא מדווח כזיוף)
 - **MEDIUM** `Sandbox:ops/flow/receipt.json` — agent-authored-receipt — committer=326012154+roshpinacare-sys@users.noreply.github.com — קבלה-הטוענת-הרצת-Actions שנכתבה-מחוץ-ל-Actions
