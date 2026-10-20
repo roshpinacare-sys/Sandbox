@@ -50,9 +50,13 @@ jobs:
           node-version: 22
 
       # דפוס-האחים (saos-runtime/steem): רק-noble — המנוע-אפס-תלות-חוץ-אחרת
-      - name: engine deps (noble only)
+      - name: engine deps (noble only — LOCKED to the engine's measured pin)
         working-directory: fleet-engine/mini-services/saos-engine
-        run: npm i --no-save @noble/hashes@^1.5.0 @noble/secp256k1@^2.2.3 --silent
+        # wave-19.40 root-cause (measured): the engine is lock-pinned to @noble/secp256k1@1.7.2
+        # (bun.lock + in-code «המנעול» comment) — noble v2 REMOVED signSync, so installing ^2.2.3
+        # here overrode the lock and crashed buildTx/signDigest on EVERY node version (the
+        # «node-22 divergence» theory of 19.38-l is falsified). node22.20 local + 1.7.2 = INTEL-OK.
+        run: npm i --no-save @noble/hashes@^1.5.0 @noble/secp256k1@1.7.2 --silent
 
       # תבונה-חיה: כישלון-מבני = יציאה 1 — והקבלה-האדומה-כבר-מקופלת-בפנקס
       - name: yield intel (selftest-gate → chain reads → curator laws → receipt)
