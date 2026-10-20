@@ -125,7 +125,13 @@ function engineSelftest(engDir) {
   const parsed = m
     ? { passed: Number(m[1]), total: Number(m[2]), status: String(m[3]).toUpperCase() }
     : { passed: null, total: null, status: "UNPARSED" };
-  const tail = text.split("\n").map((l) => l.trim()).filter(Boolean).slice(-8);
+  // workpath-scrub (wave-19.40, leak-scan law): stack lines carry absolute machine paths
+  // (file:// URLs and runner-style home roots) — receipts must stay machine-agnostic.
+  // basename+line:col keeps every diagnostic byte that matters, leaks nothing.
+  const scrub = (l) => l
+    .replace(/file:\/\/\/\S+?\/([^\/\s"']+\.\w+)(:\d+(?::\d+)?)?/g, "$1$2")
+    .replace(/(?:\/home\/(?:runner|z)|[A-Fa-f]:\\)[^\s"']*/g, (mm) => mm.split(/[\\/]/).pop() || "…");
+  const tail = text.split("\n").map((l) => scrub(l.trim())).filter(Boolean).slice(-8);
   return { parsed, tail, code: r.status, timedOut: r.error?.code === "ETIMEDOUT" || r.signal === "SIGTERM" };
 }
 
@@ -364,4 +370,4 @@ async function main() {
   }));
 }
 
-main().catch((e) => failReceipt("UNEXPECTED", { error: String(e?.stack || e).slice(0, 400) }));
+main().catch((e) => failReceipt("UNEXPECTED", { error: String(e?.stack || e).replace(/file:\/\/\/\S+?\/([^\/\s"']+\.\w+)/g, "$1").slice(0, 400) }));
