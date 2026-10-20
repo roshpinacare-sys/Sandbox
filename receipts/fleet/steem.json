@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-20T07:56:56.766Z",
+  "at": "2026-10-20T08:05:34.581Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "ac70df61c6ba4b8c99829d93d786397fc4ddd555",
+  "head": "c03d2ce72f4a27d0d8ad17d6b2451b9d6f5db5a7",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -10,8 +10,8 @@
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "flag",
-      "detail": "gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-Be9spE/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-Be9spE/steem-cockpit/mini-services/saos-engine/evidence/t72/probe-out.json, generic-api-key@/tmp/fleet-verify-Be9spE/steem-cockpit/mini-services/saos-engine/state/fleet-body-ledger.json"
+      "verdict": "pass",
+      "detail": "gitleaks HEAD scan: 0 findings"
     },
     {
       "id": "law-no-skipped-pass",
@@ -29,9 +29,7 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [
-    "law-no-secrets-at-head: gitleaks HEAD scan: 14 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-Be9spE/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-Be9spE/steem-cockpit/mini-services/saos-engine/evidence/t72/probe-out.json, generic-api-key@/tmp/fleet-verify-Be9spE/steem-cockpit/mini-services/saos-engine/state/fleet-body-ledger.json"
-  ],
+  "alerts": [],
   "overall": "FAIL",
   "reason": "engineSelftest failed:   57.8b SKIP (honest): upload/htx.txt absent on this host — exposure guard runs where the seal lives |  | SELFTEST 1939/1941 FAIL | "
 }
