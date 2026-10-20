@@ -77,10 +77,16 @@ function fleetLaws(wdir) {
   }
   laws.push({ id: "law-no-skipped-pass", verdict: theater === 0 ? "pass" : "fail", detail: `workflows scanned: ${scanned}, theater patterns: ${theater}` });
   // 2) סריקת-סודות על-push (אם-gitleaks.yml קיים — חייב push trigger)
+  // TOMBSTONE-AWARE (wave-19.39): ריפו-פרטי-מאחורי-חומת-החיוב עשוי להיות dispatch-only מתועד-בקובץ
+  // (steem: evidence issue #29 — ריצות-push מתות-ברמת-ה-job לפני-שלב-כלשהו). חוק-שאינו-יכול-להיות-ירוק
+  // מסווה-כשלים-אמתיים. הכיסוי-בפועל נמדד באותו-ריצה ע"י law-no-secrets-at-head (העורק = ה-push).
+  // לכן: tombstone מתועד ⇒ flag (נראה-תמיד), לא fail (אדום-נצחי). אין-טומבסטון-מתועד ⇒ fail כמקודם.
   const glPath = join(wfDir, "gitleaks.yml");
   if (existsSync(glPath)) {
-    const ok = readFileSync(glPath, "utf8").includes("push:");
-    laws.push({ id: "law-gitleaks-push", verdict: ok ? "pass" : "fail", detail: ok ? "gitleaks scans every push" : "gitleaks.yml exists but PR-only — pushes unscanned" });
+    const glTxt = readFileSync(glPath, "utf8");
+    const ok = glTxt.includes("push:");
+    const tombstone = !ok && glTxt.includes("workflow_dispatch:") && glTxt.includes("billing");
+    laws.push({ id: "law-gitleaks-push", verdict: ok ? "pass" : (tombstone ? "flag" : "fail"), detail: ok ? "gitleaks scans every push" : (tombstone ? "dispatch-only billing tombstone (documented in-file) — artery law-no-secrets-at-head is the push coverage" : "gitleaks.yml exists but PR-only — pushes unscanned") });
   } else laws.push({ id: "law-gitleaks-push", verdict: "flag", detail: "no gitleaks.yml in repo — no in-repo secret scan" });
   // 3) R11 חייב להישאר מחוץ-לHEAD
   const r11 = existsSync(join(wdir, "agent/vault/recovery-meta-2026-09-12.json"));
@@ -209,6 +215,8 @@ for (const repo of FLEET) {
     const checkFail = Object.values(r.checks).some((v) => v === "fail");
     const lawFail = r.laws.some((l) => l.verdict === "fail");
     r.overall = checkFail || lawFail ? "FAIL" : "PASS";
+    // honesty: a FAIL with empty reason is unmeasurable — name the failing law (wave-19.39)
+    if (!checkFail && lawFail && !r.reason) { const fl = r.laws.find((l) => l.verdict === "fail"); if (fl) r.reason = `${fl.id}: ${fl.detail}`.slice(0, 240); }
     if (r.overall === "PASS" && !r.reason) r.reason = "all checks and fleet laws pass";
   } catch (e) {
     r.overall = "ERROR";
@@ -216,7 +224,7 @@ for (const repo of FLEET) {
     out(`${repo.name}: ERROR — ${r.reason}`);
   }
   results.push(r);
-  overall.repos[repo.name] = { head: r.head, overall: r.overall, checks: r.checks, reason: r.reason };
+  overall.repos[repo.name] = { head: r.head, overall: r.overall, checks: r.checks, reason: r.reason, laws: r.laws.map(({ id, verdict }) => ({ id, verdict })) };
   if (r.alerts.length) overall.alerts.push(...r.alerts.map((a) => `${repo.name}: ${a}`));
 }
 
