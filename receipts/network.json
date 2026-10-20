@@ -1,34 +1,27 @@
 {
  "schema": "sandbox.network/1",
- "at": "2026-10-20T14:44:59.257Z",
+ "at": "2026-10-20T15:41:53.810Z",
  "sources": {
   "fleethq": {
-   "guard": {
-    "at": "2026-10-20T14:29:37.902Z",
-    "head": "6bb319f",
-    "origin": "649ab9a",
-    "behind": 0,
-    "ahead": 3,
-    "last_event": "push_rejected",
-    "last_push": {
-     "at": "2026-10-16T21:05:45.098Z",
-     "from": "cf02d02",
-     "to": "729a081"
-    }
-   },
+   "guard": null,
    "status": {
-    "ts": "2026-10-20T14:29:46Z",
-    "all_ok": true,
+    "ts": "2026-10-20T15:39:54Z",
+    "all_ok": false,
     "results": [
      {
+      "name": "llamacpp-local",
+      "verdict": "DOWN",
+      "latency_ms": 0
+     },
+     {
       "name": "nextjs-control",
-      "verdict": "OK",
-      "latency_ms": 283
+      "verdict": "UNEXPECTED",
+      "latency_ms": 10
      },
      {
       "name": "llm7-free",
       "verdict": "OK",
-      "latency_ms": 240
+      "latency_ms": 238
      },
      {
       "name": "eth-mainnet-rpc",
@@ -38,23 +31,24 @@
      {
       "name": "zero-rail-rpc",
       "verdict": "OK",
-      "latency_ms": 761
+      "latency_ms": 641
      }
     ]
    },
    "witness_row": {
-    "ts": "2026-10-20T14:29:46Z",
+    "ts": "2026-10-20T15:39:54Z",
     "nonce": null,
     "balance_eth": null,
     "address": null
    },
-   "fetched": "2026-10-20T14:44:59.257Z"
+   "fetched": "2026-10-20T15:41:53.811Z"
   },
   "self": {
-   "tick_at": "2026-10-20T14:44:59.166Z"
+   "tick_at": "2026-10-20T15:41:53.710Z"
   }
  },
  "notes": [
+  "guard: absent (fetch failed)",
   "witness_row: last row carries no witness fields (nonce/balance_eth/address absent)"
  ]
 }
