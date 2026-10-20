@@ -1,13 +1,13 @@
 {
-  "at": "2026-10-20T08:14:40.031Z",
+  "at": "2026-10-20T08:44:13.714Z",
   "slug": "roshpinacare-sys/Saosmartwallet",
   "head": "975cc72e37214ece14bd410d8827aabc1204c67a",
   "checks": {},
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "flag",
-      "detail": "gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-U3huWC/saos-wallet/tools/vault-zk-check.ts"
+      "verdict": "pass",
+      "detail": "gitleaks HEAD scan: 0 live findings — 1 ledgered false-positive(s) honored (.gitleaksignore)"
     },
     {
       "id": "law-no-skipped-pass",
@@ -50,9 +50,7 @@
       "detail": "receipt provenance: https://github.com/roshpinacare-sys/Saosmartwallet/actions/runs/39370993552"
     }
   ],
-  "alerts": [
-    "law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-U3huWC/saos-wallet/tools/vault-zk-check.ts"
-  ],
+  "alerts": [],
   "overall": "PASS",
   "reason": "all checks and fleet laws pass"
 }

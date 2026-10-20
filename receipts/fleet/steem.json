@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-20T08:14:40.031Z",
+  "at": "2026-10-20T08:44:13.714Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "d2f5cb7cd8d1af64083b6733e594ae1c56e70e92",
+  "head": "79cbbf0a17c786c3b23c5fcd0a7519f30d2b0f56",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -10,8 +10,8 @@
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "flag",
-      "detail": "gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-U3huWC/steem-cockpit/agent/recovery-meta.json"
+      "verdict": "pass",
+      "detail": "gitleaks HEAD scan: 0 live findings — 1 ledgered false-positive(s) honored (.gitleaksignore)"
     },
     {
       "id": "law-no-skipped-pass",
@@ -29,9 +29,7 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [
-    "law-no-secrets-at-head: gitleaks HEAD scan: 1 finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-U3huWC/steem-cockpit/agent/recovery-meta.json"
-  ],
+  "alerts": [],
   "overall": "FAIL",
   "reason": ""
 }
