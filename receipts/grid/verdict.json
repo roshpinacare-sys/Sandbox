@@ -1,9 +1,57 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-21T03:05:28.078Z",
-  "sources": [],
-  "asserts": [],
+  "measuredAt": "2026-10-21T03:14:32.295Z",
+  "sources": [
+    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
+  ],
+  "asserts": [
+    {
+      "id": "law-grid-state-present",
+      "ok": true,
+      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-fresh",
+      "ok": true,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 14min)",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-exec-alive",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=CYCLE-IN-FLIGHT opsToday=326",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-revival-wired",
+      "ok": true,
+      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
+      "severity": "flag",
+      "verdict": "pass"
+    }
+  ],
   "alerts": [],
-  "overall": "ERROR",
-  "reason": "ECO_WALLET_TOKEN absent — nothing measured, nothing claimed"
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
+  "provenance": {
+    "stateBlobSha": "7bdeb1bdb697da5cb384ace85137b778efa0b41d",
+    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "runId": "39537465616",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39537465616",
+    "sha": "5900fc085da6dda4dac04ef173e256ee6fd75580"
+  },
+  "measured": {
+    "enabled": true,
+    "lastTickAt": "2026-10-21T03:00:19.784Z",
+    "ageMin": 14,
+    "ticks": 28771,
+    "lastVerdict": "CYCLE-IN-FLIGHT",
+    "opsToday": 326,
+    "lastTxid": "1df7c644ecfb9b1d1ac22104714f476470153e9a"
+  }
 }
