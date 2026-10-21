@@ -1,57 +1,9 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-21T00:34:47.616Z",
-  "sources": [
-    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
-  ],
-  "asserts": [
-    {
-      "id": "law-grid-state-present",
-      "ok": true,
-      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-fresh",
-      "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 9min)",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-exec-alive",
-      "ok": true,
-      "detail": "grid executable: lastVerdict=BROADCAST opsToday=16",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-revival-wired",
-      "ok": true,
-      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
-      "severity": "flag",
-      "verdict": "pass"
-    }
-  ],
+  "measuredAt": "2026-10-21T00:58:42.463Z",
+  "sources": [],
+  "asserts": [],
   "alerts": [],
-  "overall": "PASS",
-  "reason": "grid state measured from git; laws pass",
-  "provenance": {
-    "stateBlobSha": "b45ac0d7a95b94b9a4940b30e9a1b8777364dcfb",
-    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "39522142701",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39522142701",
-    "sha": "a0b1be5c1cfe9a5b33f31db151e02ec73c899d77"
-  },
-  "measured": {
-    "enabled": true,
-    "lastTickAt": "2026-10-21T00:25:46.191Z",
-    "ageMin": 9,
-    "ticks": 27895,
-    "lastVerdict": "BROADCAST",
-    "opsToday": 16,
-    "lastTxid": "9df980408cf680be07a691d02189ec07c1dda9d1"
-  }
+  "overall": "ERROR",
+  "reason": "ECO_WALLET_TOKEN absent — nothing measured, nothing claimed"
 }
