@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-21T22:23:53.250Z",
+  "measuredAt": "2026-10-21T23:16:53.252Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -8,22 +8,8 @@
   "asserts": [
     {
       "id": "law-grid-state-present",
-      "ok": true,
-      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-fresh",
-      "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 10min)",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-exec-alive",
       "ok": false,
-      "detail": "grid enabled but blocked on credential (lastVerdict=CREDENTIAL-MISSING) — owner law: no such state where the grid does not work",
+      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
       "severity": "fail",
       "verdict": "fail"
     },
@@ -37,21 +23,12 @@
   ],
   "alerts": [],
   "overall": "FAIL",
-  "reason": "grid-law failed: law-grid-exec-alive",
+  "reason": "grid-law failed: law-grid-state-present",
   "provenance": {
-    "stateBlobSha": "8f662d7b70472f064fa8e27c5655d34120684c3e",
+    "stateBlobSha": "86d2e7d5e53b71052a2eab19b6e3a59145af72ba",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "39686089082",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39686089082",
-    "sha": "e619bfbb973ed413ff4f6e3fb0e5c68174f31bcf"
-  },
-  "measured": {
-    "enabled": true,
-    "lastTickAt": "2026-10-21T22:14:14.262Z",
-    "ageMin": 10,
-    "ticks": 330,
-    "lastVerdict": "CREDENTIAL-MISSING",
-    "opsToday": 1517,
-    "lastTxid": "4fc55135bc1e66e0a737d2939df1cd4f264e55f9"
+    "runId": "39692311571",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39692311571",
+    "sha": "3739022734e538296ba19de44368456948479c3c"
   }
 }
