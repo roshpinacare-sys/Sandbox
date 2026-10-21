@@ -1,8 +1,8 @@
 {
-  "at": "2026-10-21T08:49:33.000Z",
+  "at": "2026-10-21T11:29:35.246Z",
   "repos": {
     "steem-cockpit": {
-      "head": "543dad7fcd513b4cb91d1ae51a709e8a42f930a3",
+      "head": "4a5fcf46a412ceba6cef413054ced03f2a81a6f8",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -13,7 +13,7 @@
       "laws": [
         {
           "id": "law-no-secrets-at-head",
-          "verdict": "flag"
+          "verdict": "pass"
         },
         {
           "id": "law-no-skipped-pass",
@@ -21,7 +21,7 @@
         },
         {
           "id": "law-gitleaks-push",
-          "verdict": "flag"
+          "verdict": "pass"
         },
         {
           "id": "law-r11-head-absent",
@@ -30,7 +30,7 @@
       ]
     },
     "saos-dex": {
-      "head": "573b32c7c82b241a30d0a8c3820208e9a085670e",
+      "head": "8207beb13bf67ec303682b9b0f95287c895ae341",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -151,22 +151,19 @@
       ]
     }
   },
-  "alerts": [
-    "steem-cockpit: law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — 1 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fI6SGk/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl",
-    "steem-cockpit: law-gitleaks-push: dispatch-only billing tombstone (documented in-file) — artery law-no-secrets-at-head is the push coverage"
-  ],
+  "alerts": [],
   "overall": "PASS",
   "reason": "steem=PASS · saos-dex=PASS · saos-agents=PASS · Saosmartwallet=PASS · Adsmarket=PASS",
   "provenance": {
-    "runId": "39572168406",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39572168406",
-    "sha": "0faac06c9b93bfa2f702c16aaf8bdb4d40c537f2"
+    "runId": "39592316508",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39592316508",
+    "sha": "0de5f8b26940f90637cc3d393a6dbacb64b9aa3f"
   },
   "details": [
     {
-      "at": "2026-10-21T08:49:33.000Z",
+      "at": "2026-10-21T11:29:35.246Z",
       "slug": "roshpinacare-sys/steem",
-      "head": "543dad7fcd513b4cb91d1ae51a709e8a42f930a3",
+      "head": "4a5fcf46a412ceba6cef413054ced03f2a81a6f8",
       "checks": {
         "install": "pass",
         "engineInstall": "pass",
@@ -175,8 +172,8 @@
       "laws": [
         {
           "id": "law-no-secrets-at-head",
-          "verdict": "flag",
-          "detail": "gitleaks HEAD scan: 1 live finding(s) — 1 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fI6SGk/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl"
+          "verdict": "pass",
+          "detail": "gitleaks HEAD scan: 0 live findings — 2 ledgered false-positive(s) honored (.gitleaksignore)"
         },
         {
           "id": "law-no-skipped-pass",
@@ -185,8 +182,8 @@
         },
         {
           "id": "law-gitleaks-push",
-          "verdict": "flag",
-          "detail": "dispatch-only billing tombstone (documented in-file) — artery law-no-secrets-at-head is the push coverage"
+          "verdict": "pass",
+          "detail": "gitleaks scans every push"
         },
         {
           "id": "law-r11-head-absent",
@@ -194,17 +191,14 @@
           "detail": "absent at HEAD"
         }
       ],
-      "alerts": [
-        "law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — 1 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fI6SGk/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl",
-        "law-gitleaks-push: dispatch-only billing tombstone (documented in-file) — artery law-no-secrets-at-head is the push coverage"
-      ],
+      "alerts": [],
       "overall": "PASS",
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-21T08:49:33.000Z",
+      "at": "2026-10-21T11:29:35.246Z",
       "slug": "roshpinacare-sys/saos-dex",
-      "head": "573b32c7c82b241a30d0a8c3820208e9a085670e",
+      "head": "8207beb13bf67ec303682b9b0f95287c895ae341",
       "checks": {
         "install": "pass",
         "typecheck": "pass"
@@ -236,7 +230,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-21T08:49:33.000Z",
+      "at": "2026-10-21T11:29:35.246Z",
       "slug": "roshpinacare-sys/saos-agents",
       "head": "9651187d2e0b65c929983bb086290a097b139204",
       "checks": {
@@ -269,7 +263,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-21T08:49:33.000Z",
+      "at": "2026-10-21T11:29:35.246Z",
       "slug": "roshpinacare-sys/Saosmartwallet",
       "head": "24f08b8e09db561e5d067e7f75b7f4a4f6bb5a05",
       "checks": {},
@@ -325,7 +319,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-21T08:49:33.000Z",
+      "at": "2026-10-21T11:29:35.246Z",
       "slug": "roshpinacare-sys/Adsmarket",
       "head": "c989fc12d866d39f9fa2e1f4a808521db794aa6a",
       "checks": {},
