@@ -70,7 +70,12 @@ jobs:
             git commit -m "[tick] sovereign heartbeat: $(date -u +%FT%TZ)"
             OK=0
             for i in 1 2 3; do
-              if git pull --rebase origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
+              # DECISIONS #30 alive-writer-wins at the transport: snapshot files
+              # (latest.json/network.json) take the origin state on conflict - the
+              # writer that already pushed is the alive one; the JSONL streams
+              # union-merge (both planes lines survive). The honest-skip guard
+              # below remains the last resort.
+              if git pull --rebase -X theirs origin main && git push origin main; then OK=1; echo "push ok (attempt $i)"; break; fi
               git rebase --abort 2>/dev/null || true
               sleep $((i * 5))
             done
