@@ -1,0 +1,4 @@
+# fleet receipts are append-only JSONL streams written by concurrent planes
+# (DECISIONS #32 alive-writer-wins): union merge keeps every plane's lines —
+# a rebase race between two appenders is transport noise, not a truth conflict.
+receipts/*.jsonl merge=union
