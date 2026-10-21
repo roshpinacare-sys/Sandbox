@@ -1,16 +1,16 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-21T05:58:13Z",
+ "generatedAt": "2026-10-21T11:40:01Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
  "degraded": [],
  "chainVerify": {
-  "head": 110621697,
-  "mult": 0.0006205909314452216,
-  "treasuryNetSp": 1679.8,
-  "minOperatorSp": 40.1,
+  "head": 110628487,
+  "mult": 0.0006206008626483662,
+  "treasuryNetSp": 1644.9,
+  "minOperatorSp": 17.0,
   "beaconChainMatch": true
  },
  "decisions": [
@@ -78,7 +78,7 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-10-21T05:58:13Z",
+   "decidedAt": "2026-10-21T11:40:00Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -103,7 +103,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.4 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~1435.4 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.4 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~1400.5 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -130,12 +130,12 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 1679.8 SP (ראש 110621697, מכפיל 0.000620591)",
-    "יעד 3000 · פער 1320.2 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 2746.4 SP · נכנסת-נמדדת 244.4 SP",
-    "משואה מפרסמת 1679.8 SP · תואם=True",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 157662)",
-    "האצלות-אחרונות למפעילי-הצי: ~169.6 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
+    "אוצרה נמדדת 1644.9 SP (ראש 110628487, מכפיל 0.000620601)",
+    "יעד 3000 · פער 1355.1 SP · מסילת-שימור 2800 (R2)",
+    "האצלה-יוצאת-נמדדת 2781.5 SP · נכנסת-נמדדת 244.4 SP",
+    "משואה מפרסמת 1644.8 SP · תואם=True",
+    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 158870)",
+    "האצלות-אחרונות למפעילי-הצי: ~184.2 SP (רגלי-הצי — חיוניות, אין-לשחרר)"
    ],
    "policy": {
     "treasury": {
@@ -145,26 +145,20 @@
     },
     "operatorInterimFloors": [
      {
-      "operator": "hcsoldier4",
-      "measuredSp": 250.0,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "hcsoldier5",
-      "measuredSp": 250.0,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
       "operator": "hcsoldier6",
       "measuredSp": 250.0,
       "tier": 1,
       "interimFloorSp": 75
      },
      {
+      "operator": "haran",
+      "measuredSp": 78.4,
+      "tier": 1,
+      "interimFloorSp": 75
+     },
+     {
       "operator": "cashmachine",
-      "measuredSp": 169.9,
+      "measuredSp": 75.4,
       "tier": 1,
       "interimFloorSp": 75
      },
@@ -183,12 +177,6 @@
      {
       "operator": "woq",
       "measuredSp": 43.6,
-      "tier": 2,
-      "interimFloorSp": 30
-     },
-     {
-      "operator": "haran",
-      "measuredSp": 43.4,
       "tier": 2,
       "interimFloorSp": 30
      },
@@ -221,10 +209,24 @@
       "measuredSp": 40.1,
       "tier": 2,
       "interimFloorSp": 30
+     },
+     {
+      "operator": "hcsoldier4",
+      "measuredSp": 17.0,
+      "tier": 2,
+      "interimFloorSp": 30
+     },
+     {
+      "operator": "hcsoldier5",
+      "measuredSp": 17.0,
+      "tier": 2,
+      "interimFloorSp": 30
      }
     ],
     "operatorsBelowInterimFloor": [
-     "israelnews"
+     "israelnews",
+     "hcsoldier4",
+     "hcsoldier5"
     ],
     "soldiersFloorSp": 20,
     "yieldEngines": {
@@ -234,7 +236,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-21T05:58:13Z",
+   "decidedAt": "2026-10-21T11:40:01Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -242,14 +244,14 @@
    "area": "הנדסה",
    "status": "OBSERVING",
    "titleHe": "תקלות-הצוות",
-   "verdictHe": "הנושא-שנותב נמדד-נקי 33 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
+   "verdictHe": "הנושא-שנותב נמדד-נקי 34 פעימות רצופות — ההכרעה עוברת-ניטור (RE-MEASURE כנה; חזרת-תקלה תחזור-מיד-ל-P0) — אפס-המתנה, אפס-זיופים.",
    "evidence": [
-    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=33 (מהפנקס)"
+    "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=34 (מהפנקס)"
    ],
-   "decidedAt": "2026-10-21T05:58:13Z",
+   "decidedAt": "2026-10-21T11:40:01Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
-    "cleanStreak": 33,
+    "cleanStreak": 34,
     "subjectResolved": true
    }
   },
@@ -263,7 +265,7 @@
    "evidence": [
     "orphans=1 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-10-21T05:58:13Z",
+   "decidedAt": "2026-10-21T11:40:01Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -280,17 +282,11 @@
     "A39: state.rail.lifetime.wsteem = 0, minimum is 300000",
     "A44: state.rail.lifetime.wsteem = 0, minimum is 300000"
    ],
-   "decidedAt": "2026-10-21T05:58:13Z",
+   "decidedAt": "2026-10-21T11:40:01Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
- "workOrderStatus": {
-  "WO-FleetHQ-reds": {
-   "measured": true,
-   "subjectResolved": true,
-   "evidence": "קבלת-office-ci האחרונה: 'office-ci receipt: build pass, types pass [skip ci]'"
-  }
- },
+ "workOrderStatus": {},
  "noAction": [],
  "law": "MEASURE→OPTIONS→SCORE→DECIDE→PUBLISH→VERIFY→RE-MEASURE · R1-R5 ב-CHARTER"
 }
