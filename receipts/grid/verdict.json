@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-21T09:02:49.968Z",
+  "measuredAt": "2026-10-21T09:56:04.370Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -8,24 +8,10 @@
   "asserts": [
     {
       "id": "law-grid-state-present",
-      "ok": true,
+      "ok": false,
       "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
       "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-fresh",
-      "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 23min)",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-exec-alive",
-      "ok": true,
-      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=1299",
-      "severity": "fail",
-      "verdict": "pass"
+      "verdict": "fail"
     },
     {
       "id": "law-grid-revival-wired",
@@ -36,22 +22,13 @@
     }
   ],
   "alerts": [],
-  "overall": "PASS",
-  "reason": "grid state measured from git; laws pass",
+  "overall": "FAIL",
+  "reason": "grid-law failed: law-grid-state-present",
   "provenance": {
-    "stateBlobSha": "2d278097adc8673411c4cdc088ed8049db5331ff",
+    "stateBlobSha": "7cc22df70a99e7b5357f4798ba0494030b416276",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "39573883390",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39573883390",
-    "sha": "c0d067d3e4c412062600ced44e3f01e552fefb18"
-  },
-  "measured": {
-    "enabled": true,
-    "lastTickAt": "2026-10-21T08:39:51.860Z",
-    "ageMin": 23,
-    "ticks": 30,
-    "lastVerdict": "GOVERNOR-ACCUMULATING",
-    "opsToday": 1299,
-    "lastTxid": null
+    "runId": "39580752112",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39580752112",
+    "sha": "d967d6753e937529262176c364172ee1b503d010"
   }
 }
