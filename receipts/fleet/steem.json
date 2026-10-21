@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-21T06:07:34.658Z",
+  "at": "2026-10-21T08:49:33.000Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "eeea95e4c8ac9e9662a5150e1b2b9c814a0fde6d",
+  "head": "543dad7fcd513b4cb91d1ae51a709e8a42f930a3",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -10,8 +10,8 @@
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "pass",
-      "detail": "gitleaks HEAD scan: 0 live findings — 1 ledgered false-positive(s) honored (.gitleaksignore)"
+      "verdict": "flag",
+      "detail": "gitleaks HEAD scan: 1 live finding(s) — 1 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fI6SGk/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl"
     },
     {
       "id": "law-no-skipped-pass",
@@ -30,6 +30,7 @@
     }
   ],
   "alerts": [
+    "law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — 1 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fI6SGk/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl",
     "law-gitleaks-push: dispatch-only billing tombstone (documented in-file) — artery law-no-secrets-at-head is the push coverage"
   ],
   "overall": "PASS",
