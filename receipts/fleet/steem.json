@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-21T22:09:55.834Z",
+  "at": "2026-10-22T00:50:41.042Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "93ca8595e6dededf4daa22aa6ae9fac1e0a453b1",
+  "head": "90d316aaacb7914b07b0b8e78c61bcaf525fb352",
   "checks": {
     "install": "pass",
     "engineInstall": "pass",
@@ -10,8 +10,8 @@
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "pass",
-      "detail": "gitleaks HEAD scan: 0 live findings — 2 ledgered false-positive(s) honored (.gitleaksignore)"
+      "verdict": "flag",
+      "detail": "gitleaks HEAD scan: 48 live finding(s) — 1 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/cashmachine-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/haran-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier4-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/lsa-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/israelnews-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/macrame-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier6-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/siq-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/tov-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/wog-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/wic-commits.json"
     },
     {
       "id": "law-no-skipped-pass",
@@ -29,7 +29,9 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "law-no-secrets-at-head: gitleaks HEAD scan: 48 live finding(s) — 1 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/cashmachine-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/haran-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier4-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/lsa-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/israelnews-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/macrame-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier6-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/siq-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/tov-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/wog-commits.json, generic-api-key@/tmp/fleet-verify-wdonf8/steem-cockpit/mini-services/saos-engine/state/army-grid/wic-commits.json"
+  ],
   "overall": "PASS",
   "reason": "all checks and fleet laws pass"
 }
