@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-22T15:23:00.723Z",
+  "measuredAt": "2026-10-22T15:35:41.551Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,14 +16,14 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 3min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 2min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
       "ok": true,
-      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=11",
+      "detail": "grid executable: lastVerdict=CYCLE-IN-FLIGHT opsToday=25",
       "severity": "fail",
       "verdict": "pass"
     },
@@ -39,19 +39,19 @@
   "overall": "PASS",
   "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "988fefbfcef5987275241ec93f179904360277b3",
+    "stateBlobSha": "f80f09682f719ff9efe267517e5d41495b5d81bc",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "39804275191",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39804275191",
-    "sha": "f359281a1a4d21071f83ee9b11cc150483cece4a"
+    "runId": null,
+    "runUrl": null,
+    "sha": null
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-10-22T15:19:35.508Z",
-    "ageMin": 3,
-    "ticks": 934,
-    "lastVerdict": "GOVERNOR-ACCUMULATING",
-    "opsToday": 11,
-    "lastTxid": "cfc25a2259069f285ff96d05850ae744afea4dc0"
+    "lastTickAt": "2026-10-22T15:33:42.274Z",
+    "ageMin": 2,
+    "ticks": 1708,
+    "lastVerdict": "CYCLE-IN-FLIGHT",
+    "opsToday": 25,
+    "lastTxid": "75b7cba4853534cc29267bf820ccd1dec4360117"
   }
 }
