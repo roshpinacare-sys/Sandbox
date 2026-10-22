@@ -11,7 +11,14 @@
 // ═══════════════════════════════════════════════════════════════════════════
 import { execFileSync } from "node:child_process";
 
-const D = "/home/z/my-project/t19b/Domain";
+// 33 (2026-10-22, cycle-26 live measurement): the lane errored "spawnSync git
+// ENOENT" every slot — the real cause was the DEAD target: /home/z/my-project/
+// t19b/Domain was dismantled (t55s removed the zombie gitlinks) and execFileSync
+// throws ENOENT when the CWD is gone. The canonical chain now lives in the
+// estate clone (/home/z/estate/Domain — same repo the vault-sealer serves).
+// Lane law unchanged: pull --rebase --autostash, commit ONLY the econ chain
+// files when dirty, push, fail-honest otherwise.
+const D = "/home/z/estate/Domain";
 const ECON_PATHS = [
   "agents/econ-ledger.jsonl",
   "agents/econ-engine-state.json",
