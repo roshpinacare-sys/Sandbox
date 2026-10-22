@@ -1,9 +1,57 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-22T09:35:39.448Z",
-  "sources": [],
-  "asserts": [],
+  "measuredAt": "2026-10-22T10:01:21.945Z",
+  "sources": [
+    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
+  ],
+  "asserts": [
+    {
+      "id": "law-grid-state-present",
+      "ok": true,
+      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-fresh",
+      "ok": true,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 3min)",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-exec-alive",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=1198",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-revival-wired",
+      "ok": true,
+      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
+      "severity": "flag",
+      "verdict": "pass"
+    }
+  ],
   "alerts": [],
-  "overall": "ERROR",
-  "reason": "ECO_WALLET_TOKEN absent — nothing measured, nothing claimed"
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
+  "provenance": {
+    "stateBlobSha": "7827c4f0619863a8911a4b0c3ef8cf1361cd26c3",
+    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
+    "runId": "39759865302",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39759865302",
+    "sha": "27b6202b2a6690039366fa8c48cbbbee9c879fb1"
+  },
+  "measured": {
+    "enabled": true,
+    "lastTickAt": "2026-10-22T09:58:02.392Z",
+    "ageMin": 3,
+    "ticks": 5911,
+    "lastVerdict": "GOVERNOR-ACCUMULATING",
+    "opsToday": 1198,
+    "lastTxid": "e0f3fe61c2c5f0d7365f4f69a82a99633929674f"
+  }
 }
