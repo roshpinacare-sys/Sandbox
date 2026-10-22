@@ -1,6 +1,6 @@
 # פנקס-הרצפות — הצרכן-המדוד של D1-econ-treasury-floor [T16]
 
-נמדד: 2026-10-22T05:59:53Z · מקור-המדיניות: ops/sovereign/DECIDER/state.json (D1, 2026-10-22T01:47:33Z)
+נמדד: 2026-10-22T07:22:35Z · מקור-המדיניות: ops/sovereign/DECIDER/state.json (D1, 2026-10-22T01:47:33Z)
 
 מדיניות-D1 בפעולה: רצפות-מפעילים מדורגות (operatorInterimFloors 75/30/20 לפי-מדידה) + קו-שימור-אוצרה operatingFloorSp=2800.0 + יעד-3000 דרך-מנועי-התשואה.
 
