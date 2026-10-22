@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-21T23:16:53.252Z",
+  "measuredAt": "2026-10-22T00:11:01.290Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -8,10 +8,24 @@
   "asserts": [
     {
       "id": "law-grid-state-present",
-      "ok": false,
+      "ok": true,
       "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
       "severity": "fail",
-      "verdict": "fail"
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-fresh",
+      "ok": true,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 24min)",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-exec-alive",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=1577",
+      "severity": "fail",
+      "verdict": "pass"
     },
     {
       "id": "law-grid-revival-wired",
@@ -22,13 +36,22 @@
     }
   ],
   "alerts": [],
-  "overall": "FAIL",
-  "reason": "grid-law failed: law-grid-state-present",
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "86d2e7d5e53b71052a2eab19b6e3a59145af72ba",
+    "stateBlobSha": "ba9f434eaae1e49f2afdb4988ddc018c0a5845c1",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "39692311571",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39692311571",
-    "sha": "3739022734e538296ba19de44368456948479c3c"
+    "runId": "39698089723",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39698089723",
+    "sha": "37f209de873ff848880b7518cd739c0fda5a61d9"
+  },
+  "measured": {
+    "enabled": true,
+    "lastTickAt": "2026-10-21T23:46:59.148Z",
+    "ageMin": 24,
+    "ticks": 28,
+    "lastVerdict": "GOVERNOR-ACCUMULATING",
+    "opsToday": 1577,
+    "lastTxid": "3c5da3336b8419cb46565f9aa3c024e71c506faa"
   }
 }
