@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-22T16:16:13.026Z",
+  "measuredAt": "2026-10-22T17:11:59.652Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,14 +16,14 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 5min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 9min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
       "ok": true,
-      "detail": "grid executable: lastVerdict=CYCLE-IN-FLIGHT opsToday=33",
+      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=45",
       "severity": "fail",
       "verdict": "pass"
     },
@@ -39,19 +39,19 @@
   "overall": "PASS",
   "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "9bcb0d1ef5394e9e29ab1fd797fff7b6cb6d343f",
+    "stateBlobSha": "cb7c0b495349bab813840bbbf512b6bf2d34a08b",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "39812541906",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39812541906",
-    "sha": "fe17e295b1954208670144a9e850dd110ad69090"
+    "runId": "39820394211",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/39820394211",
+    "sha": "0496998c53d08086d3e4b203d43717436bf45500"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-10-22T16:11:14.545Z",
-    "ageMin": 5,
-    "ticks": 2225,
-    "lastVerdict": "CYCLE-IN-FLIGHT",
-    "opsToday": 33,
-    "lastTxid": "2549c24f9a84f9fbaab3e356e89df442799faf9b"
+    "lastTickAt": "2026-10-22T17:03:14.229Z",
+    "ageMin": 9,
+    "ticks": 3233,
+    "lastVerdict": "GOVERNOR-ACCUMULATING",
+    "opsToday": 45,
+    "lastTxid": "23de31c10c483eea90261707b2be6ec8cecf71db"
   }
 }
