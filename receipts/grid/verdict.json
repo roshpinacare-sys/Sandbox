@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-24T18:26:55.776Z",
+  "measuredAt": "2026-10-24T19:22:49.552Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,14 +16,14 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 3min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 6min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
       "ok": true,
-      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=66",
+      "detail": "grid executable: lastVerdict=CYCLE-IN-FLIGHT opsToday=0",
       "severity": "fail",
       "verdict": "pass"
     },
@@ -39,19 +39,19 @@
   "overall": "PASS",
   "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "d0ca946a7b5d59b7e0959c02eb072e407cfdbe10",
+    "stateBlobSha": "cb37eab391ad56ba0dc23b4a30e9368be9393812",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "40120713159",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40120713159",
-    "sha": "a3330b5af35ce9055a1bc66912135b65c501d4a8"
+    "runId": "40125003930",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40125003930",
+    "sha": "de63f82de64e0bfe83313025a99cf2ae453953ba"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-10-24T18:24:14.601Z",
-    "ageMin": 3,
-    "ticks": 835,
-    "lastVerdict": "GOVERNOR-ACCUMULATING",
-    "opsToday": 66,
-    "lastTxid": "25525e23153b5f9b616e83518339d42268a6fb6c"
+    "lastTickAt": "2026-10-24T19:16:25.841Z",
+    "ageMin": 6,
+    "ticks": 79,
+    "lastVerdict": "CYCLE-IN-FLIGHT",
+    "opsToday": 0,
+    "lastTxid": null
   }
 }
