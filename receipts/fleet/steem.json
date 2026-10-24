@@ -1,27 +1,27 @@
 {
-  "at": "2026-10-24T19:10:21.948Z",
+  "at": "2026-10-24T21:42:07.092Z",
   "slug": "roshpinacare-sys/steem",
-  "head": "ace9944fe46ed6f18d41cd535dc150546b6ddb19",
+  "head": "c03b1ea3d6fff08f45f00c6a178344063b4851bc",
   "checks": {
-    "install": "pass",
-    "engineInstall": "pass",
-    "engineSelftest": "pass"
+    "install": "fail",
+    "engineInstall": "fail",
+    "engineSelftest": "fail"
   },
   "laws": [
     {
       "id": "law-no-secrets-at-head",
       "verdict": "pass",
-      "detail": "gitleaks HEAD scan: 0 findings (4 ledger pin(s) armed)"
+      "detail": "gitleaks HEAD scan: 0 findings"
     },
     {
       "id": "law-no-skipped-pass",
       "verdict": "pass",
-      "detail": "workflows scanned: 14, theater patterns: 0"
+      "detail": "workflows scanned: 0, theater patterns: 0"
     },
     {
       "id": "law-gitleaks-push",
-      "verdict": "pass",
-      "detail": "gitleaks scans every push"
+      "verdict": "flag",
+      "detail": "no gitleaks.yml in repo — no in-repo secret scan"
     },
     {
       "id": "law-r11-head-absent",
@@ -29,7 +29,9 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [],
-  "overall": "PASS",
-  "reason": "all checks and fleet laws pass"
+  "alerts": [
+    "law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
+  ],
+  "overall": "FAIL",
+  "reason": "engineSelftest failed: error: Module not found \"selftest.mjs\" | "
 }
