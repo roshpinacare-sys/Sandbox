@@ -1,8 +1,8 @@
 {
-  "at": "2026-10-24T13:56:13.815Z",
+  "at": "2026-10-24T16:35:24.590Z",
   "repos": {
     "steem-cockpit": {
-      "head": "b395b6b8a500429064fb407cba92e76893db8398",
+      "head": "b0c149796522c44559b0df1d39e0807bbddf21df",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -30,7 +30,7 @@
       ]
     },
     "saos-dex": {
-      "head": "3ac04aac3be3de88b7b3cfb712984adbeb4e69ec",
+      "head": "1b4a0d1e57e5bc9088b735831d177bdbee697134",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -40,7 +40,7 @@
       "laws": [
         {
           "id": "law-no-secrets-at-head",
-          "verdict": "pass"
+          "verdict": "flag"
         },
         {
           "id": "law-no-skipped-pass",
@@ -83,7 +83,7 @@
       ]
     },
     "saos-wallet": {
-      "head": "e79e616d02fe5b2b8c8243788fb78fdb072bfead",
+      "head": "e5ba3401c565c2497e723d0f38cf6965bbc72573",
       "overall": "PASS",
       "checks": {},
       "reason": "all checks and fleet laws pass",
@@ -127,7 +127,7 @@
       ]
     },
     "adsmarket": {
-      "head": "aac8f85fb778b4d5b121d600bc51d500b6ddebd9",
+      "head": "65ac5175a0f6a332999f3308f203bad5bfd1174e",
       "overall": "PASS",
       "checks": {},
       "reason": "all checks and fleet laws pass",
@@ -151,19 +151,21 @@
       ]
     }
   },
-  "alerts": [],
+  "alerts": [
+    "saos-dex: law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-jDo2M8/saos-dex/src/lib/dex/htlc.test.ts"
+  ],
   "overall": "PASS",
   "reason": "steem=PASS · saos-dex=PASS · saos-agents=PASS · Saosmartwallet=PASS · Adsmarket=PASS",
   "provenance": {
-    "runId": "40100237492",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40100237492",
-    "sha": "2fda4c2b8f736767425dd266cbc00c36299daf6a"
+    "runId": "40112243068",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40112243068",
+    "sha": "840fa63784e6d32aa01991923abc97a174ba46fa"
   },
   "details": [
     {
-      "at": "2026-10-24T13:56:13.815Z",
+      "at": "2026-10-24T16:35:24.590Z",
       "slug": "roshpinacare-sys/steem",
-      "head": "b395b6b8a500429064fb407cba92e76893db8398",
+      "head": "b0c149796522c44559b0df1d39e0807bbddf21df",
       "checks": {
         "install": "pass",
         "engineInstall": "pass",
@@ -196,9 +198,9 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-24T13:56:13.815Z",
+      "at": "2026-10-24T16:35:24.590Z",
       "slug": "roshpinacare-sys/saos-dex",
-      "head": "3ac04aac3be3de88b7b3cfb712984adbeb4e69ec",
+      "head": "1b4a0d1e57e5bc9088b735831d177bdbee697134",
       "checks": {
         "install": "pass",
         "typecheck": "pass"
@@ -206,8 +208,8 @@
       "laws": [
         {
           "id": "law-no-secrets-at-head",
-          "verdict": "pass",
-          "detail": "gitleaks HEAD scan: 0 findings (3 ledger pin(s) armed)"
+          "verdict": "flag",
+          "detail": "gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-jDo2M8/saos-dex/src/lib/dex/htlc.test.ts"
         },
         {
           "id": "law-no-skipped-pass",
@@ -225,12 +227,14 @@
           "detail": "absent at HEAD"
         }
       ],
-      "alerts": [],
+      "alerts": [
+        "law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-jDo2M8/saos-dex/src/lib/dex/htlc.test.ts"
+      ],
       "overall": "PASS",
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-24T13:56:13.815Z",
+      "at": "2026-10-24T16:35:24.590Z",
       "slug": "roshpinacare-sys/saos-agents",
       "head": "ab97a1d58a4f2c50f11dc850cee7e5e5a4676e26",
       "checks": {
@@ -263,9 +267,9 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-24T13:56:13.815Z",
+      "at": "2026-10-24T16:35:24.590Z",
       "slug": "roshpinacare-sys/Saosmartwallet",
-      "head": "e79e616d02fe5b2b8c8243788fb78fdb072bfead",
+      "head": "e5ba3401c565c2497e723d0f38cf6965bbc72573",
       "checks": {},
       "laws": [
         {
@@ -311,7 +315,7 @@
         {
           "id": "law-pass-provenance",
           "verdict": "pass",
-          "detail": "receipt provenance: https://github.com/roshpinacare-sys/Saosmartwallet/actions/runs/40005463068"
+          "detail": "receipt provenance: https://github.com/roshpinacare-sys/Saosmartwallet/actions/runs/40111888816"
         }
       ],
       "alerts": [],
@@ -319,9 +323,9 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-10-24T13:56:13.815Z",
+      "at": "2026-10-24T16:35:24.590Z",
       "slug": "roshpinacare-sys/Adsmarket",
-      "head": "aac8f85fb778b4d5b121d600bc51d500b6ddebd9",
+      "head": "65ac5175a0f6a332999f3308f203bad5bfd1174e",
       "checks": {},
       "laws": [
         {

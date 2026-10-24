@@ -1,7 +1,7 @@
 {
-  "at": "2026-10-24T13:56:13.815Z",
+  "at": "2026-10-24T16:35:24.590Z",
   "slug": "roshpinacare-sys/saos-dex",
-  "head": "3ac04aac3be3de88b7b3cfb712984adbeb4e69ec",
+  "head": "1b4a0d1e57e5bc9088b735831d177bdbee697134",
   "checks": {
     "install": "pass",
     "typecheck": "pass"
@@ -9,8 +9,8 @@
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "pass",
-      "detail": "gitleaks HEAD scan: 0 findings (3 ledger pin(s) armed)"
+      "verdict": "flag",
+      "detail": "gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-jDo2M8/saos-dex/src/lib/dex/htlc.test.ts"
     },
     {
       "id": "law-no-skipped-pass",
@@ -28,7 +28,9 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    "law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-jDo2M8/saos-dex/src/lib/dex/htlc.test.ts"
+  ],
   "overall": "PASS",
   "reason": "all checks and fleet laws pass"
 }
