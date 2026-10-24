@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-24T17:31:56.756Z",
+  "measuredAt": "2026-10-24T18:26:55.776Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,14 +16,14 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 10min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 3min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
       "ok": true,
-      "detail": "grid executable: lastVerdict=NO-PARITY opsToday=36",
+      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=66",
       "severity": "fail",
       "verdict": "pass"
     },
@@ -39,19 +39,19 @@
   "overall": "PASS",
   "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "4a73a795700dac75d4b4114dde18b2e0966f638a",
+    "stateBlobSha": "d0ca946a7b5d59b7e0959c02eb072e407cfdbe10",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "40116422615",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40116422615",
-    "sha": "97e5649b21dcbe9b57731c00c54c3186f9c09e1a"
+    "runId": "40120713159",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40120713159",
+    "sha": "a3330b5af35ce9055a1bc66912135b65c501d4a8"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-10-24T17:21:32.307Z",
-    "ageMin": 10,
-    "ticks": 324,
-    "lastVerdict": "NO-PARITY",
-    "opsToday": 36,
-    "lastTxid": "cdbe529ae8300fdf37db1865a3f55bc59b937b89"
+    "lastTickAt": "2026-10-24T18:24:14.601Z",
+    "ageMin": 3,
+    "ticks": 835,
+    "lastVerdict": "GOVERNOR-ACCUMULATING",
+    "opsToday": 66,
+    "lastTxid": "25525e23153b5f9b616e83518339d42268a6fb6c"
   }
 }
