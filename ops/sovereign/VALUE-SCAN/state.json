@@ -1,6 +1,6 @@
 {
  "schema": "roshpina.value-scan/1",
- "generatedAt": "2026-10-26T05:23:01Z",
+ "generatedAt": "2026-10-26T06:18:20Z",
  "publisher": "value-scan.yml (GitHub Actions, keyless, T13)",
  "degraded": [],
  "sources": {
@@ -13,15 +13,15 @@
   "decider-d1-policy": true
  },
  "metrics": {
-  "treasuryNetSp": 2638.1,
+  "treasuryNetSp": 3099.8,
   "treasuryFloor": 3000.0,
-  "treasuryGapSp": 361.9,
+  "treasuryGapSp": -99.8,
   "minOperatorSp": 40.2,
   "operatorFloor": 100.0,
   "operatorGapSp": 59.8,
-  "steemHead": 110764182,
+  "steemHead": 110765284,
   "chainTreasurySp": 3099.8,
-  "beaconChainMatch": false,
+  "beaconChainMatch": true,
   "arteriesFresh": 7,
   "arteriesTotal": 7,
   "blockedTasks": 0,
@@ -33,10 +33,10 @@
   "dexVerdict": "ARMED-WAITING",
   "dexOpenOrders": 18,
   "d1Consumer": {
-   "policyBasis": "2026-10-26T01:07:31Z",
+   "policyBasis": "2026-10-26T06:05:41Z",
    "deciderStateAgeOk": true,
    "operatingFloorSp": 2800.0,
-   "treasuryVsKeepSp": -161.9,
+   "treasuryVsKeepSp": 299.8,
    "operatorInterimFloors": [
     {
      "operator": "cashmachine",
@@ -137,22 +137,13 @@
    ]
   }
  },
- "verdictHe": "פער-רצפת-אוצרה 361.9 SP · פער-רצפת-מפעילים 59.8 SP · 3 יתומים + 0 רוחות-רפאים במפת-הזרימה",
+ "verdictHe": "פער-רצפת-מפעילים 59.8 SP · 3 יתומים + 0 רוחות-רפאים במפת-הזרימה · DEX חי (ARMED-WAITING) · 18 פקודות פתוחות",
  "topIds": [
-  "econ-treasury-floor",
   "econ-operator-floor",
-  "net-weave"
+  "net-weave",
+  "biz-dex-scale"
  ],
  "opportunities": [
-  {
-   "id": "econ-treasury-floor",
-   "area": "כלכלה",
-   "titleHe": "פער-רצפת-אוצרה 361.9 SP",
-   "valueHe": "השלמת הרצפה = יציבות-אוצרה מלאה; אופציות מתועדות: שחרור-האצלה-אסורה (244.2 SP, 7 ימים) / רצפות-מדורגות / הכנסות-DEX — הכרעת-בעלים",
-   "evidence": "אוצרה 2638.1 < 3,000 · נמדד במשואה keyless",
-   "source": "sovereign-beacon state.json",
-   "effort": "M"
-  },
   {
    "id": "econ-operator-floor",
    "area": "כלכלה",
@@ -176,7 +167,7 @@
    "area": "עסקים",
    "titleHe": "DEX חי (ARMED-WAITING) · 18 פקודות פתוחות",
    "valueHe": "הרחבת-עומק-ספר-הפקודות = הכנסה-מיקרו-מסחרית מתמשכת (ראה 1,480 order-ops ביום-שעבר)",
-   "evidence": "verdict=ARMED-WAITING · publishedAt=2026-10-26T03:57:29.203Z",
+   "evidence": "verdict=ARMED-WAITING · publishedAt=2026-10-26T05:53:54.776Z",
    "source": "Domain dex/grid.json",
    "effort": "M"
   },
