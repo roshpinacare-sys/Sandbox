@@ -1,16 +1,16 @@
 {
-  "at": "2026-10-26T14:25:33.764Z",
+  "at": "2026-10-26T16:43:16.549Z",
   "slug": "roshpinacare-sys/saos-dex",
-  "head": "9fceaa2281e34ab5f196cdb1ea822492725b68f0",
+  "head": "51f8b912da3f5d52c5c0497c61f47bc6de4db0c1",
   "checks": {
     "install": "pass",
-    "typecheck": "pass"
+    "typecheck": "fail"
   },
   "laws": [
     {
       "id": "law-no-secrets-at-head",
       "verdict": "flag",
-      "detail": "gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-O7NZLe/saos-dex/src/lib/dex/htlc.test.ts"
+      "detail": "gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-nsy7Rs/saos-dex/src/lib/dex/htlc.test.ts"
     },
     {
       "id": "law-no-skipped-pass",
@@ -29,8 +29,8 @@
     }
   ],
   "alerts": [
-    "law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-O7NZLe/saos-dex/src/lib/dex/htlc.test.ts"
+    "law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-nsy7Rs/saos-dex/src/lib/dex/htlc.test.ts"
   ],
-  "overall": "PASS",
-  "reason": "all checks and fleet laws pass"
+  "overall": "FAIL",
+  "reason": "typecheck failed: Property 'message' does not exist on type '{}'. | grids/soldier-loop.ts(284,87): error TS2339: Property 'message' does not exist on type '{}'. | grids/soldier-loop.ts(345,60): error TS2339: Property 'message' does not exist on type '{}'. | "
 }
