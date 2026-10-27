@@ -1,57 +1,9 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-10-27T13:11:32.605Z",
-  "sources": [
-    "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
-  ],
-  "asserts": [
-    {
-      "id": "law-grid-state-present",
-      "ok": true,
-      "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-fresh",
-      "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 10min)",
-      "severity": "fail",
-      "verdict": "pass"
-    },
-    {
-      "id": "law-grid-exec-alive",
-      "ok": false,
-      "detail": "grid enabled but blocked on credential (lastVerdict=CREDENTIAL-MISSING) — owner law: no such state where the grid does not work",
-      "severity": "fail",
-      "verdict": "fail"
-    },
-    {
-      "id": "law-grid-revival-wired",
-      "ok": true,
-      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
-      "severity": "flag",
-      "verdict": "pass"
-    }
-  ],
+  "measuredAt": "2026-10-27T12:35:30.517Z",
+  "sources": [],
+  "asserts": [],
   "alerts": [],
-  "overall": "FAIL",
-  "reason": "grid-law failed: law-grid-exec-alive",
-  "provenance": {
-    "stateBlobSha": "77518b7a9dcc4beee346454109ca916b9789fb3a",
-    "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "40509800185",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40509800185",
-    "sha": "ba34bca0cf6c7f6d63c80aeca5e851541f5ebbd8"
-  },
-  "measured": {
-    "enabled": true,
-    "lastTickAt": "2026-10-27T13:01:29.366Z",
-    "ageMin": 10,
-    "ticks": 2160,
-    "lastVerdict": "CREDENTIAL-MISSING",
-    "opsToday": 0,
-    "lastTxid": null
-  }
+  "overall": "ERROR",
+  "reason": "ECO_WALLET_TOKEN absent — nothing measured, nothing claimed"
 }
