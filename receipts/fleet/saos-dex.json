@@ -1,16 +1,16 @@
 {
-  "at": "2026-10-28T22:34:36.057Z",
+  "at": "2026-10-29T01:14:45.834Z",
   "slug": "roshpinacare-sys/saos-dex",
-  "head": "64c50b343f121ec9182af163300eba7e53073efe",
+  "head": "67cf494741ed313e0cd0a2c1d2182882151c3c38",
   "checks": {
     "install": "pass",
-    "typecheck": "fail"
+    "typecheck": "pass"
   },
   "laws": [
     {
       "id": "law-no-secrets-at-head",
-      "verdict": "flag",
-      "detail": "gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-3ZrTuo/saos-dex/src/lib/dex/htlc.test.ts"
+      "verdict": "pass",
+      "detail": "gitleaks HEAD scan: 0 live findings — 1 ledgered false-positive(s) honored (.gitleaksignore)"
     },
     {
       "id": "law-no-skipped-pass",
@@ -28,9 +28,7 @@
       "detail": "absent at HEAD"
     }
   ],
-  "alerts": [
-    "law-no-secrets-at-head: gitleaks HEAD scan: 1 live finding(s) — ledger pins armed, none matched — redacted metadata: generic-api-key@/tmp/fleet-verify-3ZrTuo/saos-dex/src/lib/dex/htlc.test.ts"
-  ],
-  "overall": "FAIL",
-  "reason": "typecheck failed: Property 'message' does not exist on type '{}'. | grids/soldier-loop.ts(284,87): error TS2339: Property 'message' does not exist on type '{}'. | grids/soldier-loop.ts(345,60): error TS2339: Property 'message' does not exist on type '{}'. | "
+  "alerts": [],
+  "overall": "PASS",
+  "reason": "all checks and fleet laws pass"
 }
