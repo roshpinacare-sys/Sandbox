@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-10-29T17:15:36Z",
- "durationMs": 2001,
+ "generatedAt": "2026-10-29T18:07:56Z",
+ "durationMs": 1643,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
   "generatedAt": "2026-10-29T15:30:39Z",
-  "stateAgeMin": 105,
+  "stateAgeMin": 157,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
    "lastRunAt": "2026-10-13T03:29:21Z",
-   "ageS": 1431974,
+   "ageS": 1435114,
    "stalled": true
   }
  },
  "measures": {
   "chain": {
-   "head": 110864334,
+   "head": 110865376,
    "treasuryNetSp": 1510.5,
-   "mult": 0.0006209460350684121
+   "mult": 0.0006209475607314345
   },
   "beaconPulse": {
    "treasuryNetSp": 1510.5
@@ -43,15 +43,15 @@
    "status": "ENFORCED",
    "priority": "P0",
    "decidedAt": "2026-10-29T15:30:39Z",
-   "truth": "VERIFIED",
+   "truth": "STALE-TRUTH",
    "checks": [
     {
      "law": "decider-state-age",
-     "result": "ok",
-     "detail": "state age 105min (limit 120)"
+     "result": "mismatch",
+     "detail": "state age 157min (limit 120)"
     }
    ],
-   "note": "evidence re-measured independently + execution present"
+   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   },
   {
    "id": "D1-econ-treasury-floor",
@@ -59,7 +59,7 @@
    "status": "ENFORCED",
    "priority": "P1",
    "decidedAt": "2026-10-29T15:30:39Z",
-   "truth": "VERIFIED",
+   "truth": "STALE-TRUTH",
    "checks": [
     {
      "law": "policy-internal-consistency",
@@ -98,11 +98,11 @@
     },
     {
      "law": "decider-state-age",
-     "result": "ok",
-     "detail": "state age 105min (limit 120)"
+     "result": "mismatch",
+     "detail": "state age 157min (limit 120)"
     }
    ],
-   "note": "evidence re-measured independently + execution present"
+   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   },
   {
    "id": "D2-eng-errors",
@@ -133,8 +133,8 @@
     },
     {
      "law": "decider-state-age",
-     "result": "ok",
-     "detail": "state age 105min (limit 120)"
+     "result": "mismatch",
+     "detail": "state age 157min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -145,7 +145,7 @@
    "status": "ENFORCED",
    "priority": "P2",
    "decidedAt": "2026-10-29T15:30:39Z",
-   "truth": "VERIFIED",
+   "truth": "STALE-TRUTH",
    "checks": [
     {
      "law": "orphans-fresh",
@@ -159,34 +159,34 @@
     },
     {
      "law": "decider-state-age",
-     "result": "ok",
-     "detail": "state age 105min (limit 120)"
+     "result": "mismatch",
+     "detail": "state age 157min (limit 120)"
     }
    ],
-   "note": "evidence re-measured independently + execution present"
+   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   },
   {
    "id": "D4-truth-network",
    "area": "אימות-עצמי",
    "status": "OBSERVING",
    "decidedAt": "2026-10-29T15:30:39Z",
-   "truth": "VERIFIED",
+   "truth": "STALE-TRUTH",
    "checks": [
     {
      "law": "decider-state-age",
-     "result": "ok",
-     "detail": "state age 105min (limit 120)"
+     "result": "mismatch",
+     "detail": "state age 157min (limit 120)"
     }
    ],
-   "note": "evidence re-measured independently + execution present"
+   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   }
  ],
  "provenance": {
-  "runId": "40919297599",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40919297599",
-  "sha": "71c4c4380cc73e796d265a8a90f726bba7caa162",
+  "runId": "40927861135",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/40927861135",
+  "sha": "703a52724c144dc81400fc64ad3b473ac0287e27",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-10-29T17:15:36Z"
+  "generatedAt": "2026-10-29T18:07:56Z"
  },
  "selftest": {
   "vectors": 16,
