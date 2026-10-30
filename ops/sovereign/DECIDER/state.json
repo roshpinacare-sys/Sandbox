@@ -1,14 +1,14 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-10-30T18:48:42Z",
+ "generatedAt": "2026-10-30T22:56:00Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
  "degraded": [],
  "chainVerify": {
-  "head": 110894853,
-  "mult": 0.000620990704618051,
+  "head": 110899777,
+  "mult": 0.0006209979138718985,
   "treasuryNetSp": 1510.9,
   "minOperatorSp": 0.0,
   "beaconChainMatch": true
@@ -78,7 +78,7 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-10-30T18:48:41Z",
+   "decidedAt": "2026-10-30T22:56:00Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -130,11 +130,11 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 1510.9 SP (ראש 110894853, מכפיל 0.000620991)",
+    "אוצרה נמדדת 1510.9 SP (ראש 110899777, מכפיל 0.000620998)",
     "יעד 3000 · פער 1489.1 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 2921.6 SP · נכנסת-נמדדת 244.5 SP",
+    "האצלה-יוצאת-נמדדת 2921.7 SP · נכנסת-נמדדת 244.5 SP",
     "משואה מפרסמת 1510.9 SP · תואם=True",
-    "סריקת-היסטוריה: 300 ops-אחרונים (עד idx 184743)",
+    "סריקת-היסטוריה: 300 ops-אחרונים (עד idx 184791)",
     "האצלות-אחרונות למפעילי-הצי: ~900.0 SP (רגלי-הצי — חיוניות, אין-לשחרר)",
     "האצלות-יוצאות-שאינן-מפעילים (מדוד): hcsoldier7:0.0SP@2026-10-29T13:15:42, saos-0001:0.0SP@2026-10-29T13:15:42, saos-0002:0.0SP@2026-10-29T13:15:42, saos-0003:0.0SP@2026-10-29T13:15:42, saos-0004:0.0SP@2026-10-29T13:15:42, saos-0005:0.0SP@2026-10-29T13:15:42, saos-0006:0.0SP@2026-10-29T13:15:42, saos-0007:0.0SP@2026-10-29T13:15:42"
    ],
@@ -237,7 +237,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-10-30T18:48:42Z",
+   "decidedAt": "2026-10-30T22:56:00Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -249,7 +249,7 @@
    "evidence": [
     "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=61 (מהפנקס)"
    ],
-   "decidedAt": "2026-10-30T18:48:42Z",
+   "decidedAt": "2026-10-30T22:56:00Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
     "cleanStreak": 61,
@@ -266,20 +266,22 @@
    "evidence": [
     "orphans=3 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-10-30T18:48:42Z",
+   "decidedAt": "2026-10-30T22:56:00Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
    "id": "D4-truth-network",
    "area": "אימות-עצמי",
-   "status": "OBSERVING",
-   "titleHe": "רשת-האמת",
-   "verdictHe": "הגוף מאמת-את-עצמו ירוק בפומבי (51/51 + שער-ירוק) — ממשיכים-למדוד",
+   "status": "ENFORCED",
+   "priority": "P1",
+   "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
+   "verdictHe": "הריבונות מכריעה: 1 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 51/51 ALL_PASS (2026-10-30T15:23:01.871Z)",
-    "שער-האמת: ALL-GREEN (pass=7 fail=0)"
+    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-10-30T21:08:37.107Z)",
+    "שער-האמת: ALL-GREEN (pass=7 fail=0)",
+    "A43: markets.1.bestAsk = 0, minimum is 1"
    ],
-   "decidedAt": "2026-10-30T18:48:42Z",
+   "decidedAt": "2026-10-30T22:56:00Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
