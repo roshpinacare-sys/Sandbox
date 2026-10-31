@@ -80,7 +80,7 @@
 **נתיב-הפעלה-מהיר (בעלים, ~10-שניות):**
 1. פתח `https://github.com/roshpinacare-sys/Sandbox/settings/secrets/actions` → **New repository secret**
 2. Name: `FLEET_TOKEN` · Secret: הדבק-את-הטוקן-החדש-הרחב
-3. Actions → **token-forge** → Run workflow → `secret_name=FLEET_TOKEN` · `mode=route` — הפטיש-ינתב-ל-`saos-runtime:GH_PAT`·`FleetHQ:OFFICE_GIT_PAT`·`Console:AGENTS_WATCH_TOKEN`·`Domain:SBX_FLEET_PAT`, **יצית-את-עורקי-האמת, ויפרסם-אימות-ירוק-לגיט**
+3. Actions → **token-forge** → Run workflow → `secret_name=FLEET_TOKEN` · `mode=route` — הפטיש-ינתב-ל-`Pulse:FLEET_TOKEN`·`saos-runtime:GH_PAT`·`FleetHQ:OFFICE_GIT_PAT`·`Console:AGENTS_WATCH_TOKEN`·`Domain:SBX_FLEET_PAT`, **יצית-את-עורקי-האמת, ויפרסם-אימות-ירוק-לגיט** (`Pulse:FLEET_TOKEN`-נוסף-למפת-ברירת-המחדל-ב-2026-10-31 — המחלה-שנמדדה: Pulse-הושאר-מחוץ-למפה-והטוקן-שלו-מת-בלי-רוטציה-מאז-10-12 → heartbeat-אדום-30-יום, עיין-Issue-Pulse#10)
 - למה-לא-steem: ה-CI-הפרטי-שם-מת-מאחורי-קיר-החיוב — `token-forge.yml`-מושהה-שם-עד-תיקון-החיוב
 - אחרי-ירוק-מאומת (TOKEN-TRUTH-מציג-תפוגה-חדשה): **Revoke**-את-הישן-בדף-הטוקנים — ו-§6-של-OWNER-P0-נפתח-אוטומטית
 

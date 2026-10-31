@@ -128,7 +128,7 @@ jobs:
               print(f"::error::source token {name} failed self-check (HTTP {st}) — not routing a dead token")
               json.dump({"routed": False, "results": results}, open("/tmp/forge-result.json", "w"))
               raise SystemExit(1)
-          targets = json.loads(os.environ["TARGETS"]) if os.environ["TARGETS"].strip() else ["saos-runtime:GH_PAT", "FleetHQ:OFFICE_GIT_PAT", "Console:AGENTS_WATCH_TOKEN", "Domain:SBX_FLEET_PAT"]
+          targets = json.loads(os.environ["TARGETS"]) if os.environ["TARGETS"].strip() else ["Pulse:FLEET_TOKEN", "saos-runtime:GH_PAT", "FleetHQ:OFFICE_GIT_PAT", "Console:AGENTS_WATCH_TOKEN", "Domain:SBX_FLEET_PAT"]
           for t in targets:
               repo, sname = t.split(":", 1)
               st, pk = api("GET", f"https://api.github.com/repos/roshpinacare-sys/{repo}/actions/secrets/public-key", val)
