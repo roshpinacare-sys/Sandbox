@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-11-01T11:11:37.086Z",
+  "measuredAt": "2026-11-01T12:04:05.223Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -22,10 +22,10 @@
     },
     {
       "id": "law-grid-exec-alive",
-      "ok": false,
-      "detail": "grid enabled but blocked on credential (lastVerdict=CREDENTIAL-MISSING) — owner law: no such state where the grid does not work",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=BROADCAST-FAIL opsToday=0",
       "severity": "fail",
-      "verdict": "fail"
+      "verdict": "pass"
     },
     {
       "id": "law-grid-revival-wired",
@@ -36,22 +36,22 @@
     }
   ],
   "alerts": [],
-  "overall": "FAIL",
-  "reason": "grid-law failed: law-grid-exec-alive",
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "e51ee1f43ae916736d7ca7ed53d1bfe1870c39c0",
+    "stateBlobSha": "b3cf009572f7c7daa29231787061cc2fa82cee41",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "41300736187",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41300736187",
-    "sha": "e50803bbf83625bf2aa761ce5106f638ebed170d"
+    "runId": "41304676659",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41304676659",
+    "sha": "04ba68d609e8d89395b7d53420b5213027758b9e"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-11-01T11:07:08.981Z",
+    "lastTickAt": "2026-11-01T11:59:42.970Z",
     "ageMin": 4,
-    "ticks": 23051,
-    "lastVerdict": "CREDENTIAL-MISSING",
-    "opsToday": null,
+    "ticks": 23380,
+    "lastVerdict": "BROADCAST-FAIL",
+    "opsToday": 0,
     "lastTxid": null
   }
 }
