@@ -1,6 +1,6 @@
 {
  "schema": "roshpina.value-scan/1",
- "generatedAt": "2026-11-01T09:50:31Z",
+ "generatedAt": "2026-11-01T10:44:08Z",
  "publisher": "value-scan.yml (GitHub Actions, keyless, T13)",
  "degraded": [],
  "sources": {
@@ -19,17 +19,17 @@
   "minOperatorSp": 41.2,
   "operatorFloor": 100.0,
   "operatorGapSp": 58.8,
-  "steemHead": 110941451,
+  "steemHead": 110942521,
   "chainTreasurySp": 1511.6,
   "beaconChainMatch": true,
-  "arteriesFresh": 7,
+  "arteriesFresh": 6,
   "arteriesTotal": 7,
   "blockedTasks": 0,
   "errorAgents": 0,
   "flowNodes": 40,
   "flowOrphans": 3,
   "flowGhosts": 0,
-  "flowStale": 23,
+  "flowStale": 26,
   "dexVerdict": "ARMED-WAITING",
   "dexOpenOrders": 60,
   "d1Consumer": {
@@ -137,11 +137,11 @@
    ]
   }
  },
- "verdictHe": "פער-רצפת-אוצרה 1488.4 SP · פער-רצפת-מפעילים 58.8 SP · 3 יתומים + 0 רוחות-רפאים במפת-הזרימה",
+ "verdictHe": "1 עורקים לא-טריים · פער-רצפת-אוצרה 1488.4 SP · פער-רצפת-מפעילים 58.8 SP",
  "topIds": [
+  "ops-arteries",
   "econ-treasury-floor",
-  "econ-operator-floor",
-  "net-weave"
+  "econ-operator-floor"
  ],
  "opportunities": [
   {
@@ -163,11 +163,20 @@
    "effort": "M"
   },
   {
+   "id": "ops-arteries",
+   "area": "תפעול",
+   "titleHe": "1 עורקים לא-טריים",
+   "valueHe": "עורק-טרי = איבר-חי; החזרת-עורקים לטריות = האורגניזם שלם",
+   "evidence": "לא-טריים: grid-artery",
+   "source": "Domain office/data.json",
+   "effort": "S"
+  },
+  {
    "id": "net-weave",
    "area": "רשת",
    "titleHe": "3 יתומים + 0 רוחות-רפאים במפת-הזרימה",
    "valueHe": "חיבור-יתומים = everything-uses-everything מלא; כל-חיבור מגדיל-ערך-הדדי",
-   "evidence": "flow-map: 40 צמתים · stale=23",
+   "evidence": "flow-map: 40 צמתים · stale=26",
    "source": "Sandbox ops/flow/flow-map.json",
    "effort": "M"
   },
