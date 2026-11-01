@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-11-01T18:17:31Z",
- "durationMs": 2129,
+ "generatedAt": "2026-11-01T19:12:38Z",
+ "durationMs": 1525,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
   "generatedAt": "2026-11-01T15:58:53Z",
-  "stateAgeMin": 139,
+  "stateAgeMin": 194,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
    "lastRunAt": "2026-10-13T03:29:21Z",
-   "ageS": 1694889,
+   "ageS": 1698196,
    "stalled": true
   }
  },
  "measures": {
   "chain": {
-   "head": 110951544,
-   "treasuryNetSp": 1511.7,
-   "mult": 0.000621073645179549
+   "head": 110952643,
+   "treasuryNetSp": 1071.9,
+   "mult": 0.0006210752537576128
   },
   "beaconPulse": {
    "treasuryNetSp": 1511.7
@@ -48,7 +48,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 139min (limit 120)"
+     "detail": "state age 194min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -68,23 +68,23 @@
     },
     {
      "law": "treasury-basis-fresh-measure",
-     "result": "ok",
-     "detail": "claimed=1511.7 fresh=1511.7 tol=1"
+     "result": "mismatch",
+     "detail": "claimed=1511.7 fresh=1071.9 tol=1"
     },
     {
      "law": "beacon-vs-fresh",
-     "result": "ok",
+     "result": "mismatch",
      "detail": "beacon=1511.7"
     },
     {
      "law": "operators-basis",
-     "result": "ok",
-     "detail": "all 13 operators within ±2SP"
+     "result": "mismatch",
+     "detail": "[{\"op\":\"acct-10\",\"policySp\":43.6,\"freshSp\":100},{\"op\":\"acct-08\",\"policySp\":42.8,\"freshSp\":100},{\"op\":\"acct-06\",\"policySp\":41.2,\"freshSp\":100},{\"op\":\"acct-07\",\"policySp\":41.2,\"freshSp\":100}]"
     },
     {
      "law": "below-floor-list",
-     "result": "ok",
-     "detail": "fresh-below=[\"acct-11\",\"acct-12\",\"acct-13\"] declared=[\"acct-11\",\"acct-12\",\"acct-13\"]"
+     "result": "mismatch",
+     "detail": "fresh-below=[] declared=[\"acct-11\",\"acct-12\",\"acct-13\"]"
     },
     {
      "law": "execution-existence",
@@ -99,7 +99,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 139min (limit 120)"
+     "detail": "state age 194min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -134,7 +134,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 139min (limit 120)"
+     "detail": "state age 194min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -160,7 +160,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 139min (limit 120)"
+     "detail": "state age 194min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -175,18 +175,18 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 139min (limit 120)"
+     "detail": "state age 194min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   }
  ],
  "provenance": {
-  "runId": "41335801836",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41335801836",
-  "sha": "826234bdd2881f94fb7f4a017a3e8fa98d0ae448",
+  "runId": "41340404722",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41340404722",
+  "sha": "77a04d8c2a204372ba94590cfb535e95a6ca577e",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-11-01T18:17:31Z"
+  "generatedAt": "2026-11-01T19:12:38Z"
  },
  "selftest": {
   "vectors": 16,
