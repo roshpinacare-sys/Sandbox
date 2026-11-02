@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-11-02T04:07:32.973Z",
+  "measuredAt": "2026-11-02T05:00:07.985Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,14 +16,14 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 2min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 1min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
       "ok": true,
-      "detail": "grid executable: lastVerdict=GOVERNOR-ACCUMULATING opsToday=0",
+      "detail": "grid executable: lastVerdict=BROADCAST-FAIL opsToday=0",
       "severity": "fail",
       "verdict": "pass"
     },
@@ -39,18 +39,18 @@
   "overall": "PASS",
   "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "f6b5328fb6a6f8b9045eceba50bf931ae1abecfe",
+    "stateBlobSha": "ba457fc55d304a7f249f91e71e885cac4e367cbb",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "41386641744",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41386641744",
-    "sha": "3e7fbf1563dfa8775b6aa1e78dc9d9088ad9ec79"
+    "runId": "41391466239",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41391466239",
+    "sha": "d81d69e82d247077203801dc7c176520f537c8de"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-11-02T04:05:17.001Z",
-    "ageMin": 2,
-    "ticks": 26985,
-    "lastVerdict": "GOVERNOR-ACCUMULATING",
+    "lastTickAt": "2026-11-02T04:59:07.986Z",
+    "ageMin": 1,
+    "ticks": 27343,
+    "lastVerdict": "BROADCAST-FAIL",
     "opsToday": 0,
     "lastTxid": null
   }
