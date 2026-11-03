@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-11-03T06:07:42Z",
- "durationMs": 2643,
+ "generatedAt": "2026-11-03T07:00:43Z",
+ "durationMs": 1620,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
   "generatedAt": "2026-11-03T04:00:00Z",
-  "stateAgeMin": 128,
+  "stateAgeMin": 181,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
    "lastRunAt": "2026-10-13T03:29:21Z",
-   "ageS": 1823899,
+   "ageS": 1827081,
    "stalled": true
   }
  },
  "measures": {
   "chain": {
-   "head": 110994330,
+   "head": 110995383,
    "treasuryNetSp": 1072.5,
-   "mult": 0.0006211362687367997
+   "mult": 0.0006211378082459567
   },
   "beaconPulse": {
    "treasuryNetSp": 1072.4
@@ -48,7 +48,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 128min (limit 120)"
+     "detail": "state age 181min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -99,7 +99,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 128min (limit 120)"
+     "detail": "state age 181min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -123,8 +123,8 @@
     },
     {
      "law": "fleethq-reds-persist",
-     "result": "ok",
-     "detail": "failure runs in last 48h: 1 - routed WO-FleetHQ-reds subject persists (work pending)"
+     "result": "mismatch",
+     "detail": "0 failure runs in 48h - WO-FleetHQ-reds satisfied, world moved past the decision - RE-MEASURE"
     },
     {
      "law": "faulted-agents-fix",
@@ -134,7 +134,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 128min (limit 120)"
+     "detail": "state age 181min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -160,7 +160,7 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 128min (limit 120)"
+     "detail": "state age 181min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -176,18 +176,18 @@
     {
      "law": "decider-state-age",
      "result": "mismatch",
-     "detail": "state age 128min (limit 120)"
+     "detail": "state age 181min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
   }
  ],
  "provenance": {
-  "runId": "41587893357",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41587893357",
-  "sha": "c03d252488091cab55338558eb727bdec5304531",
+  "runId": "41593442592",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/41593442592",
+  "sha": "c82963e03199ee2ae413a6851cf7b86217783ca4",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-11-03T06:07:42Z"
+  "generatedAt": "2026-11-03T07:00:43Z"
  },
  "selftest": {
   "vectors": 16,
