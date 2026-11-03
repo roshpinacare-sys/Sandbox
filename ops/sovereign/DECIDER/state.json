@@ -1,15 +1,15 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-11-03T04:00:00Z",
+ "generatedAt": "2026-11-03T11:50:50Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
  "degraded": [],
  "chainVerify": {
-  "head": 110991790,
-  "mult": 0.0006211325515813907,
-  "treasuryNetSp": 1072.4,
+  "head": 111001158,
+  "mult": 0.0006211462641810341,
+  "treasuryNetSp": 1072.6,
   "minOperatorSp": 20.0,
   "beaconChainMatch": true
  },
@@ -22,22 +22,14 @@
    "titleHe": "ערוץ-המנהל — הסמכות-העליונה נקראת-בכל-פעימה (תיבה+לוח)",
    "verdictHe": "הריבונות מאשרת-קבלה: 5 הוראות-מהתיבה + 0 פקודות-קונסולה-חדשות נקראו-מהגיט-של-הבעלים ומנותבות-סמכות-עליונה — הוראה-חדשה מעדכנת-מיד.",
    "evidence": [
-    "inbox.jsonl: 59 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0",
-    "[inbox 2026-11-02T04:45:56.641Z] ",
+    "inbox.jsonl: 60 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0",
     "[inbox 2026-11-02T04:45:56.641Z] ",
     "[inbox 2026-11-02T09:22:57.463Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם.",
     "[inbox 2026-11-02T09:22:57.463Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם.",
-    "[inbox 2026-11-03T03:37:38.890Z] "
+    "[inbox 2026-11-03T03:37:38.890Z] ",
+    "[inbox 2026-11-03T09:28:19.764Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
    ],
    "ownerDirectives": [
-    {
-     "at": "2026-11-02T04:45:56.641Z",
-     "role": "agent",
-     "source": "ops-forge",
-     "kind": "dead-feed",
-     "subject": "פיד מת נמד�� שוב — FleetHQ/office/state/office-state.json",
-     "evidence": "stamp 2026-10-28T14:47:16.299Z"
-    },
     {
      "at": "2026-11-02T04:45:56.641Z",
      "role": "agent",
@@ -69,6 +61,14 @@
      "kind": "dead-feed",
      "subject": "פיד מת נמדד שוב — FleetHQ/office/state/office-state.json",
      "evidence": "stamp 2026-10-28T14:47:16.299Z"
+    },
+    {
+     "at": "2026-11-03T09:28:19.764Z",
+     "role": "autonomy",
+     "source": "selfhood",
+     "replyTo": "owner-channel:2026-11-03T03:37:38.890Z|ops-forge",
+     "engine": "route",
+     "text": "משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
     }
    ],
    "ackIds": [],
@@ -78,7 +78,7 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-11-03T04:00:00Z",
+   "decidedAt": "2026-11-03T11:50:50Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -103,7 +103,7 @@
     },
     {
      "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.6 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~827.8 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
+     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.6 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~828.0 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
      "scores": {
       "safety": 1,
       "reversibility": 4,
@@ -130,13 +130,13 @@
     "A"
    ],
    "evidence": [
-    "אוצרה נמדדת 1072.4 SP (ראש 110991790, מכפיל 0.000621133)",
-    "יעד 3000 · פער 1927.6 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 3362.2 SP · נכנסת-נמדדת 244.6 SP",
-    "משואה מפרסמת 1072.4 SP · תואם=True",
-    "סריקת-היסטוריה: 1300 ops-אחרונים (עד idx 185895)",
-    "האצלות-אחרונות למפעילי-הצי: ~350.0 SP (רגלי-הצי — חיוניות, אין-לשחרר)",
-    "האצלות-יוצאות-שאינן-מפעילים (מדוד): saos-0002:0.0SP@2026-10-29T13:15:42, saos-0003:0.0SP@2026-10-29T13:15:42, saos-0004:0.0SP@2026-10-29T13:15:42, saos-0005:0.0SP@2026-10-29T13:15:42, saos-0006:0.0SP@2026-10-29T13:15:42, saos-0007:0.0SP@2026-10-29T13:15:42, saos-0008:0.0SP@2026-10-29T13:15:42, saos-0009:0.0SP@2026-10-29T13:15:42"
+    "אוצרה נמדדת 1072.6 SP (ראש 111001158, מכפיל 0.000621146)",
+    "יעד 3000 · פער 1927.4 SP · מסילת-שימור 2800 (R2)",
+    "האצלה-יוצאת-נמדדת 3362.3 SP · נכנסת-נמדדת 244.6 SP",
+    "משואה מפרסמת 1072.5 SP · תואם=True",
+    "סריקת-היסטוריה: 1500 ops-אחרונים (עד idx 186090)",
+    "האצלות-אחרונות למפעילי-הצי: ~430.0 SP (רגלי-הצי — חיוניות, אין-לשחרר)",
+    "האצלות-יוצאות-שאינן-מפעילים (מדוד): hcsoldier7:0.0SP@2026-10-29T13:15:42, saos-0001:0.0SP@2026-10-29T13:15:42, saos-0002:0.0SP@2026-10-29T13:15:42, saos-0003:0.0SP@2026-10-29T13:15:42, saos-0004:0.0SP@2026-10-29T13:15:42, saos-0005:0.0SP@2026-10-29T13:15:42, saos-0006:0.0SP@2026-10-29T13:15:42, saos-0007:0.0SP@2026-10-29T13:15:42"
    ],
    "policy": {
     "treasury": {
@@ -235,7 +235,7 @@
     "basis": "measured-only (CHARTER סעיף 2)",
     "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
    },
-   "decidedAt": "2026-11-03T04:00:00Z",
+   "decidedAt": "2026-11-03T11:50:50Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -247,7 +247,7 @@
    "evidence": [
     "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=61 (מהפנקס)"
    ],
-   "decidedAt": "2026-11-03T04:00:00Z",
+   "decidedAt": "2026-11-03T11:50:50Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
     "cleanStreak": 61,
@@ -264,7 +264,7 @@
    "evidence": [
     "orphans=3 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-11-03T04:00:00Z",
+   "decidedAt": "2026-11-03T11:50:50Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -279,7 +279,7 @@
     "שער-האמת: ALL-GREEN (pass=7 fail=0)",
     "A43: markets.1.bestAsk = 0, minimum is 1"
    ],
-   "decidedAt": "2026-11-03T04:00:00Z",
+   "decidedAt": "2026-11-03T11:50:50Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
