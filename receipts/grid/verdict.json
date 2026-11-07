@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-11-07T16:46:44.225Z",
+  "measuredAt": "2026-11-07T17:40:00.177Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -15,15 +15,15 @@
     },
     {
       "id": "law-grid-fresh",
-      "ok": false,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 547min)",
+      "ok": true,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 3min)",
       "severity": "fail",
-      "verdict": "fail"
+      "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
       "ok": true,
-      "detail": "grid executable: lastVerdict=BROADCAST-FAIL opsToday=0",
+      "detail": "grid executable: lastVerdict=BROADCAST-FAIL opsToday=68",
       "severity": "fail",
       "verdict": "pass"
     },
@@ -36,22 +36,22 @@
     }
   ],
   "alerts": [],
-  "overall": "FAIL",
-  "reason": "grid-law failed: law-grid-fresh",
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "fa01867c9a724134969da333b645fab43535f77b",
+    "stateBlobSha": "bfd1aefd25daf1dc1ef52aef46b86f5c5567e2f9",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "42392949382",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42392949382",
-    "sha": "e5b9e1fff284e4168129b9ef34e2a6f97ba6c94b"
+    "runId": "42397409908",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42397409908",
+    "sha": "00467dabf643aac1a3ee43199f07bcb6285c17a6"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-11-07T07:39:27.838Z",
-    "ageMin": 547,
-    "ticks": 40962,
+    "lastTickAt": "2026-11-07T17:36:58.495Z",
+    "ageMin": 3,
+    "ticks": 41059,
     "lastVerdict": "BROADCAST-FAIL",
-    "opsToday": 0,
-    "lastTxid": null
+    "opsToday": 68,
+    "lastTxid": "201d57907b2c3b794ddf82c854e8808a021b2756"
   }
 }
