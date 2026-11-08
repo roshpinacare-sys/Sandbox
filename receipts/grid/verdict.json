@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-11-08T00:53:49.459Z",
+  "measuredAt": "2026-11-08T01:47:00.945Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -16,14 +16,14 @@
     {
       "id": "law-grid-fresh",
       "ok": true,
-      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 22min)",
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 5min)",
       "severity": "fail",
       "verdict": "pass"
     },
     {
       "id": "law-grid-exec-alive",
       "ok": true,
-      "detail": "grid executable: lastVerdict=NO-PLAN opsToday=68",
+      "detail": "grid executable: lastVerdict=BROADCAST-FAIL opsToday=68",
       "severity": "fail",
       "verdict": "pass"
     },
@@ -39,18 +39,18 @@
   "overall": "PASS",
   "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": "cbb96680fea14b5af1e006ba026f784ca57e17fa",
+    "stateBlobSha": "d389837a5c5a117cd3619227bef4ed7cd316004d",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "42431831083",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42431831083",
-    "sha": "fb1f3c20338c5b5ece64e5d31297f90b390ff47e"
+    "runId": "42435716890",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42435716890",
+    "sha": "56f9ad95f8afe062370ea6b65ddca15b3d0996d3"
   },
   "measured": {
     "enabled": true,
-    "lastTickAt": "2026-11-08T00:32:17.379Z",
-    "ageMin": 22,
-    "ticks": 41459,
-    "lastVerdict": "NO-PLAN",
+    "lastTickAt": "2026-11-08T01:41:34.234Z",
+    "ageMin": 5,
+    "ticks": 41520,
+    "lastVerdict": "BROADCAST-FAIL",
     "opsToday": 68,
     "lastTxid": "201d57907b2c3b794ddf82c854e8808a021b2756"
   }
