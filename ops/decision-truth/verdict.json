@@ -1,25 +1,25 @@
 {
  "schema": "sandbox/decision-truth/1",
- "generatedAt": "2026-11-08T12:52:17Z",
- "durationMs": 1483,
+ "generatedAt": "2026-11-08T13:47:49Z",
+ "durationMs": 1657,
  "overall": "PASS_WITH_ALERTS",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "law": "H: every ENFORCED decision must re-measure its evidence independently AND show a measured consumer; stale evidence = STALE-TRUTH; no consumer = UNEXECUTED; source down = UNVERIFIABLE (never forged)",
  "decider": {
-  "generatedAt": "2026-11-08T05:52:53Z",
-  "stateAgeMin": 419,
+  "generatedAt": "2026-11-08T13:14:11Z",
+  "stateAgeMin": 34,
   "heartbeat": {
    "workflow": "sovereign-decider.yml",
    "lastRunAt": "2026-10-13T03:29:21Z",
-   "ageS": 2280175,
+   "ageS": 2283507,
    "stalled": true
   }
  },
  "measures": {
   "chain": {
-   "head": 111145828,
+   "head": 111146935,
    "treasuryNetSp": 2521.8,
-   "mult": 0.0006213579070443974
+   "mult": 0.0006213595271928342
   },
   "beaconPulse": {
    "treasuryNetSp": 2521.7
@@ -42,24 +42,24 @@
    "area": "הנהגה",
    "status": "ENFORCED",
    "priority": "P0",
-   "decidedAt": "2026-11-08T05:52:53Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-11-08T13:14:11Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 419min (limit 120)"
+     "result": "ok",
+     "detail": "state age 34min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   },
   {
    "id": "D1-econ-treasury-floor",
    "area": "כלכלה",
    "status": "ENFORCED",
    "priority": "P1",
-   "decidedAt": "2026-11-08T05:52:53Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-11-08T13:14:11Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "policy-internal-consistency",
@@ -69,7 +69,7 @@
     {
      "law": "treasury-basis-fresh-measure",
      "result": "ok",
-     "detail": "claimed=2521.7 fresh=2521.8 tol=1"
+     "detail": "claimed=2521.8 fresh=2521.8 tol=1"
     },
     {
      "law": "beacon-vs-fresh",
@@ -98,17 +98,17 @@
     },
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 419min (limit 120)"
+     "result": "ok",
+     "detail": "state age 34min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   },
   {
    "id": "D2-eng-errors",
    "area": "הנדסה",
    "status": "OBSERVING",
-   "decidedAt": "2026-11-08T05:52:53Z",
+   "decidedAt": "2026-11-08T13:14:11Z",
    "truth": "STALE-TRUTH",
    "checks": [
     {
@@ -133,8 +133,8 @@
     },
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 419min (limit 120)"
+     "result": "ok",
+     "detail": "state age 34min (limit 120)"
     }
    ],
    "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
@@ -144,8 +144,8 @@
    "area": "רשת",
    "status": "ENFORCED",
    "priority": "P2",
-   "decidedAt": "2026-11-08T05:52:53Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-11-08T13:14:11Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "orphans-fresh",
@@ -159,34 +159,34 @@
     },
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 419min (limit 120)"
+     "result": "ok",
+     "detail": "state age 34min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   },
   {
    "id": "D4-truth-network",
    "area": "אימות-עצמי",
    "status": "OBSERVING",
-   "decidedAt": "2026-11-08T05:52:53Z",
-   "truth": "STALE-TRUTH",
+   "decidedAt": "2026-11-08T13:14:11Z",
+   "truth": "VERIFIED",
    "checks": [
     {
      "law": "decider-state-age",
-     "result": "mismatch",
-     "detail": "state age 419min (limit 120)"
+     "result": "ok",
+     "detail": "state age 34min (limit 120)"
     }
    ],
-   "note": "world moved past published evidence - T14 RE-MEASURE must re-decide (honest cycle)"
+   "note": "evidence re-measured independently + execution present"
   }
  ],
  "provenance": {
-  "runId": "42482172217",
-  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42482172217",
-  "sha": "01caff753b45dcf351fd399f62821608cb7aebc2",
+  "runId": "42486431203",
+  "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42486431203",
+  "sha": "7bd06c7684bf7ce4da0199c3860ab3f5448af5d6",
   "engine": "engine/decision-truth.mjs (H-series, zai-code-3)",
-  "generatedAt": "2026-11-08T12:52:17Z"
+  "generatedAt": "2026-11-08T13:47:49Z"
  },
  "selftest": {
   "vectors": 16,
