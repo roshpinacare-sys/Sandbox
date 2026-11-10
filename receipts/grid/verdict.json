@@ -1,6 +1,6 @@
 {
   "artery": "grid-watch",
-  "measuredAt": "2026-11-10T05:20:06.115Z",
+  "measuredAt": "2026-11-10T06:00:33.147Z",
   "sources": [
     "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
     "https://api.github.com/repos/roshpinacare-sys/saos-runtime/contents/.github/workflows/sovereign-runtime.yml"
@@ -8,22 +8,50 @@
   "asserts": [
     {
       "id": "law-grid-state-present",
-      "ok": false,
+      "ok": true,
       "detail": "hyper-grid.json must exist and parse at steem@saos-cockpit HEAD",
       "severity": "fail",
-      "verdict": "fail"
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-fresh",
+      "ok": true,
+      "detail": "grid enabled=true: lastTickAt must be ≤ 90min old (measured 23min)",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-exec-alive",
+      "ok": true,
+      "detail": "grid executable: lastVerdict=BROADCAST-FAIL opsToday=68",
+      "severity": "fail",
+      "verdict": "pass"
+    },
+    {
+      "id": "law-grid-revival-wired",
+      "ok": true,
+      "detail": "saos-runtime heartbeat must wire the bounded burst (T-62)",
+      "severity": "flag",
+      "verdict": "pass"
     }
   ],
-  "alerts": [
-    "grid-revival-unprovable: saos-runtime workflow unreadable — revival path unverified"
-  ],
-  "overall": "FAIL",
-  "reason": "grid-law failed: law-grid-state-present",
+  "alerts": [],
+  "overall": "PASS",
+  "reason": "grid state measured from git; laws pass",
   "provenance": {
-    "stateBlobSha": null,
+    "stateBlobSha": "2c9159869d759fcb7c082fbffda71d19381769ec",
     "stateUrl": "https://api.github.com/repos/roshpinacare-sys/steem/contents/mini-services/saos-engine/state/hyper-grid.json?ref=saos-cockpit",
-    "runId": "42761453547",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42761453547",
-    "sha": "64db86ee9cb4455c371d8a861b691730dcda132e"
+    "runId": "42765604096",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/42765604096",
+    "sha": "2e6b90368a50eddb519e6180f0d0997af15e01cc"
+  },
+  "measured": {
+    "enabled": true,
+    "lastTickAt": "2026-11-10T05:37:24.044Z",
+    "ageMin": 23,
+    "ticks": 46525,
+    "lastVerdict": "BROADCAST-FAIL",
+    "opsToday": 68,
+    "lastTxid": "201d57907b2c3b794ddf82c854e8808a021b2756"
   }
 }
