@@ -1,18 +1,15 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-11-17T02:53:03Z",
+ "generatedAt": "2026-11-17T11:42:02Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
  "ownerMandateVerbatim": "[owner-directive]",
- "degraded": [],
- "chainVerify": {
-  "head": 111391979,
-  "mult": 0.0006217172114035739,
-  "treasuryNetSp": 2491.0,
-  "minOperatorSp": 31.2,
-  "beaconChainMatch": true
- },
+ "degraded": [
+  "chain-rpc",
+  "hc-history"
+ ],
+ "chainVerify": null,
  "decisions": [
   {
    "id": "D0-owner-channel",
@@ -22,22 +19,14 @@
    "titleHe": "ערוץ-המנהל — הסמכות-העליונה נקראת-בכל-פעימה (תיבה+לוח)",
    "verdictHe": "הריבונות מאשרת-קבלה: 5 הוראות-מהתיבה + 0 פקודות-קונסולה-חדשות נקראו-מהגיט-של-הבעלים ומנותבות-סמכות-עליונה — הוראה-חדשה מעדכנת-מיד.",
    "evidence": [
-    "inbox.jsonl: 87 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0",
-    "[inbox 2026-11-15T00:08:36.267Z] ",
+    "inbox.jsonl: 88 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0",
     "[inbox 2026-11-15T06:17:37.405Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0.1h — המקור הקנוני עובד ומפרסם.",
     "[inbox 2026-11-16T00:11:32.581Z] ",
     "[inbox 2026-11-16T06:16:30.930Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 2.7h — המקור הקנוני עובד ומפרסם.",
-    "[inbox 2026-11-17T00:57:36.932Z] "
+    "[inbox 2026-11-17T00:57:36.932Z] ",
+    "[inbox 2026-11-17T08:16:25.563Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
    ],
    "ownerDirectives": [
-    {
-     "at": "2026-11-15T00:08:36.267Z",
-     "role": "agent",
-     "source": "ops-forge",
-     "kind": "dead-feed",
-     "subject": "פיד מת נמדד שוב — FleetHQ/office/state/office-state.json",
-     "evidence": "stamp 2026-10-28T14:47:16.299Z"
-    },
     {
      "at": "2026-11-15T06:17:37.405Z",
      "role": "autonomy",
@@ -69,6 +58,14 @@
      "kind": "dead-feed",
      "subject": "פיד מת נמדד שוב — FleetHQ/office/state/office-state.json",
      "evidence": "stamp 2026-10-28T14:47:16.299Z"
+    },
+    {
+     "at": "2026-11-17T08:16:25.563Z",
+     "role": "autonomy",
+     "source": "selfhood",
+     "replyTo": "owner-channel:2026-11-17T00:57:36.932Z|ops-forge",
+     "engine": "route",
+     "text": "משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
     }
    ],
    "ackIds": [],
@@ -78,162 +75,19 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-11-17T02:53:02Z",
+   "decidedAt": "2026-11-17T11:42:01Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
    "id": "D1-econ-treasury-floor",
    "area": "כלכלה",
-   "status": "ENFORCED",
-   "priority": "P1",
-   "titleHe": "רצפת-האוצרה — הכרעה-כלכלית-ריבונית",
-   "verdictHe": "הריבונות הכריעה בעצמה: מדיניות-מדורגת-ביניים אוכפת-מעתה (אופציה A, 19 נק') — רצפות-מפעילים 75/30/20 לפי-מדידה, קו-שימור 2800, יעד-3000 במקביל-דרך-מנועי-התשואה; שחרור-הזרימה-הנכנסת נדחה-ב-R2 (היה-מוריד-למטה-מהמסילה); המתנה-לבעלים פסולה (צו-סעיף 1).",
-   "options": [
-    {
-     "id": "A",
-     "he": "מדיניות-מדורגת-ביניים: רצפות-מפעילים 75/30/20 לפי-מדידה + קו-שימור 2800 כרצפת-תפעול עד-שיקום-3000 + המשך-מנועי-התשואה (DEX חי · curation). keyless — אוכף-מיד.",
-     "scores": {
-      "safety": 5,
-      "reversibility": 5,
-      "valueNow": 3,
-      "effort": 1
-     },
-     "total": 19,
-     "status": "CHOSEN"
-    },
-    {
-     "id": "B",
-     "he": "שחרור-הזרימה-הנכנסת (undelegate ה-244.8 SP-הנכנסים) — נדחה: מוריד-את-האוצרה ל~2246.2 SP מתחת-למסילה (הפרת R2) ושחרור-האצלות-היוצאות עורף-את-רגלי-הצי.",
-     "scores": {
-      "safety": 1,
-      "reversibility": 4,
-      "valueNow": 1,
-      "effort": 2
-     },
-     "total": 9,
-     "status": "REJECTED"
-    },
-    {
-     "id": "C",
-     "he": "המתנה-להוראות-בעלים — פסול-מראש לפי-צו-סעיף-1 (הריבונות-מכריעה-בעצמה).",
-     "scores": {
-      "safety": 0,
-      "reversibility": 0,
-      "valueNow": 0,
-      "effort": 0
-     },
-     "total": 0,
-     "status": "REJECTED"
-    }
-   ],
-   "chosen": [
-    "A"
-   ],
+   "status": "OBSERVING",
+   "titleHe": "רצפת-האוצרה",
+   "verdictHe": "אין מדידת-שרשרת — כנות: לא מכריע בלי מספרים",
    "evidence": [
-    "אוצרה נמדדת 2491.0 SP (ראש 111391979, מכפיל 0.000621717)",
-    "יעד 3000 · פער 509.0 SP · מסילת-שימור 2800 (R2)",
-    "האצלה-יוצאת-נמדדת 2123.6 SP · נכנסת-נמדדת 244.8 SP",
-    "משואה מפרסמת 2490.9 SP · תואם=True",
-    "סריקת-היסטוריה: 3000 ops-אחרונים (עד idx 198966)",
-    "האצלות-אחרונות למפעילי-הצי: ~16.0 SP (רגלי-הצי — חיוניות, אין-לשחרר)",
-    "האצלות-יוצאות-שאינן-מפעילים (מדוד): format:36.0SP@2026-11-15T16:09:54"
+    "chain-rpc לא זמין בריצה זו"
    ],
-   "policy": {
-    "treasury": {
-     "operatingFloorSp": 2800.0,
-     "targetSp": 3000.0,
-     "note": "קו-השימור = רצפת-תפעול-ביניים; היעד-3000 נשאר-היעד (ביניים-כנה, לא-ויתור)"
-    },
-    "operatorInterimFloors": [
-     {
-      "operator": "israelnews",
-      "measuredSp": 320.5,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "lsa",
-      "measuredSp": 305.3,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "haran",
-      "measuredSp": 303.8,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "cashmachine",
-      "measuredSp": 301.1,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "macrame",
-      "measuredSp": 300.5,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "siq",
-      "measuredSp": 100.1,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "tov",
-      "measuredSp": 100.1,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "wic",
-      "measuredSp": 100.1,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "wog",
-      "measuredSp": 100.1,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "woq",
-      "measuredSp": 100.1,
-      "tier": 1,
-      "interimFloorSp": 75
-     },
-     {
-      "operator": "hcsoldier5",
-      "measuredSp": 45.2,
-      "tier": 2,
-      "interimFloorSp": 30
-     },
-     {
-      "operator": "hcsoldier6",
-      "measuredSp": 36.0,
-      "tier": 2,
-      "interimFloorSp": 30
-     },
-     {
-      "operator": "hcsoldier4",
-      "measuredSp": 31.2,
-      "tier": 2,
-      "interimFloorSp": 30
-     }
-    ],
-    "operatorsBelowInterimFloor": [],
-    "soldiersFloorSp": 20,
-    "yieldEngines": {
-     "dex": "continue-armed (keyless engine, כבר-חי)",
-     "curation": "continue"
-    },
-    "basis": "measured-only (CHARTER סעיף 2)",
-    "review": "RE-MEASURE בכל פעימה; שינוי-רק-דרך-הפנקס (REVOKED/עדכון-גרסה)"
-   },
-   "decidedAt": "2026-11-17T02:53:03Z",
+   "decidedAt": "2026-11-17T11:42:02Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -245,7 +99,7 @@
    "evidence": [
     "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=61 (מהפנקס)"
    ],
-   "decidedAt": "2026-11-17T02:53:03Z",
+   "decidedAt": "2026-11-17T11:42:02Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
     "cleanStreak": 61,
@@ -262,7 +116,7 @@
    "evidence": [
     "orphans=3 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-11-17T02:53:03Z",
+   "decidedAt": "2026-11-17T11:42:02Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -273,11 +127,11 @@
    "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
    "verdictHe": "הריבונות מכריעה: 1 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-11-16T18:57:42.056Z)",
+    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-11-17T03:15:02.099Z)",
     "שער-האמת: ALL-GREEN (pass=7 fail=0)",
     "A43: markets.1.bestAsk = 0, minimum is 1"
    ],
-   "decidedAt": "2026-11-17T02:53:03Z",
+   "decidedAt": "2026-11-17T11:42:02Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
