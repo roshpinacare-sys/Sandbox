@@ -36,7 +36,7 @@ const ENGINE_ROOT = path.resolve(process.env.FLEET_ENGINE_DIR || "fleet-engine")
 const ENGINE_SUB = "mini-services/saos-engine";
 const REC_DIR = path.resolve(process.env.FLEET_RECEIPTS_DIR || "receipts/fleet-yield");
 const VOTER = String(process.env.FLEET_VOTER || OWNER_ACC).trim();
-const RPC = String(process.env.FLEET_RPC || "https://api.steemit.com").replace(/\/+$/, "");
+const RPCS = String(process.env.FLEET_RPC || "https://api.justyy.com,https://api.steemit.com,https://steemapi.boylikegirl.club,https://api.steem.buzz").split(",").map((s) => s.trim().replace(/\/+$/, "")).filter(Boolean); // §68: רוטציית-צמתים — 403/5xx בצומת-אחד כבר לא מפיל קריאת-שרשרת
 const LOG_MAX = Math.max(2, Math.min(2000, Number(process.env.FLEET_LOG_MAX) || 240));
 const FETCH_LIMIT_DEFAULT = 80; // T-62 release: false self-limit raised — real bound is the node page size (≤100/call for get_discussions_by_*); anti-spam spacing and VP laws untouched
 
@@ -67,22 +67,26 @@ function readLastLogLine() {
 }
 
 async function rpc(method, params) {
-  const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), 20000);
-  try {
-    const res = await fetch(RPC, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ jsonrpc: "2.0", method, params, id: 1 }),
-      signal: ac.signal,
-    });
-    if (!res.ok) return { ok: false, error: `http-${res.status}` };
-    const j = await res.json();
-    if (j?.error) return { ok: false, error: String(j.error?.message || "rpc-error").slice(0, 120) };
-    return { ok: true, result: j?.result ?? null };
-  } catch (e) {
-    return { ok: false, error: String(e?.cause?.code || e?.name || e || "fetch-fail").slice(0, 120) };
-  } finally { clearTimeout(timer); }
+  let last = { ok: false, error: "no-nodes" };
+  for (const node of RPCS) { // §68: רוטציית-צמתים — מנסה הבא אחרי כל כשל
+    const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), 20000);
+    try {
+      const res = await fetch(node, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", method, params, id: 1 }),
+        signal: ac.signal,
+      });
+      if (!res.ok) { last = { ok: false, error: `http-${res.status}` }; continue; }
+      const j = await res.json();
+      if (j?.error) { last = { ok: false, error: String(j.error?.message || "rpc-error").slice(0, 120) }; continue; }
+      return { ok: true, result: j?.result ?? null };
+    } catch (e) {
+      last = { ok: false, error: String(e?.cause?.code || e?.name || e || "fetch-fail").slice(0, 120) };
+    } finally { clearTimeout(timer); }
+  }
+  return last;
 }
 
 /* ── פנקס-הקבלות: קיפול-שרשרת + append + סבוב — משותף-לירוק-ולאדום (לקח-T-44:
