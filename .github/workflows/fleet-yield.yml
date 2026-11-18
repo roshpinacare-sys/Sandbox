@@ -85,16 +85,23 @@ jobs:
           if git diff --cached --quiet; then
             echo "no ledger changes — skip"
           else
+            cp receipts/fleet-yield/log.jsonl /tmp/local-log.jsonl 2>/dev/null || true
             git commit -m "[fleet-yield] yield ledger: $(date -u +%FT%TZ)"
             pushed=0
             for i in 1 2 3; do
-              if git pull --rebase origin main && git push origin main; then
+              if git -c rebase.autoStash=true pull --rebase origin main && git push origin main; then
                 pushed=1
                 echo "yield ledger pushed (attempt $i/3)"
                 break
               fi
               git rebase --abort 2>/dev/null || true
-              git status
+              # §68 · חוק-האיחוד (append-only — אותו-חוק של curate): יומן-הקבלות הוא union,
+              # לא מאבד אף קבלה בהתנגשות של שני-כותבים-concurrent על אותו-main
+              git fetch origin main && git reset --hard origin/main
+              mkdir -p receipts/fleet-yield
+              cat /tmp/local-log.jsonl receipts/fleet-yield/log.jsonl 2>/dev/null | awk '!seen[$0]++' > receipts/fleet-yield/log.jsonl
+              git add receipts/fleet-yield/log.jsonl
+              if git diff --cached --quiet; then echo "no union delta"; else git commit -m "[fleet-yield] yield ledger union: $(date -u +%FT%TZ)"; fi
               if [ "$i" -lt 3 ]; then sleep 5; fi
             done
             if [ "$pushed" -ne 1 ]; then
