@@ -1,6 +1,6 @@
 {
  "schema": "roshpina.sovereign-decider/1",
- "generatedAt": "2026-11-18T02:50:56Z",
+ "generatedAt": "2026-11-18T11:29:52Z",
  "publisher": "sovereign-decider.yml (GitHub Actions, keyless, T14)",
  "charter": "ops/sovereign/DECIDER/CHARTER.md",
  "charterMandateAt": "2026-10-11T21:20Z",
@@ -19,22 +19,14 @@
    "titleHe": "ערוץ-המנהל — הסמכות-העליונה נקראת-בכל-פעימה (תיבה+לוח)",
    "verdictHe": "הריבונות מאשרת-קבלה: 5 הוראות-מהתיבה + 0 פקודות-קונסולה-חדשות נקראו-מהגיט-של-הבעלים ומנותבות-סמכות-עליונה — הוראה-חדשה מעדכנת-מיד.",
    "evidence": [
-    "inbox.jsonl: 89 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0",
-    "[inbox 2026-11-16T00:11:32.581Z] ",
+    "inbox.jsonl: 90 הוראות · נקראו 5 אחרונות · board.json: 3 פקודות · ACK-חדשות: 0",
     "[inbox 2026-11-16T06:16:30.930Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 2.7h — המקור הקנוני עובד ומפרסם.",
     "[inbox 2026-11-17T00:57:36.932Z] ",
     "[inbox 2026-11-17T08:16:25.563Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם.",
-    "[inbox 2026-11-18T01:09:46.560Z] "
+    "[inbox 2026-11-18T01:09:46.560Z] ",
+    "[inbox 2026-11-18T07:16:05.040Z] משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
    ],
    "ownerDirectives": [
-    {
-     "at": "2026-11-16T00:11:32.581Z",
-     "role": "agent",
-     "source": "ops-forge",
-     "kind": "dead-feed",
-     "subject": "פיד מת נמדד שוב — FleetHQ/office/state/office-state.json",
-     "evidence": "stamp 2026-10-28T14:47:16.299Z"
-    },
     {
      "at": "2026-11-16T06:16:30.930Z",
      "role": "autonomy",
@@ -66,6 +58,14 @@
      "kind": "dead-feed",
      "subject": "פיד מת נמדד שוב — FleetHQ/office/state/office-state.json",
      "evidence": "stamp 2026-10-28T14:47:16.299Z"
+    },
+    {
+     "at": "2026-11-18T07:16:05.040Z",
+     "role": "autonomy",
+     "source": "selfhood",
+     "replyTo": "owner-channel:2026-11-18T01:09:46.560Z|ops-forge",
+     "engine": "route",
+     "text": "משרד-חי (Domain) נמדד חי · גיל-פעימה 0h — המקור הקנוני עובד ומפרסם."
     }
    ],
    "ackIds": [],
@@ -75,7 +75,7 @@
     "lane": "state.json-published-first — כל-צרכני-ההכרעות קוראים D0 ראשון (דפוס-D2)"
    },
    "boardMeasured": true,
-   "decidedAt": "2026-11-18T02:50:55Z",
+   "decidedAt": "2026-11-18T11:29:51Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -87,7 +87,7 @@
    "evidence": [
     "chain-rpc לא זמין בריצה זו"
    ],
-   "decidedAt": "2026-11-18T02:50:56Z",
+   "decidedAt": "2026-11-18T11:29:52Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -99,7 +99,7 @@
    "evidence": [
     "אפס סוכנים ב-state=error · אפס משימות blocked · רצף-נקי=61 (מהפנקס)"
    ],
-   "decidedAt": "2026-11-18T02:50:56Z",
+   "decidedAt": "2026-11-18T11:29:52Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)",
    "reMeasure": {
     "cleanStreak": 61,
@@ -116,7 +116,7 @@
    "evidence": [
     "orphans=3 · ghosts=0 (flow-map.json, F-series — צריכה בלבד)"
    ],
-   "decidedAt": "2026-11-18T02:50:56Z",
+   "decidedAt": "2026-11-18T11:29:52Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   },
   {
@@ -125,13 +125,14 @@
    "status": "ENFORCED",
    "priority": "P1",
    "titleHe": "רשת-האמת — כשל-בדיקה-עצמית מנותב מיד",
-   "verdictHe": "הריבונות מכריעה: 1 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
+   "verdictHe": "הריבונות מכריעה: 2 כשלי-אימות-עצמי מנותבים למסילת-התיקון מיד (fail-closed: כל-הצהרה-נבדקת מול מדידה) — אין-המתנה-להוראות.",
    "evidence": [
-    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-11-17T23:40:54.095Z)",
-    "שער-האמת: ALL-GREEN (pass=7 fail=0)",
-    "A31: core op saos.weave.core.v1 not found within the 26h window of any witness on the"
+    "מאמת-הרשת: 50/51 HAS_FAILURES (2026-11-18T07:59:18.786Z)",
+    "שער-האמת: 1 RED (pass=6 fail=1)",
+    "A31: core op saos.weave.core.v1 not found within the 26h window of any witness on the",
+    "G3-witness-freshness: cp#2342 · att 2400 · age 29.9h (threshold 26h)"
    ],
-   "decidedAt": "2026-11-18T02:50:56Z",
+   "decidedAt": "2026-11-18T11:29:52Z",
    "decidedBy": "sovereign-decider-v1 (CHARTER)"
   }
  ],
