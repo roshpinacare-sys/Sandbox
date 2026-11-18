@@ -1,15 +1,15 @@
 {
-  "at": "2026-11-18T15:01:40.895Z",
+  "at": "2026-11-18T16:14:59.763Z",
   "repos": {
     "steem-cockpit": {
-      "head": "ccf17fb36c1432e9cdeaef317bfd3cc55c5b81b6",
-      "overall": "FAIL",
+      "head": "b413a3bf12ddfe3f9cd1b92d614c5f570d6526fc",
+      "overall": "PASS",
       "checks": {
-        "install": "fail",
+        "install": "pass",
         "engineInstall": "pass",
         "engineSelftest": "pass"
       },
-      "reason": "install failed: error: Bun could not find a package.json file to install from | note: Run \"bun init\" to initialize a project | ",
+      "reason": "all checks and fleet laws pass",
       "laws": [
         {
           "id": "law-no-secrets-at-head",
@@ -30,7 +30,7 @@
       ]
     },
     "saos-dex": {
-      "head": "4bed45fd764b37258b0eeab053389a357cce4c3a",
+      "head": "0c8df84cbcb2cec7c7262d5a3115de0f7907d6fb",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -152,23 +152,23 @@
     }
   },
   "alerts": [
-    "steem-cockpit: law-no-secrets-at-head: gitleaks HEAD scan: 105 live finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/selftest.mjs, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier5-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier4-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/macrame-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/wog-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/woq-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/haran-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/lsa-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/siq-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/cashmachine-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/tov-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/israelnews-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/wic-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier6-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/r267-crosschain.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/fleet-body-ledger.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/ops/crown-recovery/recover.mjs, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/receipts/rekey5b-20261107.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/receipts/rekey5c-20261107.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl",
+    "steem-cockpit: law-no-secrets-at-head: gitleaks HEAD scan: 2 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-NZTj0K/steem-cockpit/agent/recovery-meta.json",
     "steem-cockpit: law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
   ],
-  "overall": "FAIL",
-  "reason": "steem=FAIL · saos-dex=PASS · saos-agents=PASS · Saosmartwallet=PASS · Adsmarket=PASS",
+  "overall": "PASS",
+  "reason": "steem=PASS · saos-dex=PASS · saos-agents=PASS · Saosmartwallet=PASS · Adsmarket=PASS",
   "provenance": {
-    "runId": "44330641736",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/44330641736",
-    "sha": "d9ea160ce3d1e4f244ac9455d3369103ca08332d"
+    "runId": "44344954327",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/44344954327",
+    "sha": "9b98924bcf58837820d87d33b1ded124eda69a02"
   },
   "details": [
     {
-      "at": "2026-11-18T15:01:40.895Z",
+      "at": "2026-11-18T16:14:59.763Z",
       "slug": "roshpinacare-sys/steem",
-      "head": "ccf17fb36c1432e9cdeaef317bfd3cc55c5b81b6",
+      "head": "b413a3bf12ddfe3f9cd1b92d614c5f570d6526fc",
       "checks": {
-        "install": "fail",
+        "install": "pass",
         "engineInstall": "pass",
         "engineSelftest": "pass"
       },
@@ -176,7 +176,7 @@
         {
           "id": "law-no-secrets-at-head",
           "verdict": "flag",
-          "detail": "gitleaks HEAD scan: 105 live finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/selftest.mjs, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier5-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier4-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/macrame-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/wog-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/woq-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/haran-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/lsa-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/siq-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/cashmachine-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/tov-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/israelnews-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/wic-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier6-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/r267-crosschain.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/fleet-body-ledger.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/ops/crown-recovery/recover.mjs, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/receipts/rekey5b-20261107.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/receipts/rekey5c-20261107.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl"
+          "detail": "gitleaks HEAD scan: 2 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-NZTj0K/steem-cockpit/agent/recovery-meta.json"
         },
         {
           "id": "law-no-skipped-pass",
@@ -195,16 +195,16 @@
         }
       ],
       "alerts": [
-        "law-no-secrets-at-head: gitleaks HEAD scan: 105 live finding(s) — redacted metadata: generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/selftest.mjs, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier5-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier4-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/macrame-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/wog-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/woq-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/haran-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/lsa-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/siq-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/cashmachine-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/tov-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/israelnews-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/wic-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/army-grid/hcsoldier6-commits.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/r267-crosschain.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/fleet-body-ledger.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/ops/crown-recovery/recover.mjs, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/receipts/rekey5b-20261107.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/receipts/rekey5c-20261107.json, generic-api-key@/tmp/fleet-verify-9blvxR/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl",
+        "law-no-secrets-at-head: gitleaks HEAD scan: 2 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-NZTj0K/steem-cockpit/agent/recovery-meta.json",
         "law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
       ],
-      "overall": "FAIL",
-      "reason": "install failed: error: Bun could not find a package.json file to install from | note: Run \"bun init\" to initialize a project | "
+      "overall": "PASS",
+      "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T15:01:40.895Z",
+      "at": "2026-11-18T16:14:59.763Z",
       "slug": "roshpinacare-sys/saos-dex",
-      "head": "4bed45fd764b37258b0eeab053389a357cce4c3a",
+      "head": "0c8df84cbcb2cec7c7262d5a3115de0f7907d6fb",
       "checks": {
         "install": "pass",
         "typecheck": "pass"
@@ -236,7 +236,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T15:01:40.895Z",
+      "at": "2026-11-18T16:14:59.763Z",
       "slug": "roshpinacare-sys/saos-agents",
       "head": "34f390a3d870e7c3b6d7ce1d8889116a5eb246c6",
       "checks": {
@@ -269,7 +269,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T15:01:40.895Z",
+      "at": "2026-11-18T16:14:59.763Z",
       "slug": "roshpinacare-sys/Saosmartwallet",
       "head": "5a32dcf281d609036b22fc29db16d736002a563f",
       "checks": {},
@@ -325,7 +325,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T15:01:40.895Z",
+      "at": "2026-11-18T16:14:59.763Z",
       "slug": "roshpinacare-sys/Adsmarket",
       "head": "9cc0b468c1ef99bfa1e94e95713e1b68170af161",
       "checks": {},
