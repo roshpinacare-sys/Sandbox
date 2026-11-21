@@ -1,8 +1,8 @@
 {
-  "at": "2026-11-18T16:14:59.763Z",
+  "at": "2026-11-21T12:22:08.982Z",
   "repos": {
     "steem-cockpit": {
-      "head": "b413a3bf12ddfe3f9cd1b92d614c5f570d6526fc",
+      "head": "9dbc5419ea9eadb07eaf7dfb2dfcdb2bcfd06d5e",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -30,7 +30,7 @@
       ]
     },
     "saos-dex": {
-      "head": "0c8df84cbcb2cec7c7262d5a3115de0f7907d6fb",
+      "head": "fed3d78204d2d1083fe336fe82c5147293701ff7",
       "overall": "PASS",
       "checks": {
         "install": "pass",
@@ -83,7 +83,7 @@
       ]
     },
     "saos-wallet": {
-      "head": "5a32dcf281d609036b22fc29db16d736002a563f",
+      "head": "ad0354cdde333a979a6c04c629a985e1084e00d6",
       "overall": "PASS",
       "checks": {},
       "reason": "all checks and fleet laws pass",
@@ -127,7 +127,7 @@
       ]
     },
     "adsmarket": {
-      "head": "9cc0b468c1ef99bfa1e94e95713e1b68170af161",
+      "head": "6bd36a9f43a4b6ec9b5b11069b4413158076fce4",
       "overall": "PASS",
       "checks": {},
       "reason": "all checks and fleet laws pass",
@@ -152,21 +152,21 @@
     }
   },
   "alerts": [
-    "steem-cockpit: law-no-secrets-at-head: gitleaks HEAD scan: 2 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-NZTj0K/steem-cockpit/agent/recovery-meta.json",
+    "steem-cockpit: law-no-secrets-at-head: gitleaks HEAD scan: 3 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fpY9LK/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-fpY9LK/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl",
     "steem-cockpit: law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
   ],
   "overall": "PASS",
   "reason": "steem=PASS · saos-dex=PASS · saos-agents=PASS · Saosmartwallet=PASS · Adsmarket=PASS",
   "provenance": {
-    "runId": "44344954327",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/44344954327",
-    "sha": "9b98924bcf58837820d87d33b1ded124eda69a02"
+    "runId": "44903470731",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/44903470731",
+    "sha": "9e41b08447c54d36860da685298ff0fabac0a9fc"
   },
   "details": [
     {
-      "at": "2026-11-18T16:14:59.763Z",
+      "at": "2026-11-21T12:22:08.982Z",
       "slug": "roshpinacare-sys/steem",
-      "head": "b413a3bf12ddfe3f9cd1b92d614c5f570d6526fc",
+      "head": "9dbc5419ea9eadb07eaf7dfb2dfcdb2bcfd06d5e",
       "checks": {
         "install": "pass",
         "engineInstall": "pass",
@@ -176,7 +176,7 @@
         {
           "id": "law-no-secrets-at-head",
           "verdict": "flag",
-          "detail": "gitleaks HEAD scan: 2 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-NZTj0K/steem-cockpit/agent/recovery-meta.json"
+          "detail": "gitleaks HEAD scan: 3 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fpY9LK/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-fpY9LK/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl"
         },
         {
           "id": "law-no-skipped-pass",
@@ -195,16 +195,16 @@
         }
       ],
       "alerts": [
-        "law-no-secrets-at-head: gitleaks HEAD scan: 2 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-NZTj0K/steem-cockpit/agent/recovery-meta.json",
+        "law-no-secrets-at-head: gitleaks HEAD scan: 3 live finding(s) — 103 ledgered false-positive(s) honored (.gitleaksignore) — redacted metadata: generic-api-key@/tmp/fleet-verify-fpY9LK/steem-cockpit/agent/recovery-meta.json, generic-api-key@/tmp/fleet-verify-fpY9LK/steem-cockpit/mini-services/saos-engine/state/exec-log.jsonl",
         "law-gitleaks-push: no gitleaks.yml in repo — no in-repo secret scan"
       ],
       "overall": "PASS",
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T16:14:59.763Z",
+      "at": "2026-11-21T12:22:08.982Z",
       "slug": "roshpinacare-sys/saos-dex",
-      "head": "0c8df84cbcb2cec7c7262d5a3115de0f7907d6fb",
+      "head": "fed3d78204d2d1083fe336fe82c5147293701ff7",
       "checks": {
         "install": "pass",
         "typecheck": "pass"
@@ -218,7 +218,7 @@
         {
           "id": "law-no-skipped-pass",
           "verdict": "pass",
-          "detail": "workflows scanned: 17, theater patterns: 0"
+          "detail": "workflows scanned: 19, theater patterns: 0"
         },
         {
           "id": "law-gitleaks-push",
@@ -236,7 +236,7 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T16:14:59.763Z",
+      "at": "2026-11-21T12:22:08.982Z",
       "slug": "roshpinacare-sys/saos-agents",
       "head": "34f390a3d870e7c3b6d7ce1d8889116a5eb246c6",
       "checks": {
@@ -269,9 +269,9 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T16:14:59.763Z",
+      "at": "2026-11-21T12:22:08.982Z",
       "slug": "roshpinacare-sys/Saosmartwallet",
-      "head": "5a32dcf281d609036b22fc29db16d736002a563f",
+      "head": "ad0354cdde333a979a6c04c629a985e1084e00d6",
       "checks": {},
       "laws": [
         {
@@ -317,7 +317,7 @@
         {
           "id": "law-pass-provenance",
           "verdict": "pass",
-          "detail": "receipt provenance: https://github.com/roshpinacare-sys/Saosmartwallet/actions/runs/44191883685"
+          "detail": "receipt provenance: https://github.com/roshpinacare-sys/Saosmartwallet/actions/runs/44824771948"
         }
       ],
       "alerts": [],
@@ -325,9 +325,9 @@
       "reason": "all checks and fleet laws pass"
     },
     {
-      "at": "2026-11-18T16:14:59.763Z",
+      "at": "2026-11-21T12:22:08.982Z",
       "slug": "roshpinacare-sys/Adsmarket",
-      "head": "9cc0b468c1ef99bfa1e94e95713e1b68170af161",
+      "head": "6bd36a9f43a4b6ec9b5b11069b4413158076fce4",
       "checks": {},
       "laws": [
         {
