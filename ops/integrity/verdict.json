@@ -1,27 +1,27 @@
 {
   "schema": "integrity-guard/2",
-  "at": "2026-11-21T03:58:41.121Z",
+  "at": "2026-11-21T08:16:21.765Z",
   "overall": "FAIL",
   "summary": {
     "sources": 11,
     "verified": 11,
-    "findings": 15,
+    "findings": 13,
     "counts": {
-      "FLAG": 10,
+      "FLAG": 8,
       "CRITICAL": 1,
       "MEDIUM": 4
     }
   },
   "provenance": {
-    "runId": "44863759440",
-    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/44863759440",
-    "sha": "1e7d10e9d0b786f8d42afb5e8b182aeee8a00b21"
+    "runId": "44884047737",
+    "runUrl": "https://github.com/roshpinacare-sys/Sandbox/actions/runs/44884047737",
+    "sha": "00d822f3a705de2e3e60f83c181a1d7ee128481c"
   },
   "verified": [
     {
       "where": "self:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=43093883156 conc=success repo=Sandbox"
+      "detail": "run=44863759440 conc=failure repo=Sandbox"
     },
     {
       "where": "Sandbox:receipts/wallet/verdict.json",
@@ -56,12 +56,12 @@
     {
       "where": "Domain:office/data.json",
       "law": "verified",
-      "detail": "run=44862374039 conc=success repo=Autonomy"
+      "detail": "run=44881320452 conc=success repo=Autonomy"
     },
     {
       "where": "Domain:office/data.json",
       "law": "verified",
-      "detail": "run=44860417894 conc=success repo=Autonomy"
+      "detail": "run=44879242839 conc=success repo=Autonomy"
     },
     {
       "where": "Sandbox:ops/decision-truth/verdict.json",
@@ -71,7 +71,7 @@
     {
       "where": "Sandbox:ops/integrity/verdict.json",
       "law": "verified",
-      "detail": "run=43093883156 conc=success repo=Sandbox"
+      "detail": "run=44863759440 conc=failure repo=Sandbox"
     }
   ],
   "findings": [
@@ -79,19 +79,13 @@
       "level": "FLAG",
       "where": "Sandbox:receipts/wallet/verdict.json",
       "law": "stale",
-      "detail": "60h > 26h — artery-wallet"
+      "detail": "64h > 26h — artery-wallet"
     },
     {
       "level": "FLAG",
       "where": "Sandbox:receipts/fleet/verdict.json",
       "law": "stale",
-      "detail": "60h > 26h — artery-fleet"
-    },
-    {
-      "level": "FLAG",
-      "where": "Sandbox:receipts/latest.json",
-      "law": "stale",
-      "detail": "17h > 2h — sovereign.yml"
+      "detail": "64h > 26h — artery-fleet"
     },
     {
       "level": "FLAG",
@@ -103,13 +97,13 @@
       "level": "FLAG",
       "where": "Sandbox:ops/flow/receipt.json",
       "law": "stale",
-      "detail": "67h > 26h — artery-flow"
+      "detail": "71h > 26h — artery-flow"
     },
     {
       "level": "FLAG",
       "where": "Sandbox:state/verifier/verdict-latest.json",
       "law": "stale",
-      "detail": "756h > 26h — verifier.yml"
+      "detail": "760h > 26h — verifier.yml"
     },
     {
       "level": "FLAG",
@@ -133,13 +127,7 @@
       "level": "FLAG",
       "where": "Sandbox:ops/decision-truth/verdict.json",
       "law": "stale",
-      "detail": "38h > 30h — dynamic"
-    },
-    {
-      "level": "FLAG",
-      "where": "Sandbox:ops/integrity/verdict.json",
-      "law": "stale",
-      "detail": "224h > 30h — dynamic"
+      "detail": "42h > 30h — dynamic"
     },
     {
       "level": "MEDIUM",
